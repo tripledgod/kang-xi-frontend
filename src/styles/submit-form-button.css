@@ -1,0 +1,15 @@
+.submit-form-btn {
+  width: 100%;
+  display: block;
+}
+
+@media (min-width: 768px) {
+  .submit-form-btn {
+    background-image: url('../assets/bg_button_submit_form.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 100%;
+    display: block;
+  }
+} 

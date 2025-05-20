@@ -1,0 +1,16 @@
+export const COLORS = {
+  beige: '#E6DDC6',
+  beigeLight: '#F7F5EA',
+  brown: '#7B6142',
+  brownHover: '#6a5437',
+  border: '#C7C7B9',
+  textDark: '#23211C',
+  textGray: '#888',
+  white: '#ffffff',
+  primary100: '#F7F3E8',
+  primary900: '#61422D',
+  secondary900: '#2E2A24',
+  secondary600: '#6D6A66',
+  secondary700: '#585550',
+  bg_button: '#86684A',
+};
