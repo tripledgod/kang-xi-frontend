@@ -18,7 +18,7 @@ function LanguageSwitcher({ className = "" }) {
       style={{ boxSizing: 'border-box' }}
     >
       <button
-        className={`flex-1 flex items-center justify-center transition-all duration-200 ${lang === 'en' ? 'bg-[#E6DDC6]' : 'bg-[#FDFBF1]'} ${lang === 'en' ? 'rounded-[8px]' : 'rounded-l-[8px]'} z-10`}
+        className={`flex-1 flex items-center justify-center transition-all duration-200 ${lang === 'en' ? 'bg-[#E6DDC6]' : 'bg-[#FDFBF1]'} ${lang === 'en' ? 'rounded-[8px]' : 'rounded-l-[8px]'}`}
         style={{ outline: 'none', border: 'none', padding: '12px 10px' }}
         onClick={() => i18n.changeLanguage('en')}
         aria-label="Switch to English"
@@ -26,7 +26,7 @@ function LanguageSwitcher({ className = "" }) {
         <img src={english} alt="English" className="w-12 h-8 object-cover rounded-[8px]" />
       </button>
       <button
-        className={`flex-1 flex items-center justify-center transition-all duration-200 ${lang === 'zh' ? 'bg-[#E6DDC6]' : 'bg-[#FDFBF1]'} ${lang === 'zh' ? 'rounded-[8px]' : 'rounded-r-[8px]'} z-10`}
+        className={`flex-1 flex items-center justify-center transition-all duration-200 ${lang === 'zh' ? 'bg-[#E6DDC6]' : 'bg-[#FDFBF1]'} ${lang === 'zh' ? 'rounded-[8px]' : 'rounded-r-[8px]'}`}
         style={{ outline: 'none', border: 'none', padding: '12px 10px' }}
         onClick={() => i18n.changeLanguage('zh')}
         aria-label="Switch to Chinese"
@@ -55,8 +55,6 @@ export default function Header() {
           <img src={logoMobile} alt="Kang Xi Logo Mobile" className="h-12 block lg:hidden" />
           <img src={logo} alt="Kang Xi Logo" className="h-16 hidden lg:block" />
         </Link>
-        <div className="text-left">
-        </div>
       </div>
       {/* Centered navLinks (desktop only) */}
       <nav className="hidden lg:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 items-center gap-8">
@@ -78,10 +76,10 @@ export default function Header() {
       <div className="hidden lg:flex items-center ml-auto">
         <LanguageSwitcher />
       </div>
-      {/* Mobile Hamburger Menu (mobile only, never on desktop) */}
+      {/* Mobile Hamburger Menu */}
       {!drawerOpen && (
         <button
-          className="ml-auto block lg:hidden z-40"
+          className="ml-auto block lg:hidden"
           onClick={() => setDrawerOpen(true)}
           aria-label="Open menu"
         >
@@ -90,7 +88,7 @@ export default function Header() {
       )}
       {/* Mobile Drawer */}
       {drawerOpen && (
-        <div className="fixed inset-0 bg-[#F7F5EA] z-50 flex flex-col h-full w-full transition-all duration-300">
+        <div className="fixed inset-0 bg-[#F7F5EA] flex flex-col h-full w-full transition-all duration-300">
           {/* Header with logo and close icon */}
           <div className="flex items-center justify-between px-4 pt-6">
             <div className="flex items-center gap-4">
@@ -98,11 +96,9 @@ export default function Header() {
                 <img src={logoMobile} alt="Kang Xi Logo Mobile" className="h-12 block lg:hidden" />
                 <img src={logo} alt="Kang Xi Logo" className="h-16 hidden lg:block" />
               </Link>
-              <div className="text-left">
-              </div>
             </div>
             <button
-              className="p-2 z-50"
+              className="p-2"
               onClick={() => setDrawerOpen(false)}
               aria-label="Close menu"
             >
