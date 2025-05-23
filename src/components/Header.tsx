@@ -48,7 +48,7 @@ export default function Header() {
   ];
 
   return (
-    <header className="w-full bg-[#F7F5EA] relative z-30 flex items-center px-4 md:px-8 py-4">
+    <header className="w-full bg-[#F7F5EA] relative flex items-center px-4 md:px-8 py-4">
       {/* Logo and Title */}
       <div className="flex items-center gap-4 flex-shrink-0">
         <Link to="/">
