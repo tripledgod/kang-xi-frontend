@@ -78,7 +78,7 @@ export default function Browse() {
 
       {/* Era Tabs */}
       <div className="w-full sticky top-[0px] z-30 bg-[#F7F5EA]">
-        <div className="max-w-6xl mx-auto px-4 md:pt-20 overflow-x-auto whitespace-nowrap">
+        <div className="max-w-6xl mx-auto px-4 pt-4 md:pt-20 overflow-x-auto whitespace-nowrap">
           <div className="inline-flex items-center gap-x-2 justify-start">
             {eras.map((era, idx) => (
               <React.Fragment key={era.key}>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import logo from '../assets/logo.png';
@@ -40,6 +40,18 @@ function LanguageSwitcher({ className = "" }) {
 export default function Header() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const { t } = useTranslation();
+
+  // Lock body scroll when drawer is open
+  useEffect(() => {
+    if (drawerOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [drawerOpen]);
 
   const navLinks = [
     { label: t('BROWSE'), href: '/browse' },
@@ -90,7 +102,7 @@ export default function Header() {
       )}
       {/* Mobile Drawer */}
       {drawerOpen && (
-        <div className="fixed inset-0 bg-[#F7F5EA] z-50 flex flex-col h-full w-full transition-all duration-300">
+        <div className="fixed inset-0 bg-[#F7F5EA] z-50 flex flex-col h-full w-full transition-all duration-300 overflow-hidden touch-none">
           {/* Header with logo and close icon */}
           <div className="flex items-center justify-between px-4 pt-6">
             <div className="flex items-center gap-4">
