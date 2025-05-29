@@ -140,7 +140,7 @@ export default function AboutUs() {
             {/* Desktop arrows only */}
             <div className="hidden md:flex gap-2">
               <button
-                className="w-10 h-10 border border-[#7B6142] rounded flex items-center justify-center bg-transparent text-[#7B6142] hover:bg-[#E6DDC6] transition disabled:opacity-30"
+                className="ticket-rounded w-10 h-10 border border-[#7B6142] rounded-lg flex items-center justify-center bg-transparent text-[#7B6142] hover:bg-[#E6DDC6] transition disabled:opacity-30"
                 onClick={() => setTeamIndex(i => Math.max(0, i - 1))}
                 disabled={!canGoLeft}
                 aria-label="Previous"
@@ -148,7 +148,7 @@ export default function AboutUs() {
                 <span className="text-2xl">&#8592;</span>
               </button>
               <button
-                className="w-10 h-10 border border-[#7B6142] rounded flex items-center justify-center bg-transparent text-[#7B6142] hover:bg-[#E6DDC6] transition disabled:opacity-30"
+                className="ticket-rounded w-10 h-10 border border-[#7B6142] rounded-lg flex items-center justify-center bg-transparent text-[#7B6142] hover:bg-[#E6DDC6] transition disabled:opacity-30"
                 onClick={() => setTeamIndex(i => Math.min(team.length - visibleCount, i + 1))}
                 disabled={!canGoRight}
                 aria-label="Next"

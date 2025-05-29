@@ -46,8 +46,12 @@ function RelatedArticles({ related }: { related: RelatedArticle[] }) {
             <div className="bg-[#E6DDC6] aspect-square w-full flex items-center justify-center overflow-hidden mb-4">
               <img src={article.image} alt={article.title} className="object-cover w-full h-full" />
             </div>
-            <div className="text-xl font-serif font-medium text-[#61422D] mb-2 leading-snug line-clamp-2">{article.title}</div>
-            <div className="text-base text-[#585550] mb-4 line-clamp-2">{article.desc}</div>
+            <div className="text-xl font-serif font-medium text-[#61422D] mb-2 leading-snug line-clamp-2" style={{ fontFamily: 'Source Han Serif SC VF, serif', fontWeight: 600, fontSize: 24, lineHeight: '32px', letterSpacing: 0, textAlign: 'left', color: '#4A2A1A' }}>
+              {article.title}
+            </div>
+            <div className="font-pingfang text-base font-normal leading-6 mb-4 line-clamp-3" style={{ color: '#342216' }}>
+              {article.desc}
+            </div>
             <div className="text-xs text-[#585550] font-semibold uppercase tracking-wider">{article.date}</div>
           </div>
         ))}

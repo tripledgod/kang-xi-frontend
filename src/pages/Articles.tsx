@@ -150,7 +150,7 @@ export default function Articles() {
                     <div className="w-full h-48 overflow-hidden mb-4 bg-[#E6DDC6] flex items-center justify-center">
                       <img src={article.image} alt={article.title} className="object-cover w-full h-full" />
                     </div>
-                    <div className="text-2xl font-serif font-semibold text-[#7B6142] mb-2 leading-snug line-clamp-2">
+                    <div className="text-2xl font-serif font-semibold mb-2 leading-snug" style={{ fontFamily: 'Source Han Serif SC VF, serif', fontWeight: 600, fontSize: 24, lineHeight: '32px', letterSpacing: 0, textAlign: 'left', color: '#4A2A1A' }}>
                       {article.title}
                     </div>
                     <div className="text-base text-[#585550] mb-3 line-clamp-2">
@@ -164,7 +164,7 @@ export default function Articles() {
                 {/* Desktop Row Layout */}
                 <div className="hidden md:flex flex-row gap-6 border-b border-[#E6DDC6] pb-6 last:border-b-0 last:pb-0 w-full hover:bg-[#f3efe2] transition-colors">
                   <div className="flex-1 min-w-0">
-                    <div className="text-xl font-serif font-semibold text-[#2E2A24] mb-2 leading-snug text-left">
+                    <div className="text-xl font-serif font-semibold mb-2 leading-snug text-left" style={{ fontFamily: 'Source Han Serif SC VF, serif', fontWeight: 600, fontSize: 24, lineHeight: '32px', letterSpacing: 0, textAlign: 'left', color: '#4A2A1A' }}>
                       {article.title}
                     </div>
                     <div className="text-base text-[#585550] mb-3 line-clamp-2 text-left">
@@ -185,12 +185,12 @@ export default function Articles() {
         {/* Pagination */}
         {totalPages > 1 && (
           <div className="flex justify-center items-center gap-2 mt-12 select-none">
-            <button className="px-2 py-1 text-[#7B6142] disabled:opacity-30" disabled={page === 1} onClick={() => setPage(page - 1)}>&lt;</button>
+            <button className="ticket-rounded px-2 py-1 text-[#7B6142] disabled:opacity-30 rounded-lg" disabled={page === 1} onClick={() => setPage(page - 1)}>&lt;</button>
             {pageNumbers.map((num, idx) => (
               typeof num === 'number' ? (
                 <button
                   key={num}
-                  className={`w-9 h-9 rounded-md flex items-center justify-center font-semibold text-[#7B6142] ${page === num ? 'bg-[#83644B] text-white' : ''}`}
+                  className={`ticket-rounded w-9 h-9 rounded-lg flex items-center justify-center font-semibold text-[#7B6142] ${page === num ? 'bg-[#83644B] text-white' : ''}`}
                   onClick={() => setPage(num)}
                 >
                   {num}
@@ -199,7 +199,7 @@ export default function Articles() {
                 <span key={idx} className="w-8 h-8 flex items-center justify-center text-[#7B6142]">{num}</span>
               )
             ))}
-            <button className="px-2 py-1 text-[#7B6142] disabled:opacity-30" disabled={page === totalPages} onClick={() => setPage(page + 1)}>&gt;</button>
+            <button className="ticket-rounded px-2 py-1 text-[#7B6142] disabled:opacity-30 rounded-lg" disabled={page === totalPages} onClick={() => setPage(page + 1)}>&gt;</button>
           </div>
         )}
       </div>

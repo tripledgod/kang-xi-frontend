@@ -18,20 +18,20 @@ function LanguageSwitcher({ className = "" }) {
       style={{ boxSizing: 'border-box' }}
     >
       <button
-        className={`flex-1 flex items-center justify-center transition-all duration-200 ${lang === 'en' ? 'bg-[#E6DDC6]' : 'bg-[#FDFBF1]'} ${lang === 'en' ? 'rounded-[8px]' : 'rounded-l-[8px]'} z-10`}
+        className={`ticket-rounded flex-1 flex items-center justify-center transition-all duration-200 ${lang === 'en' ? 'bg-[#E6DDC6]' : 'bg-[#FDFBF1]'} ${lang === 'en' ? 'rounded-lg' : 'rounded-l-lg'} z-10`}
         style={{ outline: 'none', border: 'none', padding: '12px 10px' }}
         onClick={() => i18n.changeLanguage('en')}
         aria-label="Switch to English"
       >
-        <img src={english} alt="English" className="w-12 h-8 object-cover rounded-[8px]" />
+        <img src={english} alt="English" className="w-12 h-8 object-cover rounded-lg" />
       </button>
       <button
-        className={`flex-1 flex items-center justify-center transition-all duration-200 ${lang === 'zh' ? 'bg-[#E6DDC6]' : 'bg-[#FDFBF1]'} ${lang === 'zh' ? 'rounded-[8px]' : 'rounded-r-[8px]'} z-10`}
+        className={`ticket-rounded flex-1 flex items-center justify-center transition-all duration-200 ${lang === 'zh' ? 'bg-[#E6DDC6]' : 'bg-[#FDFBF1]'} ${lang === 'zh' ? 'rounded-lg' : 'rounded-r-lg'} z-10`}
         style={{ outline: 'none', border: 'none', padding: '12px 10px' }}
         onClick={() => i18n.changeLanguage('zh')}
         aria-label="Switch to Chinese"
       >
-        <img src={chinese} alt="Chinese" className="w-12 h-8 object-cover rounded-[8px]" />
+        <img src={chinese} alt="Chinese" className="w-12 h-8 object-cover rounded-lg" />
       </button>
     </div>
   );
