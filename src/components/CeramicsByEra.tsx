@@ -158,7 +158,7 @@ export default function CeramicsByEra() {
       </div>
 
       {/* Content with padding top to account for fixed header */}
-      <div className="max-w-7xl mx-auto pt-[120px] md:pt-[100px]">
+      <div className="max-w-7xl mx-auto">
 
         {/* Mobile: vertical stack */}
         <div className="flex flex-col gap-8 mt-4 md:hidden">
@@ -208,9 +208,9 @@ export default function CeramicsByEra() {
                 <img src={era.img} alt={era.name} className="object-cover w-full h-full" />
               </div>
 
-              <div className="text-2xl font-serif text-[#86684A] mb-6 font-semibold" style={{ fontFamily: 'Source Han Serif SC VF, serif', fontWeight: 600, fontSize: 32, lineHeight: '40px', letterSpacing: 0 }}>
+              <h4 className="text-2xl font-serif text-[#86684A] mb-6 font-semibold" style={{ fontFamily: 'Source Han Serif SC VF, serif', fontWeight: 600, fontSize: 32, lineHeight: '40px', letterSpacing: 0 }}>
                 {era.name}
-              </div>
+              </h4>
               <div className="text-base font-semibold border-t border-[#C7C7B9] pt-4 text-[#2E2A24] mb-1">
                 {era.years}
               </div>

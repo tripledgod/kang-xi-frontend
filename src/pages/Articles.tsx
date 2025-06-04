@@ -137,7 +137,7 @@ export default function Articles() {
             </div> */}
 
           </div>
-          <div className="relative h-[340px] md:h-[400px] rounded overflow-hidden group w-full md:w-1/5">
+          <div className="relative h-[340px] md:h-[400px] rounded overflow-hidden group w-full md:w-2/5">
             <img
               src={featuredArticles[1].image}
               alt={featuredArticles[1].title}
