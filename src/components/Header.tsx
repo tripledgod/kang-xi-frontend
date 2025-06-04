@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import logo from '../assets/logo.png';
@@ -18,20 +18,20 @@ function LanguageSwitcher({ className = '' }) {
       style={{ boxSizing: 'border-box' }}
     >
       <button
-        className={`flex-1 flex items-center justify-center transition-all duration-200 ${lang === 'en' ? 'bg-[#E6DDC6]' : 'bg-[#FDFBF1]'} ${lang === 'en' ? 'rounded-[8px]' : 'rounded-l-[8px]'} z-10`}
+        className={`ticket-rounded flex-1 flex items-center justify-center transition-all duration-200 ${lang === 'en' ? 'bg-[#E6DDC6]' : 'bg-[#FDFBF1]'} ${lang === 'en' ? 'rounded-lg' : 'rounded-l-lg'} z-10`}
         style={{ outline: 'none', border: 'none', padding: '12px 10px' }}
         onClick={() => i18n.changeLanguage('en')}
         aria-label="Switch to English"
       >
-        <img src={english} alt="English" className="w-12 h-8 object-cover rounded-[8px]" />
+        <img src={english} alt="English" className="w-12 h-8 object-cover rounded-lg" />
       </button>
       <button
-        className={`flex-1 flex items-center justify-center transition-all duration-200 ${lang === 'zh' ? 'bg-[#E6DDC6]' : 'bg-[#FDFBF1]'} ${lang === 'zh' ? 'rounded-[8px]' : 'rounded-r-[8px]'} z-10`}
+        className={`ticket-rounded flex-1 flex items-center justify-center transition-all duration-200 ${lang === 'zh' ? 'bg-[#E6DDC6]' : 'bg-[#FDFBF1]'} ${lang === 'zh' ? 'rounded-lg' : 'rounded-r-lg'} z-10`}
         style={{ outline: 'none', border: 'none', padding: '12px 10px' }}
         onClick={() => i18n.changeLanguage('zh')}
         aria-label="Switch to Chinese"
       >
-        <img src={chinese} alt="Chinese" className="w-12 h-8 object-cover rounded-[8px]" />
+        <img src={chinese} alt="Chinese" className="w-12 h-8 object-cover rounded-lg" />
       </button>
     </div>
   );
@@ -40,6 +40,18 @@ function LanguageSwitcher({ className = '' }) {
 export default function Header() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const { t } = useTranslation();
+
+  // Lock body scroll when drawer is open
+  useEffect(() => {
+    if (drawerOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [drawerOpen]);
 
   const navLinks = [
     { label: t('BROWSE'), href: '/browse' },
@@ -87,7 +99,7 @@ export default function Header() {
       )}
       {/* Mobile Drawer */}
       {drawerOpen && (
-        <div className="fixed inset-0 bg-[#F7F5EA] z-50 flex flex-col h-full w-full transition-all duration-300">
+        <div className="fixed inset-0 bg-[#F7F5EA] z-50 flex flex-col h-full w-full transition-all duration-300 overflow-hidden touch-none">
           {/* Header with logo and close icon */}
           <div className="flex items-center justify-between px-4 pt-6">
             <div className="flex items-center gap-4">

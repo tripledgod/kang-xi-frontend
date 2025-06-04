@@ -23,7 +23,7 @@ const Button: React.FC<ButtonProps> = ({
     <button
       type={type}
       onClick={onClick}
-      className={`w-full md:w-[220px] h-[64px] flex items-center justify-center text-base font-semibold shadow-none transition-all px-6 ${className}`}
+      className={`w-full md:w-[222px] h-[64px] md:h-[48px] flex items-center justify-center text-base font-semibold shadow-none transition-all px-6 ${className}`}
       style={
         isOutline
           ? {
@@ -51,7 +51,7 @@ const Button: React.FC<ButtonProps> = ({
       {isOutline ? (
         <span
           className="w-full h-full flex items-center justify-center font-semibold text-base md:text-lg"
-          style={{ color: '#7B6142', fontWeight: 600, fontSize: 18 }}
+          style={{ color: '#7B6142', fontWeight: 500, fontSize: 14 }}
         >
           {text}
         </span>
@@ -69,8 +69,8 @@ const Button: React.FC<ButtonProps> = ({
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            fontWeight: 600,
-            fontSize: 18,
+            fontWeight: 500,
+            fontSize: 14,
           }}
         >
           {text}

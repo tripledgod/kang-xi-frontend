@@ -1,6 +1,9 @@
 import React from 'react';
 import Button from './Button';
-import { COLORS } from './colors.ts';
+
+import {COLORS} from "./colors.ts";
+import bgButton from '../assets/bg_button.png';
+import bgButtonMobile from '../assets/bg_button_mobile.png';
 
 interface PopupProps {
   title: string;
@@ -46,11 +49,40 @@ const Popup: React.FC<PopupProps> = ({ title, content, buttonText, onButtonClick
         </div>
         {/* Button */}
         <div className="w-full flex justify-center">
-          <Button
-            text={buttonText}
+
+        <button
+            className=" w-[220px] h-[48px] flex items-center justify-center text-base font-medium shadow-none transition-all px-6 text-xl  max-w-2xl hidden  md:block"
+            style={{
+              backgroundImage: `url(${bgButton})`,
+              backgroundSize: '100% 100%',
+              backgroundRepeat: 'no-repeat',
+              backgroundPosition: 'center',
+              color: '#fff',
+              border: 'none',
+              padding: 0,
+              minWidth: 0,
+            }}
             onClick={onButtonClick}
-            className="max-w-2xl w-full text-xl md:text-2xl"
-          />
+          >
+            {buttonText}
+          </button>
+          <button
+            className="w-full  h-[48px] flex items-center justify-center text-base font-medium shadow-none transition-all px-6 text-xl md:text-2xl max-w-2xl md:hidden"
+            style={{
+              backgroundImage: `url(${bgButtonMobile})`,
+              backgroundSize: '100% 100%',
+              backgroundRepeat: 'no-repeat',
+              backgroundPosition: 'center',
+              color: '#fff',
+              border: 'none',
+              padding: 0,
+              minWidth: 0,
+            }}
+            onClick={onButtonClick}
+          >
+            {buttonText}
+          </button>
+
         </div>
       </div>
     </div>
