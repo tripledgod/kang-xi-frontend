@@ -29,19 +29,33 @@ export default function Footer() {
           <div className="flex flex-col gap-y-4 w-full items-center md:flex-row md:w-auto md:gap-x-12 md:gap-y-0">
             <div className="flex flex-row justify-center gap-x-8 w-full md:w-auto md:gap-x-12">
               {navLinksRow1.map((link) => (
-                <Link key={link.label} to={link.href} className="text-md font-semibold text-[#FFFFFF] hover:text-[#E6DDC6] transition-colors whitespace-nowrap">{link.label}</Link>
+                <Link
+                  key={link.label}
+                  to={link.href}
+                  className="text-md font-semibold text-[#FFFFFF] hover:text-[#E6DDC6] transition-colors whitespace-nowrap"
+                >
+                  {link.label}
+                </Link>
               ))}
             </div>
             <div className="flex flex-row justify-center gap-x-8 w-full md:w-auto md:gap-x-12 mt-4 md:mt-0">
               {navLinksRow2.map((link) => (
-                <Link key={link.label} to={link.href} className="text-md font-semibold text-[#FFFFFF] hover:text-[#E6DDC6] transition-colors whitespace-nowrap">{link.label}</Link>
+                <Link
+                  key={link.label}
+                  to={link.href}
+                  className="text-md font-semibold text-[#FFFFFF] hover:text-[#E6DDC6] transition-colors whitespace-nowrap"
+                >
+                  {link.label}
+                </Link>
               ))}
             </div>
           </div>
         </nav>
         <div className="w-full border-t border-[#23211C] mb-6"></div>
         <div className="w-full flex flex-col items-center gap-6 md:flex-row md:items-center md:justify-between max-w-6xl mx-auto">
-          <div className="text-base text-[#FDFBF1] text-center">© Kangxi Collection 2020. All rights reserved.</div>
+          <div className="text-base text-[#FDFBF1] text-center">
+            © Kangxi Collection 2020. All rights reserved.
+          </div>
           <div className="flex gap-8 justify-center">
             <a href="#" aria-label="Facebook" target="_blank" rel="noopener noreferrer">
               <img src={facebook} alt="Facebook" className="h-7 w-7" />

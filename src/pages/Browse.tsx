@@ -15,7 +15,8 @@ const eras = [
 const ceramics = [
   {
     era: 'tang',
-    image: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80',
+    image:
+      'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80',
     title: 'A White Glazed Kundika, Late Tang / Five Dynasties Period',
     desc: 'The globular body supported on a slightly spreading foot, rising to a tall waisted neck collared by a flange and surmounted by a long tapering tubular mouth.',
     years: '618 – 960',
@@ -23,7 +24,8 @@ const ceramics = [
   },
   {
     era: 'tang',
-    image: 'https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=400&q=80',
+    image:
+      'https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=400&q=80',
     title: 'A Changsha Straw Glazed Pottery Ewer, Tang Dynasty',
     desc: 'A Tang Dynasty brownish green glazed pottery cover Ewer, of globular form set on a short foot; with moulded handle and sprout.',
     years: '618 – 907',
@@ -31,7 +33,8 @@ const ceramics = [
   },
   {
     era: 'tang',
-    image: 'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=400&q=80',
+    image:
+      'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=400&q=80',
     title: 'Large Sancai Gazed Peony Plate, Liao Dynasty',
     desc: 'The Thickly potted sancai plate is a superb example of Liao Dynasty pottery. The plate interior is decorated with a chrysanthemum flower.',
     years: '916–1125',
@@ -39,7 +42,8 @@ const ceramics = [
   },
   {
     era: 'tang',
-    image: 'https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=400&q=80',
+    image:
+      'https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=400&q=80',
     title: 'A Rare Bottom Filling Water Olive Green Glazed Teapot, Five Dynasties of the Period',
     desc: 'The globular body supported on a slightly spreading foot, rising to a tall waisted neck collared by a flange and surmounted by a long tapering tubular mouth.',
     years: '907 – 960',
@@ -47,7 +51,8 @@ const ceramics = [
   },
   {
     era: 'tang',
-    image: 'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?auto=format&fit=crop&w=400&q=80',
+    image:
+      'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?auto=format&fit=crop&w=400&q=80',
     title: 'A Large Painted Pottery Figure of a Pranking Horse, Tang Dynasty',
     desc: 'Horses in Tang–dynasty China were admired for their speed, with strength and intelligence, and not only were they important in the realms of travel and war.',
     years: '618 – 917',
@@ -57,7 +62,7 @@ const ceramics = [
 
 export default function Browse() {
   const [activeEra, setActiveEra] = useState('tang');
-  const filteredCeramics = ceramics.filter(c => c.era === activeEra);
+  const filteredCeramics = ceramics.filter((c) => c.era === activeEra);
   const navigate = useNavigate();
 
   return (
@@ -89,7 +94,9 @@ export default function Browse() {
                   {era.label}
                 </button>
                 {idx < eras.length - 1 && (
-                  <span className="text-[#D6C7A1] text-lg mx-2 flex items-center select-none">+</span>
+                  <span className="text-[#D6C7A1] text-lg mx-2 flex items-center select-none">
+                    +
+                  </span>
                 )}
               </React.Fragment>
             ))}
@@ -106,9 +113,15 @@ export default function Browse() {
             onClick={() => navigate(`/product/${ceramic.item}`)}
           >
             <div className="bg-[#E6DDC6] aspect-square w-full flex items-center justify-center overflow-hidden mb-4">
-              <img src={ceramic.image} alt={ceramic.title} className="object-contain w-full h-full" />
+              <img
+                src={ceramic.image}
+                alt={ceramic.title}
+                className="object-contain w-full h-full"
+              />
             </div>
-            <div className="text-xl font-serif font-semibold text-[#7B6142] mb-2 leading-snug">{ceramic.title}</div>
+            <div className="text-xl font-serif font-semibold text-[#7B6142] mb-2 leading-snug">
+              {ceramic.title}
+            </div>
             <div className="text-base text-[#585550] mb-4 line-clamp-3">{ceramic.desc}</div>
             <div className="flex flex-row justify-between text-xs text-[#23211C] font-semibold">
               <span>{ceramic.years}</span>
@@ -125,4 +138,3 @@ export default function Browse() {
     </div>
   );
 }
- 

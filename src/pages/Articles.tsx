@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import tang from '../assets/tang.png';
 import horse from '../assets/horse.png';
@@ -94,13 +94,17 @@ export default function Articles() {
           src={articlesCover}
           alt="Articles Cover"
           className="absolute inset-0 w-full h-full object-cover object-center"
-          style={{maxWidth: '100vw'}}
+          style={{ maxWidth: '100vw' }}
         />
       </div>
       {/* Featured Articles Section */}
       <div className="max-w-7xl mx-auto w-full flex flex-col md:flex-row gap-8 mb-16 px-7">
         <div className="relative h-[340px] md:h-[400px] rounded overflow-hidden group w-full md:w-4/5">
-          <img src={featuredArticles[0].image} alt={featuredArticles[0].title} className="absolute inset-0 w-full h-full object-cover object-center z-0" />
+          <img
+            src={featuredArticles[0].image}
+            alt={featuredArticles[0].title}
+            className="absolute inset-0 w-full h-full object-cover object-center z-0"
+          />
           {/* <div className="absolute inset-0 bg-black/50 z-10" />
           <div className="relative z-20 flex flex-col justify-end h-full p-6">
             <div className="text-2xl md:text-2xl font-serif font-semibold text-white mb-2 leading-snug line-clamp-2">
@@ -115,7 +119,11 @@ export default function Articles() {
           </div> */}
         </div>
         <div className="relative h-[340px] md:h-[400px] rounded overflow-hidden group w-full md:w-2/5">
-          <img src={featuredArticles[1].image} alt={featuredArticles[1].title} className="absolute inset-0 w-full h-full object-cover object-center z-0" />
+          <img
+            src={featuredArticles[1].image}
+            alt={featuredArticles[1].title}
+            className="absolute inset-0 w-full h-full object-cover object-center z-0"
+          />
           {/* <div className="absolute inset-0 bg-black/50 z-10" />
           <div className="relative z-20 flex flex-col justify-end h-full p-6">
             <div className="text-2xl md:text-2xl font-serif font-semibold text-white mb-2 leading-snug line-clamp-2">
@@ -131,7 +139,9 @@ export default function Articles() {
         </div>
       </div>
       <div className="max-w-4xl px-4 md:px-24 pt-0">
-        <h1 className="text-4xl font-serif font-semibold text-[#7B6142] mb-8 text-left">Latest Articles</h1>
+        <h1 className="text-4xl font-serif font-semibold text-[#7B6142] mb-8 text-left">
+          Latest Articles
+        </h1>
         <div className="flex flex-col gap-8 items-start">
           {pagedArticles.map((article, idx) => {
             const articleIndex = (page - 1) * ARTICLES_PER_PAGE + idx;
@@ -143,19 +153,21 @@ export default function Articles() {
                 style={{ textDecoration: 'none' }}
               >
                 {/* Mobile Card Layout */}
-                <div
-                  className="block md:hidden p-0 w-full transition-colors hover:bg-[#f3efe2]"
-                >
-                  <div className={`${idx !== pagedArticles.length - 1 ? 'border-b border-[#E6DDC6]' : ''}`}>
+                <div className="block md:hidden p-0 w-full transition-colors hover:bg-[#f3efe2]">
+                  <div
+                    className={`${idx !== pagedArticles.length - 1 ? 'border-b border-[#E6DDC6]' : ''}`}
+                  >
                     <div className="w-full h-48 overflow-hidden mb-4 bg-[#E6DDC6] flex items-center justify-center">
-                      <img src={article.image} alt={article.title} className="object-cover w-full h-full" />
+                      <img
+                        src={article.image}
+                        alt={article.title}
+                        className="object-cover w-full h-full"
+                      />
                     </div>
                     <div className="text-2xl font-serif font-semibold text-[#7B6142] mb-2 leading-snug line-clamp-2">
                       {article.title}
                     </div>
-                    <div className="text-base text-[#585550] mb-3 line-clamp-2">
-                      {article.desc}
-                    </div>
+                    <div className="text-base text-[#585550] mb-3 line-clamp-2">{article.desc}</div>
                     <div className="text-xs text-[#7B6142] pb-6 font-semibold uppercase tracking-wider">
                       {article.date}
                     </div>
@@ -175,7 +187,11 @@ export default function Articles() {
                     </div>
                   </div>
                   <div className="w-40 h-28 flex-shrink-0 rounded overflow-hidden bg-[#E6DDC6] flex items-center justify-center">
-                    <img src={article.image} alt={article.title} className="object-cover w-full h-full" />
+                    <img
+                      src={article.image}
+                      alt={article.title}
+                      className="object-cover w-full h-full"
+                    />
                   </div>
                 </div>
               </Link>
@@ -185,8 +201,14 @@ export default function Articles() {
         {/* Pagination */}
         {totalPages > 1 && (
           <div className="flex justify-center items-center gap-2 mt-12 select-none">
-            <button className="px-2 py-1 text-[#7B6142] disabled:opacity-30" disabled={page === 1} onClick={() => setPage(page - 1)}>&lt;</button>
-            {pageNumbers.map((num, idx) => (
+            <button
+              className="px-2 py-1 text-[#7B6142] disabled:opacity-30"
+              disabled={page === 1}
+              onClick={() => setPage(page - 1)}
+            >
+              &lt;
+            </button>
+            {pageNumbers.map((num, idx) =>
               typeof num === 'number' ? (
                 <button
                   key={num}
@@ -196,10 +218,18 @@ export default function Articles() {
                   {num}
                 </button>
               ) : (
-                <span key={idx} className="w-8 h-8 flex items-center justify-center text-[#7B6142]">{num}</span>
+                <span key={idx} className="w-8 h-8 flex items-center justify-center text-[#7B6142]">
+                  {num}
+                </span>
               )
-            ))}
-            <button className="px-2 py-1 text-[#7B6142] disabled:opacity-30" disabled={page === totalPages} onClick={() => setPage(page + 1)}>&gt;</button>
+            )}
+            <button
+              className="px-2 py-1 text-[#7B6142] disabled:opacity-30"
+              disabled={page === totalPages}
+              onClick={() => setPage(page + 1)}
+            >
+              &gt;
+            </button>
           </div>
         )}
       </div>

@@ -16,15 +16,17 @@ export default function Newsletter() {
   const handleClosePopup = () => setShowPopup(false);
 
   return (
-    <section
-      className="w-full py-12 px-4 bg-[#E8DBC0]"
-    >
+    <section className="w-full py-12 px-4 bg-[#E8DBC0]">
       <div className="max-w-6xl mx-auto w-full flex flex-col md:grid md:grid-cols-2 md:gap-8 items-center">
         {/* Left column: Title and description */}
         <div className="flex flex-col items-start w-full mb-8 md:mb-0">
           <h2
             className="mb-4 font-medium"
-            style={{ fontSize: 32, color: COLORS.secondary900, fontFamily: 'Source Han Serif SC VF, serif' }}
+            style={{
+              fontSize: 32,
+              color: COLORS.secondary900,
+              fontFamily: 'Source Han Serif SC VF, serif',
+            }}
           >
             GET THE LATEST NEW
           </h2>
@@ -33,7 +35,10 @@ export default function Newsletter() {
           </p>
         </div>
         {/* Right column: Input and button */}
-        <form onSubmit={handleSubscribe} className="w-full flex flex-col md:flex-row md:items-center md:justify-end md:gap-0 md:space-x-4 md:mt-0">
+        <form
+          onSubmit={handleSubscribe}
+          className="w-full flex flex-col md:flex-row md:items-center md:justify-end md:gap-0 md:space-x-4 md:mt-0"
+        >
           <input
             type="text"
             placeholder="Enter your first name"

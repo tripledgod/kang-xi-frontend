@@ -1,6 +1,6 @@
 import React from 'react';
 import Button from './Button';
-import {COLORS} from "./colors.ts";
+import { COLORS } from './colors.ts';
 
 interface PopupProps {
   title: string;
@@ -24,17 +24,33 @@ const Popup: React.FC<PopupProps> = ({ title, content, buttonText, onButtonClick
         </button>
         {/* Title */}
         <div className="w-full flex flex-col items-center">
-          <h2 className="text-center mb-6 md:mb-8 leading-tight" style={{ fontWeight: 600, fontSize: 30, color: COLORS.primary900, fontFamily: 'serif', marginTop: '24px' }}>
+          <h2
+            className="text-center mb-6 md:mb-8 leading-tight"
+            style={{
+              fontWeight: 600,
+              fontSize: 30,
+              color: COLORS.primary900,
+              fontFamily: 'serif',
+              marginTop: '24px',
+            }}
+          >
             {title}
           </h2>
         </div>
         {/* Content */}
-        <div className="text-center mb-10 md:mb-14 font-normal" style={{ fontSize: 18, fontWeight: 400, color: COLORS.secondary600 }}>
+        <div
+          className="text-center mb-10 md:mb-14 font-normal"
+          style={{ fontSize: 18, fontWeight: 400, color: COLORS.secondary600 }}
+        >
           {content}
         </div>
         {/* Button */}
         <div className="w-full flex justify-center">
-          <Button text={buttonText} onClick={onButtonClick} className="max-w-2xl w-full text-xl md:text-2xl" />
+          <Button
+            text={buttonText}
+            onClick={onButtonClick}
+            className="max-w-2xl w-full text-xl md:text-2xl"
+          />
         </div>
       </div>
     </div>
