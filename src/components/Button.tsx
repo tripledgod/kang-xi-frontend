@@ -11,7 +11,13 @@ interface ButtonProps {
   variant?: 'filled' | 'outline';
 }
 
-const Button: React.FC<ButtonProps> = ({ text, onClick, className = '', type = 'button', variant = 'filled' }) => {
+const Button: React.FC<ButtonProps> = ({
+  text,
+  onClick,
+  className = '',
+  type = 'button',
+  variant = 'filled',
+}) => {
   const isOutline = variant === 'outline';
   return (
     <button
@@ -75,4 +81,3 @@ const Button: React.FC<ButtonProps> = ({ text, onClick, className = '', type = '
 };
 
 export default Button;
- 

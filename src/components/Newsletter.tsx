@@ -17,6 +17,7 @@ export default function Newsletter() {
 
   return (
     <section className="w-full py-12 px-4 bg-[#E8DBC0]">
+<<<<<<< HEAD
       <div className="max-w-6xl mx-auto w-full flex flex-col md:grid md:grid-cols-2 md:gap-18 items-center">
         {/* Left column: Title and description */}
         <div className="flex flex-col items-center w-full mb-8 md:mb-0 md:grid md:grid-cols-3">
@@ -39,11 +40,33 @@ export default function Newsletter() {
               to our private events
             </p>
           </div>
+=======
+      <div className="max-w-6xl mx-auto w-full flex flex-col md:grid md:grid-cols-2 md:gap-8 items-center">
+        {/* Left column: Title and description */}
+        <div className="flex flex-col items-start w-full mb-8 md:mb-0">
+          <h2
+            className="mb-4 font-medium"
+            style={{
+              fontSize: 32,
+              color: COLORS.secondary900,
+              fontFamily: 'Source Han Serif SC VF, serif',
+            }}
+          >
+            GET THE LATEST NEW
+          </h2>
+          <p className="text-xl font-normal mb-8" style={{ color: COLORS.secondary700 }}>
+            Subscribe to get our 2020 catalog as well as get exclusive invites to our private events
+          </p>
+>>>>>>> d1039e37f8430577e372faae951abc59c9de56ee
         </div>
         {/* Right column: Input and button */}
         <form
           onSubmit={handleSubscribe}
+<<<<<<< HEAD
           className="w-full flex flex-col md:flex-row md:items-center md:justify-end gap-4.5 md:gap-x-4 md:mt-0"
+=======
+          className="w-full flex flex-col md:flex-row md:items-center md:justify-end md:gap-0 md:space-x-4 md:mt-0"
+>>>>>>> d1039e37f8430577e372faae951abc59c9de56ee
         >
           <input
             type="text"

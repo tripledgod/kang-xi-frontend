@@ -40,20 +40,34 @@ export default function AppraiseAnItem() {
     <div className="w-full min-h-screen bg-[#F7F5EA] flex flex-col">
       {/* Hero Section */}
       <div className="w-full bg-[#23211C] flex flex-col items-center justify-center relative">
-        <img src={verifyLegacyMobile} alt="Appraise Hero Mobile" className="w-full object-cover object-center block md:hidden" />
-        <img src={verifyLegacy} alt="Appraise Hero" className="w-full object-cover object-center hidden md:block" />
+        <img
+          src={verifyLegacyMobile}
+          alt="Appraise Hero Mobile"
+          className="w-full object-cover object-center block md:hidden"
+        />
+        <img
+          src={verifyLegacy}
+          alt="Appraise Hero"
+          className="w-full object-cover object-center hidden md:block"
+        />
       </div>
       {/* Our Services Section */}
       <div className="w-full bg-[#23211C] py-16 flex flex-col items-center justify-center text-center px-4">
         <div className="text-[#E6DDC6] text-xs mb-2 tracking-widest">OUR SERVICES</div>
-        <h2 className="text-2xl md:text-3xl font-serif font-semibold text-white mb-6 max-w-2xl mx-auto">With a network of specialists in Chinese antiquities, we provide a meticulous evaluation of your piece—examining craftsmanship, materials, historical context, and provenance to determine its authenticity and significance.</h2>
+        <h2 className="text-2xl md:text-3xl font-serif font-semibold text-white mb-6 max-w-2xl mx-auto">
+          With a network of specialists in Chinese antiquities, we provide a meticulous evaluation
+          of your piece—examining craftsmanship, materials, historical context, and provenance to
+          determine its authenticity and significance.
+        </h2>
         <div className="flex flex-col items-center">
           <img src={logoWhite} alt="Kangxi Collection Logo" className="h-14 md:h-20" />
         </div>
       </div>
       {/* Why Authenticate Section */}
       <div className="w-full bg-[#F7F5EA] py-16 px-4">
-        <h2 className="text-2xl md:text-3xl font-serif font-semibold text-[#7B6142] mb-10 text-left max-w-6xl mx-auto">Why Authenticate with Kangxis?</h2>
+        <h2 className="text-2xl md:text-3xl font-serif font-semibold text-[#7B6142] mb-10 text-left max-w-6xl mx-auto">
+          Why Authenticate with Kangxis?
+        </h2>
         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-10 mb-12">
           {whyItems.map((item, idx) => (
             <div key={idx} className="flex flex-col items-left text-left">
@@ -64,33 +78,54 @@ export default function AppraiseAnItem() {
           ))}
         </div>
         <div className="max-w-6xl mx-auto">
-          <img src={timelessTreasure} alt="Terracotta Army" className="w-full h-80 object-cover rounded" />
+          <img
+            src={timelessTreasure}
+            alt="Terracotta Army"
+            className="w-full h-80 object-cover rounded"
+          />
         </div>
       </div>
       {/* Submit Form Section */}
       <div className="w-full bg-[#E6DDC6] py-16 px-4">
         <div className="max-w-xl mx-auto">
-          <h2 className="text-2xl md:text-3xl font-serif font-semibold text-[#7B6142] mb-2 text-center">Submit Your Antique for Authentication</h2>
-          <div className="text-base text-[#585550] mb-8 text-center">To begin the authentication process, kindly provide the details below. Our team will review your submission and reach out with the next steps.</div>
+          <h2 className="text-2xl md:text-3xl font-serif font-semibold text-[#7B6142] mb-2 text-center">
+            Submit Your Antique for Authentication
+          </h2>
+          <div className="text-base text-[#585550] mb-8 text-center">
+            To begin the authentication process, kindly provide the details below. Our team will
+            review your submission and reach out with the next steps.
+          </div>
           <form className="space-y-6">
             <div>
               <label className="block mb-2 text-[#7B6142] font-semibold">First Name</label>
-              <input type="text" className="w-full rounded border border-[#C7C7B9] px-4 py-3 bg-[#F7F5EA] text-[#23211C]" placeholder="Enter your first name" />
+              <input
+                type="text"
+                className="w-full rounded border border-[#C7C7B9] px-4 py-3 bg-[#F7F5EA] text-[#23211C]"
+                placeholder="Enter your first name"
+              />
             </div>
             <div>
               <label className="block mb-2 text-[#7B6142] font-semibold">Last Name</label>
-              <input type="text" className="w-full rounded border border-[#C7C7B9] px-4 py-3 bg-[#F7F5EA] text-[#23211C]" placeholder="Enter your last name" />
+              <input
+                type="text"
+                className="w-full rounded border border-[#C7C7B9] px-4 py-3 bg-[#F7F5EA] text-[#23211C]"
+                placeholder="Enter your last name"
+              />
             </div>
             <div>
               <label className="block mb-2 text-[#7B6142] font-semibold">Item Code</label>
-              <input type="text" className="w-full rounded border border-[#C7C7B9] px-4 py-3 bg-[#F7F5EA] text-[#23211C]" placeholder="Enter item code" />
+              <input
+                type="text"
+                className="w-full rounded border border-[#C7C7B9] px-4 py-3 bg-[#F7F5EA] text-[#23211C]"
+                placeholder="Enter item code"
+              />
             </div>
             <div>
               <label className="block mb-2 text-[#7B6142] font-semibold">Contact Number</label>
               <PhoneInput
                 country={'sg'}
                 value={phone}
-                onChange={phone => setPhone(phone)}
+                onChange={(phone) => setPhone(phone)}
                 inputClass="w-full rounded border border-[#C7C7B9] px-4 py-3 bg-[#F7F5EA] text-[#23211C]"
                 buttonClass="rounded-l border border-[#C7C7B9] bg-[#F7F5EA]"
                 dropdownClass="bg-[#F7F5EA] text-[#23211C]"
@@ -106,19 +141,31 @@ export default function AppraiseAnItem() {
               >
                 <img src={icUpload} alt="Upload" className="w-8 h-8 mb-2" />
                 <div className="font-semibold text-[#23211C] text-center">
-                  Drag &amp; Drop or <span className="text-[#83644B] underline cursor-pointer" onClick={e => { e.stopPropagation(); document.getElementById('file-upload')?.click(); }}>Choose file</span> to upload
+                  Drag &amp; Drop or{' '}
+                  <span
+                    className="text-[#83644B] underline cursor-pointer"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      document.getElementById('file-upload')?.click();
+                    }}
+                  >
+                    Choose file
+                  </span>{' '}
+                  to upload
                 </div>
-                <div className="text-xs text-[#585550] mt-2 text-center">JPG, GIF or PNG. Max size of 800K</div>
+                <div className="text-xs text-[#585550] mt-2 text-center">
+                  JPG, GIF or PNG. Max size of 800K
+                </div>
                 <input
                   id="file-upload"
                   type="file"
                   accept="image/*"
                   multiple
                   className="hidden"
-                  onChange={e => {
+                  onChange={(e) => {
                     const files = e.target.files;
                     if (files && files.length > 0) {
-                      setImages(prev => [...prev, ...Array.from(files)]);
+                      setImages((prev) => [...prev, ...Array.from(files)]);
                     }
                   }}
                 />
@@ -146,11 +193,7 @@ export default function AppraiseAnItem() {
               )}
             </div>
             <div className="w-full">
-              <Button
-                text="SUBMIT FORM"
-                type="submit"
-                className="submit-form-btn"
-              />
+              <Button text="SUBMIT FORM" type="submit" className="submit-form-btn" />
             </div>
           </form>
         </div>

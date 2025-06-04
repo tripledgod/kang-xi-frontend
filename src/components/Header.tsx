@@ -9,7 +9,7 @@ import chinese from '../assets/chinese.svg';
 import menu from '../assets/menu.svg';
 import close from '../assets/close.svg';
 
-function LanguageSwitcher({ className = "" }) {
+function LanguageSwitcher({ className = '' }) {
   const { i18n } = useTranslation();
   const lang = i18n.language === 'zh' ? 'zh' : 'en';
   return (
@@ -67,16 +67,13 @@ export default function Header() {
           <img src={logoMobile} alt="Kang Xi Logo Mobile" className="h-12 block lg:hidden" />
           <img src={logo} alt="Kang Xi Logo" className="h-16 hidden lg:block" />
         </Link>
-        <div className="text-left">
-        </div>
+        <div className="text-left"></div>
       </div>
       {/* Centered navLinks (desktop only) */}
       <nav className="hidden lg:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 items-center gap-8">
         {navLinks.map((link, idx) => (
           <React.Fragment key={link.label}>
-            {idx > 0 && (
-              <img src={plus} alt="plus" className="h-3 w-3 mx-2 opacity-40" />
-            )}
+            {idx > 0 && <img src={plus} alt="plus" className="h-3 w-3 mx-2 opacity-40" />}
             <Link
               to={link.href}
               className="text-lg font-medium text-gray-800 hover:text-red-700 transition-colors"
@@ -110,8 +107,7 @@ export default function Header() {
                 <img src={logoMobile} alt="Kang Xi Logo Mobile" className="h-12 block lg:hidden" />
                 <img src={logo} alt="Kang Xi Logo" className="h-16 hidden lg:block" />
               </Link>
-              <div className="text-left">
-              </div>
+              <div className="text-left"></div>
             </div>
             <button
               className="p-2 z-50"

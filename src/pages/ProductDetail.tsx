@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import {useNavigate, useParams} from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useSwipeable } from 'react-swipeable';
 import Button from '../components/Button';
 import AcquireOrAppraise from '../components/AcquireOrAppraise';
@@ -31,28 +31,32 @@ const product = {
 const relatedProducts = [
   {
     era: 'TANG',
-    image: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80',
+    image:
+      'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80',
     title: 'A White Glazed Kundika, Late Tang / Five Dynasties Period',
     years: '618 – 960',
     item: 'T302602',
   },
   {
     era: 'TANG',
-    image: 'https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=400&q=80',
+    image:
+      'https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=400&q=80',
     title: 'A Changsha Straw Glazed Pottery Ewer, Tang Dynasty',
     years: '618 – 907',
     item: 'T302601',
   },
   {
     era: 'TANG',
-    image: 'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=400&q=80',
+    image:
+      'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=400&q=80',
     title: 'A Rare Bottom Filling Water Olive Green Glazed Teapot, Five Dynasties of the Period',
     years: '916–1125',
     item: 'L302601',
   },
   {
     era: 'TANG',
-    image: 'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?auto=format&fit=crop&w=400&q=80',
+    image:
+      'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?auto=format&fit=crop&w=400&q=80',
     title: 'A Large Painted Pottery Figure of a Pranking Horse, Tang Dynasty',
     years: '916–1125',
     item: 'L302601',
@@ -69,7 +73,11 @@ export default function ProductDetail() {
   const [descWidth, setDescWidth] = useState<number | undefined>(undefined);
   const descRef = useRef<HTMLDivElement>(null);
   const [showAcquireModal, setShowAcquireModal] = useState(false);
-  const [acquireForm, setAcquireForm] = useState({ firstName: '', lastName: '', itemCode: product.itemCode });
+  const [acquireForm, setAcquireForm] = useState({
+    firstName: '',
+    lastName: '',
+    itemCode: product.itemCode,
+  });
   const [phone, setPhone] = useState('');
   const navigate = useNavigate();
 
@@ -108,7 +116,8 @@ export default function ProductDetail() {
       <div className="max-w-6xl mx-auto px-4 pt-2 text-xs text-[#888] mb-2">Product ID: {id}</div>
       {/* Breadcrumb */}
       <div className="max-w-6xl mx-auto px-4 pt-6 text-xs text-[#888] mb-4">
-        <span>Home</span> <span className="mx-1">&gt;</span> <span>Browse</span> <span className="mx-1">&gt;</span> <span className="text-[#201F1C]">{product.title}</span>
+        <span>Home</span> <span className="mx-1">&gt;</span> <span>Browse</span>{' '}
+        <span className="mx-1">&gt;</span> <span className="text-[#201F1C]">{product.title}</span>
       </div>
       {/* Main Section */}
       <div className="max-w-6xl mx-auto px-4 flex flex-col md:flex-row gap-10">
@@ -156,7 +165,11 @@ export default function ProductDetail() {
           {/* Main Image with Zoom Button */}
           <div className="flex-1 flex items-center justify-center">
             <div className="relative w-full">
-              <img src={mainImg} alt="Main" className="object-contain w-full max-h-[400px] bg-white rounded" />
+              <img
+                src={mainImg}
+                alt="Main"
+                className="object-contain w-full max-h-[400px] bg-white rounded"
+              />
               <button
                 className="absolute top-2 right-2 bg-white rounded-full p-2 shadow hover:scale-110 transition"
                 onClick={() => openModal(gallery.indexOf(mainImg))}
@@ -173,17 +186,32 @@ export default function ProductDetail() {
             <span>{product.years}</span>
             <span className="flex items-center gap-1">
               ITEM CODE {product.itemCode}
-              <button onClick={handleCopy} className="ml-1 p-1 hover:bg-[#E6DDC6] rounded" aria-label="Copy Item Code">
+              <button
+                onClick={handleCopy}
+                className="ml-1 p-1 hover:bg-[#E6DDC6] rounded"
+                aria-label="Copy Item Code"
+              >
                 <img src={copyIcon} alt="Copy" className="w-4 h-4" />
               </button>
               {copied && <span className="text-xs text-green-600 ml-1">Copied!</span>}
             </span>
           </div>
-          <h1 className="text-3xl md:text-4xl font-serif font-medium text-[#61422D] mb-2 leading-tight">{product.title}</h1>
+          <h1 className="text-3xl md:text-4xl font-serif font-medium text-[#61422D] mb-2 leading-tight">
+            {product.title}
+          </h1>
           <div className="max-w-xl">
             <div className="text-base text-[#2E2A24] font-bold mb-1">Description</div>
-            <div ref={descRef} className="text-lg text-[#585550] mb-4 whitespace-pre-line line-clamp-6">{product.desc}</div>
-            <Button text="ACQUIRE THIS ITEM" className="submit-form-btn" onClick={() => setShowAcquireModal(true)}/>
+            <div
+              ref={descRef}
+              className="text-lg text-[#585550] mb-4 whitespace-pre-line line-clamp-6"
+            >
+              {product.desc}
+            </div>
+            <Button
+              text="ACQUIRE THIS ITEM"
+              className="submit-form-btn"
+              onClick={() => setShowAcquireModal(true)}
+            />
           </div>
         </div>
       </div>
@@ -192,11 +220,17 @@ export default function ProductDetail() {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
           {/* Top center: index */}
           <div className="absolute top-4 left-1/2 -translate-x-1/2 z-60">
-            <span className="text-white text-base bg-black/50 rounded px-3 py-1">{modalIndex + 1}/{gallery.length}</span>
+            <span className="text-white text-base bg-black/50 rounded px-3 py-1">
+              {modalIndex + 1}/{gallery.length}
+            </span>
           </div>
           {/* Top right: close button */}
           <div className="absolute top-4 right-4 z-60">
-            <button className="text-white text-3xl font-bold" onClick={closeModal} aria-label="Close">
+            <button
+              className="text-white text-3xl font-bold"
+              onClick={closeModal}
+              aria-label="Close"
+            >
               &times;
             </button>
           </div>
@@ -208,7 +242,11 @@ export default function ProductDetail() {
             <img src={icCircleLeft} alt="Previous" className="w-10 h-10" />
           </button>
           <div className="flex flex-col items-center">
-            <img src={gallery[modalIndex]} alt="Zoomed" className="max-h-[90vh] max-w-[98vw] rounded shadow-lg" />
+            <img
+              src={gallery[modalIndex]}
+              alt="Zoomed"
+              className="max-h-[90vh] max-w-[98vw] rounded shadow-lg"
+            />
           </div>
           <button
             className="absolute right-8 top-1/2 -translate-y-1/2 bg-transparent rounded-full shadow-none p-2 z-60"
@@ -223,9 +261,15 @@ export default function ProductDetail() {
       <div className="w-full bg-[#F7F5EA] py-16 mt-10">
         <div className="max-w-6xl mx-auto px-4">
           <div className="flex flex-row justify-between items-center mb-8">
-            <h2 className="text-2xl md:text-3xl font-serif font-medium text-[#201F1C]">You might be interested</h2>
-            <button className="text-[#020202] text-sm font-semibold hidden md:flex"
-                    onClick={() => navigate('/browse')}>VIEW ALL</button>
+            <h2 className="text-2xl md:text-3xl font-serif font-medium text-[#201F1C]">
+              You might be interested
+            </h2>
+            <button
+              className="text-[#020202] text-sm font-semibold hidden md:flex"
+              onClick={() => navigate('/browse')}
+            >
+              VIEW ALL
+            </button>
           </div>
           <div className="relative">
             {/* Carousel Arrows */}
@@ -237,10 +281,16 @@ export default function ProductDetail() {
                 {relatedProducts.map((item, idx) => (
                   <div key={idx} className="min-w-[260px] max-w-xs flex flex-col">
                     <div className="bg-[#E6DDC6] aspect-square w-full flex items-center justify-center overflow-hidden mb-4">
-                      <img src={item.image} alt={item.title} className="object-contain w-full h-full" />
+                      <img
+                        src={item.image}
+                        alt={item.title}
+                        className="object-contain w-full h-full"
+                      />
                     </div>
                     <div className="text-xs text-[#7B6142] font-semibold mb-2">{item.era}</div>
-                    <div className="text-base font-serif font-medium text-[#61422D] mb-2 leading-snug line-clamp-2 pb-8">{item.title}</div>
+                    <div className="text-base font-serif font-medium text-[#61422D] mb-2 leading-snug line-clamp-2 pb-8">
+                      {item.title}
+                    </div>
                     <div className="flex flex-row justify-between text-xs text-[#585550] font-semibold border-t pt-2 border-[#C7C7B9]">
                       <span>{item.years}</span>
                       <span>ITEM {item.item}</span>
@@ -263,7 +313,10 @@ export default function ProductDetail() {
       {showAcquireModal && (
         <div className="fixed inset-0 z-50 flex">
           {/* Overlay */}
-          <div className="fixed inset-0 bg-black/30 transition-opacity duration-300" onClick={() => setShowAcquireModal(false)} />
+          <div
+            className="fixed inset-0 bg-black/30 transition-opacity duration-300"
+            onClick={() => setShowAcquireModal(false)}
+          />
           {/* Drawer with slide-in animation */}
           <div className="ml-auto h-full w-full max-w-xl bg-[#F7F5EA] shadow-xl flex flex-col relative transition-transform duration-300 animate-slide-in-right">
             {/* Close button */}
@@ -276,20 +329,42 @@ export default function ProductDetail() {
             </button>
             {/* Form Content */}
             <div className="flex-1 flex flex-col justify-center px-6 py-10">
-              <h2 className="text-4xl font-serif font-medium text-[#61422D] mb-4 text-center">Secure Your Piece of History</h2>
-              <div className="text-base text-[#585550] mb-8 text-center">Fill in your details below, and we will be in touch with you shortly.</div>
+              <h2 className="text-4xl font-serif font-medium text-[#61422D] mb-4 text-center">
+                Secure Your Piece of History
+              </h2>
+              <div className="text-base text-[#585550] mb-8 text-center">
+                Fill in your details below, and we will be in touch with you shortly.
+              </div>
               <form className="space-y-6">
                 <div>
                   <label className="block mb-2 text-[#1F1F1F] font-medium">First Name</label>
-                  <input type="text" className="w-full rounded border border-[#C7C7B9] px-4 py-3 bg-white text-[#23211C]" placeholder="Enter your first name" value={acquireForm.firstName} onChange={e => setAcquireForm(f => ({ ...f, firstName: e.target.value }))} />
+                  <input
+                    type="text"
+                    className="w-full rounded border border-[#C7C7B9] px-4 py-3 bg-white text-[#23211C]"
+                    placeholder="Enter your first name"
+                    value={acquireForm.firstName}
+                    onChange={(e) => setAcquireForm((f) => ({ ...f, firstName: e.target.value }))}
+                  />
                 </div>
                 <div>
                   <label className="block mb-2 text-[#1F1F1F] font-medium">Last Name</label>
-                  <input type="text" className="w-full rounded border border-[#C7C7B9] px-4 py-3 bg-white text-[#23211C]" placeholder="Enter your last name" value={acquireForm.lastName} onChange={e => setAcquireForm(f => ({ ...f, lastName: e.target.value }))} />
+                  <input
+                    type="text"
+                    className="w-full rounded border border-[#C7C7B9] px-4 py-3 bg-white text-[#23211C]"
+                    placeholder="Enter your last name"
+                    value={acquireForm.lastName}
+                    onChange={(e) => setAcquireForm((f) => ({ ...f, lastName: e.target.value }))}
+                  />
                 </div>
                 <div>
                   <label className="block mb-2 text-[#1F1F1F] font-medium">Item Code</label>
-                  <input type="text" className="w-full rounded border border-[#C7C7B9] px-4 py-3 bg-white text-[#23211C]" placeholder="Enter item code" value={acquireForm.itemCode} onChange={e => setAcquireForm(f => ({ ...f, itemCode: e.target.value }))} />
+                  <input
+                    type="text"
+                    className="w-full rounded border border-[#C7C7B9] px-4 py-3 bg-white text-[#23211C]"
+                    placeholder="Enter item code"
+                    value={acquireForm.itemCode}
+                    onChange={(e) => setAcquireForm((f) => ({ ...f, itemCode: e.target.value }))}
+                  />
                 </div>
                 <div>
                   <label className="block mb-2 text-[#1F1F1F] font-medium">Contact Number</label>
