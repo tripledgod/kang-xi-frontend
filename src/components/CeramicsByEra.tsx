@@ -131,7 +131,7 @@ export default function CeramicsByEra() {
               />
             </button>
             <button
-              className="ml-4 w-[220px] h-[64px] flex items-center justify-center text-base font-medium shadow-none transition-all px-6"
+              className="ml-4 w-[218px] h-[48px] flex items-center justify-center text-base font-medium shadow-none transition-all px-6"
               onClick={() => navigate('/browse')}
               style={{
                 backgroundImage: `url(${bgButton})`,

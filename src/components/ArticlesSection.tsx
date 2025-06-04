@@ -48,7 +48,7 @@ export default function ArticlesSection() {
             </div>
           ))}
         </div>
-        <div className="flex justify-center w-full max-w-xs mx-auto">
+        <div className="flex justify-center w-full max-w-6xl  mx-auto ">
           <Button text="VIEW ALL ARTICLES" variant="outline" onClick={() => navigate('/articles')}/>
         </div>
       </div>

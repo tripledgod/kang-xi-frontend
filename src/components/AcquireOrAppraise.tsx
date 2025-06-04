@@ -47,7 +47,7 @@ export default function AcquireOrAppraise() {
             <p className="text-lg md:text-xl text-[#A4A7AE] mb-10 max-w-lg">{section.desc}</p>
             <div className="w-[220px] flex justify-center">
               <button
-                className="w-full md:w-[220px] h-[64px] flex items-center justify-center text-base font-medium shadow-none transition-all px-6"
+                className="w-full md:w-[189px] h-[48px] flex items-center justify-center text-base font-medium shadow-none transition-all px-6"
                 onClick={section.link ? () => navigate(section.link) : undefined}
                 style={{
                   backgroundImage: `url(${bgButton})`,
