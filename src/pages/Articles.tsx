@@ -112,7 +112,7 @@ export default function Articles() {
         />
       </div>
       {/* Featured Articles Section */}
-      <div className="max-w-7xl mx-auto w-full px-4 md:px-16 flex flex-col gap-12 mt-24">
+      <div className="max-w-7xl mx-auto pl-6 w-full md:pl-24 pr-6 md:pr-16 flex flex-col gap-12 md:mt-24">
         {/* Featured Articles */}
         <div className="flex flex-col md:flex-row gap-8">
           <div className="relative h-[340px] md:h-[400px] rounded overflow-hidden group w-full md:w-4/5">
@@ -134,7 +134,7 @@ export default function Articles() {
               </div>
             </div> */}
           </div>
-          <div className="relative h-[340px] md:h-[400px] rounded overflow-hidden group w-full md:w-2/5">
+          <div className="relative h-[340px] md:h-[400px] rounded overflow-hidden group w-full md:w-1/5">
             <img
               src={featuredArticles[1].image}
               alt={featuredArticles[1].title}
@@ -155,7 +155,7 @@ export default function Articles() {
           </div>
         </div>
         {/* Latest Articles */}
-        <div className="flex flex-col md:flex-row gap-8 w-full">
+        <div className="flex flex-col md:flex-row gap-8 w-full md:mt-12">
           <div className="w-full md:w-4/5">
             <h1 className="text-4xl font-serif font-semibold text-[#7B6142] mb-8 text-left">
               Latest Articles
