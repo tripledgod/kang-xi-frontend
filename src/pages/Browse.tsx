@@ -4,12 +4,28 @@ import heroImg from '../assets/ceramic_cover.png';
 import heroImgMobile from '../assets/ceramic_cover_mobile.png';
 import AcquireOrAppraise from '../components/AcquireOrAppraise';
 
-const eras = [
-  { key: 'tang', label: 'TANG' },
-  { key: 'song', label: 'SONG' },
-  { key: 'yuan', label: 'YUAN' },
-  { key: 'ming', label: 'MING' },
-  { key: 'qing', label: 'QING' },
+interface EraStyle {
+  fontFamily: string;
+  fontWeight: number;
+  fontSize: number;
+  lineHeight: string;
+  letterSpacing: number;
+  textAlign: 'left' | 'center' | 'right';
+  color: string;
+}
+
+interface Era {
+  key: string;
+  label: string;
+  style: EraStyle;
+}
+
+const eras: Era[] = [
+  { key: 'tang', label: 'TANG', style: { fontFamily: 'PingFang SC', fontWeight: 400, fontSize: 16, lineHeight: '24px', letterSpacing: 0, textAlign: 'left', color: '#201F1C' } },
+  { key: 'song', label: 'SONG', style: { fontFamily: 'PingFang SC', fontWeight: 400, fontSize: 16, lineHeight: '24px', letterSpacing: 0, textAlign: 'left', color: '#201F1C' } },
+  { key: 'yuan', label: 'YUAN', style: { fontFamily: 'PingFang SC', fontWeight: 400, fontSize: 16, lineHeight: '24px', letterSpacing: 0, textAlign: 'left', color: '#201F1C' } },
+  { key: 'ming', label: 'MING', style: { fontFamily: 'PingFang SC', fontWeight: 400, fontSize: 16, lineHeight: '24px', letterSpacing: 0, textAlign: 'left', color: '#201F1C' } },
+  { key: 'qing', label: 'QING', style: { fontFamily: 'PingFang SC', fontWeight: 400, fontSize: 16, lineHeight: '24px', letterSpacing: 0, textAlign: 'left', color: '#201F1C' } },
 ];
 
 const ceramics = [
@@ -84,12 +100,13 @@ export default function Browse() {
       {/* Era Tabs */}
       <div className="w-full sticky top-[0px] z-30 bg-[#F7F5EA]">
         <div className="max-w-6xl mx-auto px-4 pt-4 md:pt-20 overflow-x-auto whitespace-nowrap">
-          <div className="inline-flex items-center gap-x-2 justify-start">
+          <div className="inline-flex items-center gap-x-2 justify-start pl-[64px]">
             {eras.map((era, idx) => (
               <React.Fragment key={era.key}>
                 <button
-                  className={`pb-2 text-lg font-serif font-semibold transition-colors ${activeEra === era.key ? 'border-b-2 border-[#23211C] text-[#23211C] font-bold' : 'text-[#23211C] font-normal border-b-0'}`}
+                  className={`pb-2 transition-colors ${activeEra === era.key ? 'border-b-2 border-[#23211C] text-[#23211C]' : 'text-[#23211C] border-b-0'}`}
                   onClick={() => setActiveEra(era.key)}
+                  style={era.style}
                 >
                   {era.label}
                 </button>
@@ -105,7 +122,7 @@ export default function Browse() {
       </div>
 
       {/* Ceramics Grid */}
-      <div className="w-full max-w-6xl mx-auto px-4 mt-10 grid grid-cols-1 md:grid-cols-3 gap-10">
+      <div className="w-full max-w-6xl mx-auto px-4 mt-10 grid grid-cols-1 md:grid-cols-3 gap-10 pl-[80px]">
         {filteredCeramics.map((ceramic, idx) => (
           <div
             key={idx}
@@ -119,9 +136,9 @@ export default function Browse() {
                 className="object-contain w-full h-full"
               />
             </div>
-            <div className="text-xl font-serif font-semibold text-[#7B6142] mb-2 leading-snug">
+            <h2 className="text-[24px] font-medium text-[#61422D] mb-2 leading-[32px] tracking-[0px]">
               {ceramic.title}
-            </div>
+            </h2>
             <div className="text-base text-[#585550] mb-4 line-clamp-3">{ceramic.desc}</div>
             <div className="flex flex-row justify-between text-xs text-[#23211C] font-semibold">
               <span>{ceramic.years}</span>

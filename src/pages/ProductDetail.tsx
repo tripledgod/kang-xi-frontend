@@ -288,9 +288,9 @@ export default function ProductDetail() {
                       />
                     </div>
                     <div className="text-xs text-[#7B6142] font-semibold mb-2">{item.era}</div>
-                    <div className="text-base font-serif font-medium text-[#61422D] mb-2 leading-snug line-clamp-2 pb-8">
+                    <h2 className="text-base font-serif font-semibold text-[#61422D] mb-2 leading-snug line-clamp-2 pb-8">
                       {item.title}
-                    </div>
+                    </h2>
                     <div className="flex flex-row justify-between text-xs text-[#585550] font-semibold border-t pt-2 border-[#C7C7B9]">
                       <span>{item.years}</span>
                       <span>ITEM {item.item}</span>

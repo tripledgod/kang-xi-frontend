@@ -121,27 +121,27 @@ export default function AboutUs() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
             <div className="flex flex-col items-center">
               <img src={vaseIcon} alt="Acquisition" className="h-12 mb-4" />
-              <div className="text-lg font-semibold text-white mb-2">
+              <h2 className="text-lg font-semibold text-white mb-2">
                 Acquisition: Finding Hidden Treasures
-              </div>
+              </h2>
               <div className="text-[#A4A7AE] text-sm">
                 We source only the finest antiques from trusted networks.
               </div>
             </div>
             <div className="flex flex-col items-center">
               <img src={letterIcon} alt="Authentication" className="h-12 mb-4" />
-              <div className="text-lg font-semibold text-white mb-2">
+              <h2 className="text-lg font-semibold text-white mb-2">
                 Authentication: Ensuring Genuine Quality
-              </div>
+              </h2>
               <div className="text-[#A4A7AE] text-sm">
                 Our experts conduct thorough evaluations to confirm authenticity.
               </div>
             </div>
             <div className="flex flex-col items-center">
               <img src={chaseIcon} alt="Selling" className="h-12 mb-4" />
-              <div className="text-lg font-semibold text-white mb-2">
+              <h2 className="text-lg font-semibold text-white mb-2">
                 Selling: Connecting Collectors with Masterpieces
-              </div>
+              </h2>
               <div className="text-[#A4A7AE] text-sm">
                 We facilitate seamless transactions for both buyers and sellers.
               </div>
@@ -218,26 +218,20 @@ export default function AboutUs() {
             {/* Desktop arrows only */}
             <div className="hidden md:flex gap-2">
               <button
-<<<<<<< HEAD
+
                 className="ticket-rounded w-10 h-10 border border-[#7B6142] rounded-lg flex items-center justify-center bg-transparent text-[#7B6142] hover:bg-[#E6DDC6] transition disabled:opacity-30"
                 onClick={() => setTeamIndex(i => Math.max(0, i - 1))}
-=======
-                className="w-10 h-10 border border-[#7B6142] rounded flex items-center justify-center bg-transparent text-[#7B6142] hover:bg-[#E6DDC6] transition disabled:opacity-30"
-                onClick={() => setTeamIndex((i) => Math.max(0, i - 1))}
->>>>>>> d1039e37f8430577e372faae951abc59c9de56ee
+
                 disabled={!canGoLeft}
                 aria-label="Previous"
               >
                 <span className="text-2xl">&#8592;</span>
               </button>
               <button
-<<<<<<< HEAD
+
                 className="ticket-rounded w-10 h-10 border border-[#7B6142] rounded-lg flex items-center justify-center bg-transparent text-[#7B6142] hover:bg-[#E6DDC6] transition disabled:opacity-30"
                 onClick={() => setTeamIndex(i => Math.min(team.length - visibleCount, i + 1))}
-=======
-                className="w-10 h-10 border border-[#7B6142] rounded flex items-center justify-center bg-transparent text-[#7B6142] hover:bg-[#E6DDC6] transition disabled:opacity-30"
-                onClick={() => setTeamIndex((i) => Math.min(team.length - visibleCount, i + 1))}
->>>>>>> d1039e37f8430577e372faae951abc59c9de56ee
+
                 disabled={!canGoRight}
                 aria-label="Next"
               >
@@ -268,10 +262,10 @@ export default function AboutUs() {
                   alt={member.name}
                   className="w-full h-[340px] object-cover rounded mb-6"
                 />
-                <div className="text-2xl font-serif font-semibold text-[#7B6142] mb-1 text-left">
+                <h2 className="text-2xl font-serif font-semibold text-[#61422D] mb-1 text-left">
                   {member.name}
-                </div>
-                <div className="text-base font-bold text-[#7B6142] mb-2 text-left">
+                </h2>
+                <div className="text-base font-bold text-[#61422D] mb-2 text-left">
                   {member.role}
                 </div>
                 <div className="text-base text-[#585550] text-left">{member.desc}</div>

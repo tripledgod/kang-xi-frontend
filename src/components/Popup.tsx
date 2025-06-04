@@ -1,13 +1,10 @@
 import React from 'react';
 import Button from './Button';
-<<<<<<< HEAD
+
 import {COLORS} from "./colors.ts";
 import bgButton from '../assets/bg_button.png';
 import bgButtonMobile from '../assets/bg_button_mobile.png';
-=======
-import { COLORS } from './colors.ts';
 
->>>>>>> d1039e37f8430577e372faae951abc59c9de56ee
 interface PopupProps {
   title: string;
   content: string;
@@ -52,9 +49,9 @@ const Popup: React.FC<PopupProps> = ({ title, content, buttonText, onButtonClick
         </div>
         {/* Button */}
         <div className="w-full flex justify-center">
-<<<<<<< HEAD
+
         <button
-            className=" w-[220px] h-[64px] flex items-center justify-center text-base font-medium shadow-none transition-all px-6 text-xl md:text-2xl max-w-2xl hidden  md:block"
+            className=" w-[220px] h-[48px] flex items-center justify-center text-base font-medium shadow-none transition-all px-6 text-xl  max-w-2xl hidden  md:block"
             style={{
               backgroundImage: `url(${bgButton})`,
               backgroundSize: '100% 100%',
@@ -70,7 +67,7 @@ const Popup: React.FC<PopupProps> = ({ title, content, buttonText, onButtonClick
             {buttonText}
           </button>
           <button
-            className="w-full  h-[64px] flex items-center justify-center text-base font-medium shadow-none transition-all px-6 text-xl md:text-2xl max-w-2xl md:hidden"
+            className="w-full  h-[48px] flex items-center justify-center text-base font-medium shadow-none transition-all px-6 text-xl md:text-2xl max-w-2xl md:hidden"
             style={{
               backgroundImage: `url(${bgButtonMobile})`,
               backgroundSize: '100% 100%',
@@ -85,13 +82,7 @@ const Popup: React.FC<PopupProps> = ({ title, content, buttonText, onButtonClick
           >
             {buttonText}
           </button>
-=======
-          <Button
-            text={buttonText}
-            onClick={onButtonClick}
-            className="max-w-2xl w-full text-xl md:text-2xl"
-          />
->>>>>>> d1039e37f8430577e372faae951abc59c9de56ee
+
         </div>
       </div>
     </div>

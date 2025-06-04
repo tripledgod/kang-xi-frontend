@@ -91,7 +91,7 @@ export default function CeramicsByEra() {
           </h2>
           <div className="hidden md:flex items-center gap-4 self-end md:self-auto">
             <button
-<<<<<<< HEAD
+
               className="w-10 h-10 flex items-center justify-center text-base font-medium shadow-none transition-all rounded-[6px] border border-[#C7B08A] bg-[#F7F3E8] hover:border-[#86684A]"
               onClick={() => setIndex((i) => Math.max(0, i - 1))}
               disabled={!canGoLeft}
@@ -103,17 +103,13 @@ export default function CeramicsByEra() {
                 minWidth: 0,
                 opacity: !canGoLeft ? 0.5 : 1,
               }}
-=======
-              className="w-10 h-10 border border-[#86684A] rounded-md items-center justify-center bg-transparent"
-              onClick={() => setIndex((i) => Math.max(0, i - 1))}
-              disabled={!canGoLeft}
->>>>>>> d1039e37f8430577e372faae951abc59c9de56ee
+
             >
               <img
                 src={icLeft}
                 alt="left"
                 className="w-6 h-6"
-<<<<<<< HEAD
+
                 style={{ display: 'inline-block', filter: 'none', color: '#C7B08A' }}
               />
             </button>
@@ -129,33 +125,19 @@ export default function CeramicsByEra() {
                 minWidth: 0,
                 opacity: !canGoRight ? 0.5 : 1,
               }}
-=======
-                style={{ display: 'inline-block' }}
-              />
-            </button>
-            <button
-              className="w-10 h-10 border border-[#86684A] rounded-md items-center justify-center bg-transparent"
-              onClick={() => setIndex((i) => Math.min(eras.length - DESKTOP_VISIBLE, i + 1))}
-              disabled={!canGoRight}
->>>>>>> d1039e37f8430577e372faae951abc59c9de56ee
+
             >
               <img
                 src={icRight}
                 alt="right"
                 className="w-6 h-6"
-<<<<<<< HEAD
+
                 style={{ display: 'inline-block', filter: 'none', color: '#C7B08A' }}
               />
             </button>
             <button
               className="ml-4 w-[218px] h-[48px] flex items-center justify-center text-base font-medium shadow-none transition-all px-6"
-=======
-                style={{ display: 'inline-block' }}
-              />
-            </button>
-            <button
-              className="ml-4 w-[220px] h-[64px] flex items-center justify-center text-base font-medium shadow-none transition-all px-6"
->>>>>>> d1039e37f8430577e372faae951abc59c9de56ee
+
               onClick={() => navigate('/browse')}
               style={{
                 backgroundImage: `url(${bgButton})`,
@@ -172,13 +154,12 @@ export default function CeramicsByEra() {
             </button>
           </div>
         </div>
-<<<<<<< HEAD
+
       </div>
 
       {/* Content with padding top to account for fixed header */}
       <div className="max-w-7xl mx-auto pt-[120px] md:pt-[100px]">
-=======
->>>>>>> d1039e37f8430577e372faae951abc59c9de56ee
+
         {/* Mobile: vertical stack */}
         <div className="flex flex-col gap-8 mt-4 md:hidden">
           {eras.map((era, idx) => (
@@ -186,45 +167,35 @@ export default function CeramicsByEra() {
               <div className="bg-[#E6DDC6] aspect-square w-full flex items-center justify-center overflow-hidden mb-4">
                 <img src={era.img} alt={era.name} className="object-cover w-full h-full" />
               </div>
-              <div
-<<<<<<< HEAD
+              <h4
+
                 className="text-2xl font-serif mb-6 font-semibold"
-                style={{ color: COLORS.primary900, fontFamily: 'Source Han Serif SC VF, serif', fontWeight: 600, fontSize: 32, lineHeight: '40px', letterSpacing: 0 }}
-=======
-                className="text-2xl font-serif mb-6 font-medium"
-                style={{ color: COLORS.primary900 }}
->>>>>>> d1039e37f8430577e372faae951abc59c9de56ee
+                style={{ color: COLORS.primary900,  fontWeight: 500, fontSize: 32, lineHeight: '40px', letterSpacing: 0 }}
+
               >
                 {era.name}
-              </div>
+              </h4>
               <div className="text-base font-semibold border-t border-[#C7C7B9] pt-4 text-[#2E2A24] mb-1">
                 {era.years}
               </div>
-<<<<<<< HEAD
+
               <div className="text-base pt-2" style={{ fontFamily: 'PingFang SC, Arial, sans-serif', fontWeight: 400, fontSize: 16, lineHeight: '24px', letterSpacing: 0, color: '#342216' }}>
                 {era.desc}
               </div>
-=======
-              <div className="text-base text-[#585550] pt-2">{era.desc}</div>
->>>>>>> d1039e37f8430577e372faae951abc59c9de56ee
+
             </div>
           ))}
           <div className="mt-6">
             <Button text="VIEW ALL COLLECTION" onClick={() => navigate('/browse')} />
           </div>
         </div>
-<<<<<<< HEAD
+
 
         {/* Desktop: horizontal scroll carousel */}
         <div
           ref={containerRef}
           className="hidden md:flex gap-8 mt-4 md:overflow-x-hidden"
-=======
-        {/* Desktop: horizontal scroll carousel */}
-        <div
-          ref={containerRef}
-          className="hidden md:flex gap-8 mt-4 overflow-x-auto scrollbar-hide md:overflow-x-hidden"
->>>>>>> d1039e37f8430577e372faae951abc59c9de56ee
+
           style={{ width: containerWidth, maxWidth: '100%' }}
         >
           {eras.map((era, idx) => (
@@ -236,7 +207,7 @@ export default function CeramicsByEra() {
               <div className="bg-[#E6DDC6] aspect-square w-full flex items-center justify-center overflow-hidden mb-4">
                 <img src={era.img} alt={era.name} className="object-cover w-full h-full" />
               </div>
-<<<<<<< HEAD
+
               <div className="text-2xl font-serif text-[#86684A] mb-6 font-semibold" style={{ fontFamily: 'Source Han Serif SC VF, serif', fontWeight: 600, fontSize: 32, lineHeight: '40px', letterSpacing: 0 }}>
                 {era.name}
               </div>
@@ -246,13 +217,7 @@ export default function CeramicsByEra() {
               <div className="text-base pt-2" style={{ fontFamily: 'PingFang SC, Arial, sans-serif', fontWeight: 400, fontSize: 16, lineHeight: '24px', letterSpacing: 0, color: '#342216' }}>
                 {era.desc}
               </div>
-=======
-              <div className="text-2xl font-serif text-[#86684A] mb-6">{era.name}</div>
-              <div className="text-base font-semibold border-t border-[#C7C7B9] pt-4 text-[#2E2A24] mb-1">
-                {era.years}
-              </div>
-              <div className="text-base text-[#585550] pt-2">{era.desc}</div>
->>>>>>> d1039e37f8430577e372faae951abc59c9de56ee
+
             </div>
           ))}
         </div>

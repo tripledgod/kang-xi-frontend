@@ -11,6 +11,6 @@ export const COLORS = {
   primary900: '#61422D',
   secondary900: '#2E2A24',
   secondary600: '#6D6A66',
-  secondary700: '#342216',
+  secondary700: '#585550',
   bg_button: '#86684A',
 };

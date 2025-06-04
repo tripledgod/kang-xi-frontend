@@ -39,7 +39,7 @@ function RelatedArticles({ related }: { related: RelatedArticle[] }) {
   const navigate = useNavigate();
   return (
     <section className="w-full py-16 px-4">
-      <h2 className="text-4xl font-serif font-medium text-[#7B6142] mb-12 text-center">
+      <h2 className="text-4xl font-serif font-medium text-[#61422D] mb-12 text-center">
         Related Articles
       </h2>
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
@@ -48,23 +48,15 @@ function RelatedArticles({ related }: { related: RelatedArticle[] }) {
             <div className="bg-[#E6DDC6] aspect-square w-full flex items-center justify-center overflow-hidden mb-4">
               <img src={article.image} alt={article.title} className="object-cover w-full h-full" />
             </div>
-<<<<<<< HEAD
-            <div className="text-xl font-serif font-medium text-[#61422D] mb-2 leading-snug line-clamp-2" style={{ fontFamily: 'Source Han Serif SC VF, serif', fontWeight: 600, fontSize: 24, lineHeight: '32px', letterSpacing: 0, textAlign: 'left', color: '#4A2A1A' }}>
+
+            <h2 className="text-xl font-serif font-medium text-[#61422D] mb-2 leading-snug line-clamp-2" style={{ fontFamily: 'Source Han Serif SC VF, serif', fontWeight: 600, fontSize: 24, lineHeight: '32px', letterSpacing: 0, textAlign: 'left', color: '#61422D' }}>
               {article.title}
-            </div>
+            </h2>
             <div className="font-pingfang text-base font-normal leading-6 mb-4 line-clamp-3" style={{ color: '#342216' }}>
               {article.desc}
             </div>
             <div className="text-xs text-[#585550] font-semibold uppercase tracking-wider">{article.date}</div>
-=======
-            <div className="text-xl font-serif font-medium text-[#61422D] mb-2 leading-snug line-clamp-2">
-              {article.title}
-            </div>
-            <div className="text-base text-[#585550] mb-4 line-clamp-2">{article.desc}</div>
-            <div className="text-xs text-[#585550] font-semibold uppercase tracking-wider">
-              {article.date}
-            </div>
->>>>>>> d1039e37f8430577e372faae951abc59c9de56ee
+
           </div>
         ))}
       </div>
@@ -82,12 +74,12 @@ export default function ArticleDetail() {
         <div className="text-xs text-[#7B6142] font-semibold uppercase tracking-wider mb-2">
           JULY 4, 2024
         </div>
-        <h1 className="text-3xl md:text-4xl font-serif font-semibold text-[#2E2A24] mb-2 leading-tight">
+        <h1 className="text-3xl md:text-4xl font-serif font-semibold text-[#61422D] mb-2 leading-tight">
           They used to say that Yuan Blue-White Ceramics don't exist. How was it then discovered?
         </h1>
         <div className="text-base text-[#585550] mb-4">by Kangxi Finder</div>
         <img src={mainImg} alt="Main" className="w-full h-auto rounded mb-8" />
-        <h2 className="text-xl font-serif font-semibold text-[#2E2A24] mb-2 mt-8">
+        <h2 className="text-xl font-serif font-semibold text-[#61422D] mb-2 mt-8">
           Chinese ceramics and the world of arts
         </h2>
         <p className="mb-6 text-[#23211C]">
