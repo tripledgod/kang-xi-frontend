@@ -3,10 +3,7 @@ import Button from './Button';
 import bowl from '../assets/tang.png'; // Placeholder, replace with real images
 import horse from '../assets/chase_collection.png'; // Placeholder, replace with real images
 import blueWhite from '../assets/chase_collection.png';
-import bgButton from '../assets/bg_button.png';
 import {useNavigate} from "react-router-dom"; // Placeholder, replace with real images
-
-
 
 const articles = [
   {
@@ -36,7 +33,7 @@ export default function ArticlesSection() {
       <div className="max-w-7xl mx-auto flex flex-col items-center">
 
         <h2 className="text-[32px] leading-[40px] md:text-[48px] md:leading-[58px] font-semibold text-[#61422D] mb-2 text-center">Our Articles</h2>
-        <div className="text-[18px] leading-[26px] mb-12 text-center font-normal" style={{ color: '#342216', fontFamily: 'PingFang SC' }}>Feature articles of the month</div>
+        <div className="text-[18px] leading-[26px] mb-12 text-center font-normal text-[#342216]">Feature articles of the month</div>
 
         <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
           {articles.map((article, idx) => (
