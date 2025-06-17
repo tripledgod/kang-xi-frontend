@@ -5,6 +5,7 @@ import CeramicsByEra from '../components/CeramicsByEra';
 import AcquireOrAppraise from '../components/AcquireOrAppraise';
 import ArticlesSection from '../components/ArticlesSection';
 import Newsletter from '../components/Newsletter';
+import { API_URL } from '../utils/constants.ts';
 
 // Create Articles Interface
 export interface Article {
@@ -15,16 +16,13 @@ export interface Article {
   publishedAt: Date;
 }
 
-// Define Strapi URL
-const STRAPI_URL = 'http://localhost:1337';
-
 export default function Home() {
   // Define articles state
   const [articles, setArticles] = useState<Article[]>([]);
 
   // fetch articles
   const getArticles = async () => {
-    const response = await fetch(`${STRAPI_URL}/api/articles?populate=*`);
+    const response = await fetch(`${API_URL}/api/articles?populate=*`);
     const data = await response.json();
     console.log(data.data);
     setArticles(data.data);

@@ -11,6 +11,7 @@ import closeIcon from '../assets/close.svg';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
 import '../styles/phone-input.css';
+import { API_URL } from '../utils/constants.ts';
 
 // Mock images for gallery
 const gallery = [
@@ -109,6 +110,23 @@ export default function ProductDetail() {
     setCopied(true);
     setTimeout(() => setCopied(false), 1200);
   };
+
+  const submitForm = () => {
+    fetch(`${API_URL}/api/form-acquire`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        data: {
+          firstName: acquireForm.firstName,
+          lastName: acquireForm.lastName,
+          itemCode: acquireForm.itemCode,
+          contactNumber: `+${phone}`,
+        },
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => console.log(data));
+  }
 
   return (
     <div className="w-full min-h-screen bg-[#F7F5EA]">
@@ -335,7 +353,10 @@ export default function ProductDetail() {
               <div className="text-base text-[#585550] mb-8 text-center">
                 Fill in your details below, and we will be in touch with you shortly.
               </div>
-              <form className="space-y-6">
+              <form className="space-y-6" onSubmit={(e) => {
+                e.preventDefault();
+                submitForm();
+              }}>
                 <div>
                   <label className="block mb-2 text-[#1F1F1F] font-medium">First Name</label>
                   <input
