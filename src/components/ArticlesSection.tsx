@@ -1,65 +1,79 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import Button from './Button';
-import bowl from '../assets/tang.png'; // Placeholder, replace with real images
-import horse from '../assets/chase_collection.png'; // Placeholder, replace with real images
-import blueWhite from '../assets/chase_collection.png';
-import {useNavigate} from "react-router-dom"; // Placeholder, replace with real images
-
-const articles = [
-  {
-    image: bowl,
-    title: 'Introduction to Song Dynasty five Great Kiln and Song Cera...',
-    desc: 'The depiction of the Song Dynasty (960—1279) five great kilns was widely reported as a result of Song ceramic wares gaining fame among Chinese...',
-    date: '12 DEC 2024',
-  },
-  {
-    image: horse,
-    title: 'The Beauty of the Tang Three-Color (Sancai) Glazed Ceramic...',
-    desc: 'Sancai, or "Three-Color" is a term generally used to refer to multicolored or poly–chrome lead glazed earthen wear. Even though the "Three" is i...',
-    date: '12 DEC 2024',
-  },
-  {
-    image: blueWhite,
-    title: 'They used to say that Yuan Blue-White Ceramics do not exist...',
-    desc: "This pair of Yuan Blue–white porcelain, perhaps you may know its story, origin and even legend, but it is more likely most people don't. What is its sig...",
-    date: '12 DEC 2024',
-  },
-];
+import Loading from './Loading';
+import { useNavigate } from "react-router-dom";
+import { getArticles, Article } from '../api/articles';
+import { useLoading } from '../hooks/useLoading';
+import { useLanguage } from '../contexts/LanguageContext';
+import { getCoverUrl } from '../utils';
 
 export default function ArticlesSection() {
   const navigate = useNavigate();
+  const [articles, setArticles] = useState<Article[]>([]);
+  const { loading, withLoading } = useLoading(true);
+  const { locale } = useLanguage();
+  const { t } = useTranslation();
+
+  useEffect(() => {
+    const fetchArticles = async () => {
+      try {
+        const response = await getArticles(1, 3, locale); // Lấy 3 bài mới nhất/tháng
+        setArticles(response.data);
+      } catch (error) {
+        console.error('Error fetching articles:', error);
+      }
+    };
+    
+    withLoading(fetchArticles);
+  }, [locale]); // Re-fetch when locale changes
+
   return (
     <section className="w-full bg-[#F7F5EA] px-4 py-16">
       <div className="max-w-7xl mx-auto flex flex-col items-center">
-
         <h2 className="text-[32px] leading-[40px] md:text-[48px] md:leading-[58px] font-semibold text-[#61422D] mb-2 text-center">Our Articles</h2>
         <div className="text-[18px] leading-[26px] mb-12 text-center font-normal text-[#342216]">Feature articles of the month</div>
-
         <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-          {articles.map((article, idx) => (
-            <div key={idx} className="flex flex-col">
-              <div className="bg-[#E6DDC6] aspect-square w-full flex items-center justify-center overflow-hidden mb-4">
-                <img
-                  src={article.image}
-                  alt={article.title}
-                  className="object-cover w-full h-full"
-                />
-              </div>
-              {/* <div className="text-2xl font-serif text-[#86684A] mb-2 leading-snug truncate">
-                {article.title}
-              </div> */}
-
-              <h2 className="mb-2 leading-snug line-clamp-2" style={{   fontWeight:500, fontSize: 24, lineHeight: '32px', letterSpacing: 0, textAlign: 'left', color: '#61422D' }}>
-                {article.title}
-              </h2>
-              <div className="font-pingfang text-[16px] leading-[24px] font-normal mb-4 line-clamp-3" style={{ color: '#585550' }}>{article.desc}</div>
-              <div className="text-[14px] font-semibold leading-[20px] line-clamp-2" style={{ color: '#585550' }}>{article.date}</div>
+          {loading ? (
+            <div className="col-span-3 flex justify-center py-8">
+              <Loading size="large" text="Loading articles..." />
             </div>
-          ))}
+          ) : (
+            articles.map((article) => {
+              const imageUrl = getCoverUrl(article.cover);
+              
+              return (
+                <div key={article.id} className="flex flex-col">
+                  <div className="bg-[#E6DDC6] aspect-square w-full flex items-center justify-center overflow-hidden mb-4">
+                    {imageUrl ? (
+                      <img
+                        src={imageUrl}
+                        alt={article.title}
+                        className="object-cover w-full h-full"
+                        onError={(e) => {
+                          console.error('Image failed to load:', imageUrl);
+                          e.currentTarget.style.display = 'none';
+                        }}
+                      />
+                    ) : (
+                      <div className="text-[#61422D] text-center p-4">
+                        <div className="text-6xl mb-3 opacity-50">📄</div>
+                        <div className="text-sm font-medium">No Image</div>
+                      </div>
+                    )}
+                  </div>
+                  <h2 className="mb-2 leading-snug line-clamp-2" style={{ fontWeight:500, fontSize: 24, lineHeight: '32px', letterSpacing: 0, textAlign: 'left', color: '#61422D' }}>
+                    {article.title}
+                  </h2>
+                  <div className="font-pingfang text-[16px] leading-[24px] font-normal mb-4 line-clamp-3" style={{ color: '#585550' }}>{article.description}</div>
+                  <div className="text-[14px] font-semibold leading-[20px] line-clamp-2" style={{ color: '#585550' }}>{new Date(article.publishedAt).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' })}</div>
+                </div>
+              );
+            })
+          )}
         </div>
         <div className="flex justify-center w-full max-w-6xl  mx-auto ">
-          <Button text="VIEW ALL ARTICLES" variant="outline" onClick={() => navigate('/articles')}/>
-
+          <Button text={t('VIEW ALL ARTICLES')} variant="outline" onClick={() => navigate('/articles')}/>
         </div>
       </div>
     </section>

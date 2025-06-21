@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import chaseIcon from '../assets/chase.svg';
 import letterIcon from '../assets/letter.svg';
 import chaseCollection from '../assets/chase_collection.png';
@@ -7,29 +8,31 @@ import Button from './Button';
 import { COLORS } from './colors';
 import { useNavigate } from 'react-router-dom';
 
-const sections = [
-  {
-    icon: chaseIcon,
-    title: 'Acquire an item',
-    desc: 'Looking to acquire an item from our network of private collectors? Contact us here with your interest.',
-    button: 'LEARN MORE',
-    image: chaseCollection,
-    reverse: false,
-    link: '/acquire-an-item',
-  },
-  {
-    icon: letterIcon,
-    title: 'Appraise an item',
-    desc: 'Looking to acquire an item from our network of private collectors? Contact us here with your interest.',
-    button: 'LEARN MORE',
-    image: chaseCollection,
-    reverse: true,
-    link: '/appraise-an-item',
-  },
-];
-
 export default function AcquireOrAppraise() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
+
+  const sections = [
+    {
+      icon: chaseIcon,
+      title: 'Acquire an item',
+      desc: 'Looking to acquire an item from our network of private collectors? Contact us here with your interest.',
+      button: t('LEARN MORE'),
+      image: chaseCollection,
+      reverse: false,
+      link: '/acquire-an-item',
+    },
+    {
+      icon: letterIcon,
+      title: 'Appraise an item',
+      desc: 'Looking to acquire an item from our network of private collectors? Contact us here with your interest.',
+      button: t('LEARN MORE'),
+      image: chaseCollection,
+      reverse: true,
+      link: '/appraise-an-item',
+    },
+  ];
+
   return (
     <div className="w-full">
       {sections.map((section, idx) => (

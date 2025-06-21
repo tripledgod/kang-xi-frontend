@@ -13,6 +13,9 @@ import verifyLegacyMobile from '../assets/verify_legacy_mobile.png';
 import logoWhite from '../assets/logo_white.png';
 import icUpload from '../assets/ic_upload.svg';
 import closeCircleBorder from '../assets/close_circle_border.svg';
+import Popup from '../components/Popup';
+import { API_URL } from '../utils/constants';
+import { useNavigate } from 'react-router-dom';
 
 const whyItems = [
   {
@@ -33,8 +36,43 @@ const whyItems = [
 ];
 
 export default function AppraiseAnItem() {
+  const navigate = useNavigate();
+
   const [phone, setPhone] = useState('');
   const [images, setImages] = useState<File[]>([]);
+  const [appraiseForm, setAppraiseForm] = useState({
+    firstName: '',
+    lastName: '',
+    itemCode: '',
+  });
+  const [showSuccess, setShowSuccess] = useState(false);
+
+  
+  const submitForm = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    const formData = new FormData();
+    formData.append('data', JSON.stringify({
+      firstName: appraiseForm.firstName,
+      lastName: appraiseForm.lastName,
+      itemCode: appraiseForm.itemCode,
+      contactNumber: `+${phone}`,
+    }));
+    images.forEach((img) => {
+      formData.append('files', img);
+    });
+    try {
+      await fetch(`${API_URL}/api/submission`, {
+        method: 'POST',
+        body: formData,
+      });
+      setShowSuccess(true);
+      setAppraiseForm({ firstName: '', lastName: '', itemCode: '' });
+      setPhone('');
+      setImages([]);
+    } catch (err) {
+      // Có thể xử lý lỗi ở đây nếu muốn
+    }
+  };
 
   return (
     <div className="w-full min-h-screen bg-[#F7F5EA] flex flex-col">
@@ -95,13 +133,15 @@ export default function AppraiseAnItem() {
             To begin the authentication process, kindly provide the details below. Our team will
             review your submission and reach out with the next steps.
           </div>
-          <form className="space-y-6">
+          <form className="space-y-6" onSubmit={submitForm}>
             <div>
               <label className="block mb-2 text-[#7B6142] font-semibold">First Name</label>
               <input
                 type="text"
                 className="w-full rounded border border-[#C7C7B9] px-4 py-3 bg-[#F7F5EA] text-[#23211C]"
                 placeholder="Enter your first name"
+                value={appraiseForm.firstName}
+                onChange={e => setAppraiseForm(f => ({ ...f, firstName: e.target.value }))}
               />
             </div>
             <div>
@@ -110,6 +150,8 @@ export default function AppraiseAnItem() {
                 type="text"
                 className="w-full rounded border border-[#C7C7B9] px-4 py-3 bg-[#F7F5EA] text-[#23211C]"
                 placeholder="Enter your last name"
+                value={appraiseForm.lastName}
+                onChange={e => setAppraiseForm(f => ({ ...f, lastName: e.target.value }))}
               />
             </div>
             <div>
@@ -118,6 +160,8 @@ export default function AppraiseAnItem() {
                 type="text"
                 className="w-full rounded border border-[#C7C7B9] px-4 py-3 bg-[#F7F5EA] text-[#23211C]"
                 placeholder="Enter item code"
+                value={appraiseForm.itemCode}
+                onChange={e => setAppraiseForm(f => ({ ...f, itemCode: e.target.value }))}
               />
             </div>
             <div>
@@ -125,7 +169,7 @@ export default function AppraiseAnItem() {
               <PhoneInput
                 country={'sg'}
                 value={phone}
-                onChange={(phone) => setPhone(phone)}
+                onChange={setPhone}
                 inputClass="w-full rounded border border-[#C7C7B9] px-4 py-3 bg-[#F7F5EA] text-[#23211C]"
                 buttonClass="rounded-l border border-[#C7C7B9] bg-[#F7F5EA]"
                 dropdownClass="bg-[#F7F5EA] text-[#23211C]"
@@ -198,6 +242,18 @@ export default function AppraiseAnItem() {
           </form>
         </div>
       </div>
+      {showSuccess && (
+        <Popup
+          title="Thank you for your submission!"
+          content="We have received your request and will contact you soon."
+          buttonText="BACK TO HOMEPAGE"
+          onButtonClick={() => {
+            setShowSuccess(false);
+            navigate('/');
+          }}
+          onClose={() => setShowSuccess(false)}
+        />
+      )}
     </div>
   );
 }

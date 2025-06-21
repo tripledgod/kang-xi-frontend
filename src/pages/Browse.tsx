@@ -1,85 +1,210 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Loading from '../components/Loading';
+import { useLoading } from '../hooks/useLoading';
+import { useLanguage } from '../contexts/LanguageContext';
 import heroImg from '../assets/ceramic_cover.png';
 import heroImgMobile from '../assets/ceramic_cover_mobile.png';
 import AcquireOrAppraise from '../components/AcquireOrAppraise';
-
-interface EraStyle {
-  fontFamily: string;
-  fontWeight: number;
-  fontSize: number;
-  lineHeight: string;
-  letterSpacing: number;
-  textAlign: 'left' | 'center' | 'right';
-  color: string;
-}
+import { API_URL } from '../utils/constants';
+import axios from 'axios';
+import { getImageUrl } from "../types/category";
+import { getCategories, Category } from '../api/categories';
 
 interface Era {
   key: string;
   label: string;
-  style: EraStyle;
+  style?: React.CSSProperties;
 }
 
-const eras: Era[] = [
-  { key: 'tang', label: 'TANG', style: { fontFamily: 'PingFang SC', fontWeight: 400, fontSize: 16, lineHeight: '24px', letterSpacing: 0, textAlign: 'left', color: '#201F1C' } },
-  { key: 'song', label: 'SONG', style: { fontFamily: 'PingFang SC', fontWeight: 400, fontSize: 16, lineHeight: '24px', letterSpacing: 0, textAlign: 'left', color: '#201F1C' } },
-  { key: 'yuan', label: 'YUAN', style: { fontFamily: 'PingFang SC', fontWeight: 400, fontSize: 16, lineHeight: '24px', letterSpacing: 0, textAlign: 'left', color: '#201F1C' } },
-  { key: 'ming', label: 'MING', style: { fontFamily: 'PingFang SC', fontWeight: 400, fontSize: 16, lineHeight: '24px', letterSpacing: 0, textAlign: 'left', color: '#201F1C' } },
-  { key: 'qing', label: 'QING', style: { fontFamily: 'PingFang SC', fontWeight: 400, fontSize: 16, lineHeight: '24px', letterSpacing: 0, textAlign: 'left', color: '#201F1C' } },
-];
-
-const ceramics = [
-  {
-    era: 'tang',
-    image:
-      'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80',
-    title: 'A White Glazed Kundika, Late Tang / Five Dynasties Period',
-    desc: 'The globular body supported on a slightly spreading foot, rising to a tall waisted neck collared by a flange and surmounted by a long tapering tubular mouth.',
-    years: '618 – 960',
-    item: 'T302602',
-  },
-  {
-    era: 'tang',
-    image:
-      'https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=400&q=80',
-    title: 'A Changsha Straw Glazed Pottery Ewer, Tang Dynasty',
-    desc: 'A Tang Dynasty brownish green glazed pottery cover Ewer, of globular form set on a short foot; with moulded handle and sprout.',
-    years: '618 – 907',
-    item: 'T302601',
-  },
-  {
-    era: 'tang',
-    image:
-      'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=400&q=80',
-    title: 'Large Sancai Gazed Peony Plate, Liao Dynasty',
-    desc: 'The Thickly potted sancai plate is a superb example of Liao Dynasty pottery. The plate interior is decorated with a chrysanthemum flower.',
-    years: '916–1125',
-    item: 'L302601',
-  },
-  {
-    era: 'tang',
-    image:
-      'https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=400&q=80',
-    title: 'A Rare Bottom Filling Water Olive Green Glazed Teapot, Five Dynasties of the Period',
-    desc: 'The globular body supported on a slightly spreading foot, rising to a tall waisted neck collared by a flange and surmounted by a long tapering tubular mouth.',
-    years: '907 – 960',
-    item: 'L302602',
-  },
-  {
-    era: 'tang',
-    image:
-      'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?auto=format&fit=crop&w=400&q=80',
-    title: 'A Large Painted Pottery Figure of a Pranking Horse, Tang Dynasty',
-    desc: 'Horses in Tang–dynasty China were admired for their speed, with strength and intelligence, and not only were they important in the realms of travel and war.',
-    years: '618 – 917',
-    item: 'T302603',
-  },
-];
-
-export default function Browse() {
-  const [activeEra, setActiveEra] = useState('tang');
-  const filteredCeramics = ceramics.filter((c) => c.era === activeEra);
+const Browse: React.FC = () => {
+  const [categories, setCategories] = useState<Category[]>([]);
+  const { loading: categoriesLoading, withLoading: withCategoriesLoading } = useLoading(true);
+  const [error, setError] = useState<string | null>(null);
+  const [activeEra, setActiveEra] = useState<string>('');
+  const [products, setProducts] = useState<any[]>([]);
+  const { loading: productsLoading, withLoading: withProductsLoading } = useLoading(false);
+  const [errorProducts, setErrorProducts] = useState<string | null>(null);
   const navigate = useNavigate();
+  const { locale } = useLanguage();
+
+  // Chuyển đổi categories thành eras
+  const eras: Era[] = categories.map(category => ({
+    key: category.slug,
+    label: category.name,
+  }));
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const categoriesData = await getCategories(locale);
+        console.log("API categories data:", categoriesData);
+        if (categoriesData) {
+          setCategories(categoriesData);
+          // Set activeEra mặc định là category đầu tiên
+          if (categoriesData.length > 0) {
+            setActiveEra(categoriesData[0].slug);
+          }
+        }
+      } catch (err) {
+        console.error("Error fetching categories:", err);
+        setError("Failed to load categories");
+      }
+    };
+
+    withCategoriesLoading(fetchCategories);
+  }, [locale]); // Re-fetch when locale changes
+
+  useEffect(() => {
+    if (!activeEra || categories.length === 0) return;
+    const category = categories.find((cat) => cat.slug === activeEra);
+    if (!category) return;
+    
+    const fetchProducts = async () => {
+      try {
+        setErrorProducts(null);
+        
+        // Gọi API lấy sản phẩm theo category_id với locale
+        const response = await axios.get(`${API_URL}/api/products`, {
+          params: {
+            'filters[category][id][$eq]': category.id,
+            'locale': locale,
+            'populate': '*'
+          }
+        });
+        
+        let data = response.data.data || response.data;
+        
+        // Xử lý cấu trúc Strapi v4
+        if (Array.isArray(data) && data[0]?.attributes) {
+          data = data.map((p: any) => ({ 
+            ...p.attributes, 
+            id: p.id,
+            // Đảm bảo images được populate đúng cách
+            images: p.attributes.images?.data ? 
+              p.attributes.images.data.map((img: any) => ({
+                ...img.attributes,
+                id: img.id
+              })) : p.attributes.images
+          }));
+        }
+        
+        setProducts(data);
+      } catch (err) {
+        console.error('Error fetching products:', err);
+        setErrorProducts('Không thể tải danh sách sản phẩm');
+      }
+    };
+    
+    withProductsLoading(fetchProducts);
+  }, [activeEra, categories, locale]); // Re-fetch when locale changes
+
+  // Component ProductCard để quản lý state ảnh cho từng sản phẩm
+  const ProductCard: React.FC<{ product: any; navigate: any }> = ({ product, navigate }) => {
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+    const [imageError, setImageError] = useState(false);
+    
+    // Lấy ảnh chính từ mảng images
+    let imageUrl = '';
+    let fallbackUrls: string[] = [];
+
+    if (product.images && product.images.length > 0) {
+      const firstImage = product.images[0];
+      
+      // Tạo danh sách fallback URLs theo thứ tự ưu tiên
+      fallbackUrls = [
+        firstImage.formats?.medium?.url,
+        firstImage.formats?.small?.url,
+        firstImage.formats?.thumbnail?.url,
+        firstImage.url
+      ].filter(Boolean); // Loại bỏ undefined/null
+      
+      // URL đầu tiên làm primary
+      imageUrl = fallbackUrls[0] || '';
+      
+      // Chỉ nối API_URL khi URL là đường dẫn tương đối (bắt đầu bằng /uploads/)
+      if (imageUrl && imageUrl.startsWith('/uploads/')) {
+        imageUrl = API_URL + imageUrl;
+        fallbackUrls = fallbackUrls.map(url => 
+          url && url.startsWith('/uploads/') ? API_URL + url : url
+        );
+      }
+    }
+
+    return (
+      <div
+        key={product.id}
+        className="flex flex-col cursor-pointer hover:shadow-lg transition-shadow rounded"
+        onClick={() => navigate(`/products/${product.slug}`)}
+      >
+        <div className="bg-[#E6DDC6] aspect-square w-full flex items-center justify-center overflow-hidden mb-4">
+          {imageUrl && !imageError ? (
+            <img
+              src={fallbackUrls[currentImageIndex] || imageUrl}
+              alt={product.title || 'Product Image'}
+              className="object-contain w-full h-full"
+              onError={(e) => {
+                // Thử ảnh tiếp theo trong danh sách fallback
+                if (currentImageIndex < fallbackUrls.length - 1) {
+                  setCurrentImageIndex(prev => prev + 1);
+                } else {
+                  // Đã thử hết tất cả ảnh, hiển thị placeholder
+                  setImageError(true);
+                  e.currentTarget.style.display = 'none';
+                }
+              }}
+            />
+          ) : (
+            <div className="text-[#61422D] text-center p-4">
+              <div className="text-6xl mb-3 opacity-50">🏺</div>
+              <div className="text-sm font-medium">No Image Available</div>
+              <div className="text-xs opacity-70 mt-1">Ceramic Art</div>
+            </div>
+          )}
+        </div>
+        <h2 className="text-[24px] font-medium text-[#61422D] mb-2 leading-[32px] tracking-[0px]">
+          {product.title}
+        </h2>
+        {product.description && (
+          <div className="text-base text-[#585550] mb-4 line-clamp-3">
+            {product.description}
+          </div>
+        )}
+        {/* Thanh kẻ mờ */}
+        <div className="border-t-2 border-[#E5E1D7] opacity-80 my-3"></div>
+        <div className="flex flex-row justify-between text-xs text-[#23211C] font-semibold">
+          <span>
+            {product.ageFrom} - {product.ageTo}
+          </span>
+          <span>ITEM {product.itemCode || product.documentId}</span>
+        </div>
+      </div>
+    );
+  };
+
+  if (categoriesLoading) {
+    return (
+      <div className="min-h-screen bg-[#F7F5EA] flex items-center justify-center">
+        <Loading fullScreen text="Loading categories..." />
+      </div>
+    );
+  }
+  
+  if (error) {
+    return (
+      <div className="min-h-screen bg-[#F7F5EA] flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-[#61422D] text-lg mb-4">{error}</p>
+          <button 
+            onClick={() => window.location.reload()} 
+            className="px-4 py-2 bg-[#7B6142] text-white rounded hover:bg-[#6a5437]"
+          >
+            Try Again
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full min-h-screen bg-[#F7F5EA]">
@@ -96,15 +221,14 @@ export default function Browse() {
           className="hidden md:block w-full h-[420px] object-cover object-center"
         />
       </div>
-
-      {/* Era Tabs */}
-      <div className="w-full sticky top-[0px] z-30 bg-[#F7F5EA]">
+       {/* Era Tabs */}
+       <div className="w-full sticky top-[0px] z-30 bg-[#F7F5EA]">
         <div className="max-w-6xl mx-auto px-4 pt-4 md:pt-20 overflow-x-auto whitespace-nowrap">
-          <div className="inline-flex items-center gap-x-2 justify-start pl-[64px]">
+          <div className="inline-flex items-center gap-x-2 justify-start pl-[64px] uppercase">
             {eras.map((era, idx) => (
               <React.Fragment key={era.key}>
                 <button
-                  className={`pb-2 transition-colors ${activeEra === era.key ? 'border-b-2 border-[#23211C] text-[#23211C]' : 'text-[#23211C] border-b-0'}`}
+                  className={`pb-2 transition-colors uppercase ${activeEra === era.key ? 'border-b-2 border-[#23211C] text-[#23211C]' : 'text-[#23211C] border-b-0'}`}
                   onClick={() => setActiveEra(era.key)}
                   style={era.style}
                 >
@@ -121,31 +245,31 @@ export default function Browse() {
         </div>
       </div>
 
-      {/* Ceramics Grid */}
-      <div className="w-full max-w-6xl mx-auto px-4 mt-10 grid grid-cols-1 md:grid-cols-3 gap-10 pl-[80px]">
-        {filteredCeramics.map((ceramic, idx) => (
-          <div
-            key={idx}
-            className="flex flex-col cursor-pointer hover:shadow-lg transition-shadow rounded"
-            onClick={() => navigate(`/product/${ceramic.item}`)}
-          >
-            <div className="bg-[#E6DDC6] aspect-square w-full flex items-center justify-center overflow-hidden mb-4">
-              <img
-                src={ceramic.image}
-                alt={ceramic.title}
-                className="object-contain w-full h-full"
-              />
-            </div>
-            <h2 className="text-[24px] font-medium text-[#61422D] mb-2 leading-[32px] tracking-[0px]">
-              {ceramic.title}
-            </h2>
-            <div className="text-base text-[#585550] mb-4 line-clamp-3">{ceramic.desc}</div>
-            <div className="flex flex-row justify-between text-xs text-[#23211C] font-semibold">
-              <span>{ceramic.years}</span>
-              <span>ITEM {ceramic.item}</span>
-            </div>
+      {/* Categories Grid */}
+      <div className="w-full max-w-6xl mx-auto px-4 mt-10 grid grid-cols-1 md:grid-cols-3 gap-10 md:pl-[80px] pl-[20px]">
+        {productsLoading ? (
+          <div className="flex justify-center py-16">
+            <Loading size="large" text="Loading products..." />
           </div>
-        ))}
+        ) : errorProducts ? (
+          <div className="text-center py-16">
+            <p className="text-[#61422D] text-lg mb-4">{errorProducts}</p>
+            <button 
+              onClick={() => window.location.reload()} 
+              className="px-4 py-2 bg-[#7B6142] text-white rounded hover:bg-[#6a5437]"
+            >
+              Try Again
+            </button>
+          </div>
+        ) : products.length === 0 ? (
+          <div className="text-center py-16">
+            <p className="text-[#61422D] text-lg">Không có sản phẩm nào cho era này.</p>
+          </div>
+        ) : (
+          products.map((product: any) => (
+            <ProductCard key={product.id} product={product} navigate={navigate} />
+          ))
+        )}
       </div>
 
       {/* Acquire or Appraise Section */}
@@ -154,4 +278,6 @@ export default function Browse() {
       </div>
     </div>
   );
-}
+};
+
+export default Browse;
