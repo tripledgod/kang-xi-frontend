@@ -65,11 +65,11 @@ const Browse: React.FC = () => {
             setActiveEra(flattened[0].slug);
           }
         } else {
-          setError('Không có categories nào được tìm thấy');
+          setError('No data');
         }
       } catch (err) {
         console.error('Error fetching categories:', err);
-        setError('Không thể tải danh mục');
+        setError('Error fetching categories');
       }
     };
 
