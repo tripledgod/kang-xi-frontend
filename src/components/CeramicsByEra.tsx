@@ -7,22 +7,20 @@ import bgButtonMobile from '../assets/bg_button_mobile.png';
 import { COLORS } from './colors.ts';
 import Button from './Button.tsx';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { API_URL } from '../utils/constants';
 import { useLanguage } from '../contexts/LanguageContext';
-import { getImageUrl } from '../utils';
-import { 
-  getEraNamesForLocale, 
-  findProductForEra, 
-  createPlaceholderEra 
-} from '../utils/eraHelpers';
+import {
+  getCategories,
+  getProductsByCategory,
+  flattenCategory,
+  flattenProduct,
+} from '../api/categories';
 
 const CARD_WIDTH = 320;
 const CARD_GAP = 32;
 const DESKTOP_VISIBLE = 3;
 const DESKTOP_PEEK = 0.3; // 30% of 4th card
 const MOBILE_VISIBLE = 1;
-const MOBILE_PEEK = 0.2; // 20% of 2nd card
+const MOBILE_PEEK = 0.2;
 
 export default function CeramicsByEra() {
   const [index, setIndex] = useState(0);
@@ -41,73 +39,106 @@ export default function CeramicsByEra() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Fetch products and build eras
+  // Fetch categories and build eras
   useEffect(() => {
-    const fetchProducts = async () => {
+    const fetchCategories = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(`${API_URL}/api/products`, {
-          params: {
-            'populate': '*',
-            'pagination[pageSize]': 100,
-            'locale': locale
-          }
-        });
-        
-        let products = response.data.data || response.data;
-        
-        // Nếu là Strapi v4, products là mảng trong data với attributes
-        if (Array.isArray(products) && products[0]?.attributes) {
-          products = products.map((p: any) => ({ 
-            ...p.attributes, 
-            id: p.id,
-            // Đảm bảo category được populate đúng cách
-            category: p.attributes.category?.data ? {
-              ...p.attributes.category.data.attributes,
-              id: p.attributes.category.data.id
-            } : p.attributes.category
-          }));
+        // Lấy categories từ API
+        const categoriesData = await getCategories(locale);
+
+        if (categoriesData && categoriesData.length > 0) {
+          // Flatten categories
+          const flattenedCategories = categoriesData.map((cat) => flattenCategory(cat));
+
+          // Lấy sản phẩm đầu tiên cho từng category
+          const erasData = await Promise.all(
+            flattenedCategories.map(async (category) => {
+              try {
+                const productsData = await getProductsByCategory(category.id, locale);
+
+                if (productsData && productsData.length > 0) {
+                  // Lấy sản phẩm đầu tiên
+                  const firstProduct = flattenProduct(productsData[0]);
+                  
+                  // Debug: Log product data
+                  console.log('First product for category', category.name, ':', firstProduct);
+
+                  // Lấy ảnh đầu tiên
+                  let imageUrl = '';
+                  if (firstProduct.images && firstProduct.images.length > 0) {
+                    const firstImage = firstProduct.images[0];
+                    const rawUrl =
+                      firstImage.formats?.medium?.url ||
+                      firstImage.formats?.small?.url ||
+                      firstImage.formats?.thumbnail?.url ||
+                      firstImage.url ||
+                      '';
+                    
+                    // Xử lý URL - nối với API_URL nếu là đường dẫn tương đối
+                    imageUrl = rawUrl.startsWith('/uploads/') ? `http://localhost:1337${rawUrl}` : rawUrl;
+                  }
+
+                  const finalDesc = firstProduct.description || category.description || `Explore ${category.name} era ceramics`;
+                  console.log('Final description for', category.name, ':', finalDesc);
+
+                  return {
+                    name: category.name,
+                    years:
+                      category.ageFrom && category.ageTo
+                        ? `${category.ageFrom}—${category.ageTo}`
+                        : '',
+                    desc: finalDesc,
+                    img: imageUrl,
+                    id: category.id,
+                    slug: category.slug,
+                    isPlaceholder: false,
+                  };
+                } else {
+                  // Không có sản phẩm cho category này
+                  return {
+                    name: category.name,
+                    years:
+                      category.ageFrom && category.ageTo
+                        ? `${category.ageFrom}—${category.ageTo}`
+                        : '',
+                    desc: category.description || `No products available for ${category.name} era`,
+                    img: '',
+                    id: category.id,
+                    slug: category.slug,
+                    isPlaceholder: true,
+                  };
+                }
+              } catch (error) {
+                console.error(`Error fetching products for category ${category.name}:`, error);
+                return {
+                  name: category.name,
+                  years:
+                    category.ageFrom && category.ageTo
+                      ? `${category.ageFrom}—${category.ageTo}`
+                      : '',
+                  desc: category.description || `Error loading ${category.name} era`,
+                  img: '',
+                  id: category.id,
+                  slug: category.slug,
+                  isPlaceholder: true,
+                };
+              }
+            })
+          );
+
+          setEras(erasData);
+        } else {
+          setEras([]);
         }
-        
-        // Lấy era names theo locale hiện tại
-        const currentEraNames = getEraNamesForLocale(locale);
-        
-        // Lọc ra sản phẩm đầu tiên cho từng era
-        const erasData = currentEraNames.map((eraName) => {
-          const found = findProductForEra(products, eraName, locale);
-          
-          if (!found) {
-            // Trả về placeholder thay vì null để hiển thị era name
-            return createPlaceholderEra(eraName);
-          }
-          
-          // Lấy ảnh đầu tiên
-          let imageUrl = '';
-          if (found.images && found.images.length > 0) {
-            const firstImage = found.images[0];
-            imageUrl = getImageUrl(firstImage);
-          }
-          
-          return {
-            name: found.category?.name || eraName,
-            years: found.ageFrom && found.ageTo ? `${found.ageFrom}—${found.ageTo}` : '',
-            desc: found.description,
-            img: imageUrl,
-            id: found.id,
-            slug: found.slug,
-            isPlaceholder: false
-          };
-        });
-        
-        setEras(erasData);
       } catch (err) {
-        console.error('Error fetching products:', err);
+        console.error('Error fetching categories:', err);
         setEras([]);
       } finally {
         setLoading(false);
       }
     };
-    fetchProducts();
+    fetchCategories();
   }, [locale]); // Re-fetch when locale changes
 
   // Scroll to the correct position when index changes (desktop only)
@@ -132,7 +163,7 @@ export default function CeramicsByEra() {
 
   return (
     <section className="w-full bg-[#F7F5EA] px-4 py-12 md:pt-21 md:pb-19">
-      <div className="max-w-7xl md:pl-8 ">
+      <div className="max-w-7xl mx-auto md:px-8">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8 md:mb-12">
           <h2
             className="text-4xl md:text-5xl font-serif font-medium mb-6 md:mb-0"
@@ -199,9 +230,7 @@ export default function CeramicsByEra() {
             </button>
           </div>
         </div>
-      </div>
-      {/* Content with padding top to account for fixed header */}
-      <div className=" mx-auto md:pl-8 ">
+
         {/* Mobile: vertical stack */}
         <div className="flex flex-col gap-8 mt-4 md:hidden">
           {eras.map((era, idx) => (
@@ -219,14 +248,30 @@ export default function CeramicsByEra() {
               </div>
               <h4
                 className="text-2xl font-serif mb-6 font-semibold uppercase"
-                style={{ color: COLORS.primary900, fontWeight: 500, fontSize: 32, lineHeight: '40px', letterSpacing: 0 }}
+                style={{
+                  color: COLORS.primary900,
+                  fontWeight: 500,
+                  fontSize: 32,
+                  lineHeight: '40px',
+                  letterSpacing: 0,
+                }}
               >
                 {era.name}
               </h4>
               <div className="text-base font-semibold border-t border-[#C7C7B9] pt-4 text-[#2E2A24] mb-1">
                 {era.years}
               </div>
-              <div className="text-base pt-2  " style={{ fontFamily: 'PingFang SC, Arial, sans-serif', fontWeight: 400, fontSize: 16, lineHeight: '24px', letterSpacing: 0, color: '#342216' }}>
+              <div
+                className="text-base pt-2  "
+                style={{
+                  fontFamily: 'PingFang SC, Arial, sans-serif',
+                  fontWeight: 400,
+                  fontSize: 16,
+                  lineHeight: '24px',
+                  letterSpacing: 0,
+                  color: '#342216',
+                }}
+              >
                 {era.desc}
               </div>
             </div>
@@ -258,13 +303,32 @@ export default function CeramicsByEra() {
                   </div>
                 )}
               </div>
-              <h4 className="text-2xl font-serif text-[#86684A] mb-6 font-semibold uppercase" style={{ fontFamily: 'Source Han Serif SC VF, serif', fontWeight: 600, fontSize: 32, lineHeight: '40px', letterSpacing: 0 }}>
+              <h4
+                className="text-2xl font-serif text-[#86684A] mb-6 font-semibold uppercase"
+                style={{
+                  fontFamily: 'Source Han Serif SC VF, serif',
+                  fontWeight: 600,
+                  fontSize: 32,
+                  lineHeight: '40px',
+                  letterSpacing: 0,
+                }}
+              >
                 {era.name}
               </h4>
               <div className="text-base font-semibold border-t border-[#C7C7B9] pt-4 text-[#2E2A24] mb-1">
                 {era.years}
               </div>
-              <div className="text-base pt-2 line-clamp-3 " style={{ fontFamily: 'PingFang SC, Arial, sans-serif', fontWeight: 400, fontSize: 16, lineHeight: '24px', letterSpacing: 0, color: '#342216' }}>
+              <div
+                className="text-base pt-2 line-clamp-3 "
+                style={{
+                  fontFamily: 'PingFang SC, Arial, sans-serif',
+                  fontWeight: 400,
+                  fontSize: 16,
+                  lineHeight: '24px',
+                  letterSpacing: 0,
+                  color: '#342216',
+                }}
+              >
                 {era.desc}
               </div>
             </div>

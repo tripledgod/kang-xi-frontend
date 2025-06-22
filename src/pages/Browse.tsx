@@ -6,10 +6,14 @@ import { useLanguage } from '../contexts/LanguageContext';
 import heroImg from '../assets/ceramic_cover.png';
 import heroImgMobile from '../assets/ceramic_cover_mobile.png';
 import AcquireOrAppraise from '../components/AcquireOrAppraise';
-import { API_URL } from '../utils/constants';
-import axios from 'axios';
-import { getImageUrl } from "../types/category";
-import { getCategories, Category } from '../api/categories';
+import {
+  getCategories,
+  getProductsByCategory,
+  flattenCategory,
+  flattenProduct,
+  Category,
+  Product,
+} from '../api/categories';
 
 interface Era {
   key: string;
@@ -19,6 +23,7 @@ interface Era {
 
 const Browse: React.FC = () => {
   const [categories, setCategories] = useState<Category[]>([]);
+  const [flattenedCategories, setFlattenedCategories] = useState<any[]>([]);
   const { loading: categoriesLoading, withLoading: withCategoriesLoading } = useLoading(true);
   const [error, setError] = useState<string | null>(null);
   const [activeEra, setActiveEra] = useState<string>('');
@@ -29,7 +34,7 @@ const Browse: React.FC = () => {
   const { locale } = useLanguage();
 
   // Chuyển đổi categories thành eras
-  const eras: Era[] = categories.map(category => ({
+  const eras: Era[] = flattenedCategories.map((category) => ({
     key: category.slug,
     label: category.name,
   }));
@@ -38,97 +43,85 @@ const Browse: React.FC = () => {
     const fetchCategories = async () => {
       try {
         const categoriesData = await getCategories(locale);
-        console.log("API categories data:", categoriesData);
-        if (categoriesData) {
+        console.log('API categories data:', categoriesData);
+        if (categoriesData && categoriesData.length > 0) {
           setCategories(categoriesData);
+          // Flatten categories để dễ sử dụng
+          const flattened = categoriesData.map((cat) => flattenCategory(cat));
+          setFlattenedCategories(flattened);
           // Set activeEra mặc định là category đầu tiên
-          if (categoriesData.length > 0) {
-            setActiveEra(categoriesData[0].slug);
-          }
+          setActiveEra(flattened[0].slug);
+        } else {
+          setError('Không có categories nào được tìm thấy');
         }
       } catch (err) {
-        console.error("Error fetching categories:", err);
-        setError("Failed to load categories");
+        console.error('Error fetching categories:', err);
+        setError('Không thể tải danh mục');
       }
     };
 
     withCategoriesLoading(fetchCategories);
-  }, [locale]); // Re-fetch when locale changes
+  }, [locale]);
 
   useEffect(() => {
-    if (!activeEra || categories.length === 0) return;
-    const category = categories.find((cat) => cat.slug === activeEra);
+    if (!activeEra || flattenedCategories.length === 0) return;
+    const category = flattenedCategories.find((cat) => cat.slug === activeEra);
     if (!category) return;
-    
+
     const fetchProducts = async () => {
       try {
         setErrorProducts(null);
-        
-        // Gọi API lấy sản phẩm theo category_id với locale
-        const response = await axios.get(`${API_URL}/api/products`, {
-          params: {
-            'filters[category][id][$eq]': category.id,
-            'locale': locale,
-            'populate': '*'
-          }
-        });
-        
-        let data = response.data.data || response.data;
-        
-        // Xử lý cấu trúc Strapi v4
-        if (Array.isArray(data) && data[0]?.attributes) {
-          data = data.map((p: any) => ({ 
-            ...p.attributes, 
-            id: p.id,
-            // Đảm bảo images được populate đúng cách
-            images: p.attributes.images?.data ? 
-              p.attributes.images.data.map((img: any) => ({
-                ...img.attributes,
-                id: img.id
-              })) : p.attributes.images
-          }));
+
+        // Gọi API lấy sản phẩm theo category_id
+        const productsData = await getProductsByCategory(category.id, locale);
+        console.log('API products data:', productsData);
+
+        if (productsData && productsData.length > 0) {
+          // Flatten products để dễ sử dụng
+          const flattened = productsData.map((prod) => flattenProduct(prod));
+          setProducts(flattened);
+        } else {
+          setProducts([]);
         }
-        
-        setProducts(data);
       } catch (err) {
         console.error('Error fetching products:', err);
         setErrorProducts('Không thể tải danh sách sản phẩm');
       }
     };
-    
+
     withProductsLoading(fetchProducts);
-  }, [activeEra, categories, locale]); // Re-fetch when locale changes
+  }, [activeEra, flattenedCategories, locale]);
 
   // Component ProductCard để quản lý state ảnh cho từng sản phẩm
   const ProductCard: React.FC<{ product: any; navigate: any }> = ({ product, navigate }) => {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [imageError, setImageError] = useState(false);
-    
+
     // Lấy ảnh chính từ mảng images
     let imageUrl = '';
     let fallbackUrls: string[] = [];
 
     if (product.images && product.images.length > 0) {
       const firstImage = product.images[0];
-      
+
       // Tạo danh sách fallback URLs theo thứ tự ưu tiên
-      fallbackUrls = [
+      const rawUrls = [
         firstImage.formats?.medium?.url,
         firstImage.formats?.small?.url,
         firstImage.formats?.thumbnail?.url,
-        firstImage.url
+        firstImage.url,
       ].filter(Boolean); // Loại bỏ undefined/null
-      
+
+      // Xử lý URL - nối với API_URL nếu là đường dẫn tương đối
+      fallbackUrls = rawUrls.map(url => {
+        if (url && url.startsWith('/uploads/')) {
+          return `http://localhost:1337${url}`;
+        }
+        return url;
+      });
+
       // URL đầu tiên làm primary
       imageUrl = fallbackUrls[0] || '';
-      
-      // Chỉ nối API_URL khi URL là đường dẫn tương đối (bắt đầu bằng /uploads/)
-      if (imageUrl && imageUrl.startsWith('/uploads/')) {
-        imageUrl = API_URL + imageUrl;
-        fallbackUrls = fallbackUrls.map(url => 
-          url && url.startsWith('/uploads/') ? API_URL + url : url
-        );
-      }
     }
 
     return (
@@ -146,7 +139,7 @@ const Browse: React.FC = () => {
               onError={(e) => {
                 // Thử ảnh tiếp theo trong danh sách fallback
                 if (currentImageIndex < fallbackUrls.length - 1) {
-                  setCurrentImageIndex(prev => prev + 1);
+                  setCurrentImageIndex((prev) => prev + 1);
                 } else {
                   // Đã thử hết tất cả ảnh, hiển thị placeholder
                   setImageError(true);
@@ -166,9 +159,7 @@ const Browse: React.FC = () => {
           {product.title}
         </h2>
         {product.description && (
-          <div className="text-base text-[#585550] mb-4 line-clamp-3">
-            {product.description}
-          </div>
+          <div className="text-base text-[#585550] mb-4 line-clamp-3">{product.description}</div>
         )}
         {/* Thanh kẻ mờ */}
         <div className="border-t-2 border-[#E5E1D7] opacity-80 my-3"></div>
@@ -189,14 +180,14 @@ const Browse: React.FC = () => {
       </div>
     );
   }
-  
+
   if (error) {
     return (
       <div className="min-h-screen bg-[#F7F5EA] flex items-center justify-center">
         <div className="text-center">
           <p className="text-[#61422D] text-lg mb-4">{error}</p>
-          <button 
-            onClick={() => window.location.reload()} 
+          <button
+            onClick={() => window.location.reload()}
             className="px-4 py-2 bg-[#7B6142] text-white rounded hover:bg-[#6a5437]"
           >
             Try Again
@@ -221,8 +212,8 @@ const Browse: React.FC = () => {
           className="hidden md:block w-full h-[420px] object-cover object-center"
         />
       </div>
-       {/* Era Tabs */}
-       <div className="w-full sticky top-[0px] z-30 bg-[#F7F5EA]">
+      {/* Era Tabs */}
+      <div className="w-full sticky top-[0px] z-30 bg-[#F7F5EA]">
         <div className="max-w-6xl mx-auto px-4 pt-4 md:pt-20 overflow-x-auto whitespace-nowrap">
           <div className="inline-flex items-center gap-x-2 justify-start pl-[64px] uppercase">
             {eras.map((era, idx) => (
@@ -254,8 +245,8 @@ const Browse: React.FC = () => {
         ) : errorProducts ? (
           <div className="text-center py-16">
             <p className="text-[#61422D] text-lg mb-4">{errorProducts}</p>
-            <button 
-              onClick={() => window.location.reload()} 
+            <button
+              onClick={() => window.location.reload()}
               className="px-4 py-2 bg-[#7B6142] text-white rounded hover:bg-[#6a5437]"
             >
               Try Again
