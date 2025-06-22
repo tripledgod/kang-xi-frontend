@@ -14,6 +14,7 @@ import {
   Category,
   Product,
 } from '../api/categories';
+import { API_URL } from '../utils/constants';
 
 interface Era {
   key: string;
@@ -115,7 +116,7 @@ const Browse: React.FC = () => {
       // Xử lý URL - nối với API_URL nếu là đường dẫn tương đối
       fallbackUrls = rawUrls.map(url => {
         if (url && url.startsWith('/uploads/')) {
-          return `http://localhost:1337${url}`;
+          return `${API_URL}${url}`;
         }
         return url;
       });

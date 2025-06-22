@@ -14,6 +14,7 @@ import {
   flattenCategory,
   flattenProduct,
 } from '../api/categories';
+import { API_URL } from '../utils/constants';
 
 const CARD_WIDTH = 320;
 const CARD_GAP = 32;
@@ -76,7 +77,7 @@ export default function CeramicsByEra() {
                       '';
                     
                     // Xử lý URL - nối với API_URL nếu là đường dẫn tương đối
-                    imageUrl = rawUrl.startsWith('/uploads/') ? `http://localhost:1337${rawUrl}` : rawUrl;
+                    imageUrl = rawUrl.startsWith('/uploads/') ? `${API_URL}${rawUrl}` : rawUrl;
                   }
 
                   const finalDesc = firstProduct.description || category.description || `Explore ${category.name} era ceramics`;
