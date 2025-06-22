@@ -10,9 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
 import {
   getCategories,
-  getProductsByCategory,
   flattenCategory,
-  flattenProduct,
 } from '../api/categories';
 import { API_URL } from '../utils/constants';
 
@@ -40,7 +38,7 @@ export default function CeramicsByEra() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Fetch categories and build eras
+  // Fetch categories và xây dựng eras
   useEffect(() => {
     const fetchCategories = async () => {
       setLoading(true);
@@ -49,86 +47,59 @@ export default function CeramicsByEra() {
         const categoriesData = await getCategories(locale);
 
         if (categoriesData && categoriesData.length > 0) {
-          // Flatten categories
-          const flattenedCategories = categoriesData.map((cat) => flattenCategory(cat));
+          // Flatten categories và xây dựng eras data
+          const erasData = categoriesData.map((cat) => {
+            const category = flattenCategory(cat);
+            
+            // Xử lý ảnh từ category.image
+            let imageUrl = '';
+            if (category.image) {
+              const rawUrl =
+                category.image.formats?.medium?.url ||
+                category.image.formats?.small?.url ||
+                category.image.formats?.thumbnail?.url ||
+                category.image.url ||
+                '';
 
-          // Lấy sản phẩm đầu tiên cho từng category
-          const erasData = await Promise.all(
-            flattenedCategories.map(async (category) => {
-              try {
-                const productsData = await getProductsByCategory(category.id, locale);
+              // Xử lý URL - nối với API_URL nếu là đường dẫn tương đối
+              imageUrl = rawUrl.startsWith('/uploads/') ? `${API_URL}${rawUrl}` : rawUrl;
+            }
 
-                if (productsData && productsData.length > 0) {
-                  // Lấy sản phẩm đầu tiên
-                  const firstProduct = flattenProduct(productsData[0]);
-                  
-                  // Debug: Log product data
-                  console.log('First product for category', category.name, ':', firstProduct);
+            // Tạo years string từ ageFrom và ageTo
+            const years = category.ageFrom && category.ageTo
+              ? `${category.ageFrom}—${category.ageTo}`
+              : '';
 
-                  // Lấy ảnh đầu tiên
-                  let imageUrl = '';
-                  if (firstProduct.images && firstProduct.images.length > 0) {
-                    const firstImage = firstProduct.images[0];
-                    const rawUrl =
-                      firstImage.formats?.medium?.url ||
-                      firstImage.formats?.small?.url ||
-                      firstImage.formats?.thumbnail?.url ||
-                      firstImage.url ||
-                      '';
-                    
-                    // Xử lý URL - nối với API_URL nếu là đường dẫn tương đối
-                    imageUrl = rawUrl.startsWith('/uploads/') ? `${API_URL}${rawUrl}` : rawUrl;
-                  }
+            // Sử dụng description từ category hoặc fallback
+            const description = category.description || 
+              `Explore ${category.name} era ceramics`;
 
-                  const finalDesc = firstProduct.description || category.description || `Explore ${category.name} era ceramics`;
-                  console.log('Final description for', category.name, ':', finalDesc);
+            return {
+              name: category.name,
+              years: years,
+              desc: description,
+              img: imageUrl,
+              id: category.id,
+              slug: category.slug,
+              isPlaceholder: !imageUrl, // Đánh dấu placeholder nếu không có ảnh
+              ageFrom: category.ageFrom ? parseInt(category.ageFrom) : 0, // Thêm ageFrom để sắp xếp
+            };
+          });
 
-                  return {
-                    name: category.name,
-                    years:
-                      category.ageFrom && category.ageTo
-                        ? `${category.ageFrom}—${category.ageTo}`
-                        : '',
-                    desc: finalDesc,
-                    img: imageUrl,
-                    id: category.id,
-                    slug: category.slug,
-                    isPlaceholder: false,
-                  };
-                } else {
-                  // Không có sản phẩm cho category này
-                  return {
-                    name: category.name,
-                    years:
-                      category.ageFrom && category.ageTo
-                        ? `${category.ageFrom}—${category.ageTo}`
-                        : '',
-                    desc: category.description || `No products available for ${category.name} era`,
-                    img: '',
-                    id: category.id,
-                    slug: category.slug,
-                    isPlaceholder: true,
-                  };
-                }
-              } catch (error) {
-                console.error(`Error fetching products for category ${category.name}:`, error);
-                return {
-                  name: category.name,
-                  years:
-                    category.ageFrom && category.ageTo
-                      ? `${category.ageFrom}—${category.ageTo}`
-                      : '',
-                  desc: category.description || `Error loading ${category.name} era`,
-                  img: '',
-                  id: category.id,
-                  slug: category.slug,
-                  isPlaceholder: true,
-                };
-              }
-            })
-          );
+          // Sắp xếp theo năm tăng dần (ageFrom)
+          const sortedErasData = erasData.sort((a, b) => {
+            // Nếu cả hai đều có ageFrom, sắp xếp theo số
+            if (a.ageFrom && b.ageFrom) {
+              return a.ageFrom - b.ageFrom;
+            }
+            // Nếu chỉ một có ageFrom, đưa lên đầu
+            if (a.ageFrom && !b.ageFrom) return -1;
+            if (!a.ageFrom && b.ageFrom) return 1;
+            // Nếu cả hai đều không có ageFrom, giữ nguyên thứ tự
+            return 0;
+          });
 
-          setEras(erasData);
+          setEras(sortedErasData);
         } else {
           setEras([]);
         }
@@ -235,7 +206,11 @@ export default function CeramicsByEra() {
         {/* Mobile: vertical stack */}
         <div className="flex flex-col gap-8 mt-4 md:hidden">
           {eras.map((era, idx) => (
-            <div key={era.name} className="flex flex-col bg-transparent">
+            <div 
+              key={era.name} 
+              className="flex flex-col bg-transparent cursor-pointer hover:opacity-80 transition-opacity"
+              onClick={() => navigate(`/browse?era=${era.slug}`)}
+            >
               <div className="bg-[#E6DDC6] aspect-square w-full flex items-center justify-center overflow-hidden mb-4">
                 {era.img ? (
                   <img src={era.img} alt={era.name} className="object-cover w-full h-full" />
@@ -290,8 +265,9 @@ export default function CeramicsByEra() {
           {eras.map((era, idx) => (
             <div
               key={era.name}
-              className="flex flex-col flex-shrink-0 bg-transparent"
+              className="flex flex-col flex-shrink-0 bg-transparent cursor-pointer hover:opacity-80 transition-opacity"
               style={{ width: CARD_WIDTH, minWidth: CARD_WIDTH }}
+              onClick={() => navigate(`/browse?era=${era.slug}`)}
             >
               <div className="bg-[#E6DDC6] aspect-square w-full flex items-center justify-center overflow-hidden mb-4">
                 {era.img ? (

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import Loading from '../components/Loading';
 import { useLoading } from '../hooks/useLoading';
 import { useLanguage } from '../contexts/LanguageContext';
@@ -33,6 +33,12 @@ const Browse: React.FC = () => {
   const [errorProducts, setErrorProducts] = useState<string | null>(null);
   const navigate = useNavigate();
   const { locale } = useLanguage();
+  const [searchParams] = useSearchParams();
+
+  // Cuộn lên đầu trang mỗi khi URL thay đổi
+  useEffect(() => {
+    window.scrollTo(0, 400);
+  }, [searchParams]);
 
   // Chuyển đổi categories thành eras
   const eras: Era[] = flattenedCategories.map((category) => ({
@@ -47,11 +53,17 @@ const Browse: React.FC = () => {
         console.log('API categories data:', categoriesData);
         if (categoriesData && categoriesData.length > 0) {
           setCategories(categoriesData);
-          // Flatten categories để dễ sử dụng
           const flattened = categoriesData.map((cat) => flattenCategory(cat));
           setFlattenedCategories(flattened);
-          // Set activeEra mặc định là category đầu tiên
-          setActiveEra(flattened[0].slug);
+          
+          const eraFromUrl = searchParams.get('era');
+          const categoryExists = flattened.find(cat => cat.slug === eraFromUrl);
+
+          if (eraFromUrl && categoryExists) {
+            setActiveEra(eraFromUrl);
+          } else if (flattened.length > 0) {
+            setActiveEra(flattened[0].slug);
+          }
         } else {
           setError('Không có categories nào được tìm thấy');
         }
@@ -62,7 +74,7 @@ const Browse: React.FC = () => {
     };
 
     withCategoriesLoading(fetchCategories);
-  }, [locale]);
+  }, [locale, searchParams]);
 
   useEffect(() => {
     if (!activeEra || flattenedCategories.length === 0) return;
@@ -72,13 +84,10 @@ const Browse: React.FC = () => {
     const fetchProducts = async () => {
       try {
         setErrorProducts(null);
-
-        // Gọi API lấy sản phẩm theo category_id
         const productsData = await getProductsByCategory(category.id, locale);
         console.log('API products data:', productsData);
 
         if (productsData && productsData.length > 0) {
-          // Flatten products để dễ sử dụng
           const flattened = productsData.map((prod) => flattenProduct(prod));
           setProducts(flattened);
         } else {
@@ -92,6 +101,11 @@ const Browse: React.FC = () => {
 
     withProductsLoading(fetchProducts);
   }, [activeEra, flattenedCategories, locale]);
+
+  const handleEraClick = (eraSlug: string) => {
+    setActiveEra(eraSlug);
+    navigate(`/browse?era=${eraSlug}`, { replace: true });
+  };
 
   // Component ProductCard để quản lý state ảnh cho từng sản phẩm
   const ProductCard: React.FC<{ product: any; navigate: any }> = ({ product, navigate }) => {
@@ -114,7 +128,7 @@ const Browse: React.FC = () => {
       ].filter(Boolean); // Loại bỏ undefined/null
 
       // Xử lý URL - nối với API_URL nếu là đường dẫn tương đối
-      fallbackUrls = rawUrls.map(url => {
+      fallbackUrls = rawUrls.map((url) => {
         if (url && url.startsWith('/uploads/')) {
           return `${API_URL}${url}`;
         }
@@ -221,7 +235,7 @@ const Browse: React.FC = () => {
               <React.Fragment key={era.key}>
                 <button
                   className={`pb-2 transition-colors uppercase ${activeEra === era.key ? 'border-b-2 border-[#23211C] text-[#23211C]' : 'text-[#23211C] border-b-0'}`}
-                  onClick={() => setActiveEra(era.key)}
+                  onClick={() => handleEraClick(era.key)}
                   style={era.style}
                 >
                   {era.label}
