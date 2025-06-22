@@ -5,28 +5,46 @@ import CeramicsByEra from '../components/CeramicsByEra';
 import AcquireOrAppraise from '../components/AcquireOrAppraise';
 import ArticlesSection from '../components/ArticlesSection';
 import Newsletter from '../components/Newsletter';
+import { useLanguage } from '../contexts/LanguageContext';
+import { getArticles, Article } from '../api/articles';
+import axios from 'axios';
 import { API_URL } from '../utils/constants.ts';
-
-// Create Articles Interface
-export interface Article {
-  id: string;
-  title: string;
-  description: string;
-  cover: any;
-  publishedAt: Date;
-}
 
 export default function Home() {
   // Define articles state
   const [articles, setArticles] = useState<Article[]>([]);
+  const { locale } = useLanguage();
 
   // fetch articles
-  const getArticles = async () => {
-    const response = await fetch(`${API_URL}/api/articles?populate=*`);
-    const data = await response.json();
-    console.log(data.data);
-    setArticles(data.data);
-  };
+  useEffect(() => {
+    const fetchArticles = async () => {
+      try {
+        const response = await axios.get(`${API_URL}/api/articles`, {
+          params: {
+            'pagination[pageSize]': 3,
+            'locale': locale,
+            'populate': '*'
+          }
+        });
+        
+        let data = response.data.data || response.data;
+        
+        // Xử lý cấu trúc Strapi v4
+        if (Array.isArray(data) && data[0]?.attributes) {
+          data = data.map((article: any) => ({ 
+            ...article.attributes, 
+            id: article.id 
+          }));
+        }
+        
+        setArticles(data);
+      } catch (err) {
+        console.error('Error fetching articles:', err);
+      }
+    };
+    
+    fetchArticles();
+  }, [locale]); // Re-fetch when locale changes
 
   // Format date
   const formatDate = (date: Date) => {
@@ -37,10 +55,6 @@ export default function Home() {
     };
     return new Date(date).toLocaleDateString('en-US', options);
   };
-
-  useEffect(() => {
-    getArticles();
-  }, []);
 
   return (
     <>

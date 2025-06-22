@@ -8,6 +8,9 @@ import Button from '../components/Button';
 import customerSupportIcon from '../assets/customer_support.svg';
 import privateViewingIcon from '../assets/private_viewing.svg';
 import secureTransactionIcon from '../assets/secure_transaction.svg';
+import { API_URL } from '../utils/constants';
+import Popup from '../components/Popup';
+import { useNavigate } from 'react-router-dom';
 
 const steps = [
   {
@@ -38,9 +41,51 @@ const countryOptions = [
 export default function AcquireAnItem() {
   const [country, setCountry] = useState(countryOptions[0]);
   const [phone, setPhone] = useState('');
+  const [acquireForm, setAcquireForm] = useState({
+    firstName: '',
+    lastName: '',
+    itemCode: '',
+  });
+  const [showSuccess, setShowSuccess] = useState(false);
+  const navigate = useNavigate();
+
+  const submitForm = () => {
+    fetch(`${API_URL}/api/form-acquire`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        data: {
+          firstName: acquireForm.firstName,
+          lastName: acquireForm.lastName,
+          itemCode: acquireForm.itemCode,
+          contactNumber: `+${phone}`,
+        },
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setShowSuccess(true);
+        // Có thể reset form nếu muốn
+        // setAcquireForm({ firstName: '', lastName: '', itemCode: '' });
+        // setPhone('');
+      });
+  };
 
   return (
     <div className="w-full min-h-screen bg-[#F7F5EA]">
+      {/* Hiển thị popup khi đăng ký thành công */}
+      {showSuccess && (
+        <Popup
+          title="Thank you for contacting us!"
+          content="We will  be in  touch with you  shortly."
+          buttonText="BACK TO HOMEPAGE"
+          onButtonClick={() => {
+            setShowSuccess(false);
+            navigate('/');
+          }}
+          onClose={() => setShowSuccess(false)}
+        />
+      )}
       {/* Hero Section */}
       <div className="w-full bg-[#23211C] py-12 px-4">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row gap-10 items-center">
@@ -139,45 +184,57 @@ export default function AcquireAnItem() {
           <div className="text-base text-[#585550] mb-8 text-center">
             Fill in your details below, and we will be in touch with you shortly.
           </div>
-          <form className="space-y-6">
+          <form
+            className="space-y-6"
+            onSubmit={(e) => {
+              e.preventDefault();
+              submitForm();
+            }}
+          >
             <div>
-              <label className="block mb-2 text-[#7B6142] font-semibold">First Name</label>
+              <label className="block mb-2 text-[#1F1F1F] font-medium">First Name</label>
               <input
                 type="text"
-                className="w-full rounded border border-[#C7C7B9] px-4 py-3 bg-[#F7F5EA] text-[#23211C]"
+                className="w-full rounded border border-[#C7C7B9] px-4 py-3 bg-white text-[#23211C]"
                 placeholder="Enter your first name"
+                value={acquireForm.firstName}
+                onChange={(e) => setAcquireForm((f) => ({ ...f, firstName: e.target.value }))}
               />
             </div>
             <div>
-              <label className="block mb-2 text-[#7B6142] font-semibold">Last Name</label>
+              <label className="block mb-2 text-[#1F1F1F] font-medium">Last Name</label>
               <input
                 type="text"
-                className="w-full rounded border border-[#C7C7B9] px-4 py-3 bg-[#F7F5EA] text-[#23211C]"
+                className="w-full rounded border border-[#C7C7B9] px-4 py-3 bg-white text-[#23211C]"
                 placeholder="Enter your last name"
+                value={acquireForm.lastName}
+                onChange={(e) => setAcquireForm((f) => ({ ...f, lastName: e.target.value }))}
               />
             </div>
             <div>
-              <label className="block mb-2 text-[#7B6142] font-semibold">Item Code</label>
+              <label className="block mb-2 text-[#1F1F1F] font-medium">Item Code</label>
               <input
                 type="text"
-                className="w-full rounded border border-[#C7C7B9] px-4 py-3 bg-[#F7F5EA] text-[#23211C]"
+                className="w-full rounded border border-[#C7C7B9] px-4 py-3 bg-white text-[#23211C]"
                 placeholder="Enter item code"
+                value={acquireForm.itemCode}
+                onChange={(e) => setAcquireForm((f) => ({ ...f, itemCode: e.target.value }))}
               />
             </div>
             <div>
-              <label className="block mb-2 text-[#7B6142] font-semibold">Contact Number</label>
+              <label className="block mb-2 text-[#1F1F1F] font-medium">Contact Number</label>
               <PhoneInput
                 country={'sg'}
                 value={phone}
-                onChange={(phone) => setPhone(phone)}
-                inputClass="w-full rounded border border-[#C7C7B9] px-4 py-3 bg-[#F7F5EA] text-[#23211C]"
-                buttonClass="rounded-l border border-[#C7C7B9] bg-[#F7F5EA]"
-                dropdownClass="bg-[#F7F5EA] text-[#23211C]"
-                searchClass="bg-[#F7F5EA] text-[#23211C] border border-[#C7C7B9]"
+                onChange={setPhone}
+                inputClass="w-full rounded border border-[#C7C7B9] px-4 py-3 bg-white text-[#23211C]"
+                buttonClass="rounded-l border border-[#C7C7B9] bg-white"
+                dropdownClass="bg-white text-[#23211C]"
+                searchClass="bg-white text-[#23211C] border border-[#C7C7B9]"
                 containerClass="phone-input-container"
               />
             </div>
-            <div className="w-full">
+            <div className="w-full pt-2">
               <Button text="SUBMIT FORM" type="submit" className="submit-form-btn" />
             </div>
           </form>

@@ -1,7 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useSwipeable } from 'react-swipeable';
 import Button from '../components/Button';
+import Loading from '../components/Loading';
+import { useLoading } from '../hooks/useLoading';
+import { useLanguage } from '../contexts/LanguageContext';
 import AcquireOrAppraise from '../components/AcquireOrAppraise';
 import zoomInIcon from '../assets/zoom_in.svg';
 import icCircleLeft from '../assets/ic_circle_left.svg';
@@ -11,104 +15,164 @@ import closeIcon from '../assets/close.svg';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
 import '../styles/phone-input.css';
+
+import axios from 'axios';
 import { API_URL } from '../utils/constants.ts';
-
-// Mock images for gallery
-const gallery = [
-  'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=400&q=80',
-  'https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=400&q=80',
-  'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80',
-  'https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=400&q=80',
-  'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?auto=format&fit=crop&w=400&q=80',
-];
-
-const product = {
-  title: 'Large Sancai Gazed Peony Plate, Liao Dynasty',
-  years: '960 – 1279 (TANG)',
-  itemCode: 'T3026023',
-  desc: `The Liao Dynasty 907–1125, was an empire in East Asia that ruled over the regions of Manchuria, Mongolia, and parts of northern China proper. It was founded by the Yelü clan of the Khitan people in the same year as Tang Dynasty collapsed (907), even though its first ruler, Yelü Abaoji, did not declare an era name until 916.\n\nAlthough it was originally known as the Empire of the Khitan, the Emperor Yelü Ruan officially adopted the name "Liao" (formally "Great Liao") in 947 (938?). The name "Liao" was dropped in 983, but readopted in 1066. Another name for China in English...`,
-};
-
-const relatedProducts = [
-  {
-    era: 'TANG',
-    image:
-      'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80',
-    title: 'A White Glazed Kundika, Late Tang / Five Dynasties Period',
-    years: '618 – 960',
-    item: 'T302602',
-  },
-  {
-    era: 'TANG',
-    image:
-      'https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=400&q=80',
-    title: 'A Changsha Straw Glazed Pottery Ewer, Tang Dynasty',
-    years: '618 – 907',
-    item: 'T302601',
-  },
-  {
-    era: 'TANG',
-    image:
-      'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=400&q=80',
-    title: 'A Rare Bottom Filling Water Olive Green Glazed Teapot, Five Dynasties of the Period',
-    years: '916–1125',
-    item: 'L302601',
-  },
-  {
-    era: 'TANG',
-    image:
-      'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?auto=format&fit=crop&w=400&q=80',
-    title: 'A Large Painted Pottery Figure of a Pranking Horse, Tang Dynasty',
-    years: '916–1125',
-    item: 'L302601',
-  },
-];
+import { getImageUrl, getImagesUrls } from '../utils';
+import Popup from '../components/Popup.tsx';
 
 export default function ProductDetail() {
-  const { id } = useParams();
-  const [mainImg, setMainImg] = useState(gallery[0]);
+  const { slug } = useParams();
+  const [mainImg, setMainImg] = useState<string>('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalIndex, setModalIndex] = useState(0);
   const [mobileIndex, setMobileIndex] = useState(0);
   const [copied, setCopied] = useState(false);
   const [descWidth, setDescWidth] = useState<number | undefined>(undefined);
+  const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
   const descRef = useRef<HTMLDivElement>(null);
   const [showAcquireModal, setShowAcquireModal] = useState(false);
+  const [phone, setPhone] = useState('');
+  const { loading, withLoading } = useLoading(true);
+  const [error, setError] = useState<string | null>(null);
+  const [productDetail, setProductDetail] = useState<any>(null);
+  const [showSuccess, setShowSuccess] = useState(false);
   const [acquireForm, setAcquireForm] = useState({
     firstName: '',
     lastName: '',
-    itemCode: product.itemCode,
+    itemCode: '',
   });
-  const [phone, setPhone] = useState('');
+  const [relatedProducts, setRelatedProducts] = useState<any[]>([]);
   const navigate = useNavigate();
+  const { locale } = useLanguage();
+  const { t } = useTranslation();
+
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        // Gọi API lấy chi tiết sản phẩm theo slug với locale
+        const response = await axios.get(`${API_URL}/api/products`, {
+          params: {
+            'filters[slug][$eq]': slug,
+            'locale': locale,
+            'populate': '*'
+          }
+        });
+
+        if (response.data && response.data.data && response.data.data.length > 0) {
+          const product = response.data.data[0];
+          setProductDetail(product);
+
+          // Lấy ảnh chính từ mảng images
+          if (product.images && product.images.length > 0) {
+            const firstImage = product.images[0];
+            const imageUrl = getImageUrl(firstImage);
+            setMainImg(imageUrl);
+          }
+
+          // Lấy related products với locale
+          let relatedProductsData = [];
+          
+          if (product.category?.id || product.category?.data?.id || product.category_id) {
+            // Nếu có category, lấy products cùng category
+            const categoryId = product.category?.id || product.category?.data?.id || product.category_id;
+            
+            const relatedResponse = await axios.get(`${API_URL}/api/products`, {
+              params: {
+                'filters[category][$eq]': categoryId,
+                'pagination[pageSize]': 4,
+                'locale': locale,
+                'populate': '*'
+              }
+            });
+            
+            if (relatedResponse.data && relatedResponse.data.data) {
+              relatedProductsData = relatedResponse.data.data.filter((p: any) => p.id !== product.id);
+            }
+          } else {
+            // Nếu không có category, lấy random products
+            const randomResponse = await axios.get(`${API_URL}/api/products`, {
+              params: {
+                'pagination[pageSize]': 4,
+                'locale': locale,
+                'populate': '*',
+                'sort': 'createdAt:desc' // Lấy products mới nhất
+              }
+            });
+            
+            if (randomResponse.data && randomResponse.data.data) {
+              relatedProductsData = randomResponse.data.data.filter((p: any) => p.id !== product.id);
+            }
+          }
+          
+          setRelatedProducts(relatedProductsData);
+        } else {
+          setError('Product not found');
+        }
+      } catch (err) {
+        console.error('Error fetching product:', err);
+        setError('Failed to load product details');
+      }
+    };
+
+    if (slug) {
+      withLoading(fetchProduct);
+    }
+  }, [slug, locale]); // Re-fetch when locale changes
 
   useEffect(() => {
     if (descRef.current) {
       setDescWidth(descRef.current.offsetWidth);
     }
-  }, [product.desc]);
+  }, [productDetail?.description]);
 
   const openModal = (idx: number) => {
     setModalIndex(idx);
     setIsModalOpen(true);
   };
+
   const closeModal = () => setIsModalOpen(false);
-  const prevImg = () => setModalIndex((i) => (i === 0 ? gallery.length - 1 : i - 1));
-  const nextImg = () => setModalIndex((i) => (i === gallery.length - 1 ? 0 : i + 1));
+
+  const prevImg = () => {
+    const images = productDetail?.images || [];
+    setModalIndex((i) => (i === 0 ? images.length - 1 : i - 1));
+  };
+
+  const nextImg = () => {
+    const images = productDetail?.images || [];
+    setModalIndex((i) => (i === images.length - 1 ? 0 : i + 1));
+  };
 
   // Swipe handlers for mobile gallery
   const swipeHandlers = useSwipeable({
-    onSwipedLeft: () => setMobileIndex((i) => (i === gallery.length - 1 ? 0 : i + 1)),
-    onSwipedRight: () => setMobileIndex((i) => (i === 0 ? gallery.length - 1 : i - 1)),
+    onSwipedLeft: () => {
+      const images = productDetail?.images || [];
+      setMobileIndex((i) => (i === images.length - 1 ? 0 : i + 1));
+    },
+    onSwipedRight: () => {
+      const images = productDetail?.images || [];
+      setMobileIndex((i) => (i === 0 ? images.length - 1 : i - 1));
+    },
     preventScrollOnSwipe: true,
     trackMouse: true,
   });
 
   // Copy to clipboard
   const handleCopy = () => {
-    navigator.clipboard.writeText(product.itemCode);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 1200);
+    const itemCode = productDetail?.itemCode || productDetail?.documentId || '';
+
+    if (navigator.clipboard && window.isSecureContext) {
+      // Modern clipboard API
+      navigator.clipboard
+        .writeText(itemCode)
+        .catch(() => {
+          // Fallback to old method
+          fallbackCopyTextToClipboard(itemCode);
+        });
+    } else {
+      // Fallback for older browsers
+      fallbackCopyTextToClipboard(itemCode);
+    }
   };
 
   const submitForm = () => {
@@ -125,17 +189,90 @@ export default function ProductDetail() {
       }),
     })
       .then((res) => res.json())
-      .then((data) => console.log(data));
+      .then((data) => {
+        setShowSuccess(true);
+        setShowAcquireModal(false);
+      });
+  };
+
+  // Fallback copy method
+  const fallbackCopyTextToClipboard = (text: string) => {
+    const textArea = document.createElement('textarea');
+    textArea.value = text;
+    textArea.style.position = 'fixed';
+    textArea.style.left = '-999999px';
+    textArea.style.top = '-999999px';
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+
+    try {
+      const successful = document.execCommand('copy');
+      if (successful) {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 1200);
+      } else {
+        console.error('Fallback copy failed');
+      }
+    } catch (err) {
+      console.error('Fallback copy error:', err);
+    }
+
+    document.body.removeChild(textArea);
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#F7F5EA] flex items-center justify-center">
+        <Loading fullScreen text="Loading product details..." />
+      </div>
+    );
   }
+
+  if (error || !productDetail) {
+    return (
+      <div className="min-h-screen bg-[#F7F5EA] flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-[#61422D] text-lg mb-4">{error || 'Product not found'}</p>
+          <button 
+            onClick={() => navigate('/browse')} 
+            className="px-4 py-2 bg-[#7B6142] text-white rounded hover:bg-[#6a5437]"
+          >
+            Back to Browse
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // Lấy ảnh cho gallery
+  const images = productDetail.images || [];
+  const imageUrls = getImagesUrls(images);
 
   return (
     <div className="w-full min-h-screen bg-[#F7F5EA]">
+      {/* Hiển thị popup khi đăng ký thành công */}
+      {showSuccess && (
+        <Popup
+          title="Thank you for contacting us!"
+          content="We will  be in  touch with you  shortly."
+          buttonText="BACK TO HOMEPAGE"
+          onButtonClick={() => {
+            setShowSuccess(false);
+            navigate('/');
+          }}
+          onClose={() => setShowSuccess(false)}
+        />
+      )}
       {/* Show product id for confirmation */}
-      <div className="max-w-6xl mx-auto px-4 pt-2 text-xs text-[#888] mb-2">Product ID: {id}</div>
+      <div className="max-w-6xl mx-auto px-4 pt-2 text-xs text-[#888] mb-2">
+        Product ID: {productDetail.id}
+      </div>
       {/* Breadcrumb */}
       <div className="max-w-6xl mx-auto px-4 pt-6 text-xs text-[#888] mb-4">
         <span>Home</span> <span className="mx-1">&gt;</span> <span>Browse</span>{' '}
-        <span className="mx-1">&gt;</span> <span className="text-[#201F1C]">{product.title}</span>
+        <span className="mx-1">&gt;</span>{' '}
+        <span className="text-[#201F1C]">{productDetail.title}</span>
       </div>
       {/* Main Section */}
       <div className="max-w-6xl mx-auto px-4 flex flex-col md:flex-row gap-10">
@@ -144,18 +281,18 @@ export default function ProductDetail() {
         <div className="block md:hidden w-full">
           <div className="relative w-full" {...swipeHandlers}>
             <img
-              src={gallery[mobileIndex]}
-              alt="Main"
+              src={imageUrls[mobileIndex] || mainImg}
+              alt={productDetail.title}
               className="object-contain w-full max-h-[340px] bg-white rounded cursor-pointer"
               onClick={() => openModal(mobileIndex)}
             />
             {/* Pagination dots - now positioned over the image */}
             <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex justify-center gap-2">
-              {gallery.map((_, idx) => (
+              {imageUrls.map((_: string, idx: number) => (
                 <button
                   key={idx}
                   className={`w-2 h-2 rounded-full ${mobileIndex === idx ? 'bg-[#7B6142]' : 'bg-white'} transition`}
-                  onClick={(e) => {
+                  onClick={(e: React.MouseEvent) => {
                     e.stopPropagation(); // Prevent image click when clicking dots
                     setMobileIndex(idx);
                   }}
@@ -169,12 +306,12 @@ export default function ProductDetail() {
         <div className="hidden md:flex flex-col md:flex-row gap-4 md:w-1/2">
           {/* Thumbnails */}
           <div className="flex md:flex-col gap-2 md:gap-4 md:w-24">
-            {gallery.map((img, idx) => (
+            {imageUrls.map((img: string, idx: number) => (
               <img
                 key={idx}
                 src={img}
-                alt="Gallery Thumb"
-                className={`w-16 h-16 md:w-20 md:h-20 object-cover rounded cursor-pointer border ${mainImg === img ? 'border-[#7B6142]' : 'border-transparent'}`}
+                alt={`Gallery Thumb ${idx + 1}`}
+                className={`w-16 h-16 md:w-20 md:h-20 object-cover rounded cursor-pointer border border-[#7B6142]`}
                 onClick={() => setMainImg(img)}
                 onDoubleClick={() => openModal(idx)}
               />
@@ -185,12 +322,12 @@ export default function ProductDetail() {
             <div className="relative w-full">
               <img
                 src={mainImg}
-                alt="Main"
+                alt={productDetail.title}
                 className="object-contain w-full max-h-[400px] bg-white rounded"
               />
               <button
                 className="absolute top-2 right-2 bg-white rounded-full p-2 shadow hover:scale-110 transition"
-                onClick={() => openModal(gallery.indexOf(mainImg))}
+                onClick={() => openModal(0)}
                 aria-label="Zoom in"
               >
                 <img src={zoomInIcon} alt="Zoom In" className="w-6 h-6" />
@@ -201,9 +338,11 @@ export default function ProductDetail() {
         {/* Right: Info */}
         <div className="flex-1 flex flex-col gap-4">
           <div className="flex flex-row justify-between text-xs text-[#23211C] font-semibold items-center">
-            <span>{product.years}</span>
+            <span>
+              {productDetail.ageFrom} - {productDetail.ageTo}
+            </span>
             <span className="flex items-center gap-1">
-              ITEM CODE {product.itemCode}
+              ITEM CODE {productDetail.itemCode || productDetail.documentId}
               <button
                 onClick={handleCopy}
                 className="ml-1 p-1 hover:bg-[#E6DDC6] rounded"
@@ -215,18 +354,28 @@ export default function ProductDetail() {
             </span>
           </div>
           <h1 className="text-3xl md:text-4xl font-serif font-medium text-[#61422D] mb-2 leading-tight">
-            {product.title}
+            {productDetail.title}
           </h1>
           <div className="max-w-xl">
             <div className="text-base text-[#2E2A24] font-bold mb-1">Description</div>
             <div
               ref={descRef}
-              className="text-lg text-[#585550] mb-4 whitespace-pre-line line-clamp-6"
+              className={`text-lg text-[#585550] mb-4 whitespace-pre-line ${
+                !isDescriptionExpanded ? 'line-clamp-6' : ''
+              }`}
             >
-              {product.desc}
+              {productDetail.description}
             </div>
+            {productDetail.description && productDetail.description.length > 500 && (
+              <button
+                onClick={() => setIsDescriptionExpanded(!isDescriptionExpanded)}
+                className="text-[#7B6142] font-medium hover:text-[#61422D] transition-colors mb-4"
+              >
+                {isDescriptionExpanded ? t('READ LESS') : t('READ MORE')}
+              </button>
+            )}
             <Button
-              text="ACQUIRE THIS ITEM"
+              text={t('ACQUIRE THIS ITEM')}
               className="submit-form-btn"
               onClick={() => setShowAcquireModal(true)}
             />
@@ -239,7 +388,7 @@ export default function ProductDetail() {
           {/* Top center: index */}
           <div className="absolute top-4 left-1/2 -translate-x-1/2 z-60">
             <span className="text-white text-base bg-black/50 rounded px-3 py-1">
-              {modalIndex + 1}/{gallery.length}
+              {modalIndex + 1}/{imageUrls.length}
             </span>
           </div>
           {/* Top right: close button */}
@@ -261,7 +410,7 @@ export default function ProductDetail() {
           </button>
           <div className="flex flex-col items-center">
             <img
-              src={gallery[modalIndex]}
+              src={imageUrls[modalIndex]}
               alt="Zoomed"
               className="max-h-[90vh] max-w-[98vw] rounded shadow-lg"
             />
@@ -276,53 +425,76 @@ export default function ProductDetail() {
         </div>
       )}
       {/* Related Products Carousel */}
-      <div className="w-full bg-[#F7F5EA] py-16 mt-10">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="flex flex-row justify-between items-center mb-8">
-            <h2 className="text-2xl md:text-3xl font-serif font-medium text-[#201F1C]">
-              You might be interested
-            </h2>
-            <button
-              className="text-[#020202] text-sm font-semibold hidden md:flex"
-              onClick={() => navigate('/browse')}
-            >
-              VIEW ALL
-            </button>
-          </div>
-          <div className="relative">
-            {/* Carousel Arrows */}
-            <button className="absolute -left-6 top-3/8 -translate-y-1/2 shadow p-2 z-10 hidden md:block">
-              <img src={icCircleLeft} alt="Previous" className="w-8 h-8" />
-            </button>
-            <div className="overflow-x-auto">
-              <div className="flex gap-8">
-                {relatedProducts.map((item, idx) => (
-                  <div key={idx} className="min-w-[260px] max-w-xs flex flex-col">
-                    <div className="bg-[#E6DDC6] aspect-square w-full flex items-center justify-center overflow-hidden mb-4">
-                      <img
-                        src={item.image}
-                        alt={item.title}
-                        className="object-contain w-full h-full"
-                      />
-                    </div>
-                    <div className="text-xs text-[#7B6142] font-semibold mb-2">{item.era}</div>
-                    <h2 className="text-base font-serif font-semibold text-[#61422D] mb-2 leading-snug line-clamp-2 pb-8">
-                      {item.title}
-                    </h2>
-                    <div className="flex flex-row justify-between text-xs text-[#585550] font-semibold border-t pt-2 border-[#C7C7B9]">
-                      <span>{item.years}</span>
-                      <span>ITEM {item.item}</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
+      {(() => {
+        return relatedProducts.length > 0;
+      })() && (
+        <div className="w-full bg-[#F7F5EA] py-16 mt-10">
+          <div className="max-w-6xl mx-auto px-4">
+            <div className="flex flex-row justify-between items-center mb-8">
+              <h2 className="text-2xl md:text-3xl font-serif font-medium text-[#201F1C]">
+                You might be interested
+              </h2>
+              <button
+                className="text-[#020202] text-sm font-semibold hidden md:flex"
+                onClick={() => navigate('/browse')}
+              >
+                {t('VIEW ALL')}
+              </button>
             </div>
-            <button className="absolute -right-6 top-3/8 -translate-y-1/2 shadow p-2 z-10 hidden md:block">
-              <img src={icCircleRight} alt="Next" className="w-8 h-8" />
-            </button>
+            <div className="relative">
+              {/* Carousel Arrows */}
+              <button className="absolute -left-6 top-3/8 -translate-y-1/2 rounded-full  p-2  z-10 hidden md:block">
+                <img src={icCircleLeft} alt="Previous" className="w-8 h-8" />
+              </button>
+              <div className="overflow-x-auto">
+                <div className="flex gap-8">
+                  {relatedProducts.map((item: any, idx: number) => {
+                    console.log('Rendering related product:', item);
+                    // Lấy ảnh cho related product
+                    const relatedImageUrl = item.images && item.images.length > 0 
+                      ? getImageUrl(item.images[0]) 
+                      : '';
+
+                    return (
+                      <div key={item.id} className="min-w-[260px] max-w-xs flex flex-col">
+                        <div className="bg-[#E6DDC6] aspect-square w-full flex items-center justify-center overflow-hidden mb-4">
+                          {relatedImageUrl ? (
+                            <img
+                              src={relatedImageUrl}
+                              alt={item.title}
+                              className="object-contain w-full h-full"
+                            />
+                          ) : (
+                            <div className="text-[#61422D] text-center">
+                              <div className="text-4xl mb-2 opacity-50">🏺</div>
+                              <div className="text-xs">No Image</div>
+                            </div>
+                          )}
+                        </div>
+                        <div className="text-xs text-[#7B6142] font-semibold mb-2">
+                          {item.category?.name}
+                        </div>
+                        <h2 className="text-base font-serif font-semibold text-[#61422D] mb-2 leading-snug line-clamp-2 pb-8">
+                          {item.title}
+                        </h2>
+                        <div className="flex flex-row justify-between text-xs text-[#585550] font-semibold border-t pt-2 border-[#C7C7B9]">
+                          <span>
+                            {item.ageFrom} - {item.ageTo}
+                          </span>
+                          <span>ITEM {item.itemCode || item.documentId}</span>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+              <button className="absolute -right-6 top-3/8 -translate-y-1/2 rounded-full  p-2 z-10 hidden md:block">
+                <img src={icCircleRight} alt="Next" className="w-8 h-8" />
+              </button>
+            </div>
           </div>
         </div>
-      </div>
+      )}
       {/* Acquire or Appraise Section */}
       <div className="mt-20">
         <AcquireOrAppraise />
@@ -353,10 +525,13 @@ export default function ProductDetail() {
               <div className="text-base text-[#585550] mb-8 text-center">
                 Fill in your details below, and we will be in touch with you shortly.
               </div>
-              <form className="space-y-6" onSubmit={(e) => {
-                e.preventDefault();
-                submitForm();
-              }}>
+              <form
+                className="space-y-6"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  submitForm();
+                }}
+              >
                 <div>
                   <label className="block mb-2 text-[#1F1F1F] font-medium">First Name</label>
                   <input

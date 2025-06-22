@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslation } from 'react-i18next';
 import { COLORS } from "./colors";
 import bgButton from "../assets/bg_button.png";
 import bgButtonMobile from "../assets/bg_button_mobile.png";
@@ -7,6 +8,7 @@ import Button from "./Button";
 
 export default function Newsletter() {
   const [showPopup, setShowPopup] = useState(false);
+  const { t } = useTranslation();
 
   const handleSubscribe = (e: React.FormEvent) => {
     e.preventDefault();
@@ -67,7 +69,7 @@ export default function Newsletter() {
                 color: "#fff",
               }}
             >
-              SUBSCRIBE
+              {t('SUBSCRIBE')}
             </button>
           </div>
           <div className="w-full h-[64px] justify-center md:hidden">
@@ -86,7 +88,7 @@ export default function Newsletter() {
                 fontSize: "18px",
               }}
             >
-              SUBSCRIBE
+              {t('SUBSCRIBE')}
             </button>
           </div>
         </form>

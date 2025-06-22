@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
+import { useLanguage } from '../contexts/LanguageContext';
 import logo from '../assets/logo.png';
 import logoMobile from '../assets/logo_mobile.png';
 import plus from '../assets/plus.svg';
@@ -10,25 +11,26 @@ import menu from '../assets/menu.svg';
 import close from '../assets/close.svg';
 
 function LanguageSwitcher({ className = '' }) {
-  const { i18n } = useTranslation();
-  const lang = i18n.language === 'zh' ? 'zh' : 'en';
+  const { locale, setLocale } = useLanguage();
+  const isChinese = locale === 'zh-CN';
+  
   return (
     <div
       className={`flex border-2 border-[#E6DDC6] rounded-[8px] overflow-hidden w-[120px] h-[48px] bg-[#FDFBF1] ${className}`}
       style={{ boxSizing: 'border-box' }}
     >
       <button
-        className={`ticket-rounded flex-1 flex items-center justify-center transition-all duration-200 ${lang === 'en' ? 'bg-[#E6DDC6]' : 'bg-[#FDFBF1]'} ${lang === 'en' ? 'rounded-lg' : 'rounded-l-lg'} z-10`}
+        className={`ticket-rounded flex-1 flex items-center justify-center transition-all duration-200 ${!isChinese ? 'bg-[#E6DDC6]' : 'bg-[#FDFBF1]'} ${!isChinese ? 'rounded-lg' : 'rounded-l-lg'} z-10`}
         style={{ outline: 'none', border: 'none', padding: '12px 10px' }}
-        onClick={() => i18n.changeLanguage('en')}
+        onClick={() => setLocale('en')}
         aria-label="Switch to English"
       >
         <img src={english} alt="English" className="w-12 h-8 object-cover rounded-lg" />
       </button>
       <button
-        className={`ticket-rounded flex-1 flex items-center justify-center transition-all duration-200 ${lang === 'zh' ? 'bg-[#E6DDC6]' : 'bg-[#FDFBF1]'} ${lang === 'zh' ? 'rounded-lg' : 'rounded-r-lg'} z-10`}
+        className={`ticket-rounded flex-1 flex items-center justify-center transition-all duration-200 ${isChinese ? 'bg-[#E6DDC6]' : 'bg-[#FDFBF1]'} ${isChinese ? 'rounded-lg' : 'rounded-r-lg'} z-10`}
         style={{ outline: 'none', border: 'none', padding: '12px 10px' }}
-        onClick={() => i18n.changeLanguage('zh')}
+        onClick={() => setLocale('zh-CN')}
         aria-label="Switch to Chinese"
       >
         <img src={chinese} alt="Chinese" className="w-12 h-8 object-cover rounded-lg" />

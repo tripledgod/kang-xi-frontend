@@ -1,9 +1,10 @@
 // Import React hooks
 import { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation, useParams } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Newsletter from './components/Newsletter';
+import Loading from './components/Loading';
 import Home from './pages/Home';
 import Browse from './pages/Browse';
 import Articles from './pages/Articles.tsx';
@@ -13,28 +14,31 @@ import ArticleDetail from './pages/ArticleDetail';
 import AcquireAnItem from './pages/AcquireAnItem.tsx';
 import ProductDetail from './pages/ProductDetail';
 import AppraiseAnItem from './pages/AppraiseAnItem.tsx';
-import { API_URL } from './utils/constants.ts';
+import { useLoading } from './hooks/useLoading';
+import { LanguageProvider, useLanguage } from './contexts/LanguageContext';
+import { getArticles, Article } from './api/articles';
 
-// Create Articles Interface
-export interface Article {
-  id: string;
-  title: string;
-  description: string;
-  cover: any;
-  publishedAt: Date;
-}
+// import { API_URL } from './utils/constants.ts';
+
+import { API_URL } from './utils/constants.ts';
 
 // Create a wrapper component to access location
 function AppContent() {
   const location = useLocation();
-  const [articles, setArticles] = useState<Articles[]>([]);
+  const [articles, setArticles] = useState<Article[]>([]);
+  const { slug } = useParams();
+  const { loading, withLoading } = useLoading(true);
+  const { locale } = useLanguage();
 
   // fetch articles
-  const getArticles = async () => {
-    const response = await fetch(`${API_URL}/api/articles?populate=*`);
-    const data = await response.json();
-    console.log(data.data);
-    setArticles(data.data);
+  const getArticlesData = async () => {
+    try {
+      const response = await getArticles(1, 5, locale);
+      setArticles(response.data);
+    } catch (error) {
+      console.error('Error fetching articles:', error);
+      setArticles([]);
+    }
   };
 
   // Format date
@@ -48,12 +52,16 @@ function AppContent() {
   };
 
   useEffect(() => {
-    getArticles();
-  }, []);
+    withLoading(getArticlesData);
+  }, [locale]); // Re-fetch when locale changes
 
   // Array of paths where Newsletter should be hidden
   const hideNewsletterPaths = ['/acquire-an-item', '/appraise-an-item'];
   const shouldShowNewsletter = !hideNewsletterPaths.includes(location.pathname);
+
+  if (loading) {
+    return <Loading fullScreen text="Loading articles..." />;
+  }
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -63,8 +71,8 @@ function AppContent() {
           <Route path="/" element={<Home />} />
           <Route path="/browse" element={<Browse />} />
           <Route path="/articles" element={<Articles />} />
-          <Route path="/article/:id" element={<ArticleDetail />} />
-          <Route path="/product/:id" element={<ProductDetail />} />
+          <Route path="/article/:slug" element={<ArticleDetail />} />
+          <Route path="/products/:slug" element={<ProductDetail />} />
           <Route path="/about-us" element={<AboutUs />} />
           <Route path="/terms-and-condition" element={<TermsAndCondition />} />
           <Route path="/acquire-an-item" element={<AcquireAnItem />} />
@@ -79,8 +87,10 @@ function AppContent() {
 
 export default function App() {
   return (
-    <Router>
-      <AppContent />
-    </Router>
+    <LanguageProvider>
+      <Router>
+        <AppContent />
+      </Router>
+    </LanguageProvider>
   );
 }
