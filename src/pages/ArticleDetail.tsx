@@ -8,6 +8,8 @@ import { API_URL } from '../utils/constants';
 import Loading from '../components/Loading';
 import { useLanguage } from '../contexts/LanguageContext';
 import axios from 'axios';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 function RelatedArticles({ related }: { related: Article[] }) {
   const navigate = useNavigate();
@@ -22,31 +24,49 @@ function RelatedArticles({ related }: { related: Article[] }) {
         {related.map((article) => (
           <div key={article.id} className="flex flex-col">
             <div className="bg-[#E6DDC6] aspect-square w-full flex items-center justify-center overflow-hidden mb-4">
-              <img 
-                src={`${API_URL}${article.cover.formats.medium.url}`} 
-                alt={article.title} 
-                className="object-cover w-full h-full" 
+              <img
+                src={`${API_URL}${article.cover.formats.medium.url}`}
+                alt={article.title}
+                className="object-cover w-full h-full"
               />
             </div>
 
-            <h2 className="text-xl font-serif font-medium text-[#61422D] mb-2 leading-snug line-clamp-2" style={{ fontFamily: 'Source Han Serif SC VF, serif', fontWeight: 600, fontSize: 24, lineHeight: '32px', letterSpacing: 0, textAlign: 'left', color: '#61422D' }}>
+            <h2
+              className="text-xl font-serif font-medium text-[#61422D] mb-2 leading-snug line-clamp-2"
+              style={{
+                fontFamily: 'Source Han Serif SC VF, serif',
+                fontWeight: 600,
+                fontSize: 24,
+                lineHeight: '32px',
+                letterSpacing: 0,
+                textAlign: 'left',
+                color: '#61422D',
+              }}
+            >
               {article.title}
             </h2>
-            <div className="font-pingfang text-base font-normal leading-6 mb-4 line-clamp-3" style={{ color: '#342216' }}>
+            <div
+              className="font-pingfang text-base font-normal leading-6 mb-4 line-clamp-3"
+              style={{ color: '#342216' }}
+            >
               {article.description}
             </div>
             <div className="text-xs text-[#585550] font-semibold uppercase tracking-wider">
               {new Date(article.publishedAt).toLocaleDateString('en-US', {
                 day: 'numeric',
                 month: 'short',
-                year: 'numeric'
+                year: 'numeric',
               })}
             </div>
           </div>
         ))}
       </div>
       <div className="flex justify-center">
-        <Button text={t('VIEW ALL ARTICLES')} variant="outline" onClick={() => navigate('/articles')} />
+        <Button
+          text={t('VIEW ALL ARTICLES')}
+          variant="outline"
+          onClick={() => navigate('/articles')}
+        />
       </div>
     </section>
   );
@@ -67,13 +87,13 @@ export default function ArticleDetail() {
         const response = await axios.get(`${API_URL}/api/articles`, {
           params: {
             'filters[slug][$eq]': slug,
-            'locale': locale,
-            'populate': '*'
-          }
+            locale: locale,
+            populate: '*',
+          },
         });
-        
+
         let articleData = response.data.data || response.data;
-        
+
         // Xử lý cấu trúc Strapi v4
         if (Array.isArray(articleData) && articleData[0]?.attributes) {
           articleData = articleData[0].attributes;
@@ -81,7 +101,7 @@ export default function ArticleDetail() {
         } else if (Array.isArray(articleData)) {
           articleData = articleData[0];
         }
-        
+
         setArticle(articleData);
         const id = articleData.id;
         const related = await getRelatedArticles(id, 3, locale);
@@ -93,7 +113,7 @@ export default function ArticleDetail() {
         setLoading(false);
       }
     };
-    
+
     if (slug) {
       fetchArticle();
     }
@@ -114,20 +134,20 @@ export default function ArticleDetail() {
           {new Date(article.publishedAt).toLocaleDateString('en-US', {
             day: 'numeric',
             month: 'short',
-            year: 'numeric'
+            year: 'numeric',
           })}
         </div>
         <h1 className="text-3xl md:text-4xl font-serif font-semibold text-[#61422D] mb-2 leading-tight">
           {article.title}
         </h1>
         <div className="text-base text-[#585550] mb-4">by Kangxi Finder</div>
-        <img 
-          src={`${API_URL}${article.cover.formats.large.url}`} 
-          alt={article.title} 
-          className="w-full h-auto rounded mb-8" 
+        <img
+          src={`${API_URL}${article.cover.formats.large.url}`}
+          alt={article.title}
+          className="w-full h-auto rounded mb-8"
         />
-        <div className="text-[#23211C] whitespace-pre-wrap">
-          {article.description}
+        <div className="prose max-w-none text-[#23211C]">
+          <ReactMarkdown remarkPlugins={[remarkGfm]}>{article.description}</ReactMarkdown>
         </div>
       </div>
       <RelatedArticles related={relatedArticles} />
