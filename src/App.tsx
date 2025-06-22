@@ -13,6 +13,7 @@ import ArticleDetail from './pages/ArticleDetail';
 import AcquireAnItem from './pages/AcquireAnItem.tsx';
 import ProductDetail from './pages/ProductDetail';
 import AppraiseAnItem from './pages/AppraiseAnItem.tsx';
+import { API_URL } from './utils/constants.ts';
 
 // Create Articles Interface
 export interface Article {
@@ -23,9 +24,6 @@ export interface Article {
   publishedAt: Date;
 }
 
-// Define Strapi URL
-const STRAPI_URL = 'http://localhost:1337';
-
 // Create a wrapper component to access location
 function AppContent() {
   const location = useLocation();
@@ -33,7 +31,7 @@ function AppContent() {
 
   // fetch articles
   const getArticles = async () => {
-    const response = await fetch(`${STRAPI_URL}/api/articles?populate=*`);
+    const response = await fetch(`${API_URL}/api/articles?populate=*`);
     const data = await response.json();
     console.log(data.data);
     setArticles(data.data);
