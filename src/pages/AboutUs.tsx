@@ -5,6 +5,8 @@ import heroImg from '../assets/about_us_cover.png';
 import { API_URL } from '../utils/constants.ts';
 import { AboutResponse } from '../types.ts';
 import CoverPage from '../components/CoverPage';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 export default function AboutUs() {
   const [teamIndex, setTeamIndex] = useState(0);
@@ -60,8 +62,8 @@ export default function AboutUs() {
       <div className="min-h-screen bg-[#F7F5EA] flex items-center justify-center">
         <div className="text-center">
           <p className="text-[#61422D] text-lg mb-4">Failed to load about us data</p>
-          <button 
-            onClick={() => window.location.reload()} 
+          <button
+            onClick={() => window.location.reload()}
             className="px-4 py-2 bg-[#7B6142] text-white rounded hover:bg-[#6a5437]"
           >
             Try Again
@@ -111,9 +113,11 @@ export default function AboutUs() {
         </div>
         <div className="flex-1 flex items-center justify-center">
           <img
-            src={aboutData?.heritage?.image?.formats?.medium?.url 
-              ? `${API_URL}${aboutData.heritage.image.formats.medium.url.startsWith('/') ? '' : '/'}${aboutData.heritage.image.formats.medium.url}`
-              : heroImg}
+            src={
+              aboutData?.heritage?.image?.formats?.medium?.url
+                ? `${API_URL}${aboutData.heritage.image.formats.medium.url.startsWith('/') ? '' : '/'}${aboutData.heritage.image.formats.medium.url}`
+                : heroImg
+            }
             alt="Horse"
             className="w-full max-w-md"
           />
@@ -143,10 +147,9 @@ export default function AboutUs() {
         <h2 className="text-2xl md:text-3xl font-serif font-semibold text-[#7B6142] mb-2">
           {aboutData?.title || 'The History of Ceramics'}
         </h2>
-        <div 
-          className="text-base text-[#585550] mb-8"
-          dangerouslySetInnerHTML={{ __html: aboutData?.mainContent || 'Loading...' }}
-        />
+        <div>
+          <ReactMarkdown remarkPlugins={[remarkGfm]}>{aboutData.mainContent}</ReactMarkdown>
+        </div>
       </div>
 
       {/* Team Section */}

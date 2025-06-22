@@ -15,6 +15,10 @@ function RelatedArticles({ related }: { related: Article[] }) {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
+  const handleArticleClick = (slug: string) => {
+    navigate(`/article/${slug}`);
+  };
+
   return (
     <section className="w-full py-16 px-4">
       <h2 className="text-4xl font-serif font-medium text-[#61422D] mb-12 text-center">
@@ -22,7 +26,11 @@ function RelatedArticles({ related }: { related: Article[] }) {
       </h2>
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
         {related.map((article) => (
-          <div key={article.id} className="flex flex-col">
+          <div
+            key={article.id}
+            className="flex flex-col  cursor-pointer transition-transform duration-200 hover:scale-105"
+            onClick={() => handleArticleClick(article.slug)}
+          >
             <div className="bg-[#E6DDC6] aspect-square w-full flex items-center justify-center overflow-hidden mb-4">
               <img
                 src={`${API_URL}${article.cover.formats.medium.url}`}

@@ -55,7 +55,7 @@ const Browse: React.FC = () => {
           setCategories(categoriesData);
           const flattened = categoriesData.map((cat) => flattenCategory(cat));
           setFlattenedCategories(flattened);
-          
+
           const eraFromUrl = searchParams.get('era');
           const categoryExists = flattened.find(cat => cat.slug === eraFromUrl);
 
@@ -269,7 +269,7 @@ const Browse: React.FC = () => {
           </div>
         ) : products.length === 0 ? (
           <div className="text-center py-16">
-            <p className="text-[#61422D] text-lg">Không có sản phẩm nào cho era này.</p>
+            <p className="text-[#61422D] text-lg">No data</p>
           </div>
         ) : (
           products.map((product: any) => (
