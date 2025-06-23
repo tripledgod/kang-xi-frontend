@@ -47,12 +47,9 @@ export default function AppraiseAnItem() {
     itemCode: '',
   });
   const [showSuccess, setShowSuccess] = useState(false);
-
-
   const submitForm = async (e?: React.FormEvent) => {
 
     try {
-      if (e) e.preventDefault();
       if (e) e.preventDefault();
       const bodyFormData = new FormData();
       images.forEach((img) => {
@@ -70,7 +67,6 @@ export default function AppraiseAnItem() {
           Authorization: `Bearer ${ACCESS_TOKEN}`
         },
       })
-      console.log('conpleted upload images', responseUploadImage)
 
       const formData = new FormData();
       formData.append('data', JSON.stringify({
@@ -80,6 +76,9 @@ export default function AppraiseAnItem() {
         contactNumber: `+${phone}`,
       }));
 
+      const images1 = responseUploadImage.data.map((i: any) => i['id']);
+      console.log(images1);
+
       const newItem =  await axios(`${API_URL}/api/submission`, {
         method: 'POST',
         data: {
@@ -87,9 +86,7 @@ export default function AppraiseAnItem() {
             firstName: appraiseForm.firstName,
             lastName: appraiseForm.lastName,
             itemCode: appraiseForm.itemCode,
-            images: [
-              responseUploadImage.data[0].id
-            ],
+            images: images1,
             contactNumber: `+${phone}`,
           }
         },
