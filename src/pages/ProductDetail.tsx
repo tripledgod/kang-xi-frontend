@@ -28,6 +28,7 @@ export default function ProductDetail() {
   const [modalIndex, setModalIndex] = useState(0);
   const [mobileIndex, setMobileIndex] = useState(0);
   const [copied, setCopied] = useState(false);
+  const [copyError, setCopyError] = useState<string | null>(null);
   const [descWidth, setDescWidth] = useState<number | undefined>(undefined);
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
   const descRef = useRef<HTMLDivElement>(null);
@@ -165,13 +166,25 @@ export default function ProductDetail() {
   // Copy to clipboard
   const handleCopy = () => {
     const itemCode = productDetail?.itemCode || productDetail?.documentId || '';
+    
+    // Reset both states when starting new copy operation
+    setCopied(false);
+    setCopyError(null);
 
     if (navigator.clipboard && window.isSecureContext) {
       // Modern clipboard API
-      navigator.clipboard.writeText(itemCode).catch(() => {
-        // Fallback to old method
-        fallbackCopyTextToClipboard(itemCode);
-      });
+      navigator.clipboard.writeText(itemCode)
+        .then(() => {
+          // Show success message for modern API
+          setCopied(true);
+          setTimeout(() => setCopied(false), 1200);
+        })
+        .catch((err) => {
+          console.error('Modern clipboard API failed:', err);
+          // Don't show error here, let fallback handle it
+          // Fallback to old method
+          fallbackCopyTextToClipboard(itemCode);
+        });
     } else {
       // Fallback for older browsers
       fallbackCopyTextToClipboard(itemCode);
@@ -216,9 +229,13 @@ export default function ProductDetail() {
         setTimeout(() => setCopied(false), 1200);
       } else {
         console.error('Fallback copy failed');
+        setCopyError('Copy failed');
+        setTimeout(() => setCopyError(null), 3000);
       }
     } catch (err) {
       console.error('Fallback copy error:', err);
+      setCopyError('Copy failed');
+      setTimeout(() => setCopyError(null), 3000);
     }
 
     document.body.removeChild(textArea);
@@ -348,12 +365,14 @@ export default function ProductDetail() {
               ITEM CODE {productDetail.itemCode || productDetail.documentId}
               <button
                 onClick={handleCopy}
-                className="ml-1 p-1 hover:bg-[#E6DDC6] rounded"
+                className="ml-1 p-1 hover:bg-[#E6DDC6] rounded transition-colors duration-200"
                 aria-label="Copy Item Code"
+                title="Copy item code to clipboard"
               >
                 <img src={copyIcon} alt="Copy" className="w-4 h-4" />
               </button>
-              {copied && <span className="text-xs text-green-600 ml-1">Copied!</span>}
+              {copied && <span className="text-xs text-green-600 ml-1 font-medium">Copied!</span>}
+              {copyError && !copied && <span className="text-xs text-red-600 ml-1 font-medium">{copyError}</span>}
             </span>
           </div>
           <h1 className="text-3xl md:text-4xl font-serif font-medium text-[#61422D] mb-2 leading-tight">
