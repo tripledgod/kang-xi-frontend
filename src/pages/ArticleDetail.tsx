@@ -122,7 +122,7 @@ export default function ArticleDetail() {
   if (loading || !article) {
     return (
       <div className="min-h-screen bg-[#F7F5EA] flex items-center justify-center">
-        <Loading fullScreen text="Loading article..." />
+        <Loading fullScreen text="Loading..." />
       </div>
     );
   }

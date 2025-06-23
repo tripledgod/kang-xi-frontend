@@ -44,7 +44,7 @@ export default function ArticlesSection() {
         <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
           {loading ? (
             <div className="col-span-3 flex justify-center py-8">
-              <Loading size="large" text="Loading articles..." />
+              <Loading size="large" text="Loading..." />
             </div>
           ) : (
             articles.map((article) => {

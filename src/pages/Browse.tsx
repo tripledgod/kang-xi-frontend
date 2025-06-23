@@ -191,7 +191,7 @@ const Browse: React.FC = () => {
   if (categoriesLoading) {
     return (
       <div className="min-h-screen bg-[#F7F5EA] flex items-center justify-center">
-        <Loading fullScreen text="Loading categories..." />
+        <Loading fullScreen text="Loading..." />
       </div>
     );
   }
@@ -255,7 +255,7 @@ const Browse: React.FC = () => {
       <div className="w-full max-w-6xl mx-auto px-4 mt-10 grid grid-cols-1 md:grid-cols-3 gap-10 md:pl-[80px] pl-[20px]">
         {productsLoading ? (
           <div className="flex justify-center py-16">
-            <Loading size="large" text="Loading products..." />
+            <Loading size="large" text="Loading..." />
           </div>
         ) : errorProducts ? (
           <div className="text-center py-16">

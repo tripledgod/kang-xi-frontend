@@ -116,3 +116,14 @@ export interface AboutResponse {
   };
   meta: Record<string, unknown>;
 }
+
+export interface TermsAndConditionResponse {
+  data: {
+    id: number;
+    documentId: string;
+    content: string; // HTML or text
+    createdAt: string;
+    updatedAt: string;
+    publishedAt: string;
+  };
+}
