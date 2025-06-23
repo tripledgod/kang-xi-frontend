@@ -58,13 +58,13 @@ export default function AppraiseAnItem() {
   });
 
   const validateImageFile = (file: File): string | null => {
-    // Kiểm tra định dạng file
+    // Check file format
     const allowedTypes = ['image/jpeg', 'image/jpg', 'image/gif', 'image/png'];
     if (!allowedTypes.includes(file.type)) {
       return 'Only JPG, GIF or PNG files are allowed';
     }
 
-    // Kiểm tra kích thước file (800KB = 800 * 1024 bytes)
+    // Check file size (800KB = 800 * 1024 bytes)
     const maxSize = 800 * 1024; // 800KB
     if (file.size > maxSize) {
       return 'File size must be less than 800KB';

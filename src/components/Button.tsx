@@ -40,7 +40,7 @@ const Button: React.FC<ButtonProps> = ({
     }
   }, [text, className, isMobile]);
 
-  // Chọn background phù hợp
+  // Choose the right background
   let backgroundImage = '';
   if (isOutline) {
     backgroundImage = bgButtonOutline;
