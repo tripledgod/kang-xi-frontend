@@ -94,7 +94,7 @@ export default function ArticleDetail() {
 
         let articleData = response.data.data || response.data;
 
-        // Xử lý cấu trúc Strapi v4
+        // Handle Strapi v4 structure
         if (Array.isArray(articleData) && articleData[0]?.attributes) {
           articleData = articleData[0].attributes;
           articleData.id = response.data.data[0].id;

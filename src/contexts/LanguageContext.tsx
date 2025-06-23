@@ -45,9 +45,5 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) 
     isChinese,
   };
 
-  return (
-    <LanguageContext.Provider value={value}>
-      {children}
-    </LanguageContext.Provider>
-  );
-}; 
+  return <LanguageContext.Provider value={value}>{children}</LanguageContext.Provider>;
+};

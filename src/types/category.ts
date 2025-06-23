@@ -1,4 +1,4 @@
-import { API_URL } from '../utils/constants'; // Đã cấu hình đúng
+import { API_URL } from '../utils/constants'; // Correctly configured
 
 export interface Category {
   id: number;
@@ -66,11 +66,11 @@ export interface Product {
   } | null;
 }
 
-// Helper function để lấy URL ảnh từ Strapi
+// Helper function to get image URL from Strapi
 export const getImageUrl = (image: any): string => {
   if (!image) return '';
 
-  // Nếu image có formats, ưu tiên medium format
+  // If image has formats, prioritize medium format
   if (image.formats?.medium?.url) {
     return image.formats.medium.url.startsWith('http')
       ? image.formats.medium.url

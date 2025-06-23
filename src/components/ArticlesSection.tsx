@@ -18,7 +18,7 @@ export default function ArticlesSection() {
   useEffect(() => {
     const fetchArticles = async () => {
       try {
-        const response = await getArticles(1, 3, locale); // Lấy 3 bài mới nhất/tháng
+        const response = await getArticles(1, 3, locale); // Get 3 latest articles per month
         setArticles(response.data);
       } catch (error) {
         console.error('Error fetching articles:', error);

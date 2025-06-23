@@ -58,7 +58,7 @@ export default function AppraiseAnItem() {
       contactNumber: `+${phone}`,
     }));
     images.forEach((img) => {
-      formData.append('files', img);
+      formData.append('images', img);
     });
     try {
       await fetch(`${API_URL}/api/submission`, {
@@ -70,7 +70,7 @@ export default function AppraiseAnItem() {
       setPhone('');
       setImages([]);
     } catch (err) {
-      // Có thể xử lý lỗi ở đây nếu muốn
+      // Could handle error here if needed
     }
   };
 

@@ -65,7 +65,7 @@ export default function AcquireAnItem() {
       .then((res) => res.json())
       .then((data) => {
         setShowSuccess(true);
-        // Có thể reset form nếu muốn
+        // Could reset form if needed
         // setAcquireForm({ firstName: '', lastName: '', itemCode: '' });
         // setPhone('');
       });
@@ -73,7 +73,7 @@ export default function AcquireAnItem() {
 
   return (
     <div className="w-full min-h-screen bg-[#F7F5EA]">
-      {/* Hiển thị popup khi đăng ký thành công */}
+      {/* Show popup when registration is successful */}
       {showSuccess && (
         <Popup
           title="Thank you for contacting us!"

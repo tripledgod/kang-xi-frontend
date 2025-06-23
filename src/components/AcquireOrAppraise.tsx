@@ -45,7 +45,10 @@ export default function AcquireOrAppraise() {
           <div className="flex-1 flex flex-col items-center justify-center px-6 py-16 md:py-0 md:px-0 text-center">
             <img src={section.icon} alt="icon" className="mb-8 w-16 h-16" />
 
-            <h2 className="mb-6 text-2xl md:text-4xl leading-8 md:leading-10" style={{ color: '#FAF7F2', fontWeight: 400, letterSpacing: 0 }}>
+            <h2
+              className="mb-6 text-2xl md:text-4xl leading-8 md:leading-10"
+              style={{ color: '#FAF7F2', fontWeight: 400, letterSpacing: 0 }}
+            >
               {section.title}
             </h2>
             <p className="text-base leading-6 text-[#ABAAA7] mb-10 max-w-lg">{section.desc}</p>

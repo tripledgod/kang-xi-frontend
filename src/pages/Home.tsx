@@ -22,27 +22,27 @@ export default function Home() {
         const response = await axios.get(`${API_URL}/api/articles`, {
           params: {
             'pagination[pageSize]': 3,
-            'locale': locale,
-            'populate': '*'
-          }
+            locale: locale,
+            populate: '*',
+          },
         });
-        
+
         let data = response.data.data || response.data;
-        
-        // Xử lý cấu trúc Strapi v4
+
+        // Handle Strapi v4 structure
         if (Array.isArray(data) && data[0]?.attributes) {
-          data = data.map((article: any) => ({ 
-            ...article.attributes, 
-            id: article.id 
+          data = data.map((article: any) => ({
+            ...article.attributes,
+            id: article.id,
           }));
         }
-        
+
         setArticles(data);
       } catch (err) {
         console.error('Error fetching articles:', err);
       }
     };
-    
+
     fetchArticles();
   }, [locale]); // Re-fetch when locale changes
 

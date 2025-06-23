@@ -39,10 +39,7 @@ const Loading: React.FC<LoadingProps> = ({
     <div className={`flex flex-col items-center justify-center space-y-3 ${className}`}>
       <LoadingSpinner />
       {text && (
-        <p 
-          className="text-sm font-medium"
-          style={{ color: COLORS.brown }}
-        >
+        <p className="text-sm font-medium" style={{ color: COLORS.brown }}>
           {text}
         </p>
       )}
@@ -51,7 +48,7 @@ const Loading: React.FC<LoadingProps> = ({
 
   if (fullScreen) {
     return (
-      <div 
+      <div
         className="fixed inset-0 z-50 flex items-center justify-center"
         style={{ backgroundColor: 'rgba(247, 245, 234, 0.9)' }}
       >
@@ -63,4 +60,4 @@ const Loading: React.FC<LoadingProps> = ({
   return <LoadingContent />;
 };
 
-export default Loading; 
+export default Loading;

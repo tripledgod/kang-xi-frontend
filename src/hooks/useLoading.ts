@@ -24,4 +24,4 @@ export const useLoading = (initialState: boolean = false): UseLoadingReturn => {
     setLoading,
     withLoading,
   };
-}; 
+};
