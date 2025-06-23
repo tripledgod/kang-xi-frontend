@@ -10,6 +10,7 @@ interface ButtonProps {
   className?: string;
   type?: 'button' | 'submit' | 'reset';
   variant?: 'filled' | 'outline';
+  disabled?: boolean;
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -18,6 +19,7 @@ const Button: React.FC<ButtonProps> = ({
   className = '',
   type = 'button',
   variant = 'filled',
+  disabled = false,
 }) => {
   const isOutline = variant === 'outline';
   const btnRef = useRef<HTMLButtonElement>(null);
@@ -55,7 +57,10 @@ const Button: React.FC<ButtonProps> = ({
       ref={btnRef}
       type={type}
       onClick={onClick}
-      className={`w-full  md:w-[222px] h-[64px] md:h-[48px] flex items-center justify-center text-base font-semibold shadow-none transition-all px-6 ${className}`}
+      disabled={disabled}
+      className={`w-full  md:w-[222px] h-[64px] md:h-[48px] flex items-center justify-center text-base font-semibold shadow-none transition-all px-6 ${className} ${
+        disabled ? 'opacity-50 cursor-not-allowed' : ''
+      }`}
       style={{
         backgroundImage: `url(${backgroundImage})`,
         backgroundSize: '100% 100%',
