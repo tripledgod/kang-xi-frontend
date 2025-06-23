@@ -14,8 +14,9 @@ import logoWhite from '../assets/logo_white.png';
 import icUpload from '../assets/ic_upload.svg';
 import closeCircleBorder from '../assets/close_circle_border.svg';
 import Popup from '../components/Popup';
-import { API_URL } from '../utils/constants';
+import {ACCESS_TOKEN, API_URL} from '../utils/constants';
 import { useNavigate } from 'react-router-dom';
+import axios from "axios";
 
 const whyItems = [
   {
@@ -46,31 +47,62 @@ export default function AppraiseAnItem() {
     itemCode: '',
   });
   const [showSuccess, setShowSuccess] = useState(false);
-
-  
   const submitForm = async (e?: React.FormEvent) => {
-    if (e) e.preventDefault();
-    const formData = new FormData();
-    formData.append('data', JSON.stringify({
-      firstName: appraiseForm.firstName,
-      lastName: appraiseForm.lastName,
-      itemCode: appraiseForm.itemCode,
-      contactNumber: `+${phone}`,
-    }));
-    images.forEach((img) => {
-      formData.append('files', img);
-    });
+
     try {
-      await fetch(`${API_URL}/api/submission`, {
-        method: 'POST',
-        body: formData,
+      if (e) e.preventDefault();
+      const bodyFormData = new FormData();
+      images.forEach((img) => {
+        bodyFormData.append('files', img);
       });
+      bodyFormData.append("ref", "api::submissions.submissions");
+      bodyFormData.append("refId", "in2r4wsiqcwrqo5zt3robpnz");
+      bodyFormData.append("field", "images");
+      const responseUploadImage = await axios({
+        method: 'post',
+        url: `${API_URL}/api/upload`,
+        data: bodyFormData,
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${ACCESS_TOKEN}`
+        },
+      })
+
+      const formData = new FormData();
+      formData.append('data', JSON.stringify({
+        firstName: appraiseForm.firstName,
+        lastName: appraiseForm.lastName,
+        itemCode: appraiseForm.itemCode,
+        contactNumber: `+${phone}`,
+      }));
+
+      const images1 = responseUploadImage.data.map((i: any) => i['id']);
+      console.log(images1);
+
+      const newItem =  await axios(`${API_URL}/api/submission`, {
+        method: 'POST',
+        data: {
+          data: {
+            firstName: appraiseForm.firstName,
+            lastName: appraiseForm.lastName,
+            itemCode: appraiseForm.itemCode,
+            images: images1,
+            contactNumber: `+${phone}`,
+          }
+        },
+        headers: {
+          Authorization: `Bearer ${ACCESS_TOKEN}`
+        }
+      });
+
+      console.log(newItem)
       setShowSuccess(true);
       setAppraiseForm({ firstName: '', lastName: '', itemCode: '' });
       setPhone('');
       setImages([]);
-    } catch (err) {
-      // Có thể xử lý lỗi ở đây nếu muốn
+
+    } catch (e) {
+      console.log(e);
     }
   };
 
