@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import bgButton from '../assets/bg_button.png';
 import bgButtonMobile from '../assets/bg_button_mobile.png';
 import bgButtonOutline from '../assets/bg_button_outline.png';
+import bgButtonSubmitForm from '../assets/bg_button_submit_form.png';
 
 interface ButtonProps {
   text: string;
@@ -19,8 +20,19 @@ const Button: React.FC<ButtonProps> = ({
   variant = 'filled',
 }) => {
   const isOutline = variant === 'outline';
+  const btnRef = useRef<HTMLButtonElement>(null);
+  const [isWide, setIsWide] = useState(false);
+
+  useEffect(() => {
+    if (btnRef.current) {
+      const width = btnRef.current.offsetWidth;
+      setIsWide(width > 400);
+    }
+  }, [text, className]);
+
   return (
     <button
+      ref={btnRef}
       type={type}
       onClick={onClick}
       className={`w-full  md:w-[222px] h-[64px] md:h-[48px] flex items-center justify-center text-base font-semibold shadow-none transition-all px-6 ${className}`}
@@ -59,7 +71,7 @@ const Button: React.FC<ButtonProps> = ({
         <span
           className="hidden md:block w-full h-full md:w-[222px] md:h-[48px]"
           style={{
-            backgroundImage: `url(${bgButton})`,
+            backgroundImage: `url(${isWide ? bgButtonSubmitForm : bgButton})`,
             backgroundSize: '100% 100%',
             backgroundRepeat: 'no-repeat',
             backgroundPosition: 'center',

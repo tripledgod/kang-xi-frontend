@@ -2,7 +2,7 @@ import React from 'react';
 import Button from './Button';
 
 import { COLORS } from './colors.ts';
-import bgButton from '../assets/bg_button.png';
+import bgButtonSubmitForm from '../assets/bg_button_submit_form.png'
 import bgButtonMobile from '../assets/bg_button_mobile.png';
 
 interface PopupProps {
@@ -48,11 +48,11 @@ const Popup: React.FC<PopupProps> = ({ title, content, buttonText, onButtonClick
           {content}
         </div>
         {/* Button */}
-        <div className="w-full flex justify-center">
+        <div className="w-full flex justify-center mx-auto">
           <button
-            className=" w-[220px] h-[48px] flex items-center justify-center text-base font-medium shadow-none transition-all px-6 text-xl  max-w-2xl hidden  md:block"
+            className="w-full h-[52px] flex items-center justify-center text-base font-medium shadow-none transition-all px-6 text-xl max-w-2xl hidden md:block mx-5"
             style={{
-              backgroundImage: `url(${bgButton})`,
+              backgroundImage: `url(${bgButtonSubmitForm})`,
               backgroundSize: '100% 100%',
               backgroundRepeat: 'no-repeat',
               backgroundPosition: 'center',
