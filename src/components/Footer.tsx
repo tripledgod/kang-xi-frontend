@@ -23,10 +23,7 @@ export default function Footer() {
     { label: t('ARTICLES'), href: '/articles' },
     { label: t('ABOUT_US'), href: '/about-us' },
   ];
-  const navLinksRow2 = [
-    { label: t('CONTACT_US'), href: '#' },
-    { label: t('TERMS_AND_CONDITIONS'), href: '/terms-and-condition' },
-  ];
+  const navLinksRow2 = [{ label: t('TERMS_AND_CONDITIONS'), href: '/terms-and-condition' }];
 
   return (
     <footer className="bg-[#10110C] text-[#FDFBF1] pt-12 pb-6 px-4">
@@ -49,30 +46,15 @@ export default function Footer() {
               ))}
             </div>
             <div className="flex flex-row justify-center gap-x-8 w-full md:w-auto md:gap-x-12 mt-4 md:mt-0">
-              {navLinksRow2.map((link) => {
-                // Special handling for Contact Us link
-                if (link.label === t('CONTACT_US')) {
-                  return (
-                    <button
-                      key={link.label}
-                      onClick={handleContactClick}
-                      className="text-md font-semibold text-[#FFFFFF] hover:text-[#E6DDC6] transition-colors whitespace-nowrap bg-transparent border-none cursor-pointer"
-                    >
-                      {link.label}
-                    </button>
-                  );
-                }
-                // Regular links
-                return (
-                  <Link
-                    key={link.label}
-                    to={link.href}
-                    className="text-md font-semibold text-[#FFFFFF] hover:text-[#E6DDC6] transition-colors whitespace-nowrap"
-                  >
-                    {link.label}
-                  </Link>
-                );
-              })}
+              {navLinksRow2.map((link) => (
+                <Link
+                  key={link.label}
+                  to={link.href}
+                  className="text-md font-semibold text-[#FFFFFF] hover:text-[#E6DDC6] transition-colors whitespace-nowrap"
+                >
+                  {link.label}
+                </Link>
+              ))}
             </div>
           </div>
         </nav>
