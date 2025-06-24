@@ -51,8 +51,10 @@ function RelatedArticles({ related }: { related: Article[] }) {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
-  const handleArticleClick = (article: Article) => {
-    navigate(`/article/${article.slug}`);
+
+  const handleArticleClick = (slug: string) => {
+    navigate(`/article/${slug}`);
+
   };
 
   return (
@@ -62,10 +64,12 @@ function RelatedArticles({ related }: { related: Article[] }) {
       </h2>
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
         {related.map((article) => (
-          <div 
-            key={article.id} 
-            className="flex flex-col cursor-pointer hover:opacity-80 transition-opacity"
-            onClick={() => handleArticleClick(article)}
+
+          <div
+            key={article.id}
+            className="flex flex-col  cursor-pointer transition-transform duration-200 hover:scale-105"
+            onClick={() => handleArticleClick(article.slug)}
+
           >
             <div className="bg-[#E6DDC6] aspect-square w-full flex items-center justify-center overflow-hidden mb-4">
               <ArticleImage

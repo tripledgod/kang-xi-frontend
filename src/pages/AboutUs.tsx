@@ -5,6 +5,8 @@ import heroImg from '../assets/about_us_cover.png';
 import { API_URL } from '../utils/constants.ts';
 import { AboutResponse } from '../types.ts';
 import CoverPage from '../components/CoverPage';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 export default function AboutUs() {
   const [teamIndex, setTeamIndex] = useState(0);
@@ -145,10 +147,11 @@ export default function AboutUs() {
         <h2 className="text-2xl md:text-3xl font-serif font-semibold text-[#7B6142] mb-2">
           {aboutData?.title || 'The History of Ceramics'}
         </h2>
-        <div
-          className="text-base text-[#585550] mb-8"
-          dangerouslySetInnerHTML={{ __html: aboutData?.mainContent || 'Loading...' }}
-        />
+
+        <div>
+          <ReactMarkdown remarkPlugins={[remarkGfm]}>{aboutData.mainContent}</ReactMarkdown>
+        </div>
+
       </div>
 
       {/* Team Section */}

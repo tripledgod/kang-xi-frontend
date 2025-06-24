@@ -15,8 +15,9 @@ import logoWhite from '../assets/logo_white.png';
 import icUpload from '../assets/ic_upload.svg';
 import closeCircleBorder from '../assets/close_circle_border.svg';
 import Popup from '../components/Popup';
-import { API_URL } from '../utils/constants';
+import {ACCESS_TOKEN, API_URL} from '../utils/constants';
 import { useNavigate } from 'react-router-dom';
+import axios from "axios";
 
 const whyItems = [
   {
@@ -47,6 +48,7 @@ export default function AppraiseAnItem() {
     itemCode: '',
   });
   const [showSuccess, setShowSuccess] = useState(false);
+
   const [isLoading, setIsLoading] = useState(false);
   const [submitError, setSubmitError] = useState('');
   const [errors, setErrors] = useState({
@@ -113,39 +115,88 @@ export default function AppraiseAnItem() {
       return;
     }
 
+    // Log form data before submission
+    console.log('=== FORM DATA TO SUBMIT ===');
+    console.log('Form Data:', {
+      firstName: appraiseForm.firstName,
+      lastName: appraiseForm.lastName,
+      itemCode: appraiseForm.itemCode,
+      contactNumber: `+${phone}`,
+      imagesCount: images.length
+    });
+    console.log('Images:', images);
+    console.log('API URL:', API_URL);
+    console.log('Access Token exists:', !!ACCESS_TOKEN);
+
     setIsLoading(true);
     setSubmitError('');
-    const formData = new FormData();
-    formData.append(
-      'data',
-      JSON.stringify({
-        firstName: appraiseForm.firstName,
-        lastName: appraiseForm.lastName,
-        itemCode: appraiseForm.itemCode,
-        contactNumber: `+${phone}`,
-      })
-    );
-    images.forEach((img) => {
-      formData.append('images', img);
-    });
+
     try {
-      const response = await fetch(`${API_URL}/api/submission`, {
-        method: 'POST',
-        body: formData,
+      // 1. Upload images
+      const bodyFormData = new FormData();
+      images.forEach((img) => {
+        bodyFormData.append('files', img);
       });
+      bodyFormData.append("ref", "api::submissions.submissions");
+      bodyFormData.append("refId", "in2r4wsiqcwrqo5zt3robpnz");
+      bodyFormData.append("field", "images");
       
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
-      }
+      console.log('=== UPLOADING IMAGES ===');
+      const responseUploadImage = await axios({
+        method: 'post',
+        url: `${API_URL}/api/upload`,
+        data: bodyFormData,
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${ACCESS_TOKEN}`
+        },
+      });
+
+      const images1 = responseUploadImage.data.map((i: any) => i['id']);
+      console.log('=== IMAGES UPLOADED SUCCESSFULLY ===');
+      console.log('Uploaded image IDs:', images1);
+      console.log('Full upload response:', responseUploadImage.data);
+
+      // 2. Submit form data with image IDs
+      const submissionData = {
+        data: {
+          firstName: appraiseForm.firstName,
+          lastName: appraiseForm.lastName,
+          itemCode: appraiseForm.itemCode,
+          images: images1,
+          contactNumber: `+${phone}`,
+        }
+      };
       
+      console.log('=== SUBMITTING FORM DATA ===');
+      console.log('Submission payload:', submissionData);
+      
+      const newItem = await axios(`${API_URL}/api/submission`, {
+        method: 'POST',
+        data: submissionData,
+        headers: {
+          Authorization: `Bearer ${ACCESS_TOKEN}`
+        }
+      });
+
+      console.log('=== FORM SUBMITTED SUCCESSFULLY ===');
+      console.log('Full response:', newItem);
+      console.log('Response data:', newItem.data);
+
       setShowSuccess(true);
       setAppraiseForm({ firstName: '', lastName: '', itemCode: '' });
       setPhone('');
       setImages([]);
       setErrors({ firstName: '', lastName: '', itemCode: '', phone: '', images: '' });
+
     } catch (err) {
-      console.error('Submit error:', err);
+      console.error('=== SUBMISSION ERROR ===');
+      console.error('Error details:', err);
+      if (axios.isAxiosError(err)) {
+        console.error('Response status:', err.response?.status);
+        console.error('Response data:', err.response?.data);
+        console.error('Request config:', err.config);
+      }
       setSubmitError(err instanceof Error ? err.message : 'An unexpected error occurred. Please try again.');
     } finally {
       setIsLoading(false);

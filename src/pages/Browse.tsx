@@ -65,11 +65,13 @@ const Browse: React.FC = () => {
             setActiveEra(flattened[0].slug);
           }
         } else {
+
           setError('No categories found');
         }
       } catch (err) {
         console.error('Error fetching categories:', err);
         setError('Unable to load categories');
+
       }
     };
 
@@ -269,7 +271,9 @@ const Browse: React.FC = () => {
           </div>
         ) : products.length === 0 ? (
           <div className="text-center py-16">
-            <p className="text-[#61422D] text-lg">No products found for this era.</p>
+
+            <p className="text-[#61422D] text-lg">No data</p>
+
           </div>
         ) : (
           products.map((product: any) => (
