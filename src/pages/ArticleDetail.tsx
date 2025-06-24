@@ -51,10 +51,10 @@ function RelatedArticles({ related }: { related: Article[] }) {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
-
   const handleArticleClick = (slug: string) => {
+    // Scroll to top before navigating
+    window.scrollTo(0, 0);
     navigate(`/article/${slug}`);
-
   };
 
   return (
@@ -128,6 +128,11 @@ export default function ArticleDetail() {
   const [loading, setLoading] = useState(true);
   const { locale } = useLanguage();
   const [error, setError] = useState<string | null>(null);
+
+  // Scroll to top when component mounts
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   useEffect(() => {
     const fetchArticle = async () => {

@@ -7,6 +7,16 @@ import instagram from '../assets/instagram.svg';
 
 export default function Footer() {
   const { t } = useTranslation();
+
+  // Function to handle WhatsApp redirect
+  const handleContactClick = () => {
+    // You can customize the phone number and message
+    const phoneNumber = '+1234567890'; // Replace with actual phone number
+    const message = 'Hello! I would like to contact Kangxi Collection.'; // Customize message
+    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
+  };
+
   // Split nav links for mobile two-row layout
   const navLinksRow1 = [
     { label: t('BROWSE'), href: '/browse' },
@@ -39,15 +49,30 @@ export default function Footer() {
               ))}
             </div>
             <div className="flex flex-row justify-center gap-x-8 w-full md:w-auto md:gap-x-12 mt-4 md:mt-0">
-              {navLinksRow2.map((link) => (
-                <Link
-                  key={link.label}
-                  to={link.href}
-                  className="text-md font-semibold text-[#FFFFFF] hover:text-[#E6DDC6] transition-colors whitespace-nowrap"
-                >
-                  {link.label}
-                </Link>
-              ))}
+              {navLinksRow2.map((link) => {
+                // Special handling for Contact Us link
+                if (link.label === t('CONTACT US')) {
+                  return (
+                    <button
+                      key={link.label}
+                      onClick={handleContactClick}
+                      className="text-md font-semibold text-[#FFFFFF] hover:text-[#E6DDC6] transition-colors whitespace-nowrap bg-transparent border-none cursor-pointer"
+                    >
+                      {link.label}
+                    </button>
+                  );
+                }
+                // Regular links
+                return (
+                  <Link
+                    key={link.label}
+                    to={link.href}
+                    className="text-md font-semibold text-[#FFFFFF] hover:text-[#E6DDC6] transition-colors whitespace-nowrap"
+                  >
+                    {link.label}
+                  </Link>
+                );
+              })}
             </div>
           </div>
         </nav>
