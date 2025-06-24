@@ -65,13 +65,11 @@ const Browse: React.FC = () => {
             setActiveEra(flattened[0].slug);
           }
         } else {
-
           setError('No categories found');
         }
       } catch (err) {
         console.error('Error fetching categories:', err);
         setError('Unable to load categories');
-
       }
     };
 
@@ -172,13 +170,12 @@ const Browse: React.FC = () => {
             </div>
           )}
         </div>
-        <h2 className="text-[24px] font-medium text-[#61422D] mb-2 leading-[32px] tracking-[0px]">
+        <h2 className="text-[24px] font-medium text-[#61422D] mb-2 leading-[32px] tracking-[0px] line-clamp-2 min-h-[64px]">
           {product.title}
         </h2>
-        {product.description && (
-          <div className="text-base text-[#585550] mb-4 line-clamp-3">{product.description}</div>
-        )}
-        {/* Faded divider */}
+        <div className="text-base text-[#585550] mb-4 line-clamp-3 min-h-[72px]">
+          {product.description}
+        </div>
         <div className="border-t-2 border-[#E5E1D7] opacity-80 my-3"></div>
         <div className="flex flex-row justify-between text-xs text-[#23211C] font-semibold">
           <span>
@@ -271,9 +268,7 @@ const Browse: React.FC = () => {
           </div>
         ) : products.length === 0 ? (
           <div className="text-center py-16">
-
             <p className="text-[#61422D] text-lg">No data</p>
-
           </div>
         ) : (
           products.map((product: any) => (

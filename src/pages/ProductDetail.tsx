@@ -485,13 +485,14 @@ export default function ProductDetail() {
               <div className="overflow-x-auto">
                 <div className="flex gap-8">
                   {relatedProducts.map((item: any, idx: number) => {
-                    console.log('Rendering related product:', item);
-                    // Get image for related product
                     const relatedImageUrl =
                       item.images && item.images.length > 0 ? getImageUrl(item.images[0]) : '';
-
                     return (
-                      <div key={item.id} className="min-w-[260px] max-w-xs flex flex-col">
+                      <div
+                        key={item.id}
+                        className="min-w-[260px] max-w-xs flex flex-col cursor-pointer hover:shadow-lg transition-shadow rounded"
+                        onClick={() => navigate(`/products/${item.slug}`)}
+                      >
                         <div className="bg-[#E6DDC6] aspect-square w-full flex items-center justify-center overflow-hidden mb-4">
                           {relatedImageUrl ? (
                             <img
@@ -506,13 +507,11 @@ export default function ProductDetail() {
                             </div>
                           )}
                         </div>
-                        <div className="text-xl text-[#7B6142] mb-2">
-                          {item.category?.name}
-                        </div>
-                        <h2 className="text-base font-serif font-semibold text-[#61422D] mb-2 leading-snug line-clamp-2 pb-8">
+                        <h2 className="text-base font-serif font-semibold text-[#61422D] mb-2 leading-snug line-clamp-3 min-h-[72px]">
                           {item.title}
                         </h2>
-                        <div className="flex flex-row justify-between text-xs text-[#585550] font-semibold border-t pt-2 border-[#C7C7B9]">
+                        <div className="border-t-2 border-[#E5E1D7] opacity-80 my-3"></div>
+                        <div className="flex flex-row justify-between text-xs text-[#585550] font-semibold">
                           <span>
                             {item.ageFrom} - {item.ageTo}
                           </span>
