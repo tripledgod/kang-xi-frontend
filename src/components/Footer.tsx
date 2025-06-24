@@ -21,11 +21,11 @@ export default function Footer() {
   const navLinksRow1 = [
     { label: t('BROWSE'), href: '/browse' },
     { label: t('ARTICLES'), href: '/articles' },
-    { label: t('ABOUT US'), href: '/about-us' },
+    { label: t('ABOUT_US'), href: '/about-us' },
   ];
   const navLinksRow2 = [
-    { label: t('CONTACT US'), href: '#' },
-    { label: t('TERMS & CONDITIONS'), href: '/terms-and-condition' },
+    { label: t('CONTACT_US'), href: '#' },
+    { label: t('TERMS_AND_CONDITIONS'), href: '/terms-and-condition' },
   ];
 
   return (
@@ -51,7 +51,7 @@ export default function Footer() {
             <div className="flex flex-row justify-center gap-x-8 w-full md:w-auto md:gap-x-12 mt-4 md:mt-0">
               {navLinksRow2.map((link) => {
                 // Special handling for Contact Us link
-                if (link.label === t('CONTACT US')) {
+                if (link.label === t('CONTACT_US')) {
                   return (
                     <button
                       key={link.label}

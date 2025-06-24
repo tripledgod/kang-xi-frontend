@@ -110,7 +110,7 @@ export default function ArticlesSection() {
         </div>
         <div className="flex justify-center w-full max-w-6xl  mx-auto ">
           <Button
-            text={t('VIEW ALL ARTICLES')}
+            text={t('VIEW_ALL_ARTICLES')}
             variant="outline"
             onClick={() => navigate('/articles')}
           />

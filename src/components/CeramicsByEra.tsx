@@ -193,7 +193,7 @@ export default function CeramicsByEra() {
                 minWidth: 0,
               }}
             >
-              {t('VIEW ALL COLLECTION')}
+              {t('VIEW_ALL_COLLECTION')}
             </button>
           </div>
         </div>
@@ -248,7 +248,7 @@ export default function CeramicsByEra() {
             </div>
           ))}
           <div className="mt-6">
-            <Button text={t('VIEW ALL COLLECTION')} onClick={() => navigate('/browse')} />
+            <Button text={t('VIEW_ALL_COLLECTION')} onClick={() => navigate('/browse')} />
           </div>
         </div>
         {/* Desktop: horizontal scroll carousel */}

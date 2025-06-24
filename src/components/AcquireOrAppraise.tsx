@@ -17,7 +17,7 @@ export default function AcquireOrAppraise() {
       icon: chaseIcon,
       title: 'Acquire an item',
       desc: 'Looking to acquire an item from our network of private collectors? Contact us here with your interest.',
-      button: t('LEARN MORE'),
+      button: t('LEARN_MORE'),
       image: chaseCollection,
       reverse: false,
       link: '/acquire-an-item',
@@ -26,12 +26,14 @@ export default function AcquireOrAppraise() {
       icon: letterIcon,
       title: 'Appraise an item',
       desc: 'Looking to acquire an item from our network of private collectors? Contact us here with your interest.',
-      button: t('LEARN MORE'),
+      button: t('LEARN_MORE'),
       image: chaseCollection,
       reverse: true,
       link: '/appraise-an-item',
     },
   ];
+
+  console.log('LEARN_MORE:', t('LEARN_MORE'));
 
   return (
     <div className="w-full">

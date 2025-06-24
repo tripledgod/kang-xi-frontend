@@ -47,6 +47,7 @@ export default function ProductDetail() {
   const navigate = useNavigate();
   const { locale } = useLanguage();
   const { t } = useTranslation();
+  console.log('ACQUIRE_THIS_ITEM:', t('ACQUIRE_THIS_ITEM'));
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -396,11 +397,11 @@ export default function ProductDetail() {
                 onClick={() => setIsDescriptionExpanded(!isDescriptionExpanded)}
                 className="text-[#7B6142] font-medium hover:text-[#61422D] transition-colors mb-4"
               >
-                {isDescriptionExpanded ? t('READ LESS') : t('READ MORE')}
+                {isDescriptionExpanded ? t('READ_LESS') : t('READ_MORE')}
               </button>
             )}
             <Button
-              text={t('ACQUIRE THIS ITEM')}
+              text={t('ACQUIRE_THIS_ITEM')}
               className="submit-form-btn"
               onClick={() => setShowAcquireModal(true)}
             />
@@ -463,7 +464,7 @@ export default function ProductDetail() {
                 className="text-[#020202] text-sm font-semibold hidden md:flex"
                 onClick={() => navigate('/browse')}
               >
-                {t('VIEW ALL')}
+                {t('VIEW_ALL')}
               </button>
             </div>
             <div className="relative">

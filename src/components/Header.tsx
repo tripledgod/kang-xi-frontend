@@ -58,7 +58,7 @@ export default function Header() {
   const navLinks = [
     { label: t('BROWSE'), href: '/browse' },
     { label: t('ARTICLES'), href: '/articles' },
-    { label: t('ABOUT US'), href: '/about-us' },
+    { label: t('ABOUT_US'), href: '/about-us' },
   ];
 
   return (

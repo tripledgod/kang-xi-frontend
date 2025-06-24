@@ -12,6 +12,7 @@ import { API_URL } from '../utils/constants';
 import Popup from '../components/Popup';
 import { useNavigate } from 'react-router-dom';
 import Loading from '../components/Loading';
+import { useTranslation } from 'react-i18next';
 
 const steps = [
   {
@@ -56,6 +57,7 @@ export default function AcquireAnItem() {
     phone: '',
   });
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const validateForm = () => {
     const newErrors = {
@@ -82,7 +84,7 @@ export default function AcquireAnItem() {
     }
 
     setErrors(newErrors);
-    return !Object.values(newErrors).some(error => error !== '');
+    return !Object.values(newErrors).some((error) => error !== '');
   };
 
   const submitForm = async () => {
@@ -104,7 +106,7 @@ export default function AcquireAnItem() {
           },
         }),
       });
-      
+
       const data = await response.json();
       setShowSuccess(true);
       setAcquireForm({ firstName: '', lastName: '', itemCode: '' });
@@ -249,13 +251,11 @@ export default function AcquireAnItem() {
                 onChange={(e) => {
                   setAcquireForm((f) => ({ ...f, firstName: e.target.value }));
                   if (errors.firstName) {
-                    setErrors(prev => ({ ...prev, firstName: '' }));
+                    setErrors((prev) => ({ ...prev, firstName: '' }));
                   }
                 }}
               />
-              {errors.firstName && (
-                <p className="text-red-500 text-sm mt-1">{errors.firstName}</p>
-              )}
+              {errors.firstName && <p className="text-red-500 text-sm mt-1">{errors.firstName}</p>}
             </div>
             <div>
               <label className="block mb-2 text-[#1F1F1F] font-medium">Last Name</label>
@@ -269,13 +269,11 @@ export default function AcquireAnItem() {
                 onChange={(e) => {
                   setAcquireForm((f) => ({ ...f, lastName: e.target.value }));
                   if (errors.lastName) {
-                    setErrors(prev => ({ ...prev, lastName: '' }));
+                    setErrors((prev) => ({ ...prev, lastName: '' }));
                   }
                 }}
               />
-              {errors.lastName && (
-                <p className="text-red-500 text-sm mt-1">{errors.lastName}</p>
-              )}
+              {errors.lastName && <p className="text-red-500 text-sm mt-1">{errors.lastName}</p>}
             </div>
             <div>
               <label className="block mb-2 text-[#1F1F1F] font-medium">Item Code</label>
@@ -289,13 +287,11 @@ export default function AcquireAnItem() {
                 onChange={(e) => {
                   setAcquireForm((f) => ({ ...f, itemCode: e.target.value }));
                   if (errors.itemCode) {
-                    setErrors(prev => ({ ...prev, itemCode: '' }));
+                    setErrors((prev) => ({ ...prev, itemCode: '' }));
                   }
                 }}
               />
-              {errors.itemCode && (
-                <p className="text-red-500 text-sm mt-1">{errors.itemCode}</p>
-              )}
+              {errors.itemCode && <p className="text-red-500 text-sm mt-1">{errors.itemCode}</p>}
             </div>
             <div>
               <label className="block mb-2 text-[#1F1F1F] font-medium">Contact Number</label>
@@ -305,7 +301,7 @@ export default function AcquireAnItem() {
                 onChange={(value) => {
                   setPhone(value);
                   if (errors.phone) {
-                    setErrors(prev => ({ ...prev, phone: '' }));
+                    setErrors((prev) => ({ ...prev, phone: '' }));
                   }
                 }}
                 inputClass={`w-full rounded border px-4 py-3 bg-white text-[#23211C] ${
@@ -316,14 +312,12 @@ export default function AcquireAnItem() {
                 searchClass="bg-white text-[#23211C] border border-[#C7C7B9]"
                 containerClass="phone-input-container"
               />
-              {errors.phone && (
-                <p className="text-red-500 text-sm mt-1">{errors.phone}</p>
-              )}
+              {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone}</p>}
             </div>
             <div className="w-full pt-2">
-              <Button 
-                text={isLoading ? "SUBMITTING..." : "SUBMIT FORM"} 
-                type="submit" 
+              <Button
+                text={isLoading ? t('SUBMITTING') : t('SUBMIT_FORM')}
+                type="submit"
                 className="submit-form-btn"
                 disabled={isLoading}
               />

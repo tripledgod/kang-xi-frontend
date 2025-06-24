@@ -12,7 +12,11 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 
 // Image component with error handling and fallback
-const ArticleImage = ({ cover, alt, className = '' }: {
+const ArticleImage = ({
+  cover,
+  alt,
+  className = '',
+}: {
   cover: any;
   alt: string;
   className?: string;
@@ -29,7 +33,11 @@ const ArticleImage = ({ cover, alt, className = '' }: {
       <div className={`bg-[#E6DDC6] flex items-center justify-center ${className}`}>
         <div className="text-center text-[#7B6142]">
           <svg className="w-12 h-12 mx-auto mb-2" fill="currentColor" viewBox="0 0 20 20">
-            <path fillRule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clipRule="evenodd" />
+            <path
+              fillRule="evenodd"
+              d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z"
+              clipRule="evenodd"
+            />
           </svg>
           <p className="text-sm">No image available</p>
         </div>
@@ -37,14 +45,7 @@ const ArticleImage = ({ cover, alt, className = '' }: {
     );
   }
 
-  return (
-    <img
-      src={imageUrl}
-      alt={alt}
-      className={className}
-      onError={handleImageError}
-    />
-  );
+  return <img src={imageUrl} alt={alt} className={className} onError={handleImageError} />;
 };
 
 function RelatedArticles({ related }: { related: Article[] }) {
@@ -64,12 +65,10 @@ function RelatedArticles({ related }: { related: Article[] }) {
       </h2>
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
         {related.map((article) => (
-
           <div
             key={article.id}
             className="flex flex-col  cursor-pointer transition-transform duration-200 hover:scale-105"
             onClick={() => handleArticleClick(article.slug)}
-
           >
             <div className="bg-[#E6DDC6] aspect-square w-full flex items-center justify-center overflow-hidden mb-4">
               <ArticleImage
@@ -111,7 +110,7 @@ function RelatedArticles({ related }: { related: Article[] }) {
       </div>
       <div className="flex justify-center">
         <Button
-          text={t('VIEW ALL ARTICLES')}
+          text={t('VIEW_ALL_ARTICLES')}
           variant="outline"
           onClick={() => navigate('/articles')}
         />
@@ -193,10 +192,7 @@ export default function ArticleDetail() {
           <h1 className="text-2xl font-serif font-semibold text-[#61422D] mb-4">
             {error || 'Article not found'}
           </h1>
-          <Button
-            text="Back to Articles"
-            onClick={() => navigate('/articles')}
-          />
+          <Button text="Back to Articles" onClick={() => navigate('/articles')} />
         </div>
       </div>
     );
