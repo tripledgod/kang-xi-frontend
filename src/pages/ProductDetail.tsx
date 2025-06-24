@@ -48,6 +48,7 @@ export default function ProductDetail() {
   const { locale } = useLanguage();
   const { t } = useTranslation();
   console.log('ACQUIRE_THIS_ITEM:', t('ACQUIRE_THIS_ITEM'));
+  const [descLineCount, setDescLineCount] = useState(0);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -130,8 +131,18 @@ export default function ProductDetail() {
   useEffect(() => {
     if (descRef.current) {
       setDescWidth(descRef.current.offsetWidth);
+      // Đo số dòng thực tế của desc sau khi render
+      setTimeout(() => {
+        const el = descRef.current;
+        if (el) {
+          const lineHeight = parseFloat(getComputedStyle(el).lineHeight || '24');
+          const lines = Math.round(el.scrollHeight / lineHeight);
+          setDescLineCount(lines);
+          console.log('descLineCount:', lines, 'desc length:', productDetail?.description?.length);
+        }
+      }, 0);
     }
-  }, [productDetail?.description]);
+  }, [productDetail?.description, isDescriptionExpanded]);
 
   const openModal = (idx: number) => {
     setModalIndex(idx);
@@ -286,10 +297,6 @@ export default function ProductDetail() {
           onClose={() => setShowSuccess(false)}
         />
       )}
-      {/* Show product id for confirmation */}
-      <div className="max-w-6xl mx-auto px-4 pt-2 text-xs text-[#888] mb-2">
-        Product ID: {productDetail.id}
-      </div>
       {/* Breadcrumb */}
       <div className="max-w-6xl mx-auto px-4 pt-6 text-xs text-[#888] mb-4">
         <span>Home</span> <span className="mx-1">&gt;</span> <span>Browse</span>{' '}
@@ -297,7 +304,7 @@ export default function ProductDetail() {
         <span className="text-[#201F1C]">{productDetail.title}</span>
       </div>
       {/* Main Section */}
-      <div className="max-w-6xl mx-auto px-4 flex flex-col md:flex-row gap-10">
+      <div className="max-w-6xl mx-auto px-4 flex flex-col md:flex-row gap-10 items-start">
         {/* Left: Gallery */}
         {/* Mobile: Slideshow */}
         <div className="block md:hidden w-full">
@@ -325,7 +332,7 @@ export default function ProductDetail() {
           </div>
         </div>
         {/* Desktop: Thumbnails + Main Image */}
-        <div className="hidden md:flex flex-col md:flex-row gap-4 md:w-1/2">
+        <div className="hidden md:flex flex-col md:flex-row gap-4 md:w-1/2 h-[400px] flex-shrink-0">
           {/* Thumbnails */}
           <div className="flex md:flex-col gap-2 md:gap-4 md:w-24">
             {imageUrls.map((img: string, idx: number) => (
@@ -362,6 +369,9 @@ export default function ProductDetail() {
           <div className="flex flex-row justify-between text-xs text-[#23211C] font-semibold items-center">
             <span>
               {productDetail.ageFrom} - {productDetail.ageTo}
+              {productDetail.category?.name && (
+                <span> ({productDetail.category.name})</span>
+              )}
             </span>
             <span className="flex items-center gap-1">
               ITEM CODE {productDetail.itemCode || productDetail.documentId}
@@ -392,7 +402,7 @@ export default function ProductDetail() {
             >
               {productDetail.description}
             </div>
-            {productDetail.description && productDetail.description.length > 500 && (
+            {productDetail.description && (descLineCount > 6 || productDetail.description.length > 300) && (
               <button
                 onClick={() => setIsDescriptionExpanded(!isDescriptionExpanded)}
                 className="text-[#7B6142] font-medium hover:text-[#61422D] transition-colors mb-4"
@@ -496,7 +506,7 @@ export default function ProductDetail() {
                             </div>
                           )}
                         </div>
-                        <div className="text-xs text-[#7B6142] font-semibold mb-2">
+                        <div className="text-xl text-[#7B6142] mb-2">
                           {item.category?.name}
                         </div>
                         <h2 className="text-base font-serif font-semibold text-[#61422D] mb-2 leading-snug line-clamp-2 pb-8">
