@@ -110,7 +110,7 @@ export default function AppraiseAnItem() {
 
   const submitForm = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
-    
+
     if (!validateForm()) {
       return;
     }
@@ -138,9 +138,8 @@ export default function AppraiseAnItem() {
         bodyFormData.append('files', img);
       });
       bodyFormData.append("ref", "api::submissions.submissions");
-      bodyFormData.append("refId", "in2r4wsiqcwrqo5zt3robpnz");
       bodyFormData.append("field", "images");
-      
+
       console.log('=== UPLOADING IMAGES ===');
       const responseUploadImage = await axios({
         method: 'post',
@@ -167,10 +166,10 @@ export default function AppraiseAnItem() {
           contactNumber: `+${phone}`,
         }
       };
-      
+
       console.log('=== SUBMITTING FORM DATA ===');
       console.log('Submission payload:', submissionData);
-      
+
       const newItem = await axios(`${API_URL}/api/submission`, {
         method: 'POST',
         data: submissionData,
@@ -360,11 +359,11 @@ export default function AppraiseAnItem() {
                 onDrop={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
-                  
+
                   const files = Array.from(e.dataTransfer.files);
                   if (files.length > 0) {
                     const invalidFiles: string[] = [];
-                    
+
                     // Validate each file
                     files.forEach((file) => {
                       const error = validateImageFile(file);
@@ -375,9 +374,9 @@ export default function AppraiseAnItem() {
 
                     if (invalidFiles.length > 0) {
                       // Show error for invalid files
-                      setErrors(prev => ({ 
-                        ...prev, 
-                        images: invalidFiles.join('; ') 
+                      setErrors(prev => ({
+                        ...prev,
+                        images: invalidFiles.join('; ')
                       }));
                       return;
                     }
@@ -418,7 +417,7 @@ export default function AppraiseAnItem() {
                     if (files && files.length > 0) {
                       const fileArray = Array.from(files);
                       const invalidFiles: string[] = [];
-                      
+
                       // Validate each file
                       fileArray.forEach((file) => {
                         const error = validateImageFile(file);
@@ -429,9 +428,9 @@ export default function AppraiseAnItem() {
 
                       if (invalidFiles.length > 0) {
                         // Show error for invalid files
-                        setErrors(prev => ({ 
-                          ...prev, 
-                          images: invalidFiles.join('; ') 
+                        setErrors(prev => ({
+                          ...prev,
+                          images: invalidFiles.join('; ')
                         }));
                         return;
                       }
@@ -477,9 +476,9 @@ export default function AppraiseAnItem() {
               )}
             </div>
             <div className="w-full">
-              <Button 
-                text={isLoading ? "SUBMITTING..." : "SUBMIT FORM"} 
-                type="submit" 
+              <Button
+                text={isLoading ? "SUBMITTING..." : "SUBMIT FORM"}
+                type="submit"
                 className="submit-form-btn"
                 disabled={isLoading}
               />
