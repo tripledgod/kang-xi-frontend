@@ -35,12 +35,12 @@ const Browse: React.FC = () => {
   const { locale } = useLanguage();
   const [searchParams] = useSearchParams();
 
-  // Cuộn lên đầu trang mỗi khi URL thay đổi
+  // Scroll to top when URL changes
   useEffect(() => {
     window.scrollTo(0, 400);
   }, [searchParams]);
 
-  // Chuyển đổi categories thành eras
+  // Convert categories to eras
   const eras: Era[] = flattenedCategories.map((category) => ({
     key: category.slug,
     label: category.name,
@@ -57,7 +57,7 @@ const Browse: React.FC = () => {
           setFlattenedCategories(flattened);
 
           const eraFromUrl = searchParams.get('era');
-          const categoryExists = flattened.find(cat => cat.slug === eraFromUrl);
+          const categoryExists = flattened.find((cat) => cat.slug === eraFromUrl);
 
           if (eraFromUrl && categoryExists) {
             setActiveEra(eraFromUrl);
@@ -65,11 +65,11 @@ const Browse: React.FC = () => {
             setActiveEra(flattened[0].slug);
           }
         } else {
-          setError('No data');
+          setError('No categories found');
         }
       } catch (err) {
         console.error('Error fetching categories:', err);
-        setError('Error fetching categories');
+        setError('Unable to load categories');
       }
     };
 
@@ -95,7 +95,7 @@ const Browse: React.FC = () => {
         }
       } catch (err) {
         console.error('Error fetching products:', err);
-        setErrorProducts('Không thể tải danh sách sản phẩm');
+        setErrorProducts('Unable to load product list');
       }
     };
 
@@ -107,27 +107,27 @@ const Browse: React.FC = () => {
     navigate(`/browse?era=${eraSlug}`, { replace: true });
   };
 
-  // Component ProductCard để quản lý state ảnh cho từng sản phẩm
+  // Component ProductCard to manage image state for each product
   const ProductCard: React.FC<{ product: any; navigate: any }> = ({ product, navigate }) => {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [imageError, setImageError] = useState(false);
 
-    // Lấy ảnh chính từ mảng images
+    // Get main image from images array
     let imageUrl = '';
     let fallbackUrls: string[] = [];
 
     if (product.images && product.images.length > 0) {
       const firstImage = product.images[0];
 
-      // Tạo danh sách fallback URLs theo thứ tự ưu tiên
+      // Create fallback URL list in priority order
       const rawUrls = [
         firstImage.formats?.medium?.url,
         firstImage.formats?.small?.url,
         firstImage.formats?.thumbnail?.url,
         firstImage.url,
-      ].filter(Boolean); // Loại bỏ undefined/null
+      ].filter(Boolean); // Remove undefined/null
 
-      // Xử lý URL - nối với API_URL nếu là đường dẫn tương đối
+      // Handle URL - concatenate with API_URL if relative path
       fallbackUrls = rawUrls.map((url) => {
         if (url && url.startsWith('/uploads/')) {
           return `${API_URL}${url}`;
@@ -135,7 +135,7 @@ const Browse: React.FC = () => {
         return url;
       });
 
-      // URL đầu tiên làm primary
+      // First URL as primary
       imageUrl = fallbackUrls[0] || '';
     }
 
@@ -152,11 +152,11 @@ const Browse: React.FC = () => {
               alt={product.title || 'Product Image'}
               className="object-contain w-full h-full"
               onError={(e) => {
-                // Thử ảnh tiếp theo trong danh sách fallback
+                // Try next image in fallback list
                 if (currentImageIndex < fallbackUrls.length - 1) {
                   setCurrentImageIndex((prev) => prev + 1);
                 } else {
-                  // Đã thử hết tất cả ảnh, hiển thị placeholder
+                  // Tried all images, show placeholder
                   setImageError(true);
                   e.currentTarget.style.display = 'none';
                 }
@@ -170,13 +170,12 @@ const Browse: React.FC = () => {
             </div>
           )}
         </div>
-        <h2 className="text-[24px] font-medium text-[#61422D] mb-2 leading-[32px] tracking-[0px]">
+        <h2 className="text-[24px] font-medium text-[#61422D] mb-2 leading-[32px] tracking-[0px] line-clamp-2 min-h-[64px]">
           {product.title}
         </h2>
-        {product.description && (
-          <div className="text-base text-[#585550] mb-4 line-clamp-3">{product.description}</div>
-        )}
-        {/* Thanh kẻ mờ */}
+        <div className="text-base text-[#585550] mb-4 line-clamp-3 min-h-[72px]">
+          {product.description}
+        </div>
         <div className="border-t-2 border-[#E5E1D7] opacity-80 my-3"></div>
         <div className="flex flex-row justify-between text-xs text-[#23211C] font-semibold">
           <span>
@@ -191,7 +190,7 @@ const Browse: React.FC = () => {
   if (categoriesLoading) {
     return (
       <div className="min-h-screen bg-[#F7F5EA] flex items-center justify-center">
-        <Loading fullScreen text="Loading categories..." />
+        <Loading fullScreen text="Loading..." />
       </div>
     );
   }
@@ -255,7 +254,7 @@ const Browse: React.FC = () => {
       <div className="w-full max-w-6xl mx-auto px-4 mt-10 grid grid-cols-1 md:grid-cols-3 gap-10 md:pl-[80px] pl-[20px]">
         {productsLoading ? (
           <div className="flex justify-center py-16">
-            <Loading size="large" text="Loading products..." />
+            <Loading size="large" text="Loading..." />
           </div>
         ) : errorProducts ? (
           <div className="text-center py-16">

@@ -13,7 +13,7 @@ import close from '../assets/close.svg';
 function LanguageSwitcher({ className = '' }) {
   const { locale, setLocale } = useLanguage();
   const isChinese = locale === 'zh-CN';
-  
+
   return (
     <div
       className={`flex border-2 border-[#E6DDC6] rounded-[8px] overflow-hidden w-[120px] h-[48px] bg-[#FDFBF1] ${className}`}
@@ -58,7 +58,7 @@ export default function Header() {
   const navLinks = [
     { label: t('BROWSE'), href: '/browse' },
     { label: t('ARTICLES'), href: '/articles' },
-    { label: t('ABOUT US'), href: '/about-us' },
+    { label: t('ABOUT_US'), href: '/about-us' },
   ];
 
   return (

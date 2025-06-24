@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { COLORS } from "./colors";
-import bgButton from "../assets/bg_button.png";
-import bgButtonMobile from "../assets/bg_button_mobile.png";
-import Popup from "./Popup";
-import Button from "./Button";
+import { COLORS } from './colors';
+import bgButton from '../assets/bg_button.png';
+import bgButtonMobile from '../assets/bg_button_mobile.png';
+import Popup from './Popup';
+import Button from './Button';
 
 export default function Newsletter() {
   const [showPopup, setShowPopup] = useState(false);
@@ -28,7 +28,7 @@ export default function Newsletter() {
               style={{
                 fontSize: 32,
                 color: COLORS.secondary900,
-                fontFamily: "Source Han Serif SC VF, serif",
+                fontFamily: 'Source Han Serif SC VF, serif',
               }}
             >
               GET THE LATEST NEW
@@ -37,8 +37,8 @@ export default function Newsletter() {
               className="font-pingfang text-[18px] leading-[26px] tracking-[0px] text-left mb-8"
               style={{ color: COLORS.secondary700 }}
             >
-              Subscribe to get our 2020 catalog as well as get exclusive invites
-              to our private events
+              Subscribe to get our 2020 catalog as well as get exclusive invites to our private
+              events
             </p>
           </div>
         </div>
@@ -55,7 +55,7 @@ export default function Newsletter() {
               borderColor: COLORS.border,
               background: COLORS.beigeLight,
               color: COLORS.textDark,
-              boxShadow: "none",
+              boxShadow: 'none',
             }}
           />
           <div className="w-[189px] h-[48px] justify-center md:block hidden">
@@ -63,10 +63,10 @@ export default function Newsletter() {
               className="w-full flex-1/3 h-full items-center justify-center text-base font-medium shadow-none transition-all px-6"
               style={{
                 backgroundImage: `url(${bgButton})`,
-                backgroundSize: "100% 100%",
-                backgroundRepeat: "no-repeat",
-                backgroundPosition: "center",
-                color: "#fff",
+                backgroundSize: '100% 100%',
+                backgroundRepeat: 'no-repeat',
+                backgroundPosition: 'center',
+                color: '#fff',
               }}
             >
               {t('SUBSCRIBE')}
@@ -78,14 +78,14 @@ export default function Newsletter() {
               className="w-full h-full items-center justify-center text-base font-medium shadow-none transition-all px-6"
               style={{
                 backgroundImage: `url(${bgButtonMobile})`,
-                backgroundSize: "100% 100%",
-                backgroundRepeat: "no-repeat",
-                backgroundPosition: "center",
-                color: "#fff",
-                border: "none",
+                backgroundSize: '100% 100%',
+                backgroundRepeat: 'no-repeat',
+                backgroundPosition: 'center',
+                color: '#fff',
+                border: 'none',
                 padding: 0,
                 minWidth: 0,
-                fontSize: "18px",
+                fontSize: '18px',
               }}
             >
               {t('SUBSCRIBE')}

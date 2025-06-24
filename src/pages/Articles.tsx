@@ -1,19 +1,19 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import Loading from "../components/Loading";
-import { useLoading } from "../hooks/useLoading";
-import { useLanguage } from "../contexts/LanguageContext";
-import tang from "../assets/tang.png";
-import horse from "../assets/horse.png";
-import ceramics from "../assets/ceramics.png";
-import chaseCollection from "../assets/chase_collection.png";
-import ceramicsMobile from "../assets/ceramics_mobile.png";
-import ourArticles from "../assets/our_articles.png";
-import articlesCover from "../assets/articles_cover.png";
-import bigLeft from "../assets/big_left_article.png";
-import bigRight from "../assets/big_right_article.png";
-import { getArticles, Article } from "../api/articles";
-import { getCoverUrl } from "../utils";
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import Loading from '../components/Loading';
+import { useLoading } from '../hooks/useLoading';
+import { useLanguage } from '../contexts/LanguageContext';
+import tang from '../assets/tang.png';
+import horse from '../assets/horse.png';
+import ceramics from '../assets/ceramics.png';
+import chaseCollection from '../assets/chase_collection.png';
+import ceramicsMobile from '../assets/ceramics_mobile.png';
+import ourArticles from '../assets/our_articles.png';
+import articlesCover from '../assets/articles_cover.png';
+import bigLeft from '../assets/big_left_article.png';
+import bigRight from '../assets/big_right_article.png';
+import { getArticles, Article } from '../api/articles';
+import { getCoverUrl } from '../utils';
 
 const ARTICLES_PER_PAGE = 5;
 
@@ -43,15 +43,11 @@ export default function Articles() {
   const getPageNumbers = (current: number, total: number) => {
     const delta = 2;
     const range = [];
-    for (
-      let i = Math.max(2, current - delta);
-      i <= Math.min(total - 1, current + delta);
-      i++
-    ) {
+    for (let i = Math.max(2, current - delta); i <= Math.min(total - 1, current + delta); i++) {
       range.push(i);
     }
-    if (current - delta > 2) range.unshift("...");
-    if (current + delta < total - 1) range.push("...");
+    if (current - delta > 2) range.unshift('...');
+    if (current + delta < total - 1) range.push('...');
     range.unshift(1);
     if (total > 1) range.push(total);
     return range;
@@ -62,7 +58,7 @@ export default function Articles() {
   if (loading) {
     return (
       <div className="min-h-screen bg-[#F7F5EA] flex items-center justify-center">
-        <Loading fullScreen text="Loading articles..." />
+        <Loading fullScreen text="Loading..." />
       </div>
     );
   }
@@ -73,9 +69,9 @@ export default function Articles() {
       <div className="relative w-full h-[220px] md:h-[320px] flex items-center justify-center overflow-hidden mb-8">
         <img
           src={articles[0] ? getCoverUrl(articles[0].cover) || articlesCover : articlesCover}
-          alt={articles[0]?.title || "Articles Cover"}
+          alt={articles[0]?.title || 'Articles Cover'}
           className="absolute inset-0 w-full h-full object-cover object-center"
-          style={{ maxWidth: "100vw" }}
+          style={{ maxWidth: '100vw' }}
         />
       </div>
       {/* Featured Articles Section */}
@@ -84,7 +80,7 @@ export default function Articles() {
         <div className="flex flex-col md:flex-row gap-8">
           {featuredArticles.map((article, idx) => {
             const imageUrl = getCoverUrl(article.cover);
-            
+
             return (
               <div
                 key={article.id}
@@ -99,7 +95,7 @@ export default function Articles() {
                     e.currentTarget.src = articlesCover;
                   }}
                 />
-                {/* Có thể thêm overlay title/desc/date nếu muốn */}
+                {/* Could add overlay title/desc/date if needed */}
                 <div className="absolute bottom-0 left-0 right-0 p-4 z-10">
                   <div className="text-2xl font-serif font-semibold text-white mb-2 line-clamp-2">
                     {article.title}
@@ -111,7 +107,7 @@ export default function Articles() {
                     {new Date(article.publishedAt).toLocaleDateString('en-US', {
                       day: 'numeric',
                       month: 'short',
-                      year: 'numeric'
+                      year: 'numeric',
                     })}
                   </div>
                 </div>
@@ -128,13 +124,13 @@ export default function Articles() {
             <div className="flex flex-col gap-8 items-start">
               {articles.map((article, idx) => {
                 const imageUrl = getCoverUrl(article.cover);
-                
+
                 return (
                   <Link
                     key={article.id}
                     to={`/article/${article.slug}`}
                     className="w-full"
-                    style={{ textDecoration: "none" }}
+                    style={{ textDecoration: 'none' }}
                   >
                     {/* Mobile Card Layout */}
                     <div className="block md:hidden p-0 w-full transition-colors hover:bg-[#f3efe2]">
@@ -155,10 +151,10 @@ export default function Articles() {
                           style={{
                             fontWeight: 600,
                             fontSize: 24,
-                            lineHeight: "32px",
+                            lineHeight: '32px',
                             letterSpacing: 0,
-                            textAlign: "left",
-                            color: "#61422D",
+                            textAlign: 'left',
+                            color: '#61422D',
                           }}
                         >
                           {article.title}
@@ -170,7 +166,7 @@ export default function Articles() {
                           {new Date(article.publishedAt).toLocaleDateString('en-US', {
                             day: 'numeric',
                             month: 'short',
-                            year: 'numeric'
+                            year: 'numeric',
                           })}
                         </div>
                       </div>
@@ -183,10 +179,10 @@ export default function Articles() {
                           style={{
                             fontWeight: 600,
                             fontSize: 24,
-                            lineHeight: "32px",
+                            lineHeight: '32px',
                             letterSpacing: 0,
-                            textAlign: "left",
-                            color: "#61422D",
+                            textAlign: 'left',
+                            color: '#61422D',
                           }}
                         >
                           {article.title}
@@ -198,7 +194,7 @@ export default function Articles() {
                           {new Date(article.publishedAt).toLocaleDateString('en-US', {
                             day: 'numeric',
                             month: 'short',
-                            year: 'numeric'
+                            year: 'numeric',
                           })}
                         </div>
                       </div>
@@ -214,7 +210,7 @@ export default function Articles() {
                         />
                       </div>
                     </div>
-                    {/* Thanh kẻ mờ dưới mỗi bài viết */}
+                    {/* Faded divider under each article */}
                     {idx !== articles.length - 1 && (
                       <div className="border-t-2 border-[#E5E1D7] opacity-80 my-6"></div>
                     )}
@@ -236,21 +232,18 @@ export default function Articles() {
               &lt;
             </button>
             {pageNumbers.map((num, idx) =>
-              typeof num === "number" ? (
+              typeof num === 'number' ? (
                 <button
                   key={num}
                   className={`ticket-rounded w-9 h-9 rounded-lg flex items-center justify-center font-semibold text-[#7B6142] ${
-                    page === num ? "bg-[#83644B] text-white" : ""
+                    page === num ? 'bg-[#83644B] text-white' : ''
                   }`}
                   onClick={() => setPage(num)}
                 >
                   {num}
                 </button>
               ) : (
-                <span
-                  key={idx}
-                  className="w-8 h-8 flex items-center justify-center text-[#7B6142]"
-                >
+                <span key={idx} className="w-8 h-8 flex items-center justify-center text-[#7B6142]">
                   {num}
                 </span>
               )

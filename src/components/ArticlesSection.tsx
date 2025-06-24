@@ -18,7 +18,7 @@ export default function ArticlesSection() {
   useEffect(() => {
     const fetchArticles = async () => {
       try {
-        const response = await getArticles(1, 3, locale); // Lấy 3 bài mới nhất/tháng
+        const response = await getArticles(1, 3, locale); // Get 3 latest articles per month
         setArticles(response.data);
       } catch (error) {
         console.error('Error fetching articles:', error);
@@ -44,7 +44,7 @@ export default function ArticlesSection() {
         <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
           {loading ? (
             <div className="col-span-3 flex justify-center py-8">
-              <Loading size="large" text="Loading articles..." />
+              <Loading size="large" text="Loading..." />
             </div>
           ) : (
             articles.map((article) => {
@@ -110,7 +110,7 @@ export default function ArticlesSection() {
         </div>
         <div className="flex justify-center w-full max-w-6xl  mx-auto ">
           <Button
-            text={t('VIEW ALL ARTICLES')}
+            text={t('VIEW_ALL_ARTICLES')}
             variant="outline"
             onClick={() => navigate('/articles')}
           />

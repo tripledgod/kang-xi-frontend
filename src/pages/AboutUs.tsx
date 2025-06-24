@@ -52,7 +52,7 @@ export default function AboutUs() {
   if (loading) {
     return (
       <div className="min-h-screen bg-[#F7F5EA] flex items-center justify-center">
-        <Loading fullScreen text="Loading about us..." />
+        <Loading fullScreen text="Loading..." />
       </div>
     );
   }
@@ -147,9 +147,11 @@ export default function AboutUs() {
         <h2 className="text-2xl md:text-3xl font-serif font-semibold text-[#7B6142] mb-2">
           {aboutData?.title || 'The History of Ceramics'}
         </h2>
+
         <div>
           <ReactMarkdown remarkPlugins={[remarkGfm]}>{aboutData.mainContent}</ReactMarkdown>
         </div>
+
       </div>
 
       {/* Team Section */}

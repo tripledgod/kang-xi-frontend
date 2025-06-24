@@ -8,10 +8,7 @@ import { COLORS } from './colors.ts';
 import Button from './Button.tsx';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
-import {
-  getCategories,
-  flattenCategory,
-} from '../api/categories';
+import { getCategories, flattenCategory } from '../api/categories';
 import { API_URL } from '../utils/constants';
 
 const CARD_WIDTH = 320;
@@ -38,20 +35,20 @@ export default function CeramicsByEra() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Fetch categories và xây dựng eras
+  // Fetch categories and build eras
   useEffect(() => {
     const fetchCategories = async () => {
       setLoading(true);
       try {
-        // Lấy categories từ API
+        // Get categories from API
         const categoriesData = await getCategories(locale);
 
         if (categoriesData && categoriesData.length > 0) {
-          // Flatten categories và xây dựng eras data
+          // Flatten categories and build eras data
           const erasData = categoriesData.map((cat) => {
             const category = flattenCategory(cat);
-            
-            // Xử lý ảnh từ category.image
+
+            // Handle image from category.image
             let imageUrl = '';
             if (category.image) {
               const rawUrl =
@@ -61,18 +58,16 @@ export default function CeramicsByEra() {
                 category.image.url ||
                 '';
 
-              // Xử lý URL - nối với API_URL nếu là đường dẫn tương đối
+              // Handle URL - concatenate with API_URL if relative path
               imageUrl = rawUrl.startsWith('/uploads/') ? `${API_URL}${rawUrl}` : rawUrl;
             }
 
-            // Tạo years string từ ageFrom và ageTo
-            const years = category.ageFrom && category.ageTo
-              ? `${category.ageFrom}—${category.ageTo}`
-              : '';
+            // Create years string from ageFrom and ageTo
+            const years =
+              category.ageFrom && category.ageTo ? `${category.ageFrom}—${category.ageTo}` : '';
 
-            // Sử dụng description từ category hoặc fallback
-            const description = category.description || 
-              `Explore ${category.name} era ceramics`;
+            // Use description from category or fallback
+            const description = category.description || `Explore ${category.name} era ceramics`;
 
             return {
               name: category.name,
@@ -81,21 +76,21 @@ export default function CeramicsByEra() {
               img: imageUrl,
               id: category.id,
               slug: category.slug,
-              isPlaceholder: !imageUrl, // Đánh dấu placeholder nếu không có ảnh
-              ageFrom: category.ageFrom ? parseInt(category.ageFrom) : 0, // Thêm ageFrom để sắp xếp
+              isPlaceholder: !imageUrl, // Mark as placeholder if no image
+              ageFrom: category.ageFrom ? parseInt(category.ageFrom) : 0, // Add ageFrom for sorting
             };
           });
 
-          // Sắp xếp theo năm tăng dần (ageFrom)
+          // Sort by year ascending (ageFrom)
           const sortedErasData = erasData.sort((a, b) => {
-            // Nếu cả hai đều có ageFrom, sắp xếp theo số
+            // If both have ageFrom, sort by number
             if (a.ageFrom && b.ageFrom) {
               return a.ageFrom - b.ageFrom;
             }
-            // Nếu chỉ một có ageFrom, đưa lên đầu
+            // If only one has ageFrom, put it first
             if (a.ageFrom && !b.ageFrom) return -1;
             if (!a.ageFrom && b.ageFrom) return 1;
-            // Nếu cả hai đều không có ageFrom, giữ nguyên thứ tự
+            // If neither has ageFrom, keep original order
             return 0;
           });
 
@@ -198,7 +193,7 @@ export default function CeramicsByEra() {
                 minWidth: 0,
               }}
             >
-              {t('VIEW ALL COLLECTION')}
+              {t('VIEW_ALL_COLLECTION')}
             </button>
           </div>
         </div>
@@ -206,8 +201,8 @@ export default function CeramicsByEra() {
         {/* Mobile: vertical stack */}
         <div className="flex flex-col gap-8 mt-4 md:hidden">
           {eras.map((era, idx) => (
-            <div 
-              key={era.name} 
+            <div
+              key={era.name}
               className="flex flex-col bg-transparent cursor-pointer hover:opacity-80 transition-opacity"
               onClick={() => navigate(`/browse?era=${era.slug}`)}
             >
@@ -253,7 +248,7 @@ export default function CeramicsByEra() {
             </div>
           ))}
           <div className="mt-6">
-            <Button text={t('VIEW ALL COLLECTION')} onClick={() => navigate('/browse')} />
+            <Button text={t('VIEW_ALL_COLLECTION')} onClick={() => navigate('/browse')} />
           </div>
         </div>
         {/* Desktop: horizontal scroll carousel */}

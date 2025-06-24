@@ -28,6 +28,7 @@ export default function ProductDetail() {
   const [modalIndex, setModalIndex] = useState(0);
   const [mobileIndex, setMobileIndex] = useState(0);
   const [copied, setCopied] = useState(false);
+  const [copyError, setCopyError] = useState<string | null>(null);
   const [descWidth, setDescWidth] = useState<number | undefined>(undefined);
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
   const descRef = useRef<HTMLDivElement>(null);
@@ -46,65 +47,72 @@ export default function ProductDetail() {
   const navigate = useNavigate();
   const { locale } = useLanguage();
   const { t } = useTranslation();
+  console.log('ACQUIRE_THIS_ITEM:', t('ACQUIRE_THIS_ITEM'));
+  const [descLineCount, setDescLineCount] = useState(0);
 
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        // Gọi API lấy chi tiết sản phẩm theo slug với locale
+        // Call API to get product detail by slug with locale
         const response = await axios.get(`${API_URL}/api/products`, {
           params: {
             'filters[slug][$eq]': slug,
-            'locale': locale,
-            'populate': '*'
-          }
+            locale: locale,
+            populate: '*',
+          },
         });
 
         if (response.data && response.data.data && response.data.data.length > 0) {
           const product = response.data.data[0];
           setProductDetail(product);
 
-          // Lấy ảnh chính từ mảng images
+          // Get main image from images array
           if (product.images && product.images.length > 0) {
             const firstImage = product.images[0];
             const imageUrl = getImageUrl(firstImage);
             setMainImg(imageUrl);
           }
 
-          // Lấy related products với locale
+          // Get related products with locale
           let relatedProductsData = [];
-          
+
           if (product.category?.id || product.category?.data?.id || product.category_id) {
-            // Nếu có category, lấy products cùng category
-            const categoryId = product.category?.id || product.category?.data?.id || product.category_id;
-            
+            // If has category, get products from same category
+            const categoryId =
+              product.category?.id || product.category?.data?.id || product.category_id;
+
             const relatedResponse = await axios.get(`${API_URL}/api/products`, {
               params: {
                 'filters[category][$eq]': categoryId,
                 'pagination[pageSize]': 4,
-                'locale': locale,
-                'populate': '*'
-              }
+                locale: locale,
+                populate: '*',
+              },
             });
-            
+
             if (relatedResponse.data && relatedResponse.data.data) {
-              relatedProductsData = relatedResponse.data.data.filter((p: any) => p.id !== product.id);
+              relatedProductsData = relatedResponse.data.data.filter(
+                (p: any) => p.id !== product.id
+              );
             }
           } else {
-            // Nếu không có category, lấy random products
+            // If no category, get random products
             const randomResponse = await axios.get(`${API_URL}/api/products`, {
               params: {
                 'pagination[pageSize]': 4,
-                'locale': locale,
-                'populate': '*',
-                'sort': 'createdAt:desc' // Lấy products mới nhất
-              }
+                locale: locale,
+                populate: '*',
+                sort: 'createdAt:desc', // Get latest products
+              },
             });
-            
+
             if (randomResponse.data && randomResponse.data.data) {
-              relatedProductsData = randomResponse.data.data.filter((p: any) => p.id !== product.id);
+              relatedProductsData = randomResponse.data.data.filter(
+                (p: any) => p.id !== product.id
+              );
             }
           }
-          
+
           setRelatedProducts(relatedProductsData);
         } else {
           setError('Product not found');
@@ -123,8 +131,18 @@ export default function ProductDetail() {
   useEffect(() => {
     if (descRef.current) {
       setDescWidth(descRef.current.offsetWidth);
+      // Đo số dòng thực tế của desc sau khi render
+      setTimeout(() => {
+        const el = descRef.current;
+        if (el) {
+          const lineHeight = parseFloat(getComputedStyle(el).lineHeight || '24');
+          const lines = Math.round(el.scrollHeight / lineHeight);
+          setDescLineCount(lines);
+          console.log('descLineCount:', lines, 'desc length:', productDetail?.description?.length);
+        }
+      }, 0);
     }
-  }, [productDetail?.description]);
+  }, [productDetail?.description, isDescriptionExpanded]);
 
   const openModal = (idx: number) => {
     setModalIndex(idx);
@@ -161,11 +179,22 @@ export default function ProductDetail() {
   const handleCopy = () => {
     const itemCode = productDetail?.itemCode || productDetail?.documentId || '';
 
+    // Reset both states when starting new copy operation
+    setCopied(false);
+    setCopyError(null);
+
     if (navigator.clipboard && window.isSecureContext) {
       // Modern clipboard API
       navigator.clipboard
         .writeText(itemCode)
-        .catch(() => {
+        .then(() => {
+          // Show success message for modern API
+          setCopied(true);
+          setTimeout(() => setCopied(false), 1200);
+        })
+        .catch((err) => {
+          console.error('Modern clipboard API failed:', err);
+          // Don't show error here, let fallback handle it
           // Fallback to old method
           fallbackCopyTextToClipboard(itemCode);
         });
@@ -213,9 +242,13 @@ export default function ProductDetail() {
         setTimeout(() => setCopied(false), 1200);
       } else {
         console.error('Fallback copy failed');
+        setCopyError('Copy failed');
+        setTimeout(() => setCopyError(null), 3000);
       }
     } catch (err) {
       console.error('Fallback copy error:', err);
+      setCopyError('Copy failed');
+      setTimeout(() => setCopyError(null), 3000);
     }
 
     document.body.removeChild(textArea);
@@ -224,7 +257,7 @@ export default function ProductDetail() {
   if (loading) {
     return (
       <div className="min-h-screen bg-[#F7F5EA] flex items-center justify-center">
-        <Loading fullScreen text="Loading product details..." />
+        <Loading fullScreen text="Loading..." />
       </div>
     );
   }
@@ -234,8 +267,8 @@ export default function ProductDetail() {
       <div className="min-h-screen bg-[#F7F5EA] flex items-center justify-center">
         <div className="text-center">
           <p className="text-[#61422D] text-lg mb-4">{error || 'Product not found'}</p>
-          <button 
-            onClick={() => navigate('/browse')} 
+          <button
+            onClick={() => navigate('/browse')}
             className="px-4 py-2 bg-[#7B6142] text-white rounded hover:bg-[#6a5437]"
           >
             Back to Browse
@@ -245,13 +278,13 @@ export default function ProductDetail() {
     );
   }
 
-  // Lấy ảnh cho gallery
+  // Get images for gallery
   const images = productDetail.images || [];
   const imageUrls = getImagesUrls(images);
 
   return (
     <div className="w-full min-h-screen bg-[#F7F5EA]">
-      {/* Hiển thị popup khi đăng ký thành công */}
+      {/* Show popup when registration is successful */}
       {showSuccess && (
         <Popup
           title="Thank you for contacting us!"
@@ -264,10 +297,6 @@ export default function ProductDetail() {
           onClose={() => setShowSuccess(false)}
         />
       )}
-      {/* Show product id for confirmation */}
-      <div className="max-w-6xl mx-auto px-4 pt-2 text-xs text-[#888] mb-2">
-        Product ID: {productDetail.id}
-      </div>
       {/* Breadcrumb */}
       <div className="max-w-6xl mx-auto px-4 pt-6 text-xs text-[#888] mb-4">
         <span>Home</span> <span className="mx-1">&gt;</span> <span>Browse</span>{' '}
@@ -275,7 +304,7 @@ export default function ProductDetail() {
         <span className="text-[#201F1C]">{productDetail.title}</span>
       </div>
       {/* Main Section */}
-      <div className="max-w-6xl mx-auto px-4 flex flex-col md:flex-row gap-10">
+      <div className="max-w-6xl mx-auto px-4 flex flex-col md:flex-row gap-10 items-start">
         {/* Left: Gallery */}
         {/* Mobile: Slideshow */}
         <div className="block md:hidden w-full">
@@ -303,7 +332,7 @@ export default function ProductDetail() {
           </div>
         </div>
         {/* Desktop: Thumbnails + Main Image */}
-        <div className="hidden md:flex flex-col md:flex-row gap-4 md:w-1/2">
+        <div className="hidden md:flex flex-col md:flex-row gap-4 md:w-1/2 h-[400px] flex-shrink-0">
           {/* Thumbnails */}
           <div className="flex md:flex-col gap-2 md:gap-4 md:w-24">
             {imageUrls.map((img: string, idx: number) => (
@@ -340,17 +369,24 @@ export default function ProductDetail() {
           <div className="flex flex-row justify-between text-xs text-[#23211C] font-semibold items-center">
             <span>
               {productDetail.ageFrom} - {productDetail.ageTo}
+              {productDetail.category?.name && (
+                <span> ({productDetail.category.name})</span>
+              )}
             </span>
             <span className="flex items-center gap-1">
               ITEM CODE {productDetail.itemCode || productDetail.documentId}
               <button
                 onClick={handleCopy}
-                className="ml-1 p-1 hover:bg-[#E6DDC6] rounded"
+                className="ml-1 p-1 hover:bg-[#E6DDC6] rounded transition-colors duration-200"
                 aria-label="Copy Item Code"
+                title="Copy item code to clipboard"
               >
                 <img src={copyIcon} alt="Copy" className="w-4 h-4" />
               </button>
-              {copied && <span className="text-xs text-green-600 ml-1">Copied!</span>}
+              {copied && <span className="text-xs text-green-600 ml-1 font-medium">Copied!</span>}
+              {copyError && !copied && (
+                <span className="text-xs text-red-600 ml-1 font-medium">{copyError}</span>
+              )}
             </span>
           </div>
           <h1 className="text-3xl md:text-4xl font-serif font-medium text-[#61422D] mb-2 leading-tight">
@@ -366,16 +402,16 @@ export default function ProductDetail() {
             >
               {productDetail.description}
             </div>
-            {productDetail.description && productDetail.description.length > 500 && (
+            {productDetail.description && (descLineCount > 6 || productDetail.description.length > 300) && (
               <button
                 onClick={() => setIsDescriptionExpanded(!isDescriptionExpanded)}
                 className="text-[#7B6142] font-medium hover:text-[#61422D] transition-colors mb-4"
               >
-                {isDescriptionExpanded ? t('READ LESS') : t('READ MORE')}
+                {isDescriptionExpanded ? t('READ_LESS') : t('READ_MORE')}
               </button>
             )}
             <Button
-              text={t('ACQUIRE THIS ITEM')}
+              text={t('ACQUIRE_THIS_ITEM')}
               className="submit-form-btn"
               onClick={() => setShowAcquireModal(true)}
             />
@@ -438,7 +474,7 @@ export default function ProductDetail() {
                 className="text-[#020202] text-sm font-semibold hidden md:flex"
                 onClick={() => navigate('/browse')}
               >
-                {t('VIEW ALL')}
+                {t('VIEW_ALL')}
               </button>
             </div>
             <div className="relative">
@@ -449,14 +485,14 @@ export default function ProductDetail() {
               <div className="overflow-x-auto">
                 <div className="flex gap-8">
                   {relatedProducts.map((item: any, idx: number) => {
-                    console.log('Rendering related product:', item);
-                    // Lấy ảnh cho related product
-                    const relatedImageUrl = item.images && item.images.length > 0 
-                      ? getImageUrl(item.images[0]) 
-                      : '';
-
+                    const relatedImageUrl =
+                      item.images && item.images.length > 0 ? getImageUrl(item.images[0]) : '';
                     return (
-                      <div key={item.id} className="min-w-[260px] max-w-xs flex flex-col">
+                      <div
+                        key={item.id}
+                        className="min-w-[260px] max-w-xs flex flex-col cursor-pointer hover:shadow-lg transition-shadow rounded"
+                        onClick={() => navigate(`/products/${item.slug}`)}
+                      >
                         <div className="bg-[#E6DDC6] aspect-square w-full flex items-center justify-center overflow-hidden mb-4">
                           {relatedImageUrl ? (
                             <img
@@ -471,13 +507,11 @@ export default function ProductDetail() {
                             </div>
                           )}
                         </div>
-                        <div className="text-xs text-[#7B6142] font-semibold mb-2">
-                          {item.category?.name}
-                        </div>
-                        <h2 className="text-base font-serif font-semibold text-[#61422D] mb-2 leading-snug line-clamp-2 pb-8">
+                        <h2 className="text-base font-serif font-semibold text-[#61422D] mb-2 leading-snug line-clamp-3 min-h-[72px]">
                           {item.title}
                         </h2>
-                        <div className="flex flex-row justify-between text-xs text-[#585550] font-semibold border-t pt-2 border-[#C7C7B9]">
+                        <div className="border-t-2 border-[#E5E1D7] opacity-80 my-3"></div>
+                        <div className="flex flex-row justify-between text-xs text-[#585550] font-semibold">
                           <span>
                             {item.ageFrom} - {item.ageTo}
                           </span>

@@ -7,16 +7,23 @@ import instagram from '../assets/instagram.svg';
 
 export default function Footer() {
   const { t } = useTranslation();
+
+  // Function to handle WhatsApp redirect
+  const handleContactClick = () => {
+    // You can customize the phone number and message
+    const phoneNumber = '+1234567890'; // Replace with actual phone number
+    const message = 'Hello! I would like to contact Kangxi Collection.'; // Customize message
+    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
+  };
+
   // Split nav links for mobile two-row layout
   const navLinksRow1 = [
     { label: t('BROWSE'), href: '/browse' },
     { label: t('ARTICLES'), href: '/articles' },
-    { label: t('ABOUT US'), href: '/about-us' },
+    { label: t('ABOUT_US'), href: '/about-us' },
   ];
-  const navLinksRow2 = [
-    { label: t('CONTACT US'), href: '#' },
-    { label: t('TERMS & CONDITIONS'), href: '/terms-and-condition' },
-  ];
+  const navLinksRow2 = [{ label: t('TERMS_AND_CONDITIONS'), href: '/terms-and-condition' }];
 
   return (
     <footer className="bg-[#10110C] text-[#FDFBF1] pt-12 pb-6 px-4">

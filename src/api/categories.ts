@@ -77,21 +77,21 @@ export const getCategories = async (locale: string = 'en'): Promise<Category[]> 
       },
     });
 
-    // Debug: Log cấu trúc dữ liệu thực tế
+    // Debug: Log actual data structure
     console.log('Raw API response:', response.data);
-    
-    // Xử lý cấu trúc dữ liệu - có thể là data array hoặc trực tiếp
+
+    // Handle data structure - could be data array or direct
     let data = response.data.data || response.data || [];
-    
-    // Nếu data là array, sử dụng trực tiếp
+
+    // If data is array, use directly
     if (Array.isArray(data)) {
       if (data.length > 0) {
         console.log('First category structure:', JSON.stringify(data[0], null, 2));
       }
       return data;
     }
-    
-    // Nếu data không phải array, trả về array rỗng
+
+    // If data is not array, return empty array
     console.warn('API response is not an array:', data);
     return [];
   } catch (error) {
@@ -132,21 +132,21 @@ export const getProductsByCategory = async (
       },
     });
 
-    // Debug: Log cấu trúc dữ liệu thực tế
+    // Debug: Log actual data structure
     console.log('Raw products API response:', response.data);
-    
-    // Xử lý cấu trúc dữ liệu - có thể là data array hoặc trực tiếp
+
+    // Handle data structure - could be data array or direct
     let data = response.data.data || response.data || [];
-    
-    // Nếu data là array, sử dụng trực tiếp
+
+    // If data is array, use directly
     if (Array.isArray(data)) {
       if (data.length > 0) {
         console.log('First product structure:', JSON.stringify(data[0], null, 2));
       }
       return data;
     }
-    
-    // Nếu data không phải array, trả về array rỗng
+
+    // If data is not array, return empty array
     console.warn('Products API response is not an array:', data);
     return [];
   } catch (error) {
@@ -155,12 +155,12 @@ export const getProductsByCategory = async (
   }
 };
 
-// Helper function để chuyển đổi Category từ API format sang flat format
+// Helper function to convert Category from API format to flat format
 export const flattenCategory = (category: Category) => {
-  // Debug: Log category structure
+  // Debug: Log actual data structure
   console.log('Flattening category:', category);
-  
-  // Kiểm tra xem category có cấu trúc đúng không
+
+  // Check if category has correct structure
   if (!category) {
     console.error('Invalid category structure:', category);
     return {
@@ -195,12 +195,12 @@ export const flattenCategory = (category: Category) => {
   };
 };
 
-// Helper function để chuyển đổi Product từ API format sang flat format
+// Helper function to convert Product from API format to flat format
 export const flattenProduct = (product: Product) => {
-  // Debug: Log product structure
+  // Debug: Log actual data structure
   console.log('Flattening product:', product);
-  
-  // Kiểm tra xem product có cấu trúc đúng không
+
+  // Check if product has correct structure
   if (!product) {
     console.error('Invalid product structure:', product);
     return {
@@ -231,7 +231,7 @@ export const flattenProduct = (product: Product) => {
   };
 };
 
-// Ceramic interface và API lấy ceramics theo category
+// Ceramic interface and API to get ceramics by category
 export interface Ceramic {
   id: number;
   title: string;
