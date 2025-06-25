@@ -5,14 +5,54 @@ import bgButton from '../assets/bg_button.png';
 import bgButtonMobile from '../assets/bg_button_mobile.png';
 import Popup from './Popup';
 import Button from './Button';
+import { subscribe } from '../api/newsletter';
 
 export default function Newsletter() {
   const [showPopup, setShowPopup] = useState(false);
+  const [email, setEmail] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const { t } = useTranslation();
 
-  const handleSubscribe = (e: React.FormEvent) => {
+  const validateEmail = (email: string) => {
+    // Đơn giản, có thể thay thế regex tốt hơn nếu cần
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  };
+
+  const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
-    setShowPopup(true);
+    setError('');
+    if (!validateEmail(email)) {
+      setError('Email không hợp lệ');
+      return;
+    }
+    setLoading(true);
+    try {
+      await subscribe(email);
+      setShowPopup(true);
+      setEmail('');
+    } catch (err: any) {
+      // Xử lý lỗi từ Strapi
+      if (err?.response?.data?.error?.details?.errors) {
+        const errors = err.response.data.error.details.errors;
+        const emailError = errors.find((e: any) => e.path.includes('email'));
+        if (emailError) {
+          if (emailError.message.includes('unique')) {
+            setError('Email này đã được đăng ký trước đó');
+          } else {
+            setError(emailError.message);
+          }
+        } else {
+          setError('Đã xảy ra lỗi, vui lòng thử lại.');
+        }
+      } else if (err?.response?.data?.error?.message) {
+        setError(err.response.data.error.message);
+      } else {
+        setError('Đã xảy ra lỗi, vui lòng thử lại.');
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleClosePopup = () => setShowPopup(false);
@@ -47,19 +87,29 @@ export default function Newsletter() {
           onSubmit={handleSubscribe}
           className="w-full flex flex-col md:flex-row md:items-center md:justify-end gap-4.5 md:gap-x-4 md:mt-0"
         >
-          <input
-            type="text"
-            placeholder="Enter your first name"
-            className="w-full md:flex-2/3 h-[64px] md:h-[48px]  rounded-lg border px-6 text-lg focus:outline-none focus:ring-2"
-            style={{
-              borderColor: COLORS.border,
-              background: COLORS.beigeLight,
-              color: COLORS.textDark,
-              boxShadow: 'none',
-            }}
-          />
+          <div className="w-full">
+            <input
+              type="text"
+              placeholder="Enter your email"
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+              disabled={loading}
+              className="w-full md:flex-2/3 h-[64px] md:h-[48px]  rounded-lg border px-6 text-lg focus:outline-none focus:ring-2"
+              style={{
+                borderColor: COLORS.border,
+                background: COLORS.beigeLight,
+                color: COLORS.textDark,
+                boxShadow: 'none',
+              }}
+            />
+            {error && (
+              <div className="text-red-600 text-sm mt-1">{error}</div>
+            )}
+          </div>
           <div className="w-[189px] h-[48px] justify-center md:block hidden">
             <button
+              type="submit"
+              disabled={loading}
               className="w-full flex-1/3 h-full items-center justify-center text-base font-medium shadow-none transition-all px-6"
               style={{
                 backgroundImage: `url(${bgButton})`,
@@ -67,14 +117,17 @@ export default function Newsletter() {
                 backgroundRepeat: 'no-repeat',
                 backgroundPosition: 'center',
                 color: '#fff',
+                opacity: loading ? 0.7 : 1,
+                cursor: loading ? 'not-allowed' : 'pointer',
               }}
             >
-              {t('SUBSCRIBE')}
+              {loading ? t('ĐANG GỬI...') : t('SUBSCRIBE')}
             </button>
           </div>
           <div className="w-full h-[64px] justify-center md:hidden">
             <button
               type="submit"
+              disabled={loading}
               className="w-full h-full items-center justify-center text-base font-medium shadow-none transition-all px-6"
               style={{
                 backgroundImage: `url(${bgButtonMobile})`,
@@ -86,9 +139,11 @@ export default function Newsletter() {
                 padding: 0,
                 minWidth: 0,
                 fontSize: '18px',
+                opacity: loading ? 0.7 : 1,
+                cursor: loading ? 'not-allowed' : 'pointer',
               }}
             >
-              {t('SUBSCRIBE')}
+              {loading ? t('ĐANG GỬI...') : t('SUBSCRIBE')}
             </button>
           </div>
         </form>
