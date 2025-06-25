@@ -49,6 +49,15 @@ export default function ProductDetail() {
   const { t } = useTranslation();
   console.log('ACQUIRE_THIS_ITEM:', t('ACQUIRE_THIS_ITEM'));
   const [descLineCount, setDescLineCount] = useState(0);
+  
+  // Add validation and loading states
+  const [isLoading, setIsLoading] = useState(false);
+  const [errors, setErrors] = useState({
+    firstName: '',
+    lastName: '',
+    itemCode: '',
+    phone: '',
+  });
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -204,24 +213,66 @@ export default function ProductDetail() {
     }
   };
 
-  const submitForm = () => {
-    fetch(`${API_URL}/api/form-acquire`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        data: {
-          firstName: acquireForm.firstName,
-          lastName: acquireForm.lastName,
-          itemCode: acquireForm.itemCode,
-          contactNumber: `+${phone}`,
-        },
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setShowSuccess(true);
-        setShowAcquireModal(false);
+  const validateForm = () => {
+    const newErrors = {
+      firstName: '',
+      lastName: '',
+      itemCode: '',
+      phone: '',
+    };
+
+    if (!acquireForm.firstName.trim()) {
+      newErrors.firstName = 'First name is required';
+    }
+
+    if (!acquireForm.lastName.trim()) {
+      newErrors.lastName = 'Last name is required';
+    }
+
+    if (!acquireForm.itemCode.trim()) {
+      newErrors.itemCode = 'Item code is required';
+    }
+
+    if (!phone.trim()) {
+      newErrors.phone = 'Contact number is required';
+    }
+
+    setErrors(newErrors);
+    return !Object.values(newErrors).some((error) => error !== '');
+  };
+
+  const submitForm = async () => {
+    if (!validateForm()) {
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const response = await fetch(`${API_URL}/api/form-acquire`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          data: {
+            firstName: acquireForm.firstName,
+            lastName: acquireForm.lastName,
+            itemCode: acquireForm.itemCode,
+            contactNumber: `+${phone}`,
+          },
+        }),
       });
+
+      const data = await response.json();
+      setShowSuccess(true);
+      setShowAcquireModal(false);
+      setAcquireForm({ firstName: '', lastName: '', itemCode: '' });
+      setPhone('');
+      setErrors({ firstName: '', lastName: '', itemCode: '', phone: '' });
+    } catch (error) {
+      // Could handle error here if needed
+      console.error('Error submitting form:', error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   // Fallback copy method
@@ -570,53 +621,91 @@ export default function ProductDetail() {
                   <label className="block mb-2 text-[#1F1F1F] font-medium">First Name</label>
                   <input
                     type="text"
-                    className="w-full rounded border border-[#C7C7B9] px-4 py-3 bg-white text-[#23211C]"
+                    className={`w-full rounded border px-4 py-3 bg-white text-[#23211C] ${
+                      errors.firstName ? 'border-red-500' : 'border-[#C7C7B9]'
+                    }`}
                     placeholder="Enter your first name"
                     value={acquireForm.firstName}
-                    onChange={(e) => setAcquireForm((f) => ({ ...f, firstName: e.target.value }))}
+                    onChange={(e) => {
+                      setAcquireForm((f) => ({ ...f, firstName: e.target.value }));
+                      if (errors.firstName) {
+                        setErrors((prev) => ({ ...prev, firstName: '' }));
+                      }
+                    }}
                   />
+                  {errors.firstName && <p className="text-red-500 text-sm mt-1">{errors.firstName}</p>}
                 </div>
                 <div>
                   <label className="block mb-2 text-[#1F1F1F] font-medium">Last Name</label>
                   <input
                     type="text"
-                    className="w-full rounded border border-[#C7C7B9] px-4 py-3 bg-white text-[#23211C]"
+                    className={`w-full rounded border px-4 py-3 bg-white text-[#23211C] ${
+                      errors.lastName ? 'border-red-500' : 'border-[#C7C7B9]'
+                    }`}
                     placeholder="Enter your last name"
                     value={acquireForm.lastName}
-                    onChange={(e) => setAcquireForm((f) => ({ ...f, lastName: e.target.value }))}
+                    onChange={(e) => {
+                      setAcquireForm((f) => ({ ...f, lastName: e.target.value }));
+                      if (errors.lastName) {
+                        setErrors((prev) => ({ ...prev, lastName: '' }));
+                      }
+                    }}
                   />
+                  {errors.lastName && <p className="text-red-500 text-sm mt-1">{errors.lastName}</p>}
                 </div>
                 <div>
                   <label className="block mb-2 text-[#1F1F1F] font-medium">Item Code</label>
                   <input
                     type="text"
-                    className="w-full rounded border border-[#C7C7B9] px-4 py-3 bg-white text-[#23211C]"
+                    className={`w-full rounded border px-4 py-3 bg-white text-[#23211C] ${
+                      errors.itemCode ? 'border-red-500' : 'border-[#C7C7B9]'
+                    }`}
                     placeholder="Enter item code"
                     value={acquireForm.itemCode}
-                    onChange={(e) => setAcquireForm((f) => ({ ...f, itemCode: e.target.value }))}
+                    onChange={(e) => {
+                      setAcquireForm((f) => ({ ...f, itemCode: e.target.value }));
+                      if (errors.itemCode) {
+                        setErrors((prev) => ({ ...prev, itemCode: '' }));
+                      }
+                    }}
                   />
+                  {errors.itemCode && <p className="text-red-500 text-sm mt-1">{errors.itemCode}</p>}
                 </div>
                 <div>
                   <label className="block mb-2 text-[#1F1F1F] font-medium">Contact Number</label>
                   <PhoneInput
                     country={'sg'}
                     value={phone}
-                    onChange={setPhone}
-                    inputClass="w-full rounded border border-[#C7C7B9] px-4 py-3 bg-white text-[#23211C]"
+                    onChange={(value) => {
+                      setPhone(value);
+                      if (errors.phone) {
+                        setErrors((prev) => ({ ...prev, phone: '' }));
+                      }
+                    }}
+                    inputClass={`w-full rounded border px-4 py-3 bg-white text-[#23211C] ${
+                      errors.phone ? 'border-red-500' : 'border-[#C7C7B9]'
+                    }`}
                     buttonClass="rounded-l border border-[#C7C7B9] bg-white"
                     dropdownClass="bg-white text-[#23211C]"
                     searchClass="bg-white text-[#23211C] border border-[#C7C7B9]"
                     containerClass="phone-input-container"
                   />
+                  {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone}</p>}
                 </div>
                 <div className="w-full pt-2">
-                  <Button text="SUBMIT FORM" type="submit" className="submit-form-btn" />
+                  <Button
+                    text={isLoading ? t('SUBMITTING') : t('SUBMIT_FORM')}
+                    type="submit"
+                    className="submit-form-btn"
+                    disabled={isLoading}
+                  />
                 </div>
               </form>
             </div>
           </div>
         </div>
       )}
+      {isLoading && <Loading fullScreen={true} text="Submitting your request..." />}
     </div>
   );
 }
