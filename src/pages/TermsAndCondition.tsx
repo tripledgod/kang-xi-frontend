@@ -28,7 +28,7 @@ export default function TermsAndCondition() {
   }, [withLoading, locale]);
 
   if (loading) {
-    return <Loading text="Loading..." fullScreen />;
+    return <Loading text="Loading..." fullScreen={true} />;
   }
 
   return (

@@ -15,24 +15,27 @@ export default function Newsletter() {
   const { t } = useTranslation();
 
   const validateEmail = (email: string) => {
-    // Đơn giản, có thể thay thế regex tốt hơn nếu cần
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    // Simple validation, can be replaced with better regex if needed
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
   };
 
   const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
     if (!validateEmail(email)) {
-      setError('Email không hợp lệ');
+      setError('Please enter a valid email address');
       return;
     }
+
     setLoading(true);
+    setError('');
+
     try {
       await subscribe(email);
       setShowPopup(true);
       setEmail('');
     } catch (err: any) {
-      // Xử lý lỗi từ Strapi
+      // Handle Strapi error
       if (err?.response?.data?.error?.details?.errors) {
         const errors = err.response.data.error.details.errors;
         const emailError = errors.find((e: any) => e.path.includes('email'));

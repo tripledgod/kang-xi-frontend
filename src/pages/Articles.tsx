@@ -58,7 +58,7 @@ export default function Articles() {
   if (loading) {
     return (
       <div className="min-h-screen bg-[#F7F5EA] flex items-center justify-center">
-        <Loading fullScreen text="Loading..." />
+        <Loading fullScreen={true} text="Loading..." />
       </div>
     );
   }

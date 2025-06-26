@@ -1,5 +1,6 @@
 import React from 'react';
 import { COLORS } from './colors';
+import { useScrollLock } from '../hooks/useScrollLock';
 
 interface LoadingProps {
   size?: 'small' | 'medium' | 'large';
@@ -14,6 +15,8 @@ const Loading: React.FC<LoadingProps> = ({
   className = '',
   fullScreen = false,
 }) => {
+  useScrollLock(fullScreen);
+
   const sizeClasses = {
     small: 'w-6 h-6',
     medium: 'w-8 h-8',

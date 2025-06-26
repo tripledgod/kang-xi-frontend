@@ -140,7 +140,7 @@ export default function ProductDetail() {
   useEffect(() => {
     if (descRef.current) {
       setDescWidth(descRef.current.offsetWidth);
-      // Đo số dòng thực tế của desc sau khi render
+      // Count actual lines of desc after rendering
       setTimeout(() => {
         const el = descRef.current;
         if (el) {
@@ -308,7 +308,7 @@ export default function ProductDetail() {
   if (loading) {
     return (
       <div className="min-h-screen bg-[#F7F5EA] flex items-center justify-center">
-        <Loading fullScreen text="Loading..." />
+        <Loading fullScreen={true} text="Loading..." />
       </div>
     );
   }

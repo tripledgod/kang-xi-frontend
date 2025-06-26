@@ -190,7 +190,7 @@ const Browse: React.FC = () => {
   if (categoriesLoading) {
     return (
       <div className="min-h-screen bg-[#F7F5EA] flex items-center justify-center">
-        <Loading fullScreen text="Loading..." />
+        <Loading fullScreen={true} text="Loading..." />
       </div>
     );
   }
