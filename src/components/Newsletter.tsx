@@ -41,17 +41,17 @@ export default function Newsletter() {
         const emailError = errors.find((e: any) => e.path.includes('email'));
         if (emailError) {
           if (emailError.message.includes('unique')) {
-            setError('Email này đã được đăng ký trước đó');
+            setError('This email has already been registered');
           } else {
             setError(emailError.message);
           }
         } else {
-          setError('Đã xảy ra lỗi, vui lòng thử lại.');
+          setError('An error occurred, please try again.');
         }
       } else if (err?.response?.data?.error?.message) {
         setError(err.response.data.error.message);
       } else {
-        setError('Đã xảy ra lỗi, vui lòng thử lại.');
+        setError('An error occurred, please try again.');
       }
     } finally {
       setLoading(false);
@@ -124,7 +124,7 @@ export default function Newsletter() {
                 cursor: loading ? 'not-allowed' : 'pointer',
               }}
             >
-              {loading ? t('ĐANG GỬI...') : t('SUBSCRIBE')}
+              {loading ? 'SENDING...' : t('SUBSCRIBE')}
             </button>
           </div>
           <div className="w-full h-[64px] justify-center md:hidden">
@@ -146,7 +146,7 @@ export default function Newsletter() {
                 cursor: loading ? 'not-allowed' : 'pointer',
               }}
             >
-              {loading ? t('ĐANG GỬI...') : t('SUBSCRIBE')}
+              {loading ? 'SENDING...' : t('SUBSCRIBE')}
             </button>
           </div>
         </form>
