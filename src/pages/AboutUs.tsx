@@ -7,6 +7,7 @@ import { AboutResponse } from '../types.ts';
 import CoverPage from '../components/CoverPage';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import { getImageUrl } from '../utils';
 
 export default function AboutUs() {
   const [teamIndex, setTeamIndex] = useState(0);
@@ -115,7 +116,7 @@ export default function AboutUs() {
           <img
             src={
               aboutData?.heritage?.image?.formats?.medium?.url
-                ? `${API_URL}${aboutData.heritage.image.formats.medium.url.startsWith('/') ? '' : '/'}${aboutData.heritage.image.formats.medium.url}`
+                ? getImageUrl(aboutData.heritage.image)
                 : heroImg
             }
             alt="Horse"
@@ -133,7 +134,7 @@ export default function AboutUs() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
             {aboutData?.journey?.map((item) => (
               <div key={item.id} className="flex flex-col items-center">
-                <img src={`${API_URL}${item.icon.url}`} alt={item.title} className="h-12 mb-4" />
+                <img src={getImageUrl(item.icon)} alt={item.title} className="h-12 mb-4" />
                 <div className="text-lg font-semibold text-white mb-2">{item.title}</div>
                 <div className="text-[#A4A7AE] text-sm">{item.description}</div>
               </div>
@@ -209,7 +210,7 @@ export default function AboutUs() {
                 }}
               >
                 <img
-                  src={`${API_URL}${member.image.formats.medium.url}`}
+                  src={getImageUrl(member.image)}
                   alt={member.name}
                   className="w-full h-[340px] object-cover mb-6"
                 />
