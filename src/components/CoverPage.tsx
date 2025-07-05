@@ -1,6 +1,6 @@
 import React from 'react';
 import heroImg from '../assets/about_us_cover.png';
-import { API_URL } from '../utils/constants';
+import { getImageUrl } from '../utils';
 import { Cover } from '../types';
 
 interface CoverPageProps {
@@ -8,10 +8,12 @@ interface CoverPageProps {
 }
 
 const CoverPage: React.FC<CoverPageProps> = ({ cover }) => {
+  const imageUrl = getImageUrl(cover?.image);
+  
   return (
     <div className="relative w-full h-[260px] md:h-[340px] flex items-center justify-center overflow-hidden mb-12">
       <img
-        src={cover?.image ? `${API_URL}${cover.image.formats.large.url}` : heroImg}
+        src={imageUrl || heroImg}
         alt={cover?.title || 'About Us'}
         className="absolute inset-0 w-full h-full object-cover object-center"
         style={{ maxWidth: '100vw' }}

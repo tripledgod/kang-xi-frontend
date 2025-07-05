@@ -7,6 +7,16 @@ import { AboutResponse } from '../types.ts';
 import CoverPage from '../components/CoverPage';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import { getImageUrl } from '../utils';
+
+// Custom lại component cho thẻ <img> trong markdown
+const MarkdownComponents = {
+  img: ({ node, ...props }: any) => (
+    <div className="my-6 flex justify-center">
+      <img {...props} className="rounded-lg shadow-md max-w-full h-auto" />
+    </div>
+  ),
+};
 
 export default function AboutUs() {
   const [teamIndex, setTeamIndex] = useState(0);
@@ -94,7 +104,7 @@ export default function AboutUs() {
             <div>
               <div
                 className="text-5xl font-medium text-[#7B6142]"
-                style={{ fontFamily: 'Source Han Serif SC VF, serif' }}
+                style={{ fontFamily: 'Noto Serif SC, serif' }}
               >
                 {aboutData?.heritage?.yearsExp || '25'}+
               </div>
@@ -103,7 +113,7 @@ export default function AboutUs() {
             <div>
               <div
                 className="text-5xl font-medium text-[#7B6142]"
-                style={{ fontFamily: 'Source Han Serif SC VF, serif' }}
+                style={{ fontFamily: 'Noto Serif SC, serif' }}
               >
                 {aboutData?.heritage?.rareCollectibleItems || '100'}+
               </div>
@@ -113,11 +123,7 @@ export default function AboutUs() {
         </div>
         <div className="flex-1 flex items-center justify-center">
           <img
-            src={
-              aboutData?.heritage?.image?.formats?.medium?.url
-                ? `${API_URL}${aboutData.heritage.image.formats.medium.url.startsWith('/') ? '' : '/'}${aboutData.heritage.image.formats.medium.url}`
-                : heroImg
-            }
+            src={getImageUrl(aboutData?.heritage?.image) || heroImg}
             alt="Horse"
             className="w-full max-w-md"
           />
@@ -133,7 +139,7 @@ export default function AboutUs() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
             {aboutData?.journey?.map((item) => (
               <div key={item.id} className="flex flex-col items-center">
-                <img src={`${API_URL}${item.icon.url}`} alt={item.title} className="h-12 mb-4" />
+                <img src={getImageUrl(item.icon)} alt={item.title} className="h-12 mb-4" />
                 <div className="text-lg font-semibold text-white mb-2">{item.title}</div>
                 <div className="text-[#A4A7AE] text-sm">{item.description}</div>
               </div>
@@ -148,8 +154,13 @@ export default function AboutUs() {
           {aboutData?.title || 'The History of Ceramics'}
         </h2>
 
-        <div>
-          <ReactMarkdown remarkPlugins={[remarkGfm]}>{aboutData.mainContent}</ReactMarkdown>
+        <div className="my-5 prose prose-lg max-w-none">
+          <ReactMarkdown 
+            remarkPlugins={[remarkGfm]} 
+            components={MarkdownComponents}
+          >
+            {aboutData.mainContent}
+          </ReactMarkdown>
         </div>
 
       </div>
@@ -209,7 +220,7 @@ export default function AboutUs() {
                 }}
               >
                 <img
-                  src={`${API_URL}${member.image.formats.medium.url}`}
+                  src={getImageUrl(member.image) || heroImg}
                   alt={member.name}
                   className="w-full h-[340px] object-cover mb-6"
                 />

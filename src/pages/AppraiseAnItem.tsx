@@ -115,18 +115,7 @@ export default function AppraiseAnItem() {
       return;
     }
 
-    // Log form data before submission
-    console.log('=== FORM DATA TO SUBMIT ===');
-    console.log('Form Data:', {
-      firstName: appraiseForm.firstName,
-      lastName: appraiseForm.lastName,
-      itemCode: appraiseForm.itemCode,
-      contactNumber: `+${phone}`,
-      imagesCount: images.length
-    });
-    console.log('Images:', images);
-    console.log('API URL:', API_URL);
-    console.log('Access Token exists:', !!ACCESS_TOKEN);
+
 
     setIsLoading(true);
     setSubmitError('');
@@ -140,7 +129,7 @@ export default function AppraiseAnItem() {
       bodyFormData.append("ref", "api::submissions.submissions");
       bodyFormData.append("field", "images");
 
-      console.log('=== UPLOADING IMAGES ===');
+  
       const responseUploadImage = await axios({
         method: 'post',
         url: `${API_URL}/api/upload`,
@@ -152,9 +141,6 @@ export default function AppraiseAnItem() {
       });
 
       const images1 = responseUploadImage.data.map((i: any) => i['id']);
-      console.log('=== IMAGES UPLOADED SUCCESSFULLY ===');
-      console.log('Uploaded image IDs:', images1);
-      console.log('Full upload response:', responseUploadImage.data);
 
       // 2. Submit form data with image IDs
       const submissionData = {
@@ -167,8 +153,7 @@ export default function AppraiseAnItem() {
         }
       };
 
-      console.log('=== SUBMITTING FORM DATA ===');
-      console.log('Submission payload:', submissionData);
+     
 
       const newItem = await axios(`${API_URL}/api/submission`, {
         method: 'POST',
@@ -178,9 +163,7 @@ export default function AppraiseAnItem() {
         }
       });
 
-      console.log('=== FORM SUBMITTED SUCCESSFULLY ===');
-      console.log('Full response:', newItem);
-      console.log('Response data:', newItem.data);
+     
 
       setShowSuccess(true);
       setAppraiseForm({ firstName: '', lastName: '', itemCode: '' });

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import Loading from '../components/Loading';
 import { useLoading } from '../hooks/useLoading';
@@ -34,6 +34,7 @@ const Browse: React.FC = () => {
   const navigate = useNavigate();
   const { locale } = useLanguage();
   const [searchParams] = useSearchParams();
+  const eraTabRef = useRef<HTMLDivElement>(null);
 
   // Scroll to top when URL changes
   useEffect(() => {
@@ -50,7 +51,6 @@ const Browse: React.FC = () => {
     const fetchCategories = async () => {
       try {
         const categoriesData = await getCategories(locale);
-        console.log('API categories data:', categoriesData);
         if (categoriesData && categoriesData.length > 0) {
           setCategories(categoriesData);
           const flattened = categoriesData.map((cat) => flattenCategory(cat));
@@ -85,7 +85,6 @@ const Browse: React.FC = () => {
       try {
         setErrorProducts(null);
         const productsData = await getProductsByCategory(category.id, locale);
-        console.log('API products data:', productsData);
 
         if (productsData && productsData.length > 0) {
           const flattened = productsData.map((prod) => flattenProduct(prod));
@@ -106,6 +105,13 @@ const Browse: React.FC = () => {
     setActiveEra(eraSlug);
     navigate(`/browse?era=${eraSlug}`, { replace: true });
   };
+
+  useEffect(() => {
+    // Đảm bảo khi vào trang, thanh era tab luôn ở đầu (nút đầu sát lề trái)
+    if (eraTabRef.current) {
+      eraTabRef.current.scrollLeft = 0;
+    }
+  }, []);
 
   // Component ProductCard to manage image state for each product
   const ProductCard: React.FC<{ product: any; navigate: any }> = ({ product, navigate }) => {
@@ -229,11 +235,14 @@ const Browse: React.FC = () => {
       {/* Era Tabs */}
       <div className="w-full sticky top-[0px] z-30 bg-[#F7F5EA]">
         <div className="max-w-6xl mx-auto px-4 pt-4 md:pt-20 overflow-x-auto whitespace-nowrap">
-          <div className="inline-flex items-center gap-x-2 justify-start pl-[64px] uppercase">
+          <div
+            ref={eraTabRef}
+            className="inline-flex items-center gap-x-[20px] md:gap-x-2 justify-start pl-[20px] md:pl-[64px] uppercase"
+          >
             {eras.map((era, idx) => (
               <React.Fragment key={era.key}>
                 <button
-                  className={`pb-2 transition-colors uppercase ${activeEra === era.key ? 'border-b-2 border-[#23211C] text-[#23211C]' : 'text-[#23211C] border-b-0'}`}
+                  className={`pb-2 transition-colors uppercase text-[17px] ${activeEra === era.key ? 'border-b-2 border-[#23211C] text-[#23211C] font-bold opacity-90' : 'text-[#23211C] border-b-0'}`}
                   onClick={() => handleEraClick(era.key)}
                   style={era.style}
                 >

@@ -140,7 +140,7 @@ export default function CeramicsByEra() {
           </h2>
           <div className="hidden md:flex items-center gap-4 self-end md:self-auto">
             <button
-              className="w-10 h-10 flex items-center justify-center text-base font-medium shadow-none transition-all rounded-[6px] border border-[#C7B08A] bg-[#F7F3E8] hover:border-[#86684A]"
+              className="w-12 h-12 flex items-center justify-center text-base font-medium shadow-none transition-all rounded-[6px] border border-[#C7B08A] bg-[#F7F3E8] hover:border-[#86684A]"
               onClick={() => setIndex((i) => Math.max(0, i - 1))}
               disabled={!canGoLeft}
               style={{
@@ -150,6 +150,8 @@ export default function CeramicsByEra() {
                 padding: 0,
                 minWidth: 0,
                 opacity: !canGoLeft ? 0.5 : 1,
+                height: '48px',
+                width: '48px',
               }}
             >
               <img
@@ -160,7 +162,7 @@ export default function CeramicsByEra() {
               />
             </button>
             <button
-              className="w-10 h-10 flex items-center justify-center text-base font-medium shadow-none transition-all rounded-[6px] border border-[#C7B08A] bg-[#F7F3E8] hover:border-[#86684A]"
+              className="w-12 h-12 flex items-center justify-center text-base font-medium shadow-none transition-all rounded-[6px] border border-[#C7B08A] bg-[#F7F3E8] hover:border-[#86684A]"
               onClick={() => setIndex((i) => Math.min(eras.length - DESKTOP_VISIBLE, i + 1))}
               disabled={!canGoRight}
               style={{
@@ -170,6 +172,8 @@ export default function CeramicsByEra() {
                 padding: 0,
                 minWidth: 0,
                 opacity: !canGoRight ? 0.5 : 1,
+                height: '48px',
+                width: '48px',
               }}
             >
               <img
@@ -191,6 +195,12 @@ export default function CeramicsByEra() {
                 border: 'none',
                 padding: 0,
                 minWidth: 0,
+                fontFamily: 'Noto Sans SC, Inter, -apple-system, BlinkMacSystemFont, sans-serif',
+                fontWeight: 400,
+                fontSize: 15,
+                lineHeight: 1.8,
+                letterSpacing: '0.5px',
+                wordSpacing: '2px',
               }}
             >
               {t('VIEW_ALL_COLLECTION')}
@@ -234,13 +244,13 @@ export default function CeramicsByEra() {
               </div>
               <div
                 className="text-base pt-2  "
-                style={{
-                  fontFamily: 'PingFang SC, Arial, sans-serif',
+                style={{fontFamily: 'Noto Sans SC, Inter, -apple-system, BlinkMacSystemFont, sans-serif',
                   fontWeight: 400,
-                  fontSize: 16,
-                  lineHeight: '24px',
-                  letterSpacing: 0,
-                  color: '#342216',
+                  fontSize: 17,
+                  lineHeight: 1.8,
+                  letterSpacing: '0.2px',
+                  wordSpacing: '2px',
+                  color: '#6D6A66',
                 }}
               >
                 {era.desc}
@@ -278,7 +288,7 @@ export default function CeramicsByEra() {
               <h4
                 className="text-2xl font-serif text-[#86684A] mb-6 font-semibold uppercase"
                 style={{
-                  fontFamily: 'Source Han Serif SC VF, serif',
+                  fontFamily: 'Noto Serif SC, serif',
                   fontWeight: 600,
                   fontSize: 32,
                   lineHeight: '40px',
@@ -293,12 +303,13 @@ export default function CeramicsByEra() {
               <div
                 className="text-base pt-2 line-clamp-3 "
                 style={{
-                  fontFamily: 'PingFang SC, Arial, sans-serif',
+                  fontFamily: 'Noto Sans SC, Inter, -apple-system, BlinkMacSystemFont, sans-serif',
                   fontWeight: 400,
-                  fontSize: 16,
-                  lineHeight: '24px',
-                  letterSpacing: 0,
-                  color: '#342216',
+                  fontSize: 17,
+                  lineHeight: 1.8,
+                  letterSpacing: '0.2px',
+                  wordSpacing: '2px',
+                  color: '#6D6A66',
                 }}
               >
                 {era.desc}

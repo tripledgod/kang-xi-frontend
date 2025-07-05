@@ -47,7 +47,6 @@ export default function ProductDetail() {
   const navigate = useNavigate();
   const { locale } = useLanguage();
   const { t } = useTranslation();
-  console.log('ACQUIRE_THIS_ITEM:', t('ACQUIRE_THIS_ITEM'));
   const [descLineCount, setDescLineCount] = useState(0);
   
   // Add validation and loading states
@@ -138,20 +137,15 @@ export default function ProductDetail() {
   }, [slug, locale]); // Re-fetch when locale changes
 
   useEffect(() => {
-    if (descRef.current) {
-      setDescWidth(descRef.current.offsetWidth);
-      // Count actual lines of desc after rendering
-      setTimeout(() => {
-        const el = descRef.current;
-        if (el) {
-          const lineHeight = parseFloat(getComputedStyle(el).lineHeight || '24');
-          const lines = Math.round(el.scrollHeight / lineHeight);
-          setDescLineCount(lines);
-          console.log('descLineCount:', lines, 'desc length:', productDetail?.description?.length);
-        }
-      }, 0);
+    if (productDetail?.description) {
+      const el = document.getElementById('product-description');
+      if (el) {
+        const lineHeight = parseFloat(getComputedStyle(el).lineHeight || '24');
+        const lines = Math.round(el.scrollHeight / lineHeight);
+        setDescLineCount(lines);
+      }
     }
-  }, [productDetail?.description, isDescriptionExpanded]);
+  }, [productDetail?.description]);
 
   const openModal = (idx: number) => {
     setModalIndex(idx);

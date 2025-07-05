@@ -58,7 +58,7 @@ const Button: React.FC<ButtonProps> = ({
       type={type}
       onClick={onClick}
       disabled={disabled}
-      className={`w-full  md:w-[222px] h-[64px] md:h-[48px] flex items-center justify-center text-base font-semibold shadow-none transition-all px-6 ${className} ${
+      className={`w-full  md:w-[222px] h-[48px] flex items-center justify-center text-base font-semibold shadow-none transition-all px-6 ${className} ${
         disabled ? 'opacity-50 cursor-not-allowed' : ''
       }`}
       style={{
@@ -76,8 +76,12 @@ const Button: React.FC<ButtonProps> = ({
         className="w-full h-full flex items-center justify-center font-semibold text-base md:text-lg"
         style={{
           color: isOutline ? '#7B6142' : '#fff',
-          fontWeight: 500,
-          fontSize: 14,
+          fontWeight: 400,
+          fontSize: 15,
+          lineHeight: 1.8,
+          letterSpacing: '0.5px',
+          wordSpacing: '2px',
+          fontFamily: 'Noto Sans SC, Inter, -apple-system, BlinkMacSystemFont, sans-serif',
         }}
       >
         {text}

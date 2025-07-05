@@ -67,7 +67,7 @@ function RelatedArticles({ related }: { related: Article[] }) {
         {related.map((article) => (
           <div
             key={article.id}
-            className="flex flex-col  cursor-pointer transition-transform duration-200 hover:scale-105"
+            className="flex flex-col cursor-pointer transition-transform duration-200 hover:scale-105"
             onClick={() => handleArticleClick(article.slug)}
           >
             <div className="bg-[#E6DDC6] aspect-square w-full flex items-center justify-center overflow-hidden mb-4">
@@ -78,26 +78,46 @@ function RelatedArticles({ related }: { related: Article[] }) {
               />
             </div>
 
-            <h2
-              className="text-xl font-serif font-medium text-[#61422D] mb-2 leading-snug line-clamp-2"
-              style={{
-                fontFamily: 'Source Han Serif SC VF, serif',
-                fontWeight: 600,
-                fontSize: 24,
-                lineHeight: '32px',
-                letterSpacing: 0,
-                textAlign: 'left',
-                color: '#61422D',
-              }}
-            >
-              {article.title}
-            </h2>
-            <div
-              className="font-pingfang text-base font-normal leading-6 mb-4 line-clamp-3"
-              style={{ color: '#342216' }}
-            >
-              {article.description}
+            {/* Title với chiều cao cố định 2 dòng chỉ ở desktop */}
+            <div className="md:h-16 mb-2">
+              <h2
+                className="text-xl font-serif font-medium text-[#61422D] leading-tight overflow-hidden"
+                style={{
+                  fontFamily: 'Noto Serif SC, serif',
+                  fontWeight: 600,
+                  fontSize: 24,
+                  lineHeight: '32px',
+                  letterSpacing: 0,
+                  textAlign: 'left',
+                  color: '#61422D',
+                  display: '-webkit-box',
+                  WebkitLineClamp: 2,
+                  WebkitBoxOrient: 'vertical',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                }}
+              >
+                {article.title}
+              </h2>
             </div>
+
+            {/* Description với chiều cao cố định 3 dòng chỉ ở desktop */}
+            <div className="md:h-20 mb-4">
+              <div
+                className="font-pingfang text-base font-normal leading-6 overflow-hidden"
+                style={{ 
+                  color: '#6D6A66',
+                  display: '-webkit-box',
+                  WebkitLineClamp: 3,
+                  WebkitBoxOrient: 'vertical',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                }}
+              >
+                {article.description}
+              </div>
+            </div>
+
             <div className="text-xs text-[#585550] font-semibold uppercase tracking-wider">
               {new Date(article.publishedAt).toLocaleDateString('en-US', {
                 day: 'numeric',

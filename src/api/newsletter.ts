@@ -19,23 +19,15 @@ export const subscribe = async (email: string): Promise<SubscribeResponse> => {
     'Content-Type': 'application/json',
   };
   
-  console.log('ACCESS_TOKEN available:', !!ACCESS_TOKEN);
-  console.log('ACCESS_TOKEN length:', ACCESS_TOKEN?.length || 0);
-  
   if (ACCESS_TOKEN) {
     headers['Authorization'] = `Bearer ${ACCESS_TOKEN}`;
   }
 
   try {
-    console.log('Calling API:', `${API_URL}/api/subscribe`);
-    console.log('Payload:', { data: { email } });
-    console.log('Headers:', headers);
-    
     const response = await axios.post(`${API_URL}/api/subscribe`, {
       data: { email }
     }, { headers });
     
-    console.log('Response:', response.data);
     return response.data;
   } catch (error: any) {
     console.error('Subscribe API Error:', error);
