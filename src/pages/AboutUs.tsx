@@ -9,6 +9,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { getImageUrl } from '../utils';
 
+
 // Customize the component for <img> tag in markdown
 const MarkdownComponents = {
   img: ({ node, ...props }: any) => (
@@ -17,6 +18,7 @@ const MarkdownComponents = {
     </div>
   ),
 };
+
 
 export default function AboutUs() {
   const [teamIndex, setTeamIndex] = useState(0);
@@ -123,7 +125,9 @@ export default function AboutUs() {
         </div>
         <div className="flex-1 flex items-center justify-center">
           <img
+
             src={getImageUrl(aboutData?.heritage?.image) || heroImg}
+
             alt="Horse"
             className="w-full max-w-md"
           />
@@ -220,7 +224,9 @@ export default function AboutUs() {
                 }}
               >
                 <img
+
                   src={getImageUrl(member.image) || heroImg}
+
                   alt={member.name}
                   className="w-full h-[340px] object-cover mb-6"
                 />
