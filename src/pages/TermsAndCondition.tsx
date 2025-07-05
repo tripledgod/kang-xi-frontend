@@ -21,14 +21,14 @@ export default function TermsAndCondition() {
         const data: TermsAndConditionResponse = await response.json();
         setContent(data.data.content || '');
       } catch (error) {
-        setContent('Không thể tải điều khoản sử dụng.');
+        setContent('Unable to load terms of use.');
       }
     };
     withLoading(fetchTerms);
   }, [withLoading, locale]);
 
   if (loading) {
-    return <Loading text="Loading..." fullScreen />;
+    return <Loading text="Loading..." fullScreen={true} />;
   }
 
   return (
@@ -54,7 +54,7 @@ export default function TermsAndCondition() {
         className="max-w-2xl mx-auto px-4 md:px-0 py-10 text-[#2E2A24] text-base prose "
         style={{
           fontFamily:
-            'PingFang SC, Helvetica Neue, Arial, Hiragino Sans GB, Microsoft YaHei, 微软雅黑, STHeiti, SimSun, sans-serif',
+            'Noto Sans SC, Source Han Sans, Helvetica Neue, Arial, Hiragino Sans GB, Microsoft YaHei, 微软雅黑, STHeiti, SimSun, sans-serif',
         }}
       >
         <ReactMarkdown

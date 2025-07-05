@@ -60,7 +60,7 @@ function AppContent() {
   const shouldShowNewsletter = !hideNewsletterPaths.includes(location.pathname);
 
   if (loading) {
-    return <Loading fullScreen text="Loading..." />;
+    return <Loading fullScreen={true} text="Loading..." />;
   }
 
   return (

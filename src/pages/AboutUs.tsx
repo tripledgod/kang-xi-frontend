@@ -9,6 +9,17 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { getImageUrl } from '../utils';
 
+
+// Customize the component for <img> tag in markdown
+const MarkdownComponents = {
+  img: ({ node, ...props }: any) => (
+    <div className="my-6 flex justify-center">
+      <img {...props} className="rounded-lg shadow-md max-w-full h-auto" />
+    </div>
+  ),
+};
+
+
 export default function AboutUs() {
   const [teamIndex, setTeamIndex] = useState(0);
   const [aboutData, setAboutData] = useState<AboutResponse['data'] | null>(null);
@@ -53,7 +64,7 @@ export default function AboutUs() {
   if (loading) {
     return (
       <div className="min-h-screen bg-[#F7F5EA] flex items-center justify-center">
-        <Loading fullScreen text="Loading..." />
+        <Loading fullScreen={true} text="Loading..." />
       </div>
     );
   }
@@ -95,7 +106,7 @@ export default function AboutUs() {
             <div>
               <div
                 className="text-5xl font-medium text-[#7B6142]"
-                style={{ fontFamily: 'Source Han Serif SC VF, serif' }}
+                style={{ fontFamily: 'Noto Serif SC, serif' }}
               >
                 {aboutData?.heritage?.yearsExp || '25'}+
               </div>
@@ -104,7 +115,7 @@ export default function AboutUs() {
             <div>
               <div
                 className="text-5xl font-medium text-[#7B6142]"
-                style={{ fontFamily: 'Source Han Serif SC VF, serif' }}
+                style={{ fontFamily: 'Noto Serif SC, serif' }}
               >
                 {aboutData?.heritage?.rareCollectibleItems || '100'}+
               </div>
@@ -114,11 +125,9 @@ export default function AboutUs() {
         </div>
         <div className="flex-1 flex items-center justify-center">
           <img
-            src={
-              aboutData?.heritage?.image?.formats?.medium?.url
-                ? getImageUrl(aboutData.heritage.image)
-                : heroImg
-            }
+
+            src={getImageUrl(aboutData?.heritage?.image) || heroImg}
+
             alt="Horse"
             className="w-full max-w-md"
           />
@@ -149,8 +158,13 @@ export default function AboutUs() {
           {aboutData?.title || 'The History of Ceramics'}
         </h2>
 
-        <div>
-          <ReactMarkdown remarkPlugins={[remarkGfm]}>{aboutData.mainContent}</ReactMarkdown>
+        <div className="my-5 prose prose-lg max-w-none">
+          <ReactMarkdown 
+            remarkPlugins={[remarkGfm]} 
+            components={MarkdownComponents}
+          >
+            {aboutData.mainContent}
+          </ReactMarkdown>
         </div>
 
       </div>
@@ -210,7 +224,9 @@ export default function AboutUs() {
                 }}
               >
                 <img
-                  src={getImageUrl(member.image)}
+
+                  src={getImageUrl(member.image) || heroImg}
+
                   alt={member.name}
                   className="w-full h-[340px] object-cover mb-6"
                 />
