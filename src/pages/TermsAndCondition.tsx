@@ -21,7 +21,7 @@ export default function TermsAndCondition() {
         const data: TermsAndConditionResponse = await response.json();
         setContent(data.data.content || '');
       } catch (error) {
-        setContent('Không thể tải điều khoản sử dụng.');
+        setContent('Unable to load terms of use.');
       }
     };
     withLoading(fetchTerms);

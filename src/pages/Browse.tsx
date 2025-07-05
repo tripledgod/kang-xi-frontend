@@ -107,7 +107,7 @@ const Browse: React.FC = () => {
   };
 
   useEffect(() => {
-    // Đảm bảo khi vào trang, thanh era tab luôn ở đầu (nút đầu sát lề trái)
+    // Ensure the era tab bar is always at the start (first button aligned to the left) when entering the page
     if (eraTabRef.current) {
       eraTabRef.current.scrollLeft = 0;
     }

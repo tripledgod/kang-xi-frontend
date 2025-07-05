@@ -15,7 +15,7 @@ export default function AcquireOrAppraise() {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
-  // Hook lắng nghe thay đổi kích thước màn hình
+  // Hook to listen for screen size changes
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 768);
@@ -23,7 +23,7 @@ export default function AcquireOrAppraise() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Mảng sections chỉ chứa logic, không chứa image
+  // The sections array only contains logic, no images
   const sections = [
     {
       icon: chaseIcon,
@@ -63,7 +63,7 @@ export default function AcquireOrAppraise() {
           className={`w-full flex flex-col md:flex-row ${section.reverse ? 'md:flex-row-reverse' : ''}`}
           style={{ background: COLORS.secondary900 }}
         >
-          {/* Mobile: order-2, Desktop: order-1 (nội dung) */}
+          {/* Mobile: order-2, Desktop: order-1 (content) */}
           <div className="flex-1 flex flex-col items-center justify-center px-6 py-8 md:py-0 md:px-0 text-center order-2 md:order-1">
             <img src={section.icon} alt="icon" className="mb-8 w-16 h-16" />
             <h2
@@ -92,7 +92,7 @@ export default function AcquireOrAppraise() {
               </button>
             </div>
           </div>
-          {/* Mobile: order-1, Desktop: order-2 (ảnh) */}
+          {/* Mobile: order-1, Desktop: order-2 (image) */}
           <div className="flex-1 flex items-center justify-center bg-black order-1 md:order-2">
             <img
               src={isMobile ? section.imageMobile : section.imageDesktop}

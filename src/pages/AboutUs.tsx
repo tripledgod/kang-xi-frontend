@@ -9,7 +9,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { getImageUrl } from '../utils';
 
-// Custom lại component cho thẻ <img> trong markdown
+// Customize the component for <img> tag in markdown
 const MarkdownComponents = {
   img: ({ node, ...props }: any) => (
     <div className="my-6 flex justify-center">
