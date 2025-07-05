@@ -228,7 +228,7 @@ export default function CeramicsByEra() {
                 )}
               </div>
               <h4
-                className="text-2xl font-serif mb-6 font-semibold uppercase"
+                className="text-2xl font-serif mb-6 font-semibold"
                 style={{
                   color: COLORS.primary900,
                   fontWeight: 500,
@@ -286,7 +286,7 @@ export default function CeramicsByEra() {
                 )}
               </div>
               <h4
-                className="text-2xl font-serif text-[#86684A] mb-6 font-semibold uppercase"
+                className="text-2xl font-serif text-[#86684A] mb-6 font-semibold"
                 style={{
                   fontFamily: 'Noto Serif SC, serif',
                   fontWeight: 600,
