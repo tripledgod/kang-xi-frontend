@@ -66,12 +66,12 @@ export default function Newsletter() {
         {/* Left column: Title and description */}
         <div className="w-full flex flex-col items-center md:items-start mb-8 md:mb-0">
           <div className="w-full md:w-[420px]">
-            <h2
+            <h5
               className="mb-4 font-semibold"
               style={{
                 fontSize: 32,
                 color: COLORS.secondary900,
-                fontFamily: 'Noto Serif SC, serif',
+                // fontFamily: 'Noto Serif SC, serif',
                 fontWeight: 550,
                 lineHeight: '40px',
                 letterSpacing: 0,
@@ -79,17 +79,17 @@ export default function Newsletter() {
               }}
             >
               GET THE LATEST NEW
-            </h2>
+            </h5>
             <p
               className="font-pingfang text-[18px] leading-[26px] tracking-[0px] text-left mb-8 md:w-[400px]"
-              style={{ 
+              style={{
                 color: COLORS.secondary700,
-                fontFamily: 'Noto Sans SC, Inter, -apple-system, BlinkMacSystemFont, sans-serif',
+                // fontFamily: 'Noto Sans SC, Inter, -apple-system, BlinkMacSystemFont, sans-serif',
                 fontWeight: 400,
                 fontSize: 19,
                 lineHeight: 1.8,
                 letterSpacing: 0,
-                wordSpacing: '2px'
+                // wordSpacing: '2px'
               }}
             >
               Subscribe to get our 2020 catalog as well as get exclusive invites to our private

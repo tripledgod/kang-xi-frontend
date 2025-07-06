@@ -60,7 +60,7 @@ function RelatedArticles({ related }: { related: Article[] }) {
 
   return (
     <section className="w-full py-16 px-4">
-      <h2 className="text-4xl font-serif font-medium text-[#61422D] mb-12 text-center">
+      <h2 className="text-4xl text-[#61422D] mb-12 text-center">
         Related Articles
       </h2>
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
@@ -79,17 +79,17 @@ function RelatedArticles({ related }: { related: Article[] }) {
             </div>
 
             {/* Title with fixed height of 2 lines only on desktop */}
-            <div className="md:h-16 mb-2">
+            <div>
               <h2
-                className="text-xl font-serif font-medium text-[#61422D] leading-tight overflow-hidden"
+                // className="text-xl font-serif font-medium text-[#61422D] leading-tight overflow-hidden"
                 style={{
-                  fontFamily: 'Noto Serif SC, serif',
-                  fontWeight: 600,
+                  // fontFamily: 'Noto Serif SC, serif',
+                  // fontWeight: 600,
                   fontSize: 24,
                   lineHeight: '32px',
                   letterSpacing: 0,
                   textAlign: 'left',
-                  color: '#61422D',
+                  color: '#1E1E1E',
                   display: '-webkit-box',
                   WebkitLineClamp: 2,
                   WebkitBoxOrient: 'vertical',
@@ -98,14 +98,14 @@ function RelatedArticles({ related }: { related: Article[] }) {
                 }}
               >
                 {article.title}
-              </h2>
+              </h5>
             </div>
 
             {/* Description with fixed height of 3 lines only on desktop */}
             <div className="md:h-20 mb-4">
               <div
                 className="font-pingfang text-base font-normal leading-6 overflow-hidden"
-                style={{ 
+                style={{
                   color: '#6D6A66',
                   display: '-webkit-box',
                   WebkitLineClamp: 3,
@@ -228,10 +228,9 @@ export default function ArticleDetail() {
             year: 'numeric',
           })}
         </div>
-        <h1 className="text-3xl md:text-4xl font-serif font-semibold text-[#61422D] mb-2 leading-tight">
+        <h3 className="text-3xl md:text-4xl text-[#61422D] mb-2 leading-tight">
           {article.title}
-        </h1>
-        <div className="text-base text-[#585550] mb-4">by Kangxi Finder</div>
+        </h3>
         <ArticleImage
           cover={article.cover}
           alt={article.title}

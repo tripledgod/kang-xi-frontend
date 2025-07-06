@@ -131,13 +131,13 @@ export default function CeramicsByEra() {
   return (
     <section className="w-full bg-[#F7F5EA] px-4 py-12 md:pt-21 md:pb-19">
       <div className="max-w-7xl mx-auto md:px-8">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8 md:mb-12">
-          <h2
-            className="text-4xl md:text-5xl font-serif font-medium mb-6 md:mb-0"
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 md:mb-12">
+          <h4
+            className="text-4xl md:text-5xl md:mb-0"
             style={{ color: COLORS.secondary900 }}
           >
             Ceramics by Era
-          </h2>
+          </h4>
           <div className="hidden md:flex items-center gap-4 self-end md:self-auto">
             <button
               className="w-12 h-12 flex items-center justify-center text-base font-medium shadow-none transition-all rounded-[6px] border border-[#C7B08A] bg-[#F7F3E8] hover:border-[#86684A]"
@@ -195,7 +195,7 @@ export default function CeramicsByEra() {
                 border: 'none',
                 padding: 0,
                 minWidth: 0,
-                fontFamily: 'Noto Sans SC, Inter, -apple-system, BlinkMacSystemFont, sans-serif',
+                // fontFamily: 'Noto Sans SC, Inter, -apple-system, BlinkMacSystemFont, sans-serif',
                 fontWeight: 400,
                 fontSize: 15,
                 lineHeight: 1.8,
@@ -227,24 +227,25 @@ export default function CeramicsByEra() {
                   </div>
                 )}
               </div>
-              <h4
-                className="text-2xl font-serif mb-6 font-semibold uppercase"
+              <h6
+                className="text-2xl mb-6"
                 style={{
                   color: COLORS.primary900,
-                  fontWeight: 500,
+                  // fontWeight: 500,
                   fontSize: 32,
                   lineHeight: '40px',
                   letterSpacing: 0,
                 }}
               >
                 {era.name}
-              </h4>
+              </h6>
               <div className="text-base font-semibold border-t border-[#C7C7B9] pt-4 text-[#2E2A24] mb-1">
                 {era.years}
               </div>
               <div
                 className="text-base pt-2  "
-                style={{fontFamily: 'Noto Sans SC, Inter, -apple-system, BlinkMacSystemFont, sans-serif',
+                style={{
+                  // fontFamily: 'Noto Sans SC, Inter, -apple-system, BlinkMacSystemFont, sans-serif',
                   fontWeight: 400,
                   fontSize: 17,
                   lineHeight: 1.8,
@@ -303,7 +304,7 @@ export default function CeramicsByEra() {
               <div
                 className="text-base pt-2 line-clamp-3 "
                 style={{
-                  fontFamily: 'Noto Sans SC, Inter, -apple-system, BlinkMacSystemFont, sans-serif',
+                  // fontFamily: 'Noto Sans SC, Inter, -apple-system, BlinkMacSystemFont, sans-serif',
                   fontWeight: 400,
                   fontSize: 17,
                   lineHeight: 1.8,

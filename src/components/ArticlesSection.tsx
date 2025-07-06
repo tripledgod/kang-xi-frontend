@@ -88,7 +88,7 @@ export default function ArticlesSection() {
                   <h2
                     className="mb-2 text-xl font-serif font-medium text-[#61422D] leading-8 h-16 overflow-hidden line-clamp-2"
                     style={{
-                      fontFamily: 'Noto Serif SC, Inter, -apple-system, BlinkMacSystemFont, sans-serif',
+                      // fontFamily: 'Noto Serif SC, Inter, -apple-system, BlinkMacSystemFont, sans-serif',
                       fontWeight: 600,
                       fontSize: 24,
                       letterSpacing: '0.2px',
@@ -102,7 +102,7 @@ export default function ArticlesSection() {
                   </h2>
                   <div
                     className="font-pingfang font-normal mb-4 text-base leading-6 h-[72px] overflow-hidden line-clamp-3"
-                    style={{ 
+                    style={{
                       fontFamily: 'Noto Sans SC, Inter, -apple-system, BlinkMacSystemFont, sans-serif',
                       color: '#585550',
                       fontSize: 16,

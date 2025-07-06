@@ -68,7 +68,7 @@ export default function Articles() {
       {/* Hero Image */}
       <div className="relative w-full h-[220px] md:h-[320px] flex items-center justify-center overflow-hidden mb-8">
         <img
-          src={articles[0] ? getCoverUrl(articles[0].cover) || articlesCover : articlesCover}
+          src={articlesCover}
           alt={articles[0]?.title || 'Articles Cover'}
           className="absolute inset-0 w-full h-full object-cover object-center"
           style={{ maxWidth: '100vw' }}
