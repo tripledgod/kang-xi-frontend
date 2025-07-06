@@ -78,7 +78,7 @@ function RelatedArticles({ related }: { related: Article[] }) {
               />
             </div>
 
-            {/* Title với chiều cao cố định 2 dòng chỉ ở desktop */}
+            {/* Title with fixed height of 2 lines only on desktop */}
             <div className="md:h-16 mb-2">
               <h2
                 className="text-xl font-serif font-medium text-[#61422D] leading-tight overflow-hidden"
@@ -101,7 +101,7 @@ function RelatedArticles({ related }: { related: Article[] }) {
               </h2>
             </div>
 
-            {/* Description với chiều cao cố định 3 dòng chỉ ở desktop */}
+            {/* Description with fixed height of 3 lines only on desktop */}
             <div className="md:h-20 mb-4">
               <div
                 className="font-pingfang text-base font-normal leading-6 overflow-hidden"
