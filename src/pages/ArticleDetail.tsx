@@ -80,7 +80,7 @@ function RelatedArticles({ related }: { related: Article[] }) {
 
             {/* Title with fixed height of 2 lines only on desktop */}
             <div>
-              <h2
+              <h5
                 // className="text-xl font-serif font-medium text-[#61422D] leading-tight overflow-hidden"
                 style={{
                   // fontFamily: 'Noto Serif SC, serif',
