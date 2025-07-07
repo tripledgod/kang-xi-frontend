@@ -13,6 +13,8 @@ import Popup from '../components/Popup';
 import { useNavigate } from 'react-router-dom';
 import Loading from '../components/Loading';
 import { useTranslation } from 'react-i18next';
+import happendImg from '../assets/happend.jpg';
+import expressImg from '../assets/express.jpg';
 
 const steps = [
   {
@@ -139,10 +141,13 @@ export default function AcquireAnItem() {
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row gap-10 items-center">
           {/* Left */}
           <div className="flex-1 text-white mb-8 md:mb-0">
-            <h1 className="text-4xl md:text-5xl font-serif font-semibold mb-6">
+            <h1 className="hidden md:block text-[60px] leading-[72px] font-serif font-semibold mb-6">
               Reserve a Timeless Treasure
             </h1>
-            <p className="mb-6 text-base md:text-lg max-w-md">
+            <h3 className="block md:hidden text-[40px] leading-[48px] font-serif font-semibold mb-6">
+              Reserve a Timeless Treasure
+            </h3>
+            <p className="mb-6 text-[18px] leading-[26px] text-[#FFFFFF] max-w-md">
               Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in
               eros elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum
               nulla, ut commodo diam libero vitae erat morbi euismod.
@@ -161,75 +166,88 @@ export default function AcquireAnItem() {
       </div>
 
       {/* What Happens Next Section */}
-      <div className="max-w-6xl mx-auto py-16 px-4 flex flex-col md:flex-row gap-10 items-center">
-        {/* Left: Large image */}
-        <div className="flex-1 mb-8 md:mb-0">
-          <img
-            src={timelessTreasure}
-            alt="Timeless Treasure"
-            className="w-full h-80 object-cover rounded"
-          />
-        </div>
-        {/* Right: Steps */}
-        <div className="flex-1">
-          <h2 className="text-3xl font-serif font-semibold text-[#7B6142] mb-6 text-left">
-            What Happens Next?
-          </h2>
-          <div className="flex flex-col gap-10">
-            {steps.map((step, idx) => (
-              <div
-                key={idx}
-                className="flex flex-col items-start text-left md:flex-row md:items-center md:gap-4"
-              >
-                <div className="w-12 h-12 flex items-center justify-center mb-4 md:mb-0 md:mr-4">
-                  {step.icon}
+      <div className="w-full pt-16 px-4 md:px-[112px]">
+        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-10 md:gap-24 md:py-12">
+          {/* Left: Large image */}
+          <div className="flex-1 flex items-center justify-center mb-8 md:mb-0 order-1">
+            <img
+              src={happendImg}
+              alt="What Happens Next"
+              className="w-full md:h-140 object-cover  h-[400px]"
+            />
+          </div>
+          {/* Right: Steps */}
+          <div className="flex-1 order-2">
+            <h3 className="hidden md:block  text-[40px] leading-[48px] font-serif font-semibold text-[#61422D] mb-6 text-left">
+              What Happens Next?
+            </h3>
+            <h4 className="block md:hidden text-[32px] leading-[40px] font-serif font-semibold text-[#61422D] mb-6 text-left">
+              What Happens Next?
+            </h4>
+            <div className="flex flex-col gap-10">
+              {steps.map((step, idx) => (
+                <div
+                  key={idx}
+                  className="flex flex-col items-start text-left md:flex-row md:items-center md:gap-4"
+                >
+                  <div className="w-12 h-12 flex items-center justify-center mb-4 md:mb-0 md:mr-4">
+                    {step.icon}
+                  </div>
+                  <div>
+                    <h5 className="text-[20px] md:text-[24px] leading-[28px] md:leading-[32px] font-semibold text-[#61422D] mb-1">{step.title}</h5>
+                    <div className="text-base text-[#6D6A66]">{step.desc}</div>
+                  </div>
                 </div>
-                <div>
-                  <div className="text-lg font-semibold text-[#7B6142] mb-1">{step.title}</div>
-                  <div className="text-base text-[#585550]">{step.desc}</div>
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </div>
 
       {/* Express Interest Section */}
-      <div className="max-w-6xl mx-auto py-16 px-4 flex flex-col md:flex-row gap-10 items-center">
-        {/* Left: Text */}
-        <div className="flex-1 mb-8 md:mb-0">
-          <h2 className="text-3xl font-serif font-semibold text-[#7B6142] mb-4">
-            Express Your Interest in a Piece of History
-          </h2>
-          <p className="text-base text-[#23211C] mb-4">
-            Owning an antique is more than just possession—it is stewardship of history, a
-            connection to centuries of artistry, and a tribute to a legacy that endures. If a
-            particular piece in our collection has captured your attention, we invite you to take
-            the next step.
-          </p>
-          <p className="text-base text-[#23211C]">
-            Each artifact in our curation is unique, often with centuries of history behind it. Due
-            to the rarity and exclusivity of these pieces, availability is limited. To ensure a
-            seamless acquisition process, kindly fill out the form below to express your interest.
-          </p>
-        </div>
-        {/* Right: Large image */}
-        <div className="flex-1">
-          <img
-            src={timelessTreasure}
-            alt="Timeless Treasure"
-            className="w-full h-80 object-cover rounded"
-          />
+      <div className="w-full py-16 px-4 md:px-[112px]">
+        <div className="max-w-6xl mx-auto flex flex-col md:flex-row-reverse items-center gap-10 md:gap-24 md:pb-16">
+          {/* Right: Large image */}
+          <div className="flex-1 flex items-center justify-center mb-8 md:mb-0 order-1">
+            <img
+              src={expressImg}
+              alt="Express Your Interest"
+              className="w-full md:h-140 object-cover h-[400px]"
+            />
+          </div>
+          {/* Left: Text */}
+          <div className="flex-1 order-2">
+            <h3 className="hidden md:block text-[40px] leading-[48px] font-serif font-semibold text-[#61422D] mb-4">
+              Express Your Interest in a Piece of History
+            </h3>
+            <h4 className="block md:hidden text-[32px] leading-[40px] font-serif font-semibold text-[#61422D] mb-4">
+              Express Your Interest in a Piece of History
+            </h4>
+            <p className="text-[18px] leading-[26px] text-[#6D6A66] mb-5">
+              Owning an antique is more than just possession—it is stewardship of history, a
+              connection to centuries of artistry, and a tribute to a legacy that endures. If a
+              particular piece in our collection has captured your attention, we invite you to take
+              the next step.
+            </p>
+            <p className="text-[18px] leading-[26px] text-[#6D6A66]">
+              Each artifact in our curation is unique, often with centuries of history behind it. Due
+              to the rarity and exclusivity of these pieces, availability is limited. To ensure a
+              seamless acquisition process, kindly fill out the form below to express your interest.
+            </p>
+          </div>
         </div>
       </div>
 
       {/* Form Section */}
       <div className="w-full bg-[#E6DDC6] py-16 px-4">
         <div className="max-w-xl mx-auto">
-          <h2 className="text-3xl font-serif font-semibold text-[#7B6142] mb-2 text-center">
+          <h3 className="hidden md:block text-[40px] leading-[48px] font-serif font-semibold text-[#61422D] mb-2 text-center">
             Secure Your Piece of History
-          </h2>
-          <div className="text-base text-[#585550] mb-8 text-center">
+          </h3>
+          <h4 className="block md:hidden text-[32px]  leading-[40px] font-serif font-semibold text-[#61422D] mb-2 text-center">
+            Secure Your Piece of History
+          </h4>
+          <div className="text-[20px] leading-[28px] text-[#585550] mb-8 text-center">
             Fill in your details below, and we will be in touch with you shortly.
           </div>
           <form
@@ -240,7 +258,7 @@ export default function AcquireAnItem() {
             }}
           >
             <div>
-              <label className="block mb-2 text-[#1F1F1F] font-medium">First Name</label>
+              <label className="block mb-2 text-[#1F1F1F] font-normal text-[14px] leading-[20px]">First Name</label>
               <input
                 type="text"
                 className={`w-full rounded border px-4 py-3 bg-white text-[#23211C] ${
@@ -258,7 +276,7 @@ export default function AcquireAnItem() {
               {errors.firstName && <p className="text-red-500 text-sm mt-1">{errors.firstName}</p>}
             </div>
             <div>
-              <label className="block mb-2 text-[#1F1F1F] font-medium">Last Name</label>
+              <label className="block mb-2 text-[#1F1F1F] font-normal text-[14px] leading-[20px]">Last Name</label>
               <input
                 type="text"
                 className={`w-full rounded border px-4 py-3 bg-white text-[#23211C] ${
@@ -276,7 +294,7 @@ export default function AcquireAnItem() {
               {errors.lastName && <p className="text-red-500 text-sm mt-1">{errors.lastName}</p>}
             </div>
             <div>
-              <label className="block mb-2 text-[#1F1F1F] font-medium">Item Code</label>
+              <label className="block mb-2 text-[#1F1F1F] font-normal text-[14px] leading-[20px]">Item Code</label>
               <input
                 type="text"
                 className={`w-full rounded border px-4 py-3 bg-white text-[#23211C] ${
@@ -294,7 +312,7 @@ export default function AcquireAnItem() {
               {errors.itemCode && <p className="text-red-500 text-sm mt-1">{errors.itemCode}</p>}
             </div>
             <div>
-              <label className="block mb-2 text-[#1F1F1F] font-medium">Contact Number</label>
+              <label className="block mb-2 text-[#1F1F1F] font-normal text-[14px] leading-[20px]">Contact Number</label>
               <PhoneInput
                 country={'sg'}
                 value={phone}

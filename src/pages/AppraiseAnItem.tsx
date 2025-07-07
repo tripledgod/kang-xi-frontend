@@ -18,6 +18,7 @@ import Popup from '../components/Popup';
 import {ACCESS_TOKEN, API_URL} from '../utils/constants';
 import { useNavigate } from 'react-router-dom';
 import axios from "axios";
+import terracotaImg from '../assets/terracota.jpg';
 
 const whyItems = [
   {
@@ -202,51 +203,62 @@ export default function AppraiseAnItem() {
       </div>
       {/* Our Services Section */}
       <div className="w-full bg-[#23211C] py-16 flex flex-col items-center justify-center text-center px-4">
-        <div className="text-[#E6DDC6] text-xs mb-2 tracking-widest">OUR SERVICES</div>
-        <h2 className="text-2xl md:text-3xl font-serif font-semibold text-white mb-6 max-w-2xl mx-auto">
+        <div className="text-[#F7F3E8] text-[14px] leading-[20px] mb-2 tracking-widest font-semibold">OUR SERVICES</div>
+        <h4 className="hidden md:block text-[32px]  leading-[40px] font-serif font-semibold text-white mb-6 max-w-2xl mx-auto">
           With a network of specialists in Chinese antiquities, we provide a meticulous evaluation
           of your piece—examining craftsmanship, materials, historical context, and provenance to
           determine its authenticity and significance.
-        </h2>
+        </h4>
+        <h5 className="block md:hidden text-[24px]  leading-[32px]  font-serif font-semibold text-white mb-6 max-w-2xl mx-auto">
+          With a network of specialists in Chinese antiquities, we provide a meticulous evaluation
+          of your piece—examining craftsmanship, materials, historical context, and provenance to
+          determine its authenticity and significance.
+        </h5>
         <div className="flex flex-col items-center">
           <img src={logoWhite} alt="Kangxi Collection Logo" className="h-14 md:h-20" />
         </div>
       </div>
       {/* Why Authenticate Section */}
-      <div className="w-full bg-[#F7F5EA] py-16 px-4">
-        <h2 className="text-2xl md:text-3xl font-serif font-semibold text-[#7B6142] mb-10 text-left max-w-6xl mx-auto">
+      <div className="w-full bg-[#F7F5EA] py-12 px-4 md:py-28">
+        <h3 className="hidden md:block text-[40px] leading-[48px] font-serif font-semibold text-[#61422D] mb-10 text-left max-w-7xl mx-auto">
           Why Authenticate with Kangxis?
-        </h2>
-        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-10 mb-12">
+        </h3>
+        <h4 className="block md:hidden text-[32px] leading-[40px] font-serif font-semibold text-[#61422D] mb-10 text-left max-w-7xl mx-auto">
+          Why Authenticate with Kangxis?
+        </h4>
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-10 mb-12 md:mb-28">
           {whyItems.map((item, idx) => (
             <div key={idx} className="flex flex-col items-left text-left">
               {item.icon}
-              <div className="text-lg font-semibold text-[#7B6142] mt-4 mb-2">{item.title}</div>
-              <div className="text-base text-[#585550]">{item.desc}</div>
+              <h5 className="text-[24px] leading-[32px] font-semibold text-[#61422D] mt-4 mb-2">{item.title}</h5>
+              <div className="text-base text-[#6D6A66]">{item.desc}</div>
             </div>
           ))}
         </div>
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-7xl mx-auto">
           <img
-            src={timelessTreasure}
+            src={terracotaImg}
             alt="Terracotta Army"
-            className="w-full h-80 object-cover rounded"
+            className="w-full md:h-140 h-[229px] object-cover "
           />
         </div>
       </div>
       {/* Submit Form Section */}
       <div className="w-full bg-[#E6DDC6] py-16 px-4">
         <div className="max-w-xl mx-auto">
-          <h2 className="text-2xl md:text-3xl font-serif font-semibold text-[#7B6142] mb-2 text-center">
+          <h3 className="hidden md:block text-[40px] leading-[48px]  font-serif font-semibold text-[#61422D] mb-2 text-center">
             Submit Your Antique for Authentication
-          </h2>
-          <div className="text-base text-[#585550] mb-8 text-center">
+          </h3>
+          <h4 className="block md:hidden text-[32px] leading-[40px] font-serif font-semibold text-[#61422D] mb-2 text-center">
+            Submit Your Antique for Authentication
+          </h4>
+          <div className="text-[20px] leading-[28px] text-[#585550] mb-8 text-center">
             To begin the authentication process, kindly provide the details below. Our team will
             review your submission and reach out with the next steps.
           </div>
           <form className="space-y-6" onSubmit={submitForm}>
             <div>
-              <label className="block mb-2 text-[#7B6142] font-semibold">First Name</label>
+              <label className="block mb-2 text-[#1F1F1F] font-normal text-[14px] leading-[20px] ">First Name</label>
               <input
                 type="text"
                 className={`w-full rounded border px-4 py-3 bg-[#F7F5EA] text-[#23211C] ${
@@ -266,7 +278,7 @@ export default function AppraiseAnItem() {
               )}
             </div>
             <div>
-              <label className="block mb-2 text-[#7B6142] font-semibold">Last Name</label>
+              <label className="block mb-2 text-[#1F1F1F] font-normal text-[14px] leading-[20px] ">Last Name</label>
               <input
                 type="text"
                 className={`w-full rounded border px-4 py-3 bg-[#F7F5EA] text-[#23211C] ${
@@ -286,7 +298,7 @@ export default function AppraiseAnItem() {
               )}
             </div>
             <div>
-              <label className="block mb-2 text-[#7B6142] font-semibold">Item Code</label>
+              <label className="block mb-2 text-[#1F1F1F] font-normal text-[14px] leading-[20px] ">Item Code</label>
               <input
                 type="text"
                 className={`w-full rounded border px-4 py-3 bg-[#F7F5EA] text-[#23211C] ${
@@ -306,7 +318,7 @@ export default function AppraiseAnItem() {
               )}
             </div>
             <div>
-              <label className="block mb-2 text-[#7B6142] font-semibold">Contact Number</label>
+              <label className="block mb-2 text-[#1F1F1F] font-normal text-[14px] leading-[20px]">Contact Number</label>
               <PhoneInput
                 country={'sg'}
                 value={phone}
@@ -329,7 +341,7 @@ export default function AppraiseAnItem() {
               )}
             </div>
             <div>
-              <label className="block mb-2 text-[#7B6142] font-semibold">Upload Image</label>
+              <label className="block mb-2 text-[#1F1F1F] font-normal text-[14px] leading-[20px]">Upload Image</label>
               <div
                 className={`w-full bg-[#FDFBF1] border-2 border-dashed rounded-lg flex flex-col items-center justify-center py-8 cursor-pointer transition hover:border-[#7B6142] ${
                   errors.images ? 'border-red-500' : 'border-[#C7C7B9]'
@@ -372,11 +384,11 @@ export default function AppraiseAnItem() {
                   }
                 }}
               >
-                <img src={icUpload} alt="Upload" className="w-8 h-8 mb-2" />
-                <div className="font-semibold text-[#23211C] text-center">
+                <img src={icUpload} alt="Upload" className="w-[19px] h-[23px] mb-2" />
+                <div className="font-semibold text-[#2E2A24] text-[14px] leading-[20px] text-center">
                   Drag &amp; Drop or{' '}
                   <span
-                    className="text-[#83644B] underline cursor-pointer"
+                    className="text-[#BE9051] underline cursor-pointer"
                     onClick={(e) => {
                       e.stopPropagation();
                       document.getElementById('file-upload')?.click();
@@ -386,8 +398,8 @@ export default function AppraiseAnItem() {
                   </span>{' '}
                   to upload
                 </div>
-                <div className="text-xs text-[#585550] mt-2 text-center">
-                  JPG, GIF or PNG. Max size of 800K
+                <div className="text-xs text-[#6D6A66] mt-2 text-center">
+                  JPG, GIF or PNG. Max size of 800Kb
                 </div>
                 <input
                   id="file-upload"
