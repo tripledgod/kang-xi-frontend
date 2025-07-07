@@ -28,3 +28,16 @@ h1, h2, h3, h4, h5, h6 {
 .animate-slide-in-right {
   animation: slide-in-right 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
+
+@media (max-width: 767px) {
+  .scrollbar-hide {
+    -ms-overflow-style: none !important; /* IE and Edge */
+    scrollbar-width: none !important; /* Firefox */
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none !important; /* Chrome, Safari, Opera */
+    width: 0 !important;
+    height: 0 !important;
+    background: transparent !important;
+  }
+}

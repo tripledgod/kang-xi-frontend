@@ -27,7 +27,7 @@ const Popup: React.FC<PopupProps> = ({ title, content, buttonText, onButtonClick
         </button>
         {/* Title */}
         <div className="w-full flex flex-col items-center">
-          <h2
+          <h3
             className="text-center mb-6 md:mb-8 leading-tight"
             style={{
               fontWeight: 600,
@@ -38,7 +38,7 @@ const Popup: React.FC<PopupProps> = ({ title, content, buttonText, onButtonClick
             }}
           >
             {title}
-          </h2>
+          </h3>
         </div>
         {/* Content */}
         <div

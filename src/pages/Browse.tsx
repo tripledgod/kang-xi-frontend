@@ -35,6 +35,8 @@ const Browse: React.FC = () => {
   const { locale } = useLanguage();
   const [searchParams] = useSearchParams();
   const eraTabRef = useRef<HTMLDivElement>(null);
+  const eraTabWrapperRef = useRef<HTMLDivElement>(null);
+  const eraButtonRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
   // Scroll to top when URL changes
   useEffect(() => {
@@ -106,13 +108,6 @@ const Browse: React.FC = () => {
     navigate(`/browse?era=${eraSlug}`, { replace: true });
   };
 
-  useEffect(() => {
-    // Ensure the era tab bar is always at the start (first button aligned to the left) when entering the page
-    if (eraTabRef.current) {
-      eraTabRef.current.scrollLeft = 0;
-    }
-  }, []);
-
   // Component ProductCard to manage image state for each product
   const ProductCard: React.FC<{ product: any; navigate: any }> = ({ product, navigate }) => {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -176,14 +171,14 @@ const Browse: React.FC = () => {
             </div>
           )}
         </div>
-        <h2 className="text-[24px] font-medium text-[#61422D] mb-2 leading-[32px] tracking-[0px] line-clamp-2 min-h-[64px]">
+        <h5 className="md:text-[24px] text-[20px] font-medium text-[#61422D] mb-2 leading-[28px] md:leading-[32px] tracking-[0px] line-clamp-2 min-h-[64px]">
           {product.title}
-        </h2>
+        </h5>
         <div className="text-base text-[#585550] mb-4 line-clamp-3 min-h-[72px]">
           {product.description}
         </div>
         <div className="border-t-2 border-[#E5E1D7] opacity-80 my-3"></div>
-        <div className="flex flex-row justify-between text-xs text-[#23211C] font-semibold">
+        <div className="flex flex-row justify-between text-[14px] leading-[20px] text-[#585550] font-semibold">
           <span>
             {product.ageFrom} - {product.ageTo}
           </span>
@@ -192,6 +187,20 @@ const Browse: React.FC = () => {
       </div>
     );
   };
+
+  // When changing activeEra, if the active era is hidden, scrollIntoView (inline: 'nearest')
+  useEffect(() => {
+    const idx = eras.findIndex(e => e.key === activeEra);
+    const tabContainer = eraTabRef.current;
+    const btn = eraButtonRefs.current[idx];
+    if (tabContainer && btn) {
+      const containerRect = tabContainer.getBoundingClientRect();
+      const btnRect = btn.getBoundingClientRect();
+      if (btnRect.left < containerRect.left || btnRect.right > containerRect.right) {
+        btn.scrollIntoView({ behavior: 'auto', inline: 'center', block: 'nearest' });
+      }
+    }
+  }, [activeEra, eras]);
 
   if (categoriesLoading) {
     return (
@@ -234,15 +243,16 @@ const Browse: React.FC = () => {
       </div>
       {/* Era Tabs */}
       <div className="w-full sticky top-[0px] z-30 bg-[#F7F5EA]">
-        <div className="max-w-6xl mx-auto px-4 pt-4 md:pt-20 overflow-x-auto whitespace-nowrap">
+        <div className="max-w-6xl mx-auto px-4 pt-4 md:pt-20 overflow-x-auto scrollbar-hide">
           <div
             ref={eraTabRef}
-            className="inline-flex items-center gap-x-[20px] md:gap-x-2 justify-start pl-[20px] md:pl-[64px] uppercase"
+            className="inline-flex items-center gap-x-[18px] md:gap-x-2 justify-start pl-[10px] md:pl-[64px] uppercase whitespace-nowrap"
           >
             {eras.map((era, idx) => (
               <React.Fragment key={era.key}>
                 <button
-                  className={`pb-2 transition-colors uppercase text-[17px] ${activeEra === era.key ? 'border-b-2 border-[#23211C] text-[#23211C] font-bold opacity-90' : 'text-[#23211C] border-b-0'}`}
+                  ref={el => { eraButtonRefs.current[idx] = el; }}
+                  className={`pb-2 transition-colors uppercase text-[17px] relative ${activeEra === era.key ? 'border-b-2 border-[#23211C] text-[#23211C] font-semibold opacity-90 z-20' : 'text-[#23211C] border-b-0'}`}
                   onClick={() => handleEraClick(era.key)}
                   style={era.style}
                 >

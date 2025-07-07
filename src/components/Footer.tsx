@@ -39,7 +39,7 @@ export default function Footer() {
                 <Link
                   key={link.label}
                   to={link.href}
-                  className="text-md font-semibold text-[#FFFFFF] hover:text-[#E6DDC6] transition-colors whitespace-nowrap"
+                  className="text-[14px] leading-[20px] font-semibold text-[#FFFFFF] hover:text-[#E6DDC6] transition-colors whitespace-nowrap"
                 >
                   {link.label}
                 </Link>
@@ -50,7 +50,7 @@ export default function Footer() {
                 <Link
                   key={link.label}
                   to={link.href}
-                  className="text-md font-semibold text-[#FFFFFF] hover:text-[#E6DDC6] transition-colors whitespace-nowrap"
+                  className="text-[14px] leading-[20px] font-semibold text-[#FFFFFF] hover:text-[#E6DDC6] transition-colors whitespace-nowrap"
                 >
                   {link.label}
                 </Link>
