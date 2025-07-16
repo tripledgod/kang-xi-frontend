@@ -1,9 +1,47 @@
 @import 'tailwindcss';
 
 @font-face {
+  font-family: 'PingFang SC';
+  src: url('/fonts/PingFangSC-Ultralight.otf') format('opentype');
+  font-weight: 200;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'PingFang SC';
+  src: url('/fonts/PingFangSC-Thin.otf') format('opentype');
+  font-weight: 300;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'PingFang SC';
+  src: url('/fonts/PingFangSC-Light.otf') format('opentype');
+  font-weight: 350;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'PingFang SC';
+  src: url('/fonts/PingFangSC-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'PingFang SC';
+  src: url('/fonts/PingFangSC-Medium.otf') format('opentype');
+  font-weight: 500;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'PingFang SC';
+  src: url('/fonts/PingFangSC-Semibold.otf') format('opentype');
+  font-weight: 600;
+  font-display: swap;
+}
+
+@font-face {
   font-family: 'Source Han Serif SC VF';
-  src: url('https://cdn.jsdelivr.net/npm/@wc1font/source-han-serif-sc-vf') format('truetype-variabled');
-  font-weight: 100 900;
+  src: url('/fonts/SourceHanSerifSC-VF.otf.woff2') format('woff2');
+  font-weight: 200 900;
+  font-display: swap;
 }
 body {
   font-family: 'PingFang SC', serif;
@@ -11,7 +49,8 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-    font-family: 'Source Han Serif SC VF', serif;
+  font-family: "source-han-serif-sc", 'PingFang SC', 'Noto Serif SC', 'Microsoft YaHei', 'SimSun', serif;
+  font-weight: 600;
 }
 
 @tailwind utilities;

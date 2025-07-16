@@ -290,7 +290,7 @@ export default function CeramicsByEra() {
                 )}
               </div>
               <h4
-                className="text-2xl font-serif text-[#86684A] mb-6 font-semibold"
+                className="text-2xl font-serif text-[#61422D] mb-6 font-semibold"
                 style={{
                   fontWeight: 600,
                   fontSize: 32,

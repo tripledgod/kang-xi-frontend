@@ -75,7 +75,7 @@ export default function Articles() {
         />
       </div>
       {/* Featured Articles Section */}
-      <div className="max-w-7xl mx-auto pl-6 w-full md:pl-20 pr-6 md:pr-16 flex flex-col gap-12 md:mt-24">
+      <div className="max-w-7xl mx-auto w-full pl-6 pr-6  flex flex-col gap-12 md:mt-30">
         {/* Featured Articles */}
         <div className="flex flex-col md:flex-row gap-8">
           {featuredArticles.map((article, idx) => {
@@ -153,7 +153,7 @@ export default function Articles() {
                           className="text-2xl font-serif font-semibold mb-2 leading-snug"
                           style={{
                             fontWeight: 600,
-                            fontSize: 200,
+                            fontSize: 20,
                             lineHeight: '28px',
                             letterSpacing: 0,
                             textAlign: 'left',
@@ -175,7 +175,7 @@ export default function Articles() {
                       </div>
                     </div>
                     {/* Desktop Grid Layout */}
-                    <div className="hidden md:grid grid-cols-[1fr_160px] gap-6 pb-6 w-full hover:bg-[#f3efe2] transition-colors">
+                    <div className="hidden md:grid grid-cols-[1fr_238px] gap-6 pb-6 w-full hover:bg-[#f3efe2] transition-colors">
                       <div>
                         <h5
                           className="text-2xl font-serif font-semibold mb-2 leading-snug"
@@ -201,11 +201,11 @@ export default function Articles() {
                           })}
                         </div>
                       </div>
-                      <div className="w-full h-28 flex-shrink-0 rounded overflow-hidden bg-[#E6DDC6] flex items-center justify-center md:justify-end">
+                      <div className="w-[238px] h-[180px] flex-shrink-0 rounded overflow-hidden bg-[#E6DDC6] flex items-center justify-center md:justify-end">
                         <img
                           src={imageUrl || articlesCover}
                           alt={article.title}
-                          className="object-cover w-full h-full max-w-[160px]"
+                          className="object-cover w-full h-full"
                           onError={(e) => {
                             console.error('Image failed to load:', imageUrl);
                             e.currentTarget.src = articlesCover;

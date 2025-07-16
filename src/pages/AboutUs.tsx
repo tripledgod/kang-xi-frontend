@@ -105,6 +105,7 @@ export default function AboutUs() {
           <div className="text-[18px] leading-[26px] text-[#585550] mb-5">
             {aboutData?.heritage?.body || 'Loading...'}
           </div>
+          <div className="h-[1px] bg-[#D5D4D3] w-full my-4 md:my-8"></div>
           <div className="flex gap-12">
             <div>
               <div

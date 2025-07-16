@@ -26,7 +26,7 @@ export default function Footer() {
   const navLinksRow2 = [{ label: t('TERMS_AND_CONDITIONS'), href: '/terms-and-condition' }];
 
   return (
-    <footer className="bg-[#10110C] text-[#FDFBF1] pt-12 pb-6 px-4">
+    <footer className="bg-[#201F1C] text-[#FDFBF1] pt-12 pb-6 px-4">
       <div className="flex flex-col items-center">
         <Link to="/">
           <img src={bottomLogo} alt="Kang Xi Logo" className="h-20 mb-2" />
