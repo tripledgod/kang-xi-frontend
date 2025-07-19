@@ -39,7 +39,7 @@ export default function Footer() {
                 <Link
                   key={link.label}
                   to={link.href}
-                  className="text-[14px] leading-[20px] font-semibold text-[#FFFFFF] hover:text-[#E6DDC6] transition-colors whitespace-nowrap"
+                  className="text-[14px] leading-[20px] font-semibold text-[#FFFFFF] hover:text-[#E6DDC6] transition-colors whitespace-nowrap opacity-80"
                 >
                   {link.label}
                 </Link>
@@ -50,7 +50,7 @@ export default function Footer() {
                 <Link
                   key={link.label}
                   to={link.href}
-                  className="text-[14px] leading-[20px] font-semibold text-[#FFFFFF] hover:text-[#E6DDC6] transition-colors whitespace-nowrap"
+                  className="text-[14px] leading-[20px] font-semibold text-[#FFFFFF] hover:text-[#E6DDC6] transition-colors whitespace-nowrap opacity-80 "
                 >
                   {link.label}
                 </Link>
@@ -60,7 +60,7 @@ export default function Footer() {
         </nav>
         <div className="w-full border-t border-[#23211C] mb-6"></div>
         <div className="w-full flex flex-col items-center gap-6 md:flex-row md:items-center md:justify-between max-w-6xl mx-auto">
-          <div className="text-base text-[#FDFBF1] text-center">
+          <div className="text-base text-[#FFFFFF] text-center opacity-80">
             © Kangxi Collection 2020. All rights reserved.
           </div>
           <div className="flex gap-8 justify-center">

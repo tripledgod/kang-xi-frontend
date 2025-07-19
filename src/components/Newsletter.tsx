@@ -108,6 +108,7 @@ export default function Newsletter() {
                 fontSize: 18,
                 lineHeight: '26px',
                 letterSpacing: 0,
+                opacity:0.8,
               }}
             >
               Subscribe to get our 2020 catalog as well as get exclusive invites to our private

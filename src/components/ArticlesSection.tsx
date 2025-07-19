@@ -60,6 +60,7 @@ export default function ArticlesSection() {
             lineHeight: '26px',
             letterSpacing: 0,
             wordSpacing: '2px',
+            opacity:0.8,
           }}
         >
           Feature articles of the month

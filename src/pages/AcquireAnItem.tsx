@@ -142,12 +142,12 @@ export default function AcquireAnItem() {
           {/* Left */}
           <div className="flex-1 text-white mb-8 md:mb-0">
             <h1 className="hidden md:block text-[60px] leading-[72px] font-serif font-semibold mb-6">
-              Reserve a Timeless Treasure
+              Reserve a Timeless<br />Treasure
             </h1>
             <h3 className="block md:hidden text-[40px] leading-[48px] font-serif font-semibold mb-6">
-              Reserve a Timeless Treasure
+              Reserve a<br/> Timeless<br />Treasure
             </h3>
-            <p className="mb-6 text-[18px] leading-[26px] text-[#FFFFFF] max-w-md">
+            <p className="mb-6 text-[18px] leading-[26px] text-[#FFFFFF] max-w-md opacity-70">
               Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in
               eros elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum
               nulla, ut commodo diam libero vitae erat morbi euismod.
