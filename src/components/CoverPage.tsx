@@ -22,9 +22,12 @@ const CoverPage: React.FC<CoverPageProps> = ({ cover }) => {
         style={{ maxWidth: '100vw' }}
       />
       <div className="absolute inset-0 bg-opacity-40 flex flex-col items-center justify-center text-white">
-        <h1 className="text-3xl md:text-4xl font-serif font-medium mb-2">
+        <h1 className="hidden md:block text-[60px] leading-[72px]font-serif font-semibold mb-2">
           {cover?.title || 'About Us'}
         </h1>
+        <h3 className="block md:hidden text-[40px] leading-[48px] font-serif font-semibold mb-2">
+          {cover?.title || 'About Us'}
+        </h3>
         <p className="text-lg md:text-xl">
           {cover?.subTitle || 'Appreciating Chinese Works of Art'}
         </p>

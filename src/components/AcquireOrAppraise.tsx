@@ -66,16 +66,25 @@ export default function AcquireOrAppraise() {
           {/* Mobile: order-2, Desktop: order-1 (content) */}
           <div className="flex-1 flex flex-col items-center justify-center px-6 py-8 md:py-0 md:px-0 text-center order-2 md:order-1">
             <img src={section.icon} alt="icon" className="mb-8 w-16 h-16" />
-            <h2
-              className="mb-6 text-2xl md:text-4xl leading-8 md:leading-10"
-              style={{ color: '#FAF7F2', fontWeight: 400, letterSpacing: 0 }}
-            >
-              {section.title}
-            </h2>
+            {isMobile ? (
+              <h5
+                className="mb-6 text-2xl md:text-4xl leading-8 md:leading-10"
+                style={{ color: '#FAF7F2', fontWeight: 600, letterSpacing: 0 }}
+              >
+                {section.title}
+              </h5>
+            ) : (
+              <h4
+                className="mb-6 text-2xl md:text-4xl leading-8 md:leading-10"
+                style={{ color: '#FAF7F2', fontWeight: 600, letterSpacing: 0 }}
+              >
+                {section.title}
+              </h4>
+            )}
             <p className="text-base leading-6 text-[#ABAAA7] mb-10 max-w-lg">{section.desc}</p>
             <div className="w-[220px] flex justify-center">
               <button
-                className="w-full md:w-[189px] h-[48px] flex items-center justify-center text-base font-medium shadow-none transition-all px-6"
+                className="w-full md:w-[189px] h-[48px] flex items-center justify-center text-base font-semibold shadow-none transition-all px-6"
                 onClick={section.link ? () => navigate(section.link) : undefined}
                 style={{
                   backgroundImage: `url(${bgButton})`,
@@ -86,6 +95,10 @@ export default function AcquireOrAppraise() {
                   border: 'none',
                   padding: 0,
                   minWidth: 0,
+                  fontSize: 14,
+                  lineHeight: '20px',
+                  letterSpacing: '0.5px',
+
                 }}
               >
                 {section.button}

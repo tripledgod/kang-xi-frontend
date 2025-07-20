@@ -73,15 +73,16 @@ const Button: React.FC<ButtonProps> = ({
       }}
     >
       <span
-        className="w-full h-full flex items-center justify-center font-semibold text-base md:text-lg"
+        className="w-full h-full flex items-center justify-center font-semibold text-base md:text-lg leading-[20px] md:leading-[24px]"
         style={{
           color: isOutline ? '#7B6142' : '#fff',
-          fontWeight: 400,
-          fontSize: 15,
-          lineHeight: 1.8,
-          letterSpacing: '0.5px',
+          fontWeight: 600,
+          fontSize: 14,
+          letterSpacing: 0,
           wordSpacing: '2px',
-          fontFamily: 'Noto Sans SC, Inter, -apple-system, BlinkMacSystemFont, sans-serif',
+          ...(typeof window !== 'undefined' && window.innerWidth >= 768
+            ? { letterSpacing: '0.5px' }
+            : {}),
         }}
       >
         {text}

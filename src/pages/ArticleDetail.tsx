@@ -60,7 +60,7 @@ function RelatedArticles({ related }: { related: Article[] }) {
 
   return (
     <section className="w-full py-16 px-4">
-      <h2 className="text-4xl font-serif font-medium text-[#61422D] mb-12 text-center">
+      <h2 className="text-4xl text-[#61422D] mb-12 text-center">
         Related Articles
       </h2>
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
@@ -78,18 +78,17 @@ function RelatedArticles({ related }: { related: Article[] }) {
               />
             </div>
 
-            {/* Title với chiều cao cố định 2 dòng chỉ ở desktop */}
-            <div className="md:h-16 mb-2">
-              <h2
-                className="text-xl font-serif font-medium text-[#61422D] leading-tight overflow-hidden"
+            {/* Title with fixed height of 2 lines only on desktop */}
+            <div>
+              <h5
+                className="md:text-[24px] md:leading-[32px] text-20[px] leading[28px] font-semibold text-[#61422D]"
                 style={{
-                  fontFamily: 'Noto Serif SC, serif',
-                  fontWeight: 600,
-                  fontSize: 24,
-                  lineHeight: '32px',
+                  // fontFamily: 'Noto Serif SC, serif',
+                  // fontWeight: 600,
+                  
                   letterSpacing: 0,
                   textAlign: 'left',
-                  color: '#61422D',
+                  color: '#1E1E1E',
                   display: '-webkit-box',
                   WebkitLineClamp: 2,
                   WebkitBoxOrient: 'vertical',
@@ -98,15 +97,15 @@ function RelatedArticles({ related }: { related: Article[] }) {
                 }}
               >
                 {article.title}
-              </h2>
+              </h5>
             </div>
 
-            {/* Description với chiều cao cố định 3 dòng chỉ ở desktop */}
+            {/* Description with fixed height of 3 lines only on desktop */}
             <div className="md:h-20 mb-4">
               <div
                 className="font-pingfang text-base font-normal leading-6 overflow-hidden"
-                style={{ 
-                  color: '#6D6A66',
+                style={{
+                  color: '#585550',
                   display: '-webkit-box',
                   WebkitLineClamp: 3,
                   WebkitBoxOrient: 'vertical',
@@ -118,7 +117,7 @@ function RelatedArticles({ related }: { related: Article[] }) {
               </div>
             </div>
 
-            <div className="text-xs text-[#585550] font-semibold uppercase tracking-wider">
+            <div className="text-[14px] leading-[20px]text-[#585550] font-semibold uppercase tracking-wider">
               {new Date(article.publishedAt).toLocaleDateString('en-US', {
                 day: 'numeric',
                 month: 'short',
@@ -221,23 +220,30 @@ export default function ArticleDetail() {
   return (
     <div className="w-full min-h-screen bg-[#F7F5EA]">
       <div className="max-w-2xl mx-auto px-4 pt-8">
-        <div className="text-xs text-[#7B6142] font-semibold uppercase tracking-wider mb-2">
+        <div className="text-[14px]  leading-[20px] text-[#6D6A66] font-semibold uppercase tracking-wider mb-2">
           {new Date(article.publishedAt).toLocaleDateString('en-US', {
             day: 'numeric',
             month: 'short',
             year: 'numeric',
           })}
         </div>
-        <h1 className="text-3xl md:text-4xl font-serif font-semibold text-[#61422D] mb-2 leading-tight">
+        <h3 className="hidden md:block text-[40px] leading-[48px] text-[#61422D] mb-2 font-semibold">
           {article.title}
-        </h1>
-        <div className="text-base text-[#585550] mb-4">by Kangxi Finder</div>
+        </h3>
+        <h4 className="block md:hidden text-[32px] leading-[40px] text-[#61422D] mb-2 font-semibold">
+          {article.title}
+        </h4>
+        {article.shortDescription && (
+          <div className="text-[20px] leading-[28px] text-[#585550] mt-6">
+            {article.shortDescription}
+          </div>
+        )}
         <ArticleImage
           cover={article.cover}
           alt={article.title}
-          className="w-full h-auto rounded mb-8"
+          className="w-full h-auto rounded md:my-16 my-8"
         />
-        <div className="prose max-w-none text-[#23211C]">
+        <div className="prose max-w-none text-[#585550] text-[16px] md:text-[18px] leading-[24px] md:leading-[26px] [&_img]:my-8 md:[&_img]:my-12 [&_img]:mx-auto [&_img]:block">
           <ReactMarkdown remarkPlugins={[remarkGfm]}>{article.description}</ReactMarkdown>
         </div>
       </div>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { COLORS } from './colors';
 import bgButton from '../assets/bg_button.png';
@@ -12,7 +12,14 @@ export default function Newsletter() {
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const { t } = useTranslation();
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const validateEmail = (email: string) => {
     // Simple validation, can be replaced with better regex if needed
@@ -66,30 +73,42 @@ export default function Newsletter() {
         {/* Left column: Title and description */}
         <div className="w-full flex flex-col items-center md:items-start mb-8 md:mb-0">
           <div className="w-full md:w-[420px]">
-            <h2
-              className="mb-4 font-semibold"
-              style={{
-                fontSize: 32,
-                color: COLORS.secondary900,
-                fontFamily: 'Noto Serif SC, serif',
-                fontWeight: 550,
-                lineHeight: '40px',
-                letterSpacing: 0,
-                opacity:0.97,
-              }}
-            >
-              GET THE LATEST NEW
-            </h2>
+            {isMobile ? (
+              <h5
+                className="mb-4 font-semibold"
+                style={{
+                  fontSize: 24,
+                  color: COLORS.secondary900,
+                  fontWeight: 600,
+                  lineHeight: '32px',
+                  letterSpacing: 0,
+                }}
+              >
+                GET THE LATEST NEW
+              </h5>
+            ) : (
+              <h4
+                className="mb-4 font-semibold"
+                style={{
+                  fontSize: 32,
+                  color: COLORS.secondary900,
+                  fontWeight: 600,
+                  lineHeight: '40px',
+                  letterSpacing: 0,
+                }}
+              >
+                GET THE LATEST NEW
+              </h4>
+            )}
             <p
               className="font-pingfang text-[18px] leading-[26px] tracking-[0px] text-left mb-8 md:w-[400px]"
-              style={{ 
+              style={{
                 color: COLORS.secondary700,
-                fontFamily: 'Noto Sans SC, Inter, -apple-system, BlinkMacSystemFont, sans-serif',
                 fontWeight: 400,
-                fontSize: 19,
-                lineHeight: 1.8,
+                fontSize: 18,
+                lineHeight: '26px',
                 letterSpacing: 0,
-                wordSpacing: '2px'
+                opacity:0.8,
               }}
             >
               Subscribe to get our 2020 catalog as well as get exclusive invites to our private
@@ -105,11 +124,11 @@ export default function Newsletter() {
           <div className="w-full md:w-2/3">
             <input
               type="text"
-              placeholder="Enter your email"
+              placeholder="Enter your first name"
               value={email}
-              onChange={e => setEmail(e.target.value)}
+              onChange={(e) => setEmail(e.target.value)}
               disabled={loading}
-              className="w-full h-[48px] rounded-lg border px-6 text-lg focus:outline-none focus:ring-2"
+              className="w-full h-[48px] rounded-lg border px-6 text-lg focus:outline-none focus:ring-2 text-[16px] leading-[24px]"
               style={{
                 borderColor: COLORS.border,
                 background: COLORS.beigeLight,
@@ -117,16 +136,14 @@ export default function Newsletter() {
                 boxShadow: 'none',
               }}
             />
-            {error && (
-              <div className="text-red-600 text-sm mt-1">{error}</div>
-            )}
+            {error && <div className="text-red-600 text-sm mt-1">{error}</div>}
           </div>
           <div className="w-full justify-center md:w-1/3 h-[48px] flex items-center">
             {/* Button desktop */}
             <button
               type="submit"
               disabled={loading}
-              className="hidden md:flex w-full h-full items-center justify-center text-base font-medium shadow-none transition-all px-6"
+              className="hidden md:flex w-full h-full items-center justify-center text-[16px] leading-[20px] font-medium shadow-none transition-all px-6"
               style={{
                 backgroundImage: `url(${bgButton})`,
                 backgroundSize: '100% 100%',
@@ -135,6 +152,7 @@ export default function Newsletter() {
                 color: '#fff',
                 opacity: loading ? 0.7 : 1,
                 cursor: loading ? 'not-allowed' : 'pointer',
+                letterSpacing:'0.5px',
               }}
             >
               {loading ? 'SENDING...' : t('SUBSCRIBE')}
@@ -143,7 +161,7 @@ export default function Newsletter() {
             <button
               type="submit"
               disabled={loading}
-              className="flex md:hidden w-full h-full items-center justify-center text-base font-medium shadow-none transition-all px-6"
+              className="flex md:hidden w-full h-full items-center justify-center text-[16px] leading-[24px] font-medium shadow-none transition-all px-6"
               style={{
                 backgroundImage: `url(${bgButtonMobile})`,
                 backgroundSize: '100% 100%',

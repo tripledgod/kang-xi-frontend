@@ -26,7 +26,7 @@ export default function Footer() {
   const navLinksRow2 = [{ label: t('TERMS_AND_CONDITIONS'), href: '/terms-and-condition' }];
 
   return (
-    <footer className="bg-[#10110C] text-[#FDFBF1] pt-12 pb-6 px-4">
+    <footer className="bg-[#201F1C] text-[#FDFBF1] pt-12 pb-6 px-4">
       <div className="flex flex-col items-center">
         <Link to="/">
           <img src={bottomLogo} alt="Kang Xi Logo" className="h-20 mb-2" />
@@ -39,7 +39,7 @@ export default function Footer() {
                 <Link
                   key={link.label}
                   to={link.href}
-                  className="text-md font-semibold text-[#FFFFFF] hover:text-[#E6DDC6] transition-colors whitespace-nowrap"
+                  className="text-[14px] leading-[20px] font-semibold text-[#FFFFFF] hover:text-[#E6DDC6] transition-colors whitespace-nowrap opacity-80"
                 >
                   {link.label}
                 </Link>
@@ -50,7 +50,7 @@ export default function Footer() {
                 <Link
                   key={link.label}
                   to={link.href}
-                  className="text-md font-semibold text-[#FFFFFF] hover:text-[#E6DDC6] transition-colors whitespace-nowrap"
+                  className="text-[14px] leading-[20px] font-semibold text-[#FFFFFF] hover:text-[#E6DDC6] transition-colors whitespace-nowrap opacity-80 "
                 >
                   {link.label}
                 </Link>
@@ -60,7 +60,7 @@ export default function Footer() {
         </nav>
         <div className="w-full border-t border-[#23211C] mb-6"></div>
         <div className="w-full flex flex-col items-center gap-6 md:flex-row md:items-center md:justify-between max-w-6xl mx-auto">
-          <div className="text-base text-[#FDFBF1] text-center">
+          <div className="text-base text-[#FFFFFF] text-center opacity-80">
             © Kangxi Collection 2020. All rights reserved.
           </div>
           <div className="flex gap-8 justify-center">

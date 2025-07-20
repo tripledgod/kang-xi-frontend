@@ -93,20 +93,24 @@ export default function AboutUs() {
       {/* Legacy Section */}
       <div className="max-w-6xl mx-auto px-4 md:flex md:items-center md:gap-12 mb-16">
         <div className="flex-1 mb-8 md:mb-0">
-          <div className="text-xs text-[#7B6142] font-semibold uppercase tracking-wider mb-2">
+          <div className="text-[14px] leading-[20px] text-[#585550] font-semibold uppercase tracking-wider mb-2">
             Heritage
           </div>
-          <h2 className="text-3xl md:text-4xl font-serif font-medium text-[#61422D] mb-4">
+          <h3 className="hidden md:block text-[40px] leading-[48px] font-serif font-semibold text-[#61422D] mb-4">
             {aboutData?.heritage?.title || 'The Legacy of Kangxi Private Collection'}
-          </h2>
-          <div className="text-base text-[#585550] mb-8">
+          </h3>
+          <h4 className="block md:hidden text-[32px] leading-[40px] font-serif font-semibold text-[#61422D] mb-4">
+            {aboutData?.heritage?.title || 'The Legacy of Kangxi Private Collection'}
+          </h4>
+          <div className="text-[18px] leading-[26px] text-[#585550] mb-5">
             {aboutData?.heritage?.body || 'Loading...'}
           </div>
+          <div className="h-[1px] bg-[#D5D4D3] w-full my-4 md:my-8"></div>
           <div className="flex gap-12">
             <div>
               <div
                 className="text-5xl font-medium text-[#7B6142]"
-                style={{ fontFamily: 'Noto Serif SC, serif' }}
+                
               >
                 {aboutData?.heritage?.yearsExp || '25'}+
               </div>
@@ -115,7 +119,7 @@ export default function AboutUs() {
             <div>
               <div
                 className="text-5xl font-medium text-[#7B6142]"
-                style={{ fontFamily: 'Noto Serif SC, serif' }}
+                
               >
                 {aboutData?.heritage?.rareCollectibleItems || '100'}+
               </div>
@@ -135,17 +139,20 @@ export default function AboutUs() {
       </div>
 
       {/* Journey Section */}
-      <div className="w-full bg-[#2E2A24] py-16 mb-16">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-2xl md:text-3xl font-serif font-semibold text-white mb-10">
+      <div className="w-full bg-[#2E2A24] py-16 mb-16 md:mt-8">
+        <div className="max-w-6xl mx-auto text-center">
+          <h3 className="hidden md:block text-[40px] leading-[48px] font-serif font-semibold text-white mb-16">
             The Journey of Antique Chinese Porcelain
-          </h2>
+          </h3>
+          <h4 className="block md:hidden text-[32px] leading-[40px]font-serif font-semibold text-white mb-10">
+            Our Services
+          </h4>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
             {aboutData?.journey?.map((item) => (
               <div key={item.id} className="flex flex-col items-center">
                 <img src={getImageUrl(item.icon)} alt={item.title} className="h-12 mb-4" />
-                <div className="text-lg font-semibold text-white mb-2">{item.title}</div>
-                <div className="text-[#A4A7AE] text-sm">{item.description}</div>
+                <h5 className="text-[20px] md:text-[24px] leading-[28px] md:leading-[32px] font-semibold text-[#FAF7F2] mb-2">{item.title}</h5>
+                <div className="text-[#ABAAA7] text-[16px] leading-[24px]">{item.description}</div>
               </div>
             ))}
           </div>
@@ -153,12 +160,15 @@ export default function AboutUs() {
       </div>
 
       {/* History Section */}
-      <div className="max-w-4xl mx-auto px-4 mb-16">
-        <h2 className="text-2xl md:text-3xl font-serif font-semibold text-[#7B6142] mb-2">
+      <div className="max-w-6xl mx-auto px-4 mb-16">
+        <h3 className="hidden md:block text-[40px] leading-[48px] font-serif font-semibold text-[#61422D] mb-2">
           {aboutData?.title || 'The History of Ceramics'}
-        </h2>
+        </h3>
+        <h4 className="block md:hidden text-[32px] leading-[40px] font-serif font-semibold text-[#61422D] mb-2">
+          {aboutData?.title || 'The History of Ceramics'}
+        </h4>
 
-        <div className="my-5 prose prose-lg max-w-none">
+        <div className="my-5 prose prose-lg max-w-none text-[20px] leading-[28px] [&_img]:my-3 md:[&_img]:my-11 text-[#585550]">
           <ReactMarkdown 
             remarkPlugins={[remarkGfm]} 
             components={MarkdownComponents}
@@ -174,10 +184,13 @@ export default function AboutUs() {
         <div className="max-w-6xl mx-auto px-4">
           <div className="flex items-center justify-between mb-2">
             <div>
-              <h2 className="text-4xl font-serif font-semibold text-[#7B6142] mb-2 text-left">
+              <h3 className="hidden md:block text-[40px] leading-[48px] font-serif font-semibold text-[#61422D] mb-2 text-left">
                 Meet Our Team
-              </h2>
-              <div className="text-base text-[#585550] mb-0 text-left">
+              </h3>
+              <h4 className="block md:hidden text-2xl font-serif font-semibold text-[#61422D] mb-2 text-left">
+                Meet Our Team
+              </h4>
+              <div className="text-[20px] leading-[28px] text-[#585550] mb-0 text-left">
                 Meet the dedicated professionals behind our collection.
               </div>
             </div>
@@ -230,10 +243,10 @@ export default function AboutUs() {
                   alt={member.name}
                   className="w-full h-[340px] object-cover mb-6"
                 />
-                <div className="text-2xl font-serif font-semibold text-[#7B6142] mb-1 text-left">
+                <h5 className="text-2xl font-serif font-semibold text-[#61422D] mb-1 text-left">
                   {member.name}
-                </div>
-                <div className="text-base font-bold text-[#7B6142] mb-2 text-left">
+                </h5>
+                <div className="text-base font-semibold text-[#61422D] mb-2 text-left">
                   {member.position}
                 </div>
                 <div className="text-base text-[#585550] text-left">{member.bio}</div>

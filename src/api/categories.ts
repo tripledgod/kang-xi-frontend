@@ -77,22 +77,18 @@ export const getCategories = async (locale: string = 'en'): Promise<Category[]> 
       },
     });
 
-    // Debug: Log actual data structure
-    console.log('Raw API response:', response.data);
-
     // Handle data structure - could be data array or direct
     let data = response.data.data || response.data || [];
 
     // If data is array, use directly
     if (Array.isArray(data)) {
       if (data.length > 0) {
-        console.log('First category structure:', JSON.stringify(data[0], null, 2));
+        // Keep the structure logging for debugging but remove console.log
       }
       return data;
     }
 
     // If data is not array, return empty array
-    console.warn('API response is not an array:', data);
     return [];
   } catch (error) {
     console.error('Error fetching categories:', error);
@@ -132,22 +128,18 @@ export const getProductsByCategory = async (
       },
     });
 
-    // Debug: Log actual data structure
-    console.log('Raw products API response:', response.data);
-
     // Handle data structure - could be data array or direct
     let data = response.data.data || response.data || [];
 
     // If data is array, use directly
     if (Array.isArray(data)) {
       if (data.length > 0) {
-        console.log('First product structure:', JSON.stringify(data[0], null, 2));
+        // Keep the structure logging for debugging but remove console.log
       }
       return data;
     }
 
     // If data is not array, return empty array
-    console.warn('Products API response is not an array:', data);
     return [];
   } catch (error) {
     console.error('Error fetching products by category:', error);
@@ -157,12 +149,8 @@ export const getProductsByCategory = async (
 
 // Helper function to convert Category from API format to flat format
 export const flattenCategory = (category: Category) => {
-  // Debug: Log actual data structure
-  console.log('Flattening category:', category);
-
   // Check if category has correct structure
   if (!category) {
-    console.error('Invalid category structure:', category);
     return {
       id: 0,
       documentId: '',
@@ -197,12 +185,8 @@ export const flattenCategory = (category: Category) => {
 
 // Helper function to convert Product from API format to flat format
 export const flattenProduct = (product: Product) => {
-  // Debug: Log actual data structure
-  console.log('Flattening product:', product);
-
   // Check if product has correct structure
   if (!product) {
-    console.error('Invalid product structure:', product);
     return {
       id: 0,
       title: 'Unknown Product',
@@ -242,16 +226,3 @@ export interface Ceramic {
   category: number | string;
 }
 
-// export const getCeramicsByCategory = async (categoryId: number | string): Promise<Ceramic[]> => {
-//   const response = await axios.get(`${API_URL}/api/ceramics`, {
-//     params: {
-//       'filters[category][id][$eq]': categoryId
-//     }
-//   });
-//   return response.data.data || [];
-// };
-
-// export const getAllCeramics = async (): Promise<Ceramic[]> => {
-//   const response = await axios.get(`${API_URL}/api/ceramics`);
-//   return response.data.data || [];
-// };

@@ -68,14 +68,14 @@ export default function Articles() {
       {/* Hero Image */}
       <div className="relative w-full h-[220px] md:h-[320px] flex items-center justify-center overflow-hidden mb-8">
         <img
-          src={articles[0] ? getCoverUrl(articles[0].cover) || articlesCover : articlesCover}
+          src={articlesCover}
           alt={articles[0]?.title || 'Articles Cover'}
           className="absolute inset-0 w-full h-full object-cover object-center"
           style={{ maxWidth: '100vw' }}
         />
       </div>
       {/* Featured Articles Section */}
-      <div className="max-w-7xl mx-auto pl-6 w-full md:pl-20 pr-6 md:pr-16 flex flex-col gap-12 md:mt-24">
+      <div className="max-w-7xl mx-auto w-full pl-6 pr-6  flex flex-col gap-12 md:mt-30">
         {/* Featured Articles */}
         <div className="flex flex-col md:flex-row gap-8">
           {featuredArticles.map((article, idx) => {
@@ -97,9 +97,9 @@ export default function Articles() {
                 />
                 {/* Could add overlay title/desc/date if needed */}
                 <div className="absolute bottom-0 left-0 right-0 p-4 z-10">
-                  <div className="text-2xl font-serif font-semibold text-white mb-2 line-clamp-2">
+                  <h5 className="text-[20px] md:text-[24px] leading-[28px] md:leading-[32px] font-semibold text-white mb-2 line-clamp-2">
                     {article.title}
-                  </div>
+                  </h5>
                   <div className="text-base text-white mb-3 line-clamp-2">
                     {article.description}
                   </div>
@@ -118,9 +118,12 @@ export default function Articles() {
         {/* Latest Articles */}
         <div className="flex flex-col md:flex-row gap-8 w-full md:mt-12">
           <div className="w-full md:w-4/5">
-            <h1 className="text-4xl font-serif font-semibold text-[#61422D] mb-8 text-left">
+            <h3 className="hidden md:block text-[40px] leading-[48px]font-serif font-semibold text-[#61422D] mb-8 text-left">
               Latest Articles
-            </h1>
+            </h3>
+            <h5 className="block md:hidden text-[32px] leading-[40px] font-serif font-semibold text-[#61422D] mb-8 text-left">
+              Latest Articles
+            </h5>
             <div className="flex flex-col gap-8 items-start">
               {articles.map((article, idx) => {
                 const imageUrl = getCoverUrl(article.cover);
@@ -146,19 +149,19 @@ export default function Articles() {
                             }}
                           />
                         </div>
-                        <h2
+                        <h5
                           className="text-2xl font-serif font-semibold mb-2 leading-snug"
                           style={{
                             fontWeight: 600,
-                            fontSize: 24,
-                            lineHeight: '32px',
+                            fontSize: 20,
+                            lineHeight: '28px',
                             letterSpacing: 0,
                             textAlign: 'left',
                             color: '#61422D',
                           }}
                         >
                           {article.title}
-                        </h2>
+                        </h5>
                         <div className="text-base text-[#585550] mb-3 line-clamp-2 text-left">
                           {article.description}
                         </div>
@@ -172,9 +175,9 @@ export default function Articles() {
                       </div>
                     </div>
                     {/* Desktop Grid Layout */}
-                    <div className="hidden md:grid grid-cols-[1fr_160px] gap-6 pb-6 w-full hover:bg-[#f3efe2] transition-colors">
+                    <div className="hidden md:grid grid-cols-[1fr_238px] gap-6 pb-6 w-full hover:bg-[#f3efe2] transition-colors">
                       <div>
-                        <h2
+                        <h5
                           className="text-2xl font-serif font-semibold mb-2 leading-snug"
                           style={{
                             fontWeight: 600,
@@ -186,11 +189,11 @@ export default function Articles() {
                           }}
                         >
                           {article.title}
-                        </h2>
+                        </h5>
                         <div className="text-base text-[#585550] mb-3 line-clamp-2 text-left">
                           {article.description}
                         </div>
-                        <div className="text-xs text-[#7B6142] font-semibold uppercase tracking-wider text-left">
+                        <div className="text-[14px] leading-[20px] text-[#585550] font-semibold uppercase tracking-wider text-left">
                           {new Date(article.publishedAt).toLocaleDateString('en-US', {
                             day: 'numeric',
                             month: 'short',
@@ -198,11 +201,11 @@ export default function Articles() {
                           })}
                         </div>
                       </div>
-                      <div className="w-full h-28 flex-shrink-0 rounded overflow-hidden bg-[#E6DDC6] flex items-center justify-center md:justify-end">
+                      <div className="w-[238px] h-[180px] flex-shrink-0 rounded overflow-hidden bg-[#E6DDC6] flex items-center justify-center md:justify-end">
                         <img
                           src={imageUrl || articlesCover}
                           alt={article.title}
-                          className="object-cover w-full h-full max-w-[160px]"
+                          className="object-cover w-full h-full"
                           onError={(e) => {
                             console.error('Image failed to load:', imageUrl);
                             e.currentTarget.src = articlesCover;

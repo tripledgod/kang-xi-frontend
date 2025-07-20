@@ -15,6 +15,14 @@ export default function ArticlesSection() {
   const { locale } = useLanguage();
   const { t } = useTranslation();
 
+  // Add a variable to check for mobile
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   useEffect(() => {
     const fetchArticles = async () => {
       try {
@@ -35,19 +43,24 @@ export default function ArticlesSection() {
   return (
     <section className="w-full bg-[#F7F5EA] px-4 py-16">
       <div className="max-w-7xl mx-auto flex flex-col items-center">
-        <h2 className="text-[32px] leading-[40px] md:text-[48px] md:leading-[58px] font-semibold text-[#61422D] mb-2 text-center">
-          Our Articles
-        </h2>
+        {isMobile ? (
+          <h4 className="text-[32px] leading-[40px]  font-semibold text-[#61422D] mb-2 text-center">
+            Our Articles
+          </h4>
+        ) : (
+          <h2 className="text-[48px] leading-[58px]  font-semibold text-[#61422D] mb-2 text-center">
+            Our Articles
+          </h2>
+        )}
         <div
           className="text-[18px] leading-[26px] mb-12 text-center font-normal text-[#342216]"
           style={{
-            fontFamily: 'Noto Sans SC, Inter, -apple-system, BlinkMacSystemFont, sans-serif',
             fontWeight: 400,
-            fontSize: 19,
-            lineHeight: 1.8,
+            fontSize: 18,
+            lineHeight: '26px',
             letterSpacing: 0,
             wordSpacing: '2px',
-            opacity: 0.8,
+            opacity:0.8,
           }}
         >
           Feature articles of the month
@@ -85,25 +98,21 @@ export default function ArticlesSection() {
                       </div>
                     )}
                   </div>
-                  <h2
-                    className="mb-2 text-xl font-serif font-medium text-[#61422D] leading-8 h-16 overflow-hidden line-clamp-2"
+                  <h5
+                    className="mb-2 font-serif font-medium text-[#61422D] h-16 overflow-hidden line-clamp-2 text-[20px] md:text-[24px] leading-[28px] md:leading-[32px]"
                     style={{
-                      fontFamily: 'Noto Serif SC, Inter, -apple-system, BlinkMacSystemFont, sans-serif',
                       fontWeight: 600,
-                      fontSize: 24,
                       letterSpacing: '0.2px',
                       wordSpacing: '2px',
                       textAlign: 'left',
                       color: '#61422D',
-                      opacity:0.97,
                     }}
                   >
                     {article.title}
-                  </h2>
+                  </h5>
                   <div
                     className="font-pingfang font-normal mb-4 text-base leading-6 h-[72px] overflow-hidden line-clamp-3"
-                    style={{ 
-                      fontFamily: 'Noto Sans SC, Inter, -apple-system, BlinkMacSystemFont, sans-serif',
+                    style={{
                       color: '#585550',
                       fontSize: 16,
                       letterSpacing: '0.2px',
@@ -113,7 +122,7 @@ export default function ArticlesSection() {
                     {article.description}
                   </div>
                   <div
-                    className="text-[14px] font-semibold leading-[20px] line-clamp-2"
+                    className="text-[14px] font-semibold leading-[20px] line-clamp-2 uppercase"
                     style={{ color: '#585550' }}
                   >
                     {new Date(article.publishedAt).toLocaleDateString('en-US', {

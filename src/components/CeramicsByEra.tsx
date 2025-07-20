@@ -131,13 +131,16 @@ export default function CeramicsByEra() {
   return (
     <section className="w-full bg-[#F7F5EA] px-4 py-12 md:pt-21 md:pb-19">
       <div className="max-w-7xl mx-auto md:px-8">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8 md:mb-12">
-          <h2
-            className="text-4xl md:text-5xl font-serif font-medium mb-6 md:mb-0"
-            style={{ color: COLORS.secondary900 }}
-          >
-            Ceramics by Era
-          </h2>
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 md:mb-12">
+          {isMobile ? (
+            <h4 className="text-4xl md:text-5xl md:mb-0" style={{ color: COLORS.secondary900 }}>
+              Ceramics by Era
+            </h4>
+          ) : (
+            <h2 className="text-4xl md:text-5xl md:mb-0" style={{ color: COLORS.secondary900 }}>
+              Ceramics by Era
+            </h2>
+          )}
           <div className="hidden md:flex items-center gap-4 self-end md:self-auto">
             <button
               className="w-12 h-12 flex items-center justify-center text-base font-medium shadow-none transition-all rounded-[6px] border border-[#C7B08A] bg-[#F7F3E8] hover:border-[#86684A]"
@@ -195,10 +198,10 @@ export default function CeramicsByEra() {
                 border: 'none',
                 padding: 0,
                 minWidth: 0,
-                fontFamily: 'Noto Sans SC, Inter, -apple-system, BlinkMacSystemFont, sans-serif',
+                // fontFamily: 'Noto Sans SC, Inter, -apple-system, BlinkMacSystemFont, sans-serif',
                 fontWeight: 400,
-                fontSize: 15,
-                lineHeight: 1.8,
+                fontSize: 14,
+                lineHeight: 1.25,
                 letterSpacing: '0.5px',
                 wordSpacing: '2px',
               }}
@@ -228,10 +231,10 @@ export default function CeramicsByEra() {
                 )}
               </div>
               <h4
-                className="text-2xl font-serif mb-6 font-semibold"
+                className="text-2xl mb-6"
                 style={{
                   color: COLORS.primary900,
-                  fontWeight: 500,
+                  // fontWeight: 500,
                   fontSize: 32,
                   lineHeight: '40px',
                   letterSpacing: 0,
@@ -244,11 +247,12 @@ export default function CeramicsByEra() {
               </div>
               <div
                 className="text-base pt-2  "
-                style={{fontFamily: 'Noto Sans SC, Inter, -apple-system, BlinkMacSystemFont, sans-serif',
+                style={{
+                  // fontFamily: 'Noto Sans SC, Inter, -apple-system, BlinkMacSystemFont, sans-serif',
                   fontWeight: 400,
-                  fontSize: 17,
-                  lineHeight: 1.8,
-                  letterSpacing: '0.2px',
+                  fontSize: 16,
+                  lineHeight: 1.5,
+                  letterSpacing: 0,
                   wordSpacing: '2px',
                   color: '#6D6A66',
                 }}
@@ -286,9 +290,8 @@ export default function CeramicsByEra() {
                 )}
               </div>
               <h4
-                className="text-2xl font-serif text-[#86684A] mb-6 font-semibold"
+                className="text-2xl font-serif text-[#61422D] mb-6 font-semibold"
                 style={{
-                  fontFamily: 'Noto Serif SC, serif',
                   fontWeight: 600,
                   fontSize: 32,
                   lineHeight: '40px',
@@ -303,11 +306,10 @@ export default function CeramicsByEra() {
               <div
                 className="text-base pt-2 line-clamp-3 "
                 style={{
-                  fontFamily: 'Noto Sans SC, Inter, -apple-system, BlinkMacSystemFont, sans-serif',
                   fontWeight: 400,
-                  fontSize: 17,
-                  lineHeight: 1.8,
-                  letterSpacing: '0.2px',
+                  fontSize: 16,
+                  lineHeight: 1.5,
+                  letterSpacing: 0,
                   wordSpacing: '2px',
                   color: '#6D6A66',
                 }}

@@ -434,14 +434,14 @@ export default function ProductDetail() {
               )}
             </span>
           </div>
-          <h1 className="text-3xl md:text-4xl font-serif font-medium text-[#61422D] mb-2 leading-tight">
+          <h4 className="text-[26px] md:text-[32px] leading-[34px] md:leading-[40px] font-serif font-medium text-[#61422D] mb-2 ">
             {productDetail.title}
-          </h1>
+          </h4>
           <div className="max-w-xl">
-            <div className="text-base text-[#2E2A24] font-bold mb-1">Description</div>
+            <div className="text-[14px] leading-[20px] text-[#2E2A24] font-semibold mb-1">Description</div>
             <div
               ref={descRef}
-              className={`text-lg text-[#585550] mb-4 whitespace-pre-line ${
+              className={`text-[16px] leading-[24px] mb-3 text-[#585550]  whitespace-pre-line ${
                 !isDescriptionExpanded ? 'line-clamp-6' : ''
               }`}
             >
@@ -450,14 +450,14 @@ export default function ProductDetail() {
             {productDetail.description && (descLineCount > 6 || productDetail.description.length > 300) && (
               <button
                 onClick={() => setIsDescriptionExpanded(!isDescriptionExpanded)}
-                className="text-[#7B6142] font-medium hover:text-[#61422D] transition-colors mb-4"
+                className="text-[#020202] font-semibold text-[14px] leading-[20px] hover:text-[#61422D] transition-colors mb-4 uppercase"
               >
                 {isDescriptionExpanded ? t('READ_LESS') : t('READ_MORE')}
               </button>
             )}
             <Button
               text={t('ACQUIRE_THIS_ITEM')}
-              className="submit-form-btn"
+              className="submit-form-btn "
               onClick={() => setShowAcquireModal(true)}
             />
           </div>
@@ -475,7 +475,7 @@ export default function ProductDetail() {
           {/* Top right: close button */}
           <div className="absolute top-4 right-4 z-60">
             <button
-              className="text-white text-3xl font-bold"
+              className="text-white text-3xl font-semibold"
               onClick={closeModal}
               aria-label="Close"
             >
@@ -512,9 +512,9 @@ export default function ProductDetail() {
         <div className="w-full bg-[#F7F5EA] py-16 mt-10">
           <div className="max-w-6xl mx-auto px-4">
             <div className="flex flex-row justify-between items-center mb-8">
-              <h2 className="text-2xl md:text-3xl font-serif font-medium text-[#201F1C]">
+              <h4 className="text-[26px] md:text-[32px] leading-[34px] md:leading-[40px] font-serif font-semibold text-[#201F1C]">
                 You might be interested
-              </h2>
+              </h4>
               <button
                 className="text-[#020202] text-sm font-semibold hidden md:flex"
                 onClick={() => navigate('/browse')}
@@ -552,11 +552,11 @@ export default function ProductDetail() {
                             </div>
                           )}
                         </div>
-                        <h2 className="text-base font-serif font-semibold text-[#61422D] mb-2 leading-snug line-clamp-3 min-h-[72px]">
+                        <h5 className="text-[20px]  md:text-[24px] md:leading-[32px] leading-[28px]font-serif font-semibold text-[#61422D] mb-2 leading-snug line-clamp-3 min-h-[72px]">
                           {item.title}
-                        </h2>
+                        </h5>
                         <div className="border-t-2 border-[#E5E1D7] opacity-80 my-3"></div>
-                        <div className="flex flex-row justify-between text-xs text-[#585550] font-semibold">
+                        <div className="flex flex-row justify-between text-[14px] leading-[20px] text-[#585550] font-semibold">
                           <span>
                             {item.ageFrom} - {item.ageTo}
                           </span>
@@ -598,10 +598,10 @@ export default function ProductDetail() {
             </button>
             {/* Form Content */}
             <div className="flex-1 flex flex-col justify-center px-6 py-10">
-              <h2 className="text-4xl font-serif font-medium text-[#61422D] mb-4 text-center">
+              <h3 className=" font-serif text-[28px] leading-[32px] md:text-[40px] md:leading-[48px] font-semibold text-[#61422D] mb-4 text-center">
                 Secure Your Piece of History
-              </h2>
-              <div className="text-base text-[#585550] mb-8 text-center">
+              </h3>
+              <div className="text-[20px] leading-[28px] text-[#6D6A66] mb-8 text-center font-normal">
                 Fill in your details below, and we will be in touch with you shortly.
               </div>
               <form
@@ -612,7 +612,7 @@ export default function ProductDetail() {
                 }}
               >
                 <div>
-                  <label className="block mb-2 text-[#1F1F1F] font-medium">First Name</label>
+                  <label className="block mb-2 text-[#1F1F1F] font-normal text-[14px] leading-[20px]">First Name</label>
                   <input
                     type="text"
                     className={`w-full rounded border px-4 py-3 bg-white text-[#23211C] ${
@@ -630,7 +630,7 @@ export default function ProductDetail() {
                   {errors.firstName && <p className="text-red-500 text-sm mt-1">{errors.firstName}</p>}
                 </div>
                 <div>
-                  <label className="block mb-2 text-[#1F1F1F] font-medium">Last Name</label>
+                  <label className="block mb-2 text-[#1F1F1F] font-normal text-[14px] leading-[20px]">Last Name</label>
                   <input
                     type="text"
                     className={`w-full rounded border px-4 py-3 bg-white text-[#23211C] ${
@@ -648,7 +648,7 @@ export default function ProductDetail() {
                   {errors.lastName && <p className="text-red-500 text-sm mt-1">{errors.lastName}</p>}
                 </div>
                 <div>
-                  <label className="block mb-2 text-[#1F1F1F] font-medium">Item Code</label>
+                  <label className="block mb-2 text-[#1F1F1F] font-normal text-[14px] leading-[20px]">Item Code</label>
                   <input
                     type="text"
                     className={`w-full rounded border px-4 py-3 bg-white text-[#23211C] ${
@@ -666,7 +666,7 @@ export default function ProductDetail() {
                   {errors.itemCode && <p className="text-red-500 text-sm mt-1">{errors.itemCode}</p>}
                 </div>
                 <div>
-                  <label className="block mb-2 text-[#1F1F1F] font-medium">Contact Number</label>
+                  <label className="block mb-2 text-[#1F1F1F] font-normal text-[14px] leading-[20px]">Contact Number</label>
                   <PhoneInput
                     country={'sg'}
                     value={phone}

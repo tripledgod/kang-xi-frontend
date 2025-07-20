@@ -18,6 +18,7 @@ export interface Article {
   id: number;
   documentId: string;
   title: string;
+  shortDescription?: string;
   description: string;
   slug: string;
   createdAt: string;

@@ -1,22 +1,58 @@
 @import 'tailwindcss';
 
-body {
-  font-family: 'Noto Sans SC', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+@font-face {
+  font-family: 'PingFang SC';
+  src: url('/fonts/PingFangSC-Ultralight.otf') format('opentype');
+  font-weight: 200;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'PingFang SC';
+  src: url('/fonts/PingFangSC-Thin.otf') format('opentype');
+  font-weight: 300;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'PingFang SC';
+  src: url('/fonts/PingFangSC-Light.otf') format('opentype');
+  font-weight: 350;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'PingFang SC';
+  src: url('/fonts/PingFangSC-Regular.otf') format('opentype');
   font-weight: 400;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'PingFang SC';
+  src: url('/fonts/PingFangSC-Medium.otf') format('opentype');
+  font-weight: 500;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'PingFang SC';
+  src: url('/fonts/PingFangSC-Semibold.otf') format('opentype');
+  font-weight: 600;
+  font-display: swap;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-family: 'Noto Serif SC', serif;
+@font-face {
+  font-family: 'Source Han Serif SC VF';
+  src: url('/fonts/SourceHanSerifSC-VF.otf.woff2') format('woff2');
+  font-weight: 200 900;
+  font-display: swap;
+}
+body {
+  font-family: 'PingFang SC', serif;
+  font-weight: 400;
 }
 
-@import "tailwindcss/preflight";
+h1, h2, h3, h4, h5, h6 {
+  font-family: "source-han-serif-sc", 'PingFang SC', 'Noto Serif SC', 'Microsoft YaHei', 'SimSun', serif;
+  font-weight: 600;
+}
+
 @tailwind utilities;
 
 @keyframes slide-in-right {
@@ -30,4 +66,17 @@ h6 {
 
 .animate-slide-in-right {
   animation: slide-in-right 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@media (max-width: 767px) {
+  .scrollbar-hide {
+    -ms-overflow-style: none !important; /* IE and Edge */
+    scrollbar-width: none !important; /* Firefox */
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none !important; /* Chrome, Safari, Opera */
+    width: 0 !important;
+    height: 0 !important;
+    background: transparent !important;
+  }
 }
