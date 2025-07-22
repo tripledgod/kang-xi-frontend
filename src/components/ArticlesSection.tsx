@@ -60,7 +60,7 @@ export default function ArticlesSection() {
             lineHeight: '26px',
             letterSpacing: 0,
             wordSpacing: '2px',
-            opacity:0.8,
+            opacity: 0.8,
           }}
         >
           Feature articles of the month
@@ -125,11 +125,12 @@ export default function ArticlesSection() {
                     className="text-[14px] font-semibold leading-[20px] line-clamp-2 uppercase"
                     style={{ color: '#585550' }}
                   >
-                    {new Date(article.publishedAt).toLocaleDateString('en-US', {
-                      day: 'numeric',
+                    {new Date(article.publishedAt).toLocaleDateString('en-GB', {
+                      day: '2-digit',
                       month: 'short',
                       year: 'numeric',
-                    })}
+                    })
+                    .replace(/\b([a-z]{3})\b/i, (m) => m.toUpperCase())}
                   </div>
                 </div>
               );

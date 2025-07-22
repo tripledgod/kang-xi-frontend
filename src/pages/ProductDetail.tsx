@@ -48,7 +48,8 @@ export default function ProductDetail() {
   const { locale } = useLanguage();
   const { t } = useTranslation();
   const [descLineCount, setDescLineCount] = useState(0);
-  
+  const [showReadMore, setShowReadMore] = useState(false);
+
   // Add validation and loading states
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState({
@@ -136,15 +137,18 @@ export default function ProductDetail() {
     }
   }, [slug, locale]); // Re-fetch when locale changes
 
+  // Measure description lines only when description changes
   useEffect(() => {
-    if (productDetail?.description) {
-      const el = document.getElementById('product-description');
-      if (el) {
-        const lineHeight = parseFloat(getComputedStyle(el).lineHeight || '24');
-        const lines = Math.round(el.scrollHeight / lineHeight);
-        setDescLineCount(lines);
-      }
+    if (descRef.current) {
+      const el = descRef.current;
+      const lineHeight = parseFloat(getComputedStyle(el).lineHeight || '24');
+      const lines = Math.round(el.scrollHeight / lineHeight);
+      setDescLineCount(lines);
+      setShowReadMore(lines > 9);
+    } else {
+      setShowReadMore(false);
     }
+    setIsDescriptionExpanded(false); // Reset expand state when product changes
   }, [productDetail?.description]);
 
   const openModal = (idx: number) => {
@@ -299,6 +303,14 @@ export default function ProductDetail() {
     document.body.removeChild(textArea);
   };
 
+  // Render description as paragraphs to preserve spacing
+  const renderDescriptionParagraphs = (desc: string) => {
+    const paragraphs = desc.split(/\n|\r\n/);
+    return paragraphs.map((para, idx) => (
+      <p key={idx} style={{ marginBottom: 12 }}>{para}</p>
+    ));
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-[#F7F5EA] flex items-center justify-center">
@@ -309,7 +321,7 @@ export default function ProductDetail() {
 
   if (error || !productDetail) {
     return (
-      <div className="min-h-screen bg-[#F7F5EA] flex items-center justify-center">
+      <div className="min-h-screen bg-[#FAF7F2] flex items-center justify-center">
         <div className="text-center">
           <p className="text-[#61422D] text-lg mb-4">{error || 'Product not found'}</p>
           <button
@@ -327,8 +339,16 @@ export default function ProductDetail() {
   const images = productDetail.images || [];
   const imageUrls = getImagesUrls(images);
 
+  // Show only the first 500 characters of description if not expanded
+  const MAX_DESCRIPTION_LENGTH = 500;
+  const description = productDetail?.description || '';
+  const isLongDescription = description.length > MAX_DESCRIPTION_LENGTH;
+  const displayedDescription = !isDescriptionExpanded && isLongDescription
+    ? description.slice(0, MAX_DESCRIPTION_LENGTH) + '...'
+    : description;
+
   return (
-    <div className="w-full min-h-screen bg-[#F7F5EA]">
+    <div className="w-full min-h-screen bg-[#F7F3E8]  ">
       {/* Show popup when registration is successful */}
       {showSuccess && (
         <Popup
@@ -342,81 +362,65 @@ export default function ProductDetail() {
           onClose={() => setShowSuccess(false)}
         />
       )}
+
+      <div className="w-full border-t border-[#E8DBC0]" />
       {/* Breadcrumb */}
-      <div className="max-w-6xl mx-auto px-4 pt-6 text-xs text-[#888] mb-4">
+      <div className="w-full px-4 pt-6 text-xs text-[#817F7C] pb-5 md:px-[112px]  md:pb-[48px] font-semibold">
         <span>Home</span> <span className="mx-1">&gt;</span> <span>Browse</span>{' '}
         <span className="mx-1">&gt;</span>{' '}
-        <span className="text-[#201F1C]">{productDetail.title}</span>
+        <span className="text-[#201F1C] truncate max-w-[220px] md:max-w-full md:truncate-none inline-block align-bottom">
+          {productDetail.title}
+        </span>
       </div>
       {/* Main Section */}
-      <div className="max-w-6xl mx-auto px-4 flex flex-col md:flex-row gap-10 items-start">
-        {/* Left: Gallery */}
-        {/* Mobile: Slideshow */}
-        <div className="block md:hidden w-full">
-          <div className="relative w-full" {...swipeHandlers}>
+      <div className="w-full flex flex-col md:flex-row gap-10 md:items-start items-start md:px-[112px] pb-8 md:pb-22">
+        {/* Thumbnails (desktop only) */}
+        <div className="hidden md:flex flex-col gap-4 w-[109px] flex-shrink-0">
+          {imageUrls.map((img: string, idx: number) => (
             <img
-              src={imageUrls[mobileIndex] || mainImg}
-              alt={productDetail.title}
-              className="object-contain w-full max-h-[340px] bg-white rounded cursor-pointer"
-              onClick={() => openModal(mobileIndex)}
+              key={idx}
+              src={img}
+              alt={`Gallery Thumb ${idx + 1}`}
+              className={`w-[109px] h-[109px] object-cover cursor-pointer ${mainImg === img ? 'border border-[1px] border-[#61422D]' : 'border-none'}`}
+              onClick={() => setMainImg(img)}
+              onDoubleClick={() => openModal(idx)}
             />
-            {/* Pagination dots - now positioned over the image */}
-            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex justify-center gap-2">
-              {imageUrls.map((_: string, idx: number) => (
+          ))}
+        </div>
+        {/* Main Image */}
+        <div className="md:flex-shrink-0 md:flex md:items-start md:justify-center md:w-[539px] md:h-[636px] w-full">
+          <div className="relative bg-[#F7F3E8] w-full md:h-full flex items-start justify-center">
+            <img
+              src={mainImg}
+              alt={productDetail.title}
+              className="object-contain object-top w-full md:h-full"
+            />
+            {/* Pagination dots for mobile - overlay on image */}
+            <div className="md:hidden absolute left-1/2 -translate-x-1/2 bottom-2 flex flex-row gap-2 z-10 pb-1">
+              {imageUrls.map((_, idx) => (
                 <button
                   key={idx}
-                  className={`w-2 h-2 rounded-full ${mobileIndex === idx ? 'bg-[#7B6142]' : 'bg-white'} transition`}
-                  onClick={(e: React.MouseEvent) => {
-                    e.stopPropagation(); // Prevent image click when clicking dots
-                    setMobileIndex(idx);
-                  }}
+                  className={`w-2 h-2 rounded-full transition ${mainImg === imageUrls[idx] ? 'bg-[#61422D] opacity-100' : 'bg-[#201F1C] opacity-40'}`}
+                  onClick={() => setMainImg(imageUrls[idx])}
                   aria-label={`Go to image ${idx + 1}`}
                 />
               ))}
             </div>
+            <button
+              className="absolute top-2 right-2 bg-white rounded-full p-2 shadow hover:scale-110 transition md:block hidden"
+              onClick={() => openModal(0)}
+              aria-label="Zoom in"
+            >
+              <img src={zoomInIcon} alt="Zoom In" className="w-6 h-6" />
+            </button>
           </div>
         </div>
-        {/* Desktop: Thumbnails + Main Image */}
-        <div className="hidden md:flex flex-col md:flex-row gap-4 md:w-1/2 h-[400px] flex-shrink-0">
-          {/* Thumbnails */}
-          <div className="flex md:flex-col gap-2 md:gap-4 md:w-24">
-            {imageUrls.map((img: string, idx: number) => (
-              <img
-                key={idx}
-                src={img}
-                alt={`Gallery Thumb ${idx + 1}`}
-                className={`w-16 h-16 md:w-20 md:h-20 object-cover rounded cursor-pointer border border-[#7B6142]`}
-                onClick={() => setMainImg(img)}
-                onDoubleClick={() => openModal(idx)}
-              />
-            ))}
-          </div>
-          {/* Main Image with Zoom Button */}
-          <div className="flex-1 flex items-center justify-center">
-            <div className="relative w-full">
-              <img
-                src={mainImg}
-                alt={productDetail.title}
-                className="object-contain w-full max-h-[400px] bg-white rounded"
-              />
-              <button
-                className="absolute top-2 right-2 bg-white rounded-full p-2 shadow hover:scale-110 transition"
-                onClick={() => openModal(0)}
-                aria-label="Zoom in"
-              >
-                <img src={zoomInIcon} alt="Zoom In" className="w-6 h-6" />
-              </button>
-            </div>
-          </div>
-        </div>
-        {/* Right: Info */}
-        <div className="flex-1 flex flex-col gap-4">
-          <div className="flex flex-row justify-between text-xs text-[#23211C] font-semibold items-center">
+        {/* Product content, always visible */}
+        <div className="flex-1 md:pl-12 flex flex-col gap-4 md:min-h-[636px] md:px-0 px-4">
+          <div className="flex flex-row justify-between text-[14px]  text-[#585550] leading-[20px] font-semibold items-center">
             <span>
               {productDetail.ageFrom} - {productDetail.ageTo}
-              {productDetail.category?.name && (
-                <span> ({productDetail.category.name})</span>
-              )}
+              {productDetail.category?.name && <span> ({productDetail.category.name})</span>}
             </span>
             <span className="flex items-center gap-1">
               ITEM CODE {productDetail.itemCode || productDetail.documentId}
@@ -434,30 +438,30 @@ export default function ProductDetail() {
               )}
             </span>
           </div>
-          <h4 className="text-[26px] md:text-[32px] leading-[34px] md:leading-[40px] font-serif font-medium text-[#61422D] mb-2 ">
+          <h4 className="text-[26px] md:text-[32px] leading-[34px] md:leading-[40px] font-serif font-medium text-[#61422D] pb-1 ">
             {productDetail.title}
           </h4>
           <div className="max-w-xl">
-            <div className="text-[14px] leading-[20px] text-[#2E2A24] font-semibold mb-1">Description</div>
-            <div
-              ref={descRef}
-              className={`text-[16px] leading-[24px] mb-3 text-[#585550]  whitespace-pre-line ${
-                !isDescriptionExpanded ? 'line-clamp-6' : ''
-              }`}
-            >
-              {productDetail.description}
+            <div className="text-[14px] leading-[20px] text-[#2E2A24] font-semibold mb-2">
+              Description
             </div>
-            {productDetail.description && (descLineCount > 6 || productDetail.description.length > 300) && (
+            <div
+              id="product-description"
+              className="text-[16px] leading-[24px] text-[#585550]"
+            >
+              {renderDescriptionParagraphs(displayedDescription)}
+            </div>
+            {isLongDescription && (
               <button
-                onClick={() => setIsDescriptionExpanded(!isDescriptionExpanded)}
-                className="text-[#020202] font-semibold text-[14px] leading-[20px] hover:text-[#61422D] transition-colors mb-4 uppercase"
+                onClick={() => setIsDescriptionExpanded((prev) => !prev)}
+                className="text-[#201F1C] uppercase  text-[14px] leading-[20px] font-semibold"
               >
-                {isDescriptionExpanded ? t('READ_LESS') : t('READ_MORE')}
+                {isDescriptionExpanded ? 'Read Less' : 'Read More'}
               </button>
             )}
             <Button
               text={t('ACQUIRE_THIS_ITEM')}
-              className="submit-form-btn "
+              className="submit-form-btn mt-[34px] md:mt-10"
               onClick={() => setShowAcquireModal(true)}
             />
           </div>
@@ -509,10 +513,10 @@ export default function ProductDetail() {
       {(() => {
         return relatedProducts.length > 0;
       })() && (
-        <div className="w-full bg-[#F7F5EA] py-16 mt-10">
-          <div className="max-w-6xl mx-auto px-4">
+        <div className="w-full bg-[#FAF7F2] py-8 md:py-20 ">
+          <div className="w-full md:px-[112px] px-4">
             <div className="flex flex-row justify-between items-center mb-8">
-              <h4 className="text-[26px] md:text-[32px] leading-[34px] md:leading-[40px] font-serif font-semibold text-[#201F1C]">
+              <h4 className="text-[26px] md:text-[32px] leading-[34px] md:leading-[40px] font-serif font-semibold text-[#201F1C]  md:pb-4 md:pt-0">
                 You might be interested
               </h4>
               <button
@@ -575,7 +579,7 @@ export default function ProductDetail() {
         </div>
       )}
       {/* Acquire or Appraise Section */}
-      <div className="mt-20">
+      <div className="mt-8 md:mt-0">
         <AcquireOrAppraise />
       </div>
       {/* Right-side Acquire Modal */}
@@ -612,7 +616,9 @@ export default function ProductDetail() {
                 }}
               >
                 <div>
-                  <label className="block mb-2 text-[#1F1F1F] font-normal text-[14px] leading-[20px]">First Name</label>
+                  <label className="block mb-2 text-[#1F1F1F] font-normal text-[14px] leading-[20px]">
+                    First Name
+                  </label>
                   <input
                     type="text"
                     className={`w-full rounded border px-4 py-3 bg-white text-[#23211C] ${
@@ -627,10 +633,14 @@ export default function ProductDetail() {
                       }
                     }}
                   />
-                  {errors.firstName && <p className="text-red-500 text-sm mt-1">{errors.firstName}</p>}
+                  {errors.firstName && (
+                    <p className="text-red-500 text-sm mt-1">{errors.firstName}</p>
+                  )}
                 </div>
                 <div>
-                  <label className="block mb-2 text-[#1F1F1F] font-normal text-[14px] leading-[20px]">Last Name</label>
+                  <label className="block mb-2 text-[#1F1F1F] font-normal text-[14px] leading-[20px]">
+                    Last Name
+                  </label>
                   <input
                     type="text"
                     className={`w-full rounded border px-4 py-3 bg-white text-[#23211C] ${
@@ -645,10 +655,14 @@ export default function ProductDetail() {
                       }
                     }}
                   />
-                  {errors.lastName && <p className="text-red-500 text-sm mt-1">{errors.lastName}</p>}
+                  {errors.lastName && (
+                    <p className="text-red-500 text-sm mt-1">{errors.lastName}</p>
+                  )}
                 </div>
                 <div>
-                  <label className="block mb-2 text-[#1F1F1F] font-normal text-[14px] leading-[20px]">Item Code</label>
+                  <label className="block mb-2 text-[#1F1F1F] font-normal text-[14px] leading-[20px]">
+                    Item Code
+                  </label>
                   <input
                     type="text"
                     className={`w-full rounded border px-4 py-3 bg-white text-[#23211C] ${
@@ -663,10 +677,14 @@ export default function ProductDetail() {
                       }
                     }}
                   />
-                  {errors.itemCode && <p className="text-red-500 text-sm mt-1">{errors.itemCode}</p>}
+                  {errors.itemCode && (
+                    <p className="text-red-500 text-sm mt-1">{errors.itemCode}</p>
+                  )}
                 </div>
                 <div>
-                  <label className="block mb-2 text-[#1F1F1F] font-normal text-[14px] leading-[20px]">Contact Number</label>
+                  <label className="block mb-2 text-[#1F1F1F] font-normal text-[14px] leading-[20px]">
+                    Contact Number
+                  </label>
                   <PhoneInput
                     country={'sg'}
                     value={phone}

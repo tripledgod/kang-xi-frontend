@@ -57,14 +57,14 @@ export default function Articles() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#F7F5EA] flex items-center justify-center">
+      <div className="min-h-screen bg-[#F7F3E8] flex items-center justify-center">
         <Loading fullScreen={true} text="Loading..." />
       </div>
     );
   }
 
   return (
-    <div className="w-full min-h-screen pb-24 bg-[#F7F5EA] ">
+    <div className="w-full min-h-screen pb-24 bg-[#F7F3E8] ">
       {/* Hero Image */}
       <div className="relative w-full h-[220px] md:h-[320px] flex items-center justify-center overflow-hidden mb-8">
         <img
@@ -73,6 +73,7 @@ export default function Articles() {
           className="absolute inset-0 w-full h-full object-cover object-center"
           style={{ maxWidth: '100vw' }}
         />
+        <div className="absolute inset-0 bg-black opacity-40 z-10"></div>
       </div>
       {/* Featured Articles Section */}
       <div className="max-w-7xl mx-auto w-full pl-6 pr-6  flex flex-col gap-12 md:mt-30">
@@ -95,8 +96,9 @@ export default function Articles() {
                     e.currentTarget.src = articlesCover;
                   }}
                 />
+                <div className="absolute inset-0 bg-black opacity-40 z-10"></div>
                 {/* Could add overlay title/desc/date if needed */}
-                <div className="absolute bottom-0 left-0 right-0 p-4 z-10">
+                <div className="absolute bottom-0 left-0 right-0 p-4 z-20">
                   <h5 className="text-[20px] md:text-[24px] leading-[28px] md:leading-[32px] font-semibold text-white mb-2 line-clamp-2">
                     {article.title}
                   </h5>
@@ -104,11 +106,12 @@ export default function Articles() {
                     {article.description}
                   </div>
                   <div className="text-xs text-white font-semibold uppercase tracking-wider">
-                    {new Date(article.publishedAt).toLocaleDateString('en-US', {
-                      day: 'numeric',
+                    {new Date(article.publishedAt).toLocaleDateString('en-GB', {
+                      day: '2-digit',
                       month: 'short',
                       year: 'numeric',
-                    })}
+                    })
+                    .replace(/\b([a-z]{3})\b/i, (m) => m.toUpperCase())}
                   </div>
                 </div>
               </div>
@@ -137,7 +140,7 @@ export default function Articles() {
                   >
                     {/* Mobile Card Layout */}
                     <div className="block md:hidden p-0 w-full transition-colors hover:bg-[#f3efe2]">
-                      <div className="w-full">
+                      <div className="w-full flex flex-col h-full">
                         <div className="w-full h-48 overflow-hidden mb-4 bg-[#E6DDC6] flex items-center justify-center">
                           <img
                             src={imageUrl || articlesCover}
@@ -165,20 +168,22 @@ export default function Articles() {
                         <div className="text-base text-[#585550] mb-3 line-clamp-2 text-left">
                           {article.description}
                         </div>
+                        <div className="flex-1"></div>
                         <div className="text-xs text-[#7B6142] pb-6 font-semibold uppercase tracking-wider text-left">
-                          {new Date(article.publishedAt).toLocaleDateString('en-US', {
-                            day: 'numeric',
+                          {new Date(article.publishedAt).toLocaleDateString('en-GB', {
+                            day: '2-digit',
                             month: 'short',
                             year: 'numeric',
-                          })}
+                          })
+                          .replace(/\b([a-z]{3})\b/i, (m) => m.toUpperCase())}
                         </div>
                       </div>
                     </div>
                     {/* Desktop Grid Layout */}
-                    <div className="hidden md:grid grid-cols-[1fr_238px] gap-6 pb-6 w-full hover:bg-[#f3efe2] transition-colors">
-                      <div>
+                    <div className="hidden md:grid grid-cols-[1fr_238px] gap-6 w-full hover:bg-[#f3efe2] transition-colors">
+                      <div className="flex flex-col h-full">
                         <h5
-                          className="text-2xl font-serif font-semibold mb-2 leading-snug"
+                          className="text-2xl font-serif font-semibold mb-2 leading-snug line-clamp-2"
                           style={{
                             fontWeight: 600,
                             fontSize: 24,
@@ -190,15 +195,17 @@ export default function Articles() {
                         >
                           {article.title}
                         </h5>
-                        <div className="text-base text-[#585550] mb-3 line-clamp-2 text-left">
+                        <div className="text-base text-[#585550] mb-3 line-clamp-3 text-left">
                           {article.description}
                         </div>
+                        <div className="flex-1"></div>
                         <div className="text-[14px] leading-[20px] text-[#585550] font-semibold uppercase tracking-wider text-left">
-                          {new Date(article.publishedAt).toLocaleDateString('en-US', {
-                            day: 'numeric',
+                          {new Date(article.publishedAt).toLocaleDateString('en-GB', {
+                            day: '2-digit',
                             month: 'short',
                             year: 'numeric',
-                          })}
+                          })
+                          .replace(/\b([a-z]{3})\b/i, (m) => m.toUpperCase())}
                         </div>
                       </div>
                       <div className="w-[238px] h-[180px] flex-shrink-0 rounded overflow-hidden bg-[#E6DDC6] flex items-center justify-center md:justify-end">
@@ -215,7 +222,7 @@ export default function Articles() {
                     </div>
                     {/* Faded divider under each article */}
                     {idx !== articles.length - 1 && (
-                      <div className="border-t-2 border-[#E5E1D7] opacity-80 my-6"></div>
+                      <div className="border-t-2 border-[#E5E1D7] opacity-80 mt-8"></div>
                     )}
                   </Link>
                 );

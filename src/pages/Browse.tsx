@@ -143,7 +143,7 @@ const Browse: React.FC = () => {
     return (
       <div
         key={product.id}
-        className="flex flex-col cursor-pointer hover:shadow-lg transition-shadow rounded"
+        className="flex flex-col cursor-pointer rounded"
         onClick={() => navigate(`/products/${product.slug}`)}
       >
         <div className="bg-[#E6DDC6] aspect-square w-full flex items-center justify-center overflow-hidden mb-4">
@@ -190,7 +190,7 @@ const Browse: React.FC = () => {
 
   // When changing activeEra, if the active era is hidden, scrollIntoView (inline: 'nearest')
   useEffect(() => {
-    const idx = eras.findIndex(e => e.key === activeEra);
+    const idx = eras.findIndex((e) => e.key === activeEra);
     const tabContainer = eraTabRef.current;
     const btn = eraButtonRefs.current[idx];
     if (tabContainer && btn) {
@@ -251,7 +251,9 @@ const Browse: React.FC = () => {
             {eras.map((era, idx) => (
               <React.Fragment key={era.key}>
                 <button
-                  ref={el => { eraButtonRefs.current[idx] = el; }}
+                  ref={(el) => {
+                    eraButtonRefs.current[idx] = el;
+                  }}
                   className={`pb-2 transition-colors uppercase text-[17px] relative ${activeEra === era.key ? 'border-b-2 border-[#23211C] text-[#23211C] font-semibold opacity-90 z-20' : 'text-[#23211C] border-b-0'}`}
                   onClick={() => handleEraClick(era.key)}
                   style={era.style}
