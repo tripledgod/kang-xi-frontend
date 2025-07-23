@@ -71,14 +71,14 @@ export default function Articles() {
         {/* Mobile Hero Image */}
         <img
           src={heroMobileImage}
-          alt={articles[0]?.title || 'Articles Cover'}
+          alt="Articles Cover"
           className="absolute inset-0 w-full h-full object-cover object-center md:hidden"
           style={{ maxWidth: '100vw' }}
         />
         {/* Desktop Hero Image */}
         <img
           src={articlesCover}
-          alt={articles[0]?.title || 'Articles Cover'}
+          alt="Articles Cover"
           className="absolute inset-0 w-full h-full object-cover object-center hidden md:block"
           style={{ maxWidth: '100vw' }}
         />
