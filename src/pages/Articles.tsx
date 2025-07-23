@@ -101,7 +101,7 @@ export default function Articles() {
             return (
               <div
                 key={article.id}
-                className={`relative h-[340px] md:h-[400px] overflow-hidden group w-full ${idx === 0 ? 'md:w-4/5' : 'md:w-2/5'}`}
+                className={`relative h-[343px] md:h-[400px] overflow-hidden group w-full ${idx === 0 ? 'md:w-4/5' : 'md:w-2/5'}`}
               >
                 <img
                   src={imageUrl || articlesCover}
@@ -147,12 +147,18 @@ export default function Articles() {
               {articles.map((article, idx) => {
                 const imageUrl = getCoverUrl(article.cover);
 
+                // Hàm xử lý scroll lên đầu trước khi chuyển trang
+                const handleArticleClick = (e: React.MouseEvent) => {
+                  window.scrollTo({ top: 0, behavior: 'auto' });
+                };
+
                 return (
                   <Link
                     key={article.id}
                     to={`/article/${article.slug}`}
                     className="w-full"
                     style={{ textDecoration: 'none' }}
+                    onClick={handleArticleClick}
                   >
                     {/* Mobile Card Layout */}
                     <div className="block md:hidden p-0 w-full transition-colors">

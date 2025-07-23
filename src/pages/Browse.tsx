@@ -43,29 +43,43 @@ const Browse: React.FC = () => {
     window.scrollTo(0, 400);
   }, [searchParams]);
 
-  // Convert categories to eras
-  const eras: Era[] = flattenedCategories.map((category) => ({
+  // Danh sách slug era chuẩn, chỉ hiển thị đúng 5 era này và đúng thứ tự
+  const eraOrder = ['tang', 'song', 'yuan', 'ming', 'quing'];
+
+  // Lọc và sắp xếp flattenedCategories theo thứ tự chuẩn
+  const filteredSortedCategories = flattenedCategories
+    .filter((cat) => eraOrder.includes(cat.slug))
+    .sort((a, b) => eraOrder.indexOf(a.slug) - eraOrder.indexOf(b.slug));
+
+  // Convert categories to eras (chỉ lấy 5 era chuẩn, đúng thứ tự)
+  const eras: Era[] = filteredSortedCategories.map((category) => ({
     key: category.slug,
     label: category.name,
   }));
 
+  // Khai báo cứng 5 era
+  const eraTabs = [
+    { slug: 'tang', name: 'TANG' },
+    { slug: 'song', name: 'SONG' },
+    { slug: 'yuan', name: 'YUAN' },
+    { slug: 'ming', name: 'MING' },
+    { slug: 'quing', name: 'QUING' },
+  ];
+
+  // Khi load trang, nếu không có activeEra, set mặc định là 'tang'
+  useEffect(() => {
+    if (!activeEra) {
+      setActiveEra('tang');
+    }
+  }, [activeEra]);
+
+  // Fetch categories từ API để lấy id cho từng era
   useEffect(() => {
     const fetchCategories = async () => {
       try {
         const categoriesData = await getCategories(locale);
         if (categoriesData && categoriesData.length > 0) {
           setCategories(categoriesData);
-          const flattened = categoriesData.map((cat) => flattenCategory(cat));
-          setFlattenedCategories(flattened);
-
-          const eraFromUrl = searchParams.get('era');
-          const categoryExists = flattened.find((cat) => cat.slug === eraFromUrl);
-
-          if (eraFromUrl && categoryExists) {
-            setActiveEra(eraFromUrl);
-          } else if (flattened.length > 0) {
-            setActiveEra(flattened[0].slug);
-          }
         } else {
           setError('No categories found');
         }
@@ -74,38 +88,43 @@ const Browse: React.FC = () => {
         setError('Unable to load categories');
       }
     };
-
     withCategoriesLoading(fetchCategories);
-  }, [locale, searchParams]);
+  }, [locale]);
 
+  // Fetch sản phẩm theo activeEra (dùng categories để lấy id)
   useEffect(() => {
-    if (!activeEra || flattenedCategories.length === 0) return;
-    const category = flattenedCategories.find((cat) => cat.slug === activeEra);
-    if (!category) return;
-
+    if (!activeEra || categories.length === 0) return;
+    // Tìm category theo slug
+    const category = categories.map((cat) => flattenCategory(cat)).find((cat) => cat.slug === activeEra);
+    if (!category) {
+      setProducts([]);
+      setErrorProducts('No data for this era');
+      return;
+    }
     const fetchProducts = async () => {
       try {
         setErrorProducts(null);
         const productsData = await getProductsByCategory(category.id, locale);
-
         if (productsData && productsData.length > 0) {
           const flattened = productsData.map((prod) => flattenProduct(prod));
           setProducts(flattened);
         } else {
           setProducts([]);
+          setErrorProducts('No data for this era');
         }
       } catch (err) {
         console.error('Error fetching products:', err);
         setErrorProducts('Unable to load product list');
       }
     };
-
     withProductsLoading(fetchProducts);
-  }, [activeEra, flattenedCategories, locale]);
+  }, [activeEra, categories, locale]);
 
   const handleEraClick = (eraSlug: string) => {
-    setActiveEra(eraSlug);
-    navigate(`/browse?era=${eraSlug}`, { replace: true });
+    if (eraSlug !== activeEra) {
+      setActiveEra(eraSlug);
+      navigate(`/browse?era=${eraSlug}`, { replace: true });
+    }
   };
 
   // Component ProductCard to manage image state for each product
@@ -248,19 +267,18 @@ const Browse: React.FC = () => {
             ref={eraTabRef}
             className="inline-flex items-center gap-x-[18px] md:gap-x-2 justify-start pl-[10px] md:pl-[64px] uppercase whitespace-nowrap"
           >
-            {eras.map((era, idx) => (
-              <React.Fragment key={era.key}>
+            {eraTabs.map((era, idx) => (
+              <React.Fragment key={era.slug}>
                 <button
                   ref={(el) => {
                     eraButtonRefs.current[idx] = el;
                   }}
-                  className={`pb-2 transition-colors uppercase text-[17px] relative ${activeEra === era.key ? 'border-b-2 border-[#23211C] text-[#23211C] font-semibold opacity-90 z-20' : 'text-[#23211C] border-b-0'}`}
-                  onClick={() => handleEraClick(era.key)}
-                  style={era.style}
+                  className={`pb-2 transition-colors uppercase text-[17px] relative ${activeEra === era.slug ? 'border-b-2 border-[#23211C] text-[#23211C] font-semibold opacity-90 z-20' : 'text-[#23211C] border-b-0'}`}
+                  onClick={() => handleEraClick(era.slug)}
                 >
-                  {era.label}
+                  {era.name}
                 </button>
-                {idx < eras.length - 1 && (
+                {idx < eraTabs.length - 1 && (
                   <span className="text-[#D6C7A1] text-lg mx-2 flex items-center select-none">
                     +
                   </span>
@@ -280,12 +298,6 @@ const Browse: React.FC = () => {
         ) : errorProducts ? (
           <div className="text-center py-16">
             <p className="text-[#61422D] text-lg mb-4">{errorProducts}</p>
-            <button
-              onClick={() => window.location.reload()}
-              className="px-4 py-2 bg-[#7B6142] text-white rounded hover:bg-[#6a5437]"
-            >
-              Try Again
-            </button>
           </div>
         ) : products.length === 0 ? (
           <div className="text-center py-16">

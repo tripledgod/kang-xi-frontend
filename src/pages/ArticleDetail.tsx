@@ -60,9 +60,7 @@ function RelatedArticles({ related }: { related: Article[] }) {
 
   return (
     <section className="w-full py-16 px-4">
-      <h2 className="text-4xl text-[#61422D] mb-12 text-center">
-        Related Articles
-      </h2>
+      <h2 className="text-4xl text-[#61422D] mb-12 text-center">Related Articles</h2>
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
         {related.map((article) => (
           <div
@@ -85,7 +83,7 @@ function RelatedArticles({ related }: { related: Article[] }) {
                 style={{
                   // fontFamily: 'Noto Serif SC, serif',
                   // fontWeight: 600,
-                  
+
                   letterSpacing: 0,
                   textAlign: 'left',
                   color: '#1E1E1E',
@@ -147,10 +145,10 @@ export default function ArticleDetail() {
   const { locale } = useLanguage();
   const [error, setError] = useState<string | null>(null);
 
-  // Scroll to top when component mounts
+  // Scroll to top when slug changes (mỗi lần chuyển bài viết)
   useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+    window.scrollTo({ top: 0, behavior: 'auto' });
+  }, [slug]);
 
   useEffect(() => {
     const fetchArticle = async () => {
