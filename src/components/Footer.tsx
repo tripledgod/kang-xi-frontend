@@ -61,7 +61,7 @@ export default function Footer() {
         <div className="w-full border-t border-[#23211C] mb-6"></div>
         <div className="w-full flex flex-col items-center gap-6 md:flex-row md:items-center md:justify-between max-w-6xl mx-auto">
           <div className="text-base text-[#FFFFFF] text-center opacity-80">
-            © Kangxi Collection 2025. All rights reserved.
+            © Kangxi Collection {new Date().getFullYear()}. All rights reserved.
           </div>
           <div className="flex gap-8 justify-center">
             <a href="#" aria-label="Facebook" target="_blank" rel="noopener noreferrer">

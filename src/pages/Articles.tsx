@@ -9,7 +9,8 @@ import ceramics from '../assets/ceramics.png';
 import chaseCollection from '../assets/chase_collection.png';
 import ceramicsMobile from '../assets/ceramics_mobile.png';
 import ourArticles from '../assets/our_articles.png';
-import articlesCover from '../assets/articles_cover.png';
+import articlesCover from '../assets/hero_image.png';
+import heroMobileImage from '../assets/hero_mobile_image.png';
 import bigLeft from '../assets/big_left_article.png';
 import bigRight from '../assets/big_right_article.png';
 import { getArticles, Article } from '../api/articles';
@@ -66,14 +67,29 @@ export default function Articles() {
   return (
     <div className="w-full min-h-screen pb-24 bg-[#F7F3E8] ">
       {/* Hero Image */}
-      <div className="relative w-full h-[220px] md:h-[320px] flex items-center justify-center overflow-hidden mb-8">
+      <div className="relative w-full h-[220px] md:h-[312px] flex items-center justify-center overflow-hidden mb-8 md:pt-[96px] md:pb-[96px]">
+        {/* Mobile Hero Image */}
+        <img
+          src={heroMobileImage}
+          alt={articles[0]?.title || 'Articles Cover'}
+          className="absolute inset-0 w-full h-full object-cover object-center md:hidden"
+          style={{ maxWidth: '100vw' }}
+        />
+        {/* Desktop Hero Image */}
         <img
           src={articlesCover}
           alt={articles[0]?.title || 'Articles Cover'}
-          className="absolute inset-0 w-full h-full object-cover object-center"
+          className="absolute inset-0 w-full h-full object-cover object-center hidden md:block"
           style={{ maxWidth: '100vw' }}
         />
-        <div className="absolute inset-0 bg-black opacity-40 z-10"></div>
+        <div className="absolute inset-0 bg-black/40 z-10"></div>
+        {/* Add prominent title on hero image if needed */}
+        <div className="absolute inset-0 flex flex-col items-center justify-center z-20">
+          <h3 className="text-white text-[40px] leading-[48px] font-semibold drop-shadow-lg text-center md:hidden" style={{ letterSpacing: '-0.01em' }}>Articles</h3>
+          <h1 className="hidden md:block text-white text-[60px] leading-[72px] font-semibold drop-shadow-lg text-center" style={{ letterSpacing: '-0.02em' }}>Articles</h1>
+          <p className="text-white md:hidden drop-shadow-lg  text-[18px] leading-[26px] mt-4">Appreciating Chinese Works of Art</p>
+          <p className="text-white hidden md:block drop-shadow-lg text-[20px] leading-[28px] mt-5">Appreciating Chinese Works of Art</p>
+        </div>
       </div>
       {/* Featured Articles Section */}
       <div className="max-w-7xl mx-auto w-full pl-6 pr-6  flex flex-col gap-12 md:mt-30">
@@ -85,7 +101,7 @@ export default function Articles() {
             return (
               <div
                 key={article.id}
-                className={`relative h-[340px] md:h-[400px] rounded overflow-hidden group w-full ${idx === 0 ? 'md:w-4/5' : 'md:w-2/5'}`}
+                className={`relative h-[340px] md:h-[400px] overflow-hidden group w-full ${idx === 0 ? 'md:w-4/5' : 'md:w-2/5'}`}
               >
                 <img
                   src={imageUrl || articlesCover}
@@ -97,15 +113,15 @@ export default function Articles() {
                   }}
                 />
                 <div className="absolute inset-0 bg-black opacity-40 z-10"></div>
-                {/* Could add overlay title/desc/date if needed */}
+                {/* Overlay title/desc/date always white and clear */}
                 <div className="absolute bottom-0 left-0 right-0 p-4 z-20">
-                  <h5 className="text-[20px] md:text-[24px] leading-[28px] md:leading-[32px] font-semibold text-white mb-2 line-clamp-2">
+                  <h5 className="text-[20px] md:text-[24px] leading-[28px] md:leading-[32px] font-semibold text-white mb-2 line-clamp-2 drop-shadow-lg">
                     {article.title}
                   </h5>
-                  <div className="text-base text-white mb-3 line-clamp-2">
+                  <div className="text-base text-white mb-3 line-clamp-2 drop-shadow-lg">
                     {article.description}
                   </div>
-                  <div className="text-xs text-white font-semibold uppercase tracking-wider">
+                  <div className="text-xs text-white font-semibold uppercase tracking-wider drop-shadow-lg">
                     {new Date(article.publishedAt).toLocaleDateString('en-GB', {
                       day: '2-digit',
                       month: 'short',
@@ -139,7 +155,7 @@ export default function Articles() {
                     style={{ textDecoration: 'none' }}
                   >
                     {/* Mobile Card Layout */}
-                    <div className="block md:hidden p-0 w-full transition-colors hover:bg-[#f3efe2]">
+                    <div className="block md:hidden p-0 w-full transition-colors">
                       <div className="w-full flex flex-col h-full">
                         <div className="w-full h-48 overflow-hidden mb-4 bg-[#E6DDC6] flex items-center justify-center">
                           <img
@@ -180,7 +196,7 @@ export default function Articles() {
                       </div>
                     </div>
                     {/* Desktop Grid Layout */}
-                    <div className="hidden md:grid grid-cols-[1fr_238px] gap-6 w-full hover:bg-[#f3efe2] transition-colors">
+                    <div className="hidden md:grid grid-cols-[1fr_238px] gap-6 w-full transition-colors">
                       <div className="flex flex-col h-full">
                         <h5
                           className="text-2xl font-serif font-semibold mb-2 leading-snug line-clamp-2"
@@ -208,7 +224,7 @@ export default function Articles() {
                           .replace(/\b([a-z]{3})\b/i, (m) => m.toUpperCase())}
                         </div>
                       </div>
-                      <div className="w-[238px] h-[180px] flex-shrink-0 rounded overflow-hidden bg-[#E6DDC6] flex items-center justify-center md:justify-end">
+                      <div className="w-[238px] h-[180px] flex-shrink-0 overflow-hidden bg-[#E6DDC6] flex items-center justify-center md:justify-end">
                         <img
                           src={imageUrl || articlesCover}
                           alt={article.title}
