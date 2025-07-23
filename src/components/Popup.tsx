@@ -2,7 +2,7 @@ import React from 'react';
 import Button from './Button';
 
 import { COLORS } from './colors.ts';
-import bgButtonSubmitForm from '../assets/bg_button_submit_form.png'
+import bgButtonSubmitForm from '../assets/bg_button_submit_form.png';
 import bgButtonMobile from '../assets/bg_button_mobile.png';
 
 interface PopupProps {
@@ -27,23 +27,22 @@ const Popup: React.FC<PopupProps> = ({ title, content, buttonText, onButtonClick
         </button>
         {/* Title */}
         <div className="w-full flex flex-col items-center">
-          <h3
-            className="text-center mb-6 md:mb-8 leading-tight"
+          <h4
+            className="text-center mb-6 md:mb-4 leading-[40px]"
             style={{
               fontWeight: 600,
-              fontSize: 30,
+              fontSize: 32,
               color: COLORS.primary900,
-              fontFamily: 'serif',
               marginTop: '24px',
             }}
           >
             {title}
-          </h3>
+          </h4>
         </div>
         {/* Content */}
         <div
-          className="text-center mb-10 md:mb-14 font-normal"
-          style={{ fontSize: 18, fontWeight: 400, color: COLORS.secondary600 }}
+          className="text-center mb-10 md:mb-8 font-normal leading-[28px]"
+          style={{ fontSize: 20, fontWeight: 400, color: COLORS.secondary600 }}
         >
           {content}
         </div>
