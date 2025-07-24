@@ -103,19 +103,29 @@ export default function AboutUs() {
           <div className="text-[18px] leading-[26px] text-[#585550] mb-5">
             {aboutData?.heritage?.body || 'Loading...'}
           </div>
-          <div className="h-[1px] bg-[#D5D4D3] w-full my-4 md:my-8"></div>
-          <div className="flex gap-12">
+          <div className="h-[1px] bg-[#D5D4D3] w-full my-4 md:mt-8"></div>
+          <div className="flex gap-12 ">
             <div>
-              <div className="text-5xl font-medium text-[#7B6142]">
+              <h2 style={{ letterSpacing: '-1%' }} className="text-5xl font-medium text-[#61422D]">
                 {aboutData?.heritage?.yearsExp || '25'}+
+              </h2>
+              <div
+                style={{ letterSpacing: '0.5px' }}
+                className="text-[14px] leading-[20px] font-semibold text-[#585550] mt-2"
+              >
+                YEARS EXPERIENCES
               </div>
-              <div className="text-xs text-[#585550] mt-1">YEARS EXPERIENCES</div>
             </div>
             <div>
-              <div className="text-5xl font-medium text-[#7B6142]">
+              <h2 style={{ letterSpacing: '-1%' }} className="text-5xl font-medium text-[#61422D]">
                 {aboutData?.heritage?.rareCollectibleItems || '100'}+
+              </h2>
+              <div
+                style={{ letterSpacing: '0.5px' }}
+                className="text-[14px] leading-[20px] font-semibold text-[#585550] mt-2"
+              >
+                RARE COLLECTIBLE ITEMS
               </div>
-              <div className="text-xs text-[#585550] mt-1">RARE COLLECTIBLE ITEMS</div>
             </div>
           </div>
         </div>
@@ -190,10 +200,22 @@ export default function AboutUs() {
                 disabled={!canGoLeft}
                 aria-label="Previous"
               >
-                <span className="text-[20px] text-[#93633B] font-semibold"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-6">
-  <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
-</svg>
-</span>
+                <span className="text-[20px] text-[#93633B] font-semibold">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    className="size-6"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"
+                    />
+                  </svg>
+                </span>
               </button>
               <button
                 className="ticket-rounded w-12 h-12 border-2 border-[#DAC497] rounded-lg flex items-center justify-center bg-transparent text-[#93633B] hover:bg-[#E6DDC6] transition "
@@ -205,10 +227,22 @@ export default function AboutUs() {
                 disabled={!canGoRight}
                 aria-label="Next"
               >
-                <span className="text-[20px] text-[#93633B] font-semibold"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-6">
-  <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
-</svg>
-</span>
+                <span className="text-[20px] text-[#93633B] font-semibold">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    className="size-6"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"
+                    />
+                  </svg>
+                </span>
               </button>
             </div>
           </div>

@@ -281,7 +281,7 @@ const Browse: React.FC = () => {
                   {era.name}
                 </button>
                 {idx < eraTabs.length - 1 && (
-                  <span className="text-[#D6C7A1] text-lg mx-2 flex items-center  select-none  ">
+                  <span className="text-[#D6C7A1] text-lg mx-2 flex items-center  select-none mb-[5px] ">
                     +
                   </span>
                 )}
