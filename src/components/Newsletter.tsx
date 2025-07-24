@@ -9,7 +9,7 @@ import { subscribe } from '../api/newsletter';
 
 export default function Newsletter() {
   const [showPopup, setShowPopup] = useState(false);
-  const [email, setEmail] = useState('');
+  const [firstName, setFirstName] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
@@ -21,16 +21,14 @@ export default function Newsletter() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const validateEmail = (email: string) => {
-    // Simple validation, can be replaced with better regex if needed
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
+  const validateFirstName = (name: string) => {
+    return name.trim().length > 0;
   };
 
   const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!validateEmail(email)) {
-      setError('Please enter a valid email address');
+    if (!validateFirstName(firstName)) {
+      setError('Please enter your first name');
       return;
     }
 
@@ -38,19 +36,21 @@ export default function Newsletter() {
     setError('');
 
     try {
-      await subscribe(email);
+      await subscribe(firstName);
       setShowPopup(true);
-      setEmail('');
+      setFirstName('');
     } catch (err: any) {
       // Handle Strapi error
       if (err?.response?.data?.error?.details?.errors) {
         const errors = err.response.data.error.details.errors;
-        const emailError = errors.find((e: any) => e.path.includes('email'));
-        if (emailError) {
-          if (emailError.message.includes('unique')) {
-            setError('This email has already been registered');
+        const nameError = errors.find(
+          (e: any) => e.path.includes('email') || e.path.includes('firstName')
+        );
+        if (nameError) {
+          if (nameError.message.includes('unique')) {
+            setError('This name has already been registered');
           } else {
-            setError(emailError.message);
+            setError(nameError.message);
           }
         } else {
           setError('An error occurred, please try again.');
@@ -84,7 +84,7 @@ export default function Newsletter() {
                   letterSpacing: 0,
                 }}
               >
-                GET THE LATEST NEW
+                GET THE LATEST NEWS
               </h5>
             ) : (
               <h4
@@ -97,7 +97,7 @@ export default function Newsletter() {
                   letterSpacing: 0,
                 }}
               >
-                GET THE LATEST NEW
+                GET THE LATEST NEWS
               </h4>
             )}
             <p
@@ -108,7 +108,7 @@ export default function Newsletter() {
                 fontSize: 18,
                 lineHeight: '26px',
                 letterSpacing: 0,
-                opacity:0.8,
+                opacity: 0.8,
               }}
             >
               Subscribe to get our 2020 catalog as well as get exclusive invites to our private
@@ -121,12 +121,12 @@ export default function Newsletter() {
           onSubmit={handleSubscribe}
           className="w-full flex flex-col md:flex-row md:items-center md:justify-end gap-4.5 md:gap-x-4 md:mt-0"
         >
-          <div className="w-full md:w-2/3">
+          <div className="w-full md:w-2/3 relative">
             <input
               type="text"
               placeholder="Enter your first name"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
               disabled={loading}
               className="w-full h-[48px] rounded-lg border px-6 text-lg focus:outline-none focus:ring-2 text-[16px] leading-[24px]"
               style={{
@@ -136,7 +136,12 @@ export default function Newsletter() {
                 boxShadow: 'none',
               }}
             />
-            {error && <div className="text-red-600 text-sm mt-1">{error}</div>}
+            <div
+              className="text-red-600 text-sm mt-1 absolute left-0 top-full w-full"
+              style={{ minHeight: 0 }}
+            >
+              {error || ''}
+            </div>
           </div>
           <div className="w-full justify-center md:w-1/3 h-[48px] flex items-center">
             {/* Button desktop */}
@@ -152,7 +157,7 @@ export default function Newsletter() {
                 color: '#fff',
                 opacity: loading ? 0.7 : 1,
                 cursor: loading ? 'not-allowed' : 'pointer',
-                letterSpacing:'0.5px',
+                letterSpacing: '0.5px',
               }}
             >
               {loading ? 'SENDING...' : t('SUBSCRIBE')}
@@ -180,6 +185,8 @@ export default function Newsletter() {
       {showPopup && (
         <Popup
           title="Thanks for subscribing!"
+          titleClassName="md:text-[32px] md:leading-[40px] text-[30px] leading-[36px]"
+          containerClassName=" md:h-[244px] h-[274px] "
           content="We will be in touch with you shortly."
           buttonText="BACK TO HOMEPAGE"
           onButtonClick={handleClosePopup}

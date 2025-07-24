@@ -126,7 +126,9 @@ export default function AcquireAnItem() {
       {/* Show popup when registration is successful */}
       {showSuccess && (
         <Popup
-          title="Thank you for contacting us!"
+          title={'Thank you for\ncontacting us'}
+          titleClassName="md:text-[40px] md:leading-[48px] text-[30px] leading-[36px]"
+          containerClassName=" md:h-[300px] h-[274px] "
           content="We will  be in  touch with you  shortly."
           buttonText="BACK TO HOMEPAGE"
           onButtonClick={() => {
@@ -142,10 +144,14 @@ export default function AcquireAnItem() {
           {/* Left */}
           <div className="flex-1 text-white mb-8 md:mb-0">
             <h1 className="hidden md:block text-[60px] leading-[72px] font-serif font-semibold mb-6">
-              Reserve a Timeless<br />Treasure
+              Reserve a Timeless
+              <br />
+              Treasure
             </h1>
             <h3 className="block md:hidden text-[40px] leading-[48px] font-serif font-semibold mb-6">
-              Reserve a<br/> Timeless<br />Treasure
+              Reserve a<br /> Timeless
+              <br />
+              Treasure
             </h3>
             <p className="mb-6 text-[18px] leading-[26px] text-[#FFFFFF] max-w-md opacity-70">
               Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in
@@ -194,7 +200,9 @@ export default function AcquireAnItem() {
                     {step.icon}
                   </div>
                   <div>
-                    <h5 className="text-[20px] md:text-[24px] leading-[28px] md:leading-[32px] font-semibold text-[#61422D] mb-1">{step.title}</h5>
+                    <h5 className="text-[20px] md:text-[24px] leading-[28px] md:leading-[32px] font-semibold text-[#61422D] mb-1">
+                      {step.title}
+                    </h5>
                     <div className="text-base text-[#6D6A66]">{step.desc}</div>
                   </div>
                 </div>
@@ -230,9 +238,10 @@ export default function AcquireAnItem() {
               the next step.
             </p>
             <p className="text-[18px] leading-[26px] text-[#6D6A66]">
-              Each artifact in our curation is unique, often with centuries of history behind it. Due
-              to the rarity and exclusivity of these pieces, availability is limited. To ensure a
-              seamless acquisition process, kindly fill out the form below to express your interest.
+              Each artifact in our curation is unique, often with centuries of history behind it.
+              Due to the rarity and exclusivity of these pieces, availability is limited. To ensure
+              a seamless acquisition process, kindly fill out the form below to express your
+              interest.
             </p>
           </div>
         </div>
@@ -258,7 +267,9 @@ export default function AcquireAnItem() {
             }}
           >
             <div>
-              <label className="block mb-2 text-[#1F1F1F] font-normal text-[14px] leading-[20px]">First Name</label>
+              <label className="block mb-2 text-[#1F1F1F] font-normal text-[14px] leading-[20px]">
+                First Name
+              </label>
               <input
                 type="text"
                 className={`w-full rounded border px-4 py-3 bg-white text-[#23211C] ${
@@ -276,7 +287,9 @@ export default function AcquireAnItem() {
               {errors.firstName && <p className="text-red-500 text-sm mt-1">{errors.firstName}</p>}
             </div>
             <div>
-              <label className="block mb-2 text-[#1F1F1F] font-normal text-[14px] leading-[20px]">Last Name</label>
+              <label className="block mb-2 text-[#1F1F1F] font-normal text-[14px] leading-[20px]">
+                Last Name
+              </label>
               <input
                 type="text"
                 className={`w-full rounded border px-4 py-3 bg-white text-[#23211C] ${
@@ -294,7 +307,9 @@ export default function AcquireAnItem() {
               {errors.lastName && <p className="text-red-500 text-sm mt-1">{errors.lastName}</p>}
             </div>
             <div>
-              <label className="block mb-2 text-[#1F1F1F] font-normal text-[14px] leading-[20px]">Item Code</label>
+              <label className="block mb-2 text-[#1F1F1F] font-normal text-[14px] leading-[20px]">
+                Item Code
+              </label>
               <input
                 type="text"
                 className={`w-full rounded border px-4 py-3 bg-white text-[#23211C] ${
@@ -312,7 +327,9 @@ export default function AcquireAnItem() {
               {errors.itemCode && <p className="text-red-500 text-sm mt-1">{errors.itemCode}</p>}
             </div>
             <div>
-              <label className="block mb-2 text-[#1F1F1F] font-normal text-[14px] leading-[20px]">Contact Number</label>
+              <label className="block mb-2 text-[#1F1F1F] font-normal text-[14px] leading-[20px]">
+                Contact Number
+              </label>
               <PhoneInput
                 country={'sg'}
                 value={phone}

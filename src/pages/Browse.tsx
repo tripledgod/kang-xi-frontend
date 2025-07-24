@@ -95,7 +95,9 @@ const Browse: React.FC = () => {
   useEffect(() => {
     if (!activeEra || categories.length === 0) return;
     // Tìm category theo slug
-    const category = categories.map((cat) => flattenCategory(cat)).find((cat) => cat.slug === activeEra);
+    const category = categories
+      .map((cat) => flattenCategory(cat))
+      .find((cat) => cat.slug === activeEra);
     if (!category) {
       setProducts([]);
       setErrorProducts('No data for this era');
@@ -279,7 +281,7 @@ const Browse: React.FC = () => {
                   {era.name}
                 </button>
                 {idx < eraTabs.length - 1 && (
-                  <span className="text-[#D6C7A1] text-lg mx-2 flex items-center select-none">
+                  <span className="text-[#D6C7A1] text-lg mx-2 flex justify-center select-none">
                     +
                   </span>
                 )}

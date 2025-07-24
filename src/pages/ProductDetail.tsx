@@ -307,7 +307,9 @@ export default function ProductDetail() {
   const renderDescriptionParagraphs = (desc: string) => {
     const paragraphs = desc.split(/\n|\r\n/);
     return paragraphs.map((para, idx) => (
-      <p key={idx} style={{ marginBottom: 12 }}>{para}</p>
+      <p key={idx} style={{ marginBottom: 12 }}>
+        {para}
+      </p>
     ));
   };
 
@@ -343,16 +345,19 @@ export default function ProductDetail() {
   const MAX_DESCRIPTION_LENGTH = 500;
   const description = productDetail?.description || '';
   const isLongDescription = description.length > MAX_DESCRIPTION_LENGTH;
-  const displayedDescription = !isDescriptionExpanded && isLongDescription
-    ? description.slice(0, MAX_DESCRIPTION_LENGTH) + '...'
-    : description;
+  const displayedDescription =
+    !isDescriptionExpanded && isLongDescription
+      ? description.slice(0, MAX_DESCRIPTION_LENGTH) + '...'
+      : description;
 
   return (
     <div className="w-full min-h-screen bg-[#F7F3E8]  ">
       {/* Show popup when registration is successful */}
       {showSuccess && (
         <Popup
-          title="Thank you for contacting us!"
+          title={`Thank you for\n contacting us`}
+          titleClassName="md:text-[40px] md:leading-[48px] text-[30px] leading-[36px]"
+          containerClassName=" md:h-[300px] h-[274px] "
           content="We will  be in  touch with you  shortly."
           buttonText="BACK TO HOMEPAGE"
           onButtonClick={() => {
@@ -445,10 +450,7 @@ export default function ProductDetail() {
             <div className="text-[14px] leading-[20px] text-[#2E2A24] font-semibold mb-2">
               Description
             </div>
-            <div
-              id="product-description"
-              className="text-[16px] leading-[24px] text-[#585550]"
-            >
+            <div id="product-description" className="text-[16px] leading-[24px] text-[#585550]">
               {renderDescriptionParagraphs(displayedDescription)}
             </div>
             {isLongDescription && (

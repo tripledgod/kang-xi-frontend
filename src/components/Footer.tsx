@@ -58,7 +58,8 @@ export default function Footer() {
             </div>
           </div>
         </nav>
-        <div className="w-full border-t border-[#23211C] mb-6"></div>
+        {/* Faint divider line */}
+        <div className="w-full max-w-[341px] mx-auto border-t border-[#FDFBF1]/20 opacity-50 mb-6 md:max-w-6xl" style={{ borderTopWidth: '1px' }}></div>
         <div className="w-full flex flex-col items-center gap-6 md:flex-row md:items-center md:justify-between max-w-6xl mx-auto">
           <div className="text-base text-[#FFFFFF] text-center opacity-80">
             © Kangxi Collection {new Date().getFullYear()}. All rights reserved.
