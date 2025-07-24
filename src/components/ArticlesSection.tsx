@@ -78,7 +78,7 @@ export default function ArticlesSection() {
                 <div
                   key={article.id}
                   className="flex flex-col cursor-pointer transition-transform duration-200 hover:scale-105"
-                  onClick={() => handleArticleClick(article.slug)}
+                  onClick={() =>{ window.scrollTo({ top: 0, behavior: 'auto' }); handleArticleClick(article.slug)}}
                 >
                   <div className="bg-[#E6DDC6] aspect-square w-full flex items-center justify-center overflow-hidden mb-4">
                     {imageUrl ? (
@@ -125,12 +125,13 @@ export default function ArticlesSection() {
                     className="text-[14px] font-semibold leading-[20px] line-clamp-2 uppercase"
                     style={{ color: '#585550' }}
                   >
-                    {new Date(article.publishedAt).toLocaleDateString('en-GB', {
-                      day: '2-digit',
-                      month: 'short',
-                      year: 'numeric',
-                    })
-                    .replace(/\b([a-z]{3})\b/i, (m) => m.toUpperCase())}
+                    {new Date(article.publishedAt)
+                      .toLocaleDateString('en-GB', {
+                        day: '2-digit',
+                        month: 'short',
+                        year: 'numeric',
+                      })
+                      .replace(/\b([a-z]{3})\b/i, (m) => m.toUpperCase())}
                   </div>
                 </div>
               );
@@ -141,7 +142,7 @@ export default function ArticlesSection() {
           <Button
             text={t('VIEW_ALL_ARTICLES')}
             variant="outline"
-            onClick={() => navigate('/articles')}
+            onClick={() => { window.scrollTo({ top: 0, behavior: 'auto' }); navigate('/articles'); }}
           />
         </div>
       </div>

@@ -188,7 +188,7 @@ export default function CeramicsByEra() {
             </button>
             <button
               className="ml-4 w-[218px] h-[48px] flex items-center justify-center text-base font-medium shadow-none transition-all px-6"
-              onClick={() => navigate('/browse')}
+              onClick={() => { window.scrollTo({ top: 0, behavior: 'auto' }); navigate('/browse'); }}
               style={{
                 backgroundImage: `url(${bgButton})`,
                 backgroundSize: '100% 100%',
@@ -216,8 +216,8 @@ export default function CeramicsByEra() {
           {eras.map((era, idx) => (
             <div
               key={era.name}
-              className="flex flex-col bg-transparent cursor-pointer hover:opacity-80 transition-opacity"
-              onClick={() => navigate(`/browse?era=${era.slug}`)}
+              className="flex flex-col bg-transparent cursor-pointer"
+              onClick={() => {window.scrollTo({ top: 10, behavior: 'auto' }); navigate(`/browse?era=${era.slug}`)}}
             >
               <div className="bg-[#E6DDC6] aspect-square w-full flex items-center justify-center overflow-hidden mb-4">
                 {era.img ? (
@@ -274,9 +274,9 @@ export default function CeramicsByEra() {
           {eras.map((era, idx) => (
             <div
               key={era.name}
-              className="flex flex-col flex-shrink-0 bg-transparent cursor-pointer hover:opacity-80 transition-opacity"
+              className="flex flex-col flex-shrink-0 bg-transparent cursor-pointer"
               style={{ width: CARD_WIDTH, minWidth: CARD_WIDTH }}
-              onClick={() => navigate(`/browse?era=${era.slug}`)}
+              onClick={() => {window.scrollTo({ top: 500, behavior: 'auto' }); navigate(`/browse?era=${era.slug}`)}}
             >
               <div className="bg-[#E6DDC6] aspect-square w-full flex items-center justify-center overflow-hidden mb-4">
                 {era.img ? (

@@ -59,13 +59,13 @@ function RelatedArticles({ related }: { related: Article[] }) {
   };
 
   return (
-    <section className="w-full py-16 px-4">
-      <h2 className="text-4xl text-[#61422D] mb-12 text-center">Related Articles</h2>
-      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
+    <section className="w-full py-24 px-4">
+      <h2 className="text-4xl text-[#61422D] mb-16 text-center">Related Articles</h2>
+      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 mb-10 md:mb-16">
         {related.map((article) => (
           <div
             key={article.id}
-            className="flex flex-col cursor-pointer transition-transform duration-200 hover:scale-105"
+            className="flex flex-col cursor-pointer"
             onClick={() => handleArticleClick(article.slug)}
           >
             <div className="bg-[#E6DDC6] aspect-square w-full flex items-center justify-center overflow-hidden mb-4">
@@ -79,7 +79,7 @@ function RelatedArticles({ related }: { related: Article[] }) {
             {/* Title with fixed height of 2 lines only on desktop */}
             <div>
               <h5
-                className="md:text-[24px] md:leading-[32px] text-20[px] leading[28px] font-semibold text-[#61422D]"
+                className="md:text-[24px] md:leading-[32px] text-20[px] leading[28px] font-semibold text-[#61422D] mb-[8px] md:mb-[9px]"
                 style={{
                   // fontFamily: 'Noto Serif SC, serif',
                   // fontWeight: 600,
@@ -115,7 +115,7 @@ function RelatedArticles({ related }: { related: Article[] }) {
               </div>
             </div>
 
-            <div className="text-[14px] leading-[20px]text-[#585550] font-semibold uppercase tracking-wider">
+            <div className="text-[14px] leading-[20px]text-[#585550] font-semibold uppercase tracking-wider mt-auto">
               {new Date(article.publishedAt).toLocaleDateString('en-US', {
                 day: 'numeric',
                 month: 'short',

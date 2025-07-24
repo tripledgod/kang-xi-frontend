@@ -17,7 +17,9 @@ export default function TermsAndCondition() {
   useEffect(() => {
     const fetchTerms = async () => {
       try {
-        const response = await fetch(`${API_URL}/api/terms-and-condition?populate=*&locale=${locale}`);
+        const response = await fetch(
+          `${API_URL}/api/terms-and-condition?populate=*&locale=${locale}`
+        );
         const data: TermsAndConditionResponse = await response.json();
         setContent(data.data.content || '');
       } catch (error) {
@@ -47,19 +49,37 @@ export default function TermsAndCondition() {
           className="hidden md:block absolute inset-0 w-full h-full object-cover object-center"
           style={{ maxWidth: '100vw' }}
         />
+         <div className="absolute inset-0 bg-black opacity-50 z-10"></div>
+        {/* Overlay text */}
+        <div className="absolute inset-0 flex flex-col items-center justify-center z-20">
+          <h3 className="block md:hidden text-white font-serif font-semibold text-[40px] leading-[48px] drop-shadow-lg text-center m-4">
+            Terms and <br/>Conditions
+          </h3>
+          <h1 className="hidden md:block text-white font-serif font-semibold text-[60px] leading-[72px] drop-shadow-lg text-center mb-4 mx-4">
+            Terms and Conditions
+          </h1>
+          <div className="text-white text-[18px] md:text-[20px] md:leading-[28px] leading-[26px] text-center drop-shadow-lg">
+            Updated 12/04/2025
+          </div>
+        </div>
       </div>
 
       {/* Content Section */}
       <div
-        className="max-w-2xl mx-auto px-4 md:px-0 py-10 text-[#2E2A24] text-base prose "
-        style={{
-          fontFamily:
-            'Noto Sans SC, Source Han Sans, Helvetica Neue, Arial, Hiragino Sans GB, Microsoft YaHei, 微软雅黑, STHeiti, SimSun, sans-serif',
-        }}
+        className="max-w-2xl mx-auto px-4 md:px-0 py-10 text-[#2E2A24] text-base prose mb-5 "
+        
       >
         <ReactMarkdown
           remarkPlugins={[remarkGfm]}
           components={{
+            p: ({ node, ...props }) => (
+              <p
+                {...props}
+                style={{
+                  marginBottom: '20px',
+                }}
+              />
+            ),
             img: ({ node, ...props }) => (
               <img
                 {...props}

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useLayoutEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useSwipeable } from 'react-swipeable';
@@ -136,6 +136,10 @@ export default function ProductDetail() {
       withLoading(fetchProduct);
     }
   }, [slug, locale]); // Re-fetch when locale changes
+
+  useLayoutEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+  }, [slug]);
 
   // Measure description lines only when description changes
   useEffect(() => {

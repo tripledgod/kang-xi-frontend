@@ -9,6 +9,7 @@ import customerSupportIcon from '../assets/customer_support.svg';
 import privateViewingIcon from '../assets/private_viewing.svg';
 import secureTransactionIcon from '../assets/secure_transaction.svg';
 import timelessTreasure from '../assets/timeless_treasure.png';
+import bgButtonMobile from '../assets/bg_button.png';
 import verifyLegacy from '../assets/verify_legacy.png';
 import verifyLegacyMobile from '../assets/verify_legacy_mobile.png';
 import logoWhite from '../assets/logo_white.png';
@@ -59,6 +60,14 @@ export default function AppraiseAnItem() {
     phone: '',
     images: '',
   });
+
+  const formRef = React.useRef<HTMLDivElement>(null);
+
+  const handleScrollToForm = () => {
+    if (formRef.current) {
+      formRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   const validateImageFile = (file: File): string | null => {
     // Check file format
@@ -183,17 +192,52 @@ export default function AppraiseAnItem() {
   return (
     <div className="w-full min-h-screen bg-[#F7F5EA] flex flex-col">
       {/* Hero Section */}
-      <div className="w-full bg-[#23211C] flex flex-col items-center justify-center relative">
+      <div className="w-full  bg-[#23211C] flex flex-col items-center justify-center relative">
         <img
           src={verifyLegacyMobile}
           alt="Appraise Hero Mobile"
-          className="w-full object-cover object-center block md:hidden"
+          className="w-full object-cover h-[675px] object-center block md:hidden"
         />
         <img
           src={verifyLegacy}
           alt="Appraise Hero"
           className="w-full object-cover object-center hidden md:block"
         />
+        <div className="absolute inset-0 bg-black opacity-40 z-10"></div>
+        {/* Overlay content: Title & Description */}
+        <div className="absolute inset-0 flex flex-col items-center justify-center text-center md:px-4 px-6 pointer-events-none z-10">
+          <h3 className="block md:hidden text-white font-serif font-semibold text-[40px] leading-[48px] mb-5 pointer-events-auto">
+            Verify the <br /> Legacy of Your <br /> Antique
+          </h3>
+          <h1 className="hidden md:block text-white font-serif font-semibold text-[60px] leading-[72px] drop-shadow-lg mb-5 pointer-events-auto">
+            Verify the Legacy of
+            <br />
+            Your Antique
+          </h1>
+          <p className="text-white text-[18px] leading-[26px] max-w-2xl md:max-w-[664px] mx-auto opacity-90 mb-5 pointer-events-auto">
+            Antiques carry history, but true value lies in authenticity. Whether you have inherited a piece, discovered a rare find, or wish to confirm the provenance of your artifact, Kangxis offers expert authentication services to help you uncover the true story behind your antique
+          </p>
+          <div className="pointer-events-auto md:mt-7 mt-12">  
+          <button
+              type="submit"
+              onClick={handleScrollToForm}
+              
+              className="flex h-[48px] w-[189px] items-center justify-center text-[14px] leading-[20px] font-semibold shadow-none transition-all px-6"
+              style={{
+                backgroundImage: `url(${bgButtonMobile})`,
+                backgroundSize: '100% 100%',
+                backgroundRepeat: 'no-repeat',
+                backgroundPosition: 'center',
+                color: '#fff',
+                
+              }}
+            >
+              APPRAISE AN ITEM
+            </button>  
+                 
+            
+          </div>
+        </div>
       </div>
       {/* Our Services Section */}
       <div className="w-full bg-[#23211C] py-16 flex flex-col items-center justify-center text-center px-4">
@@ -242,7 +286,7 @@ export default function AppraiseAnItem() {
         </div>
       </div>
       {/* Submit Form Section */}
-      <div className="w-full bg-[#E6DDC6] py-16 px-4">
+      <div ref={formRef} className="w-full bg-[#E6DDC6] py-16 px-4">
         <div className="max-w-xl mx-auto">
           <h3 className="hidden md:block text-[40px] leading-[48px]  font-serif font-semibold text-[#61422D] mb-2 text-center">
             Submit Your Antique for Authentication

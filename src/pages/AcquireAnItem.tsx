@@ -15,6 +15,7 @@ import Loading from '../components/Loading';
 import { useTranslation } from 'react-i18next';
 import happendImg from '../assets/happend.jpg';
 import expressImg from '../assets/express.jpg';
+import bgButtonMobile from '../assets/bg_button.png';
 
 const steps = [
   {
@@ -60,6 +61,7 @@ export default function AcquireAnItem() {
   });
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const formRef = React.useRef<HTMLDivElement>(null);
 
   const validateForm = () => {
     const newErrors = {
@@ -121,6 +123,12 @@ export default function AcquireAnItem() {
     }
   };
 
+  const handleScrollToForm = () => {
+    if (formRef.current) {
+      formRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <div className="w-full min-h-screen bg-[#F7F5EA]">
       {/* Show popup when registration is successful */}
@@ -140,25 +148,40 @@ export default function AcquireAnItem() {
       )}
       {/* Hero Section */}
       <div className="w-full bg-[#23211C] py-12 px-4">
-        <div className="max-w-6xl mx-auto flex flex-col md:flex-row gap-10 items-center">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row gap-10 items-center">
           {/* Left */}
           <div className="flex-1 text-white mb-8 md:mb-0">
             <h1 className="hidden md:block text-[60px] leading-[72px] font-serif font-semibold mb-6">
-              Reserve a Timeless
+              Reserve a <br />Timeless
               <br />
               Treasure
             </h1>
-            <h3 className="block md:hidden text-[40px] leading-[48px] font-serif font-semibold mb-6">
+            <h3 className="block md:hidden text-[40px] leading-[48px] font-serif font-semibold mb-4">
               Reserve a<br /> Timeless
               <br />
               Treasure
             </h3>
-            <p className="mb-6 text-[18px] leading-[26px] text-[#FFFFFF] max-w-md opacity-70">
+            <p className="md:mb-16 mb-8 text-[18px] leading-[26px] text-[#FFFFFF] max-w-[478px] opacity-70">
               Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in
               eros elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum
               nulla, ut commodo diam libero vitae erat morbi euismod.
             </p>
-            <Button text="ACQUIRE AN ITEM" />
+            <button
+              type="submit"
+              onClick={handleScrollToForm}
+              
+              className="flex h-[48px] w-[189px] items-center justify-center text-[14px] leading-[20px] font-semibold shadow-none transition-all px-6"
+              style={{
+                backgroundImage: `url(${bgButtonMobile})`,
+                backgroundSize: '100% 100%',
+                backgroundRepeat: 'no-repeat',
+                backgroundPosition: 'center',
+                color: '#fff',
+                
+              }}
+            >
+              ACQUIRE AN ITEM
+            </button> 
           </div>
           {/* Right: Single image */}
           <div className="flex-1">
@@ -248,7 +271,7 @@ export default function AcquireAnItem() {
       </div>
 
       {/* Form Section */}
-      <div className="w-full bg-[#E6DDC6] py-16 px-4">
+      <div ref={formRef} className="w-full bg-[#E6DDC6] py-16 px-4">
         <div className="max-w-xl mx-auto">
           <h3 className="hidden md:block text-[40px] leading-[48px] font-serif font-semibold text-[#61422D] mb-2 text-center">
             Secure Your Piece of History
