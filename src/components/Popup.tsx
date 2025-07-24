@@ -15,10 +15,20 @@ interface PopupProps {
   containerClassName?: string;
 }
 
-const Popup: React.FC<PopupProps> = ({ title, content, buttonText, onButtonClick, onClose, titleClassName, containerClassName }) => {
+const Popup: React.FC<PopupProps> = ({
+  title,
+  content,
+  buttonText,
+  onButtonClick,
+  onClose,
+  titleClassName,
+  containerClassName,
+}) => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-      <div className={`relative bg-[#F7F5EA] shadow-xl md:p-10 px-4  py-10 md:max-w-[592px] max-w-[343px] w-full    flex flex-col items-center ${containerClassName || ''}`}>
+      <div
+        className={`relative bg-[#F7F5EA] shadow-xl md:p-10 px-4  py-10 md:max-w-[592px] max-w-[343px] w-full    flex flex-col items-center ${containerClassName || ''}`}
+      >
         {/* Close icon */}
         <button
           className="absolute top-4 right-4 text-4xl text-[#A4A7AE] hover:text-[#86684A] focus:outline-none"
@@ -32,9 +42,8 @@ const Popup: React.FC<PopupProps> = ({ title, content, buttonText, onButtonClick
           <h4
             className={`text-center mb-4  ${titleClassName || ''}`}
             style={{
-              fontWeight: 600,            
+              fontWeight: 600,
               color: COLORS.primary900,
-             
             }}
           >
             {title.split('\n').map((line, idx) => (
@@ -48,14 +57,14 @@ const Popup: React.FC<PopupProps> = ({ title, content, buttonText, onButtonClick
         {/* Content */}
         <div
           className="text-center mb-8 md:mb-8 font-normal md:leading-[28px] md:text[20px] text-[18px] leading-[26px]"
-          style={{  fontWeight: 400, color: COLORS.secondary600 }}
+          style={{ fontWeight: 400, color: COLORS.secondary600 }}
         >
           {content}
         </div>
         {/* Button */}
         <div className="w-full flex justify-center mx-auto">
           <button
-            className="w-full h-[48px] flex items-center justify-center text-base font-medium shadow-none transition-all  text-xl  hidden md:block mx-5"
+            className="w-full h-[48px]  items-center justify-center text-[14px] leading-[24px] font-semibold shadow-none transition-all    hidden md:block mx-5"
             style={{
               backgroundImage: `url(${bgButtonSubmitForm})`,
               backgroundSize: '100% 100%',
@@ -71,7 +80,7 @@ const Popup: React.FC<PopupProps> = ({ title, content, buttonText, onButtonClick
             {buttonText}
           </button>
           <button
-            className="w-full  h-[48px] flex items-center justify-center text-base font-medium shadow-none transition-all  text-xl md:text-2xl  md:hidden"
+            className="w-full  h-[48px] flex items-center justify-center text-[14px] leading-[24px] font-semibold shadow-none transition-all     md:hidden"
             style={{
               backgroundImage: `url(${bgButtonMobile})`,
               backgroundSize: '100% 100%',

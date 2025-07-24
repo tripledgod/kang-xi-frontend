@@ -26,13 +26,13 @@ export default function Footer() {
   const navLinksRow2 = [{ label: t('TERMS_AND_CONDITIONS'), href: '/terms-and-condition' }];
 
   return (
-    <footer className="bg-[#201F1C] text-[#FDFBF1] pt-12 pb-6 px-4">
+    <footer className="bg-[#201F1C] text-[#FDFBF1] pt-12 pb-12 px-4">
       <div className="flex flex-col items-center">
         <Link to="/">
           <img src={bottomLogo} alt="Kang Xi Logo" className="h-20 mb-2" />
         </Link>
         {/* Two rows for nav links on mobile, single row on desktop */}
-        <nav className="w-full flex flex-col items-center gap-y-4 mb-8 mt-8 md:flex-row md:flex-wrap md:justify-center md:gap-x-12 md:gap-y-4">
+        <nav className="w-full flex flex-col items-center gap-y-4 md:mb-16 mb-12 mt-8 md:flex-row md:flex-wrap md:justify-center md:gap-x-12 md:gap-y-4">
           <div className="flex flex-col gap-y-4 w-full items-center md:flex-row md:w-auto md:gap-x-12 md:gap-y-0">
             <div className="flex flex-row justify-center gap-x-8 w-full md:w-auto md:gap-x-12">
               {navLinksRow1.map((link) => (
@@ -59,8 +59,11 @@ export default function Footer() {
           </div>
         </nav>
         {/* Faint divider line */}
-        <div className="w-full max-w-[341px] mx-auto border-t border-[#FDFBF1]/20 opacity-50 mb-6 md:max-w-6xl" style={{ borderTopWidth: '1px' }}></div>
-        <div className="w-full flex flex-col items-center gap-6 md:flex-row md:items-center md:justify-between max-w-6xl mx-auto">
+        <div
+          className="w-full max-w-[341px] mx-auto border-t border-[#FDFBF1]/20 opacity-50 md:mb-6 mb-8 md:max-w-7xl"
+          style={{ borderTopWidth: '1px' }}
+        ></div>
+        <div className="w-full max-w-[341px] flex flex-col items-center gap-6 md:flex-row md:items-center md:justify-between md:max-w-7xl md:mx-[112px] mx-17px">
           <div className="text-base text-[#FFFFFF] text-center opacity-80">
             © Kangxi Collection {new Date().getFullYear()}. All rights reserved.
           </div>

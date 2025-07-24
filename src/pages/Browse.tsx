@@ -39,25 +39,22 @@ const Browse: React.FC = () => {
   const eraButtonRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
   // Scroll to top when URL changes
-  useEffect(() => {
-    window.scrollTo(0, 400);
-  }, [searchParams]);
 
-  // Danh sách slug era chuẩn, chỉ hiển thị đúng 5 era này và đúng thứ tự
+  // Standard era slug list, only display these 5 eras in this order
   const eraOrder = ['tang', 'song', 'yuan', 'ming', 'quing'];
 
-  // Lọc và sắp xếp flattenedCategories theo thứ tự chuẩn
+  // Filter and sort flattenedCategories in standard order
   const filteredSortedCategories = flattenedCategories
     .filter((cat) => eraOrder.includes(cat.slug))
     .sort((a, b) => eraOrder.indexOf(a.slug) - eraOrder.indexOf(b.slug));
 
-  // Convert categories to eras (chỉ lấy 5 era chuẩn, đúng thứ tự)
+  // Convert categories to eras (only take 5 standard eras, correct order)
   const eras: Era[] = filteredSortedCategories.map((category) => ({
     key: category.slug,
     label: category.name,
   }));
 
-  // Khai báo cứng 5 era
+  // Hardcode 5 eras
   const eraTabs = [
     { slug: 'tang', name: 'TANG' },
     { slug: 'song', name: 'SONG' },
@@ -66,14 +63,14 @@ const Browse: React.FC = () => {
     { slug: 'quing', name: 'QUING' },
   ];
 
-  // Khi load trang, nếu không có activeEra, set mặc định là 'tang'
+  // When loading page, if no activeEra, set default to 'tang'
   useEffect(() => {
     if (!activeEra) {
       setActiveEra('tang');
     }
   }, [activeEra]);
 
-  // Fetch categories từ API để lấy id cho từng era
+  // Fetch categories from API to get id for each era
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -91,10 +88,10 @@ const Browse: React.FC = () => {
     withCategoriesLoading(fetchCategories);
   }, [locale]);
 
-  // Fetch sản phẩm theo activeEra (dùng categories để lấy id)
+  // Fetch products by activeEra (use categories to get id)
   useEffect(() => {
     if (!activeEra || categories.length === 0) return;
-    // Tìm category theo slug
+    // Find category by slug
     const category = categories
       .map((cat) => flattenCategory(cat))
       .find((cat) => cat.slug === activeEra);
@@ -165,7 +162,10 @@ const Browse: React.FC = () => {
       <div
         key={product.id}
         className="flex flex-col cursor-pointer rounded"
-        onClick={() => navigate(`/products/${product.slug}`)}
+        onClick={() => {
+          window.scrollTo(0, 0);
+          navigate(`/products/${product.slug}`);
+        }}
       >
         <div className="bg-[#E6DDC6] aspect-square w-full flex items-center justify-center overflow-hidden mb-4">
           {imageUrl && !imageError ? (
@@ -275,13 +275,13 @@ const Browse: React.FC = () => {
                   ref={(el) => {
                     eraButtonRefs.current[idx] = el;
                   }}
-                  className={`pb-2 transition-colors uppercase text-[17px] relative ${activeEra === era.slug ? 'border-b-2 border-[#23211C] text-[#23211C] font-semibold opacity-90 z-20' : 'text-[#23211C] border-b-0'}`}
+                  className={` transition-colors uppercase text-[17px] relative ${activeEra === era.slug ? 'border-b-2 border-[#23211C] text-[#23211C] font-semibold opacity-90 z-20' : 'text-[#23211C] border-b-0'}`}
                   onClick={() => handleEraClick(era.slug)}
                 >
                   {era.name}
                 </button>
                 {idx < eraTabs.length - 1 && (
-                  <span className="text-[#D6C7A1] text-lg mx-2 flex justify-center select-none">
+                  <span className="text-[#D6C7A1] text-lg mx-2 flex items-center  select-none  ">
                     +
                   </span>
                 )}
