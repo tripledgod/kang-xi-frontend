@@ -196,7 +196,7 @@ export default function AcquireAnItem() {
 
       {/* What Happens Next Section */}
       <div className="w-full pt-16 px-4 md:px-[112px]">
-        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-10 md:gap-24 md:py-12">
+        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-0  md:gap-24 md:py-12">
           {/* Left: Large image */}
           <div className="flex-1 flex items-center justify-center mb-8 md:mb-0 order-1">
             <img
@@ -236,8 +236,8 @@ export default function AcquireAnItem() {
       </div>
 
       {/* Express Interest Section */}
-      <div className="w-full py-16 px-4 md:px-[112px]">
-        <div className="max-w-6xl mx-auto flex flex-col md:flex-row-reverse items-center gap-10 md:gap-24 md:pb-16">
+      <div className="w-full  pt-12 md:pt-16 pb-28 md:pb-16 px-4 md:px-[112px]">
+        <div className="max-w-6xl mx-auto flex flex-col md:flex-row-reverse items-center gap-0 md:gap-24 md:pb-16">
           {/* Right: Large image */}
           <div className="flex-1 flex items-center justify-center mb-8 md:mb-0 order-1">
             <img

@@ -176,19 +176,22 @@ export default function AboutUs() {
           </ReactMarkdown>
         </div>
       </div>
+      
+    
+      <div className="h-[1px] max-w-[382px] md:max-w-[1120px] mx-auto bg-[#D5D4D3]  opacity-50 w-full md:my-8 my-0 mt-8 px-4"></div>
 
       {/* Team Section */}
-      <div className="w-full bg-[#F7F5EA] py-16">
+      <div className="w-full bg-[#F7F5EA] md:py-16 py-12">
         <div className="max-w-6xl mx-auto px-4">
           <div className="flex items-center justify-between mb-2">
             <div>
-              <h3 className="hidden md:block text-[40px] leading-[48px] font-serif font-semibold text-[#61422D] mb-2 text-left">
+              <h3 className="hidden md:block text-[40px] leading-[48px] font-serif font-semibold text-[#61422D] mb-4 text-left">
                 Meet Our Team
               </h3>
-              <h4 className="block md:hidden text-2xl font-serif font-semibold text-[#61422D] mb-2 text-left">
+              <h4 className="block md:hidden text-2xl font-serif font-semibold text-[#61422D] mb-4 md:mb-5 text-left">
                 Meet Our Team
               </h4>
-              <div className="text-[20px] leading-[28px] text-[#585550] mb-0 text-left">
+              <div className="text-[20px] leading-[28px] text-[#585550] md:mb-8 mb-0 text-left">
                 Meet the dedicated professionals behind our collection.
               </div>
             </div>

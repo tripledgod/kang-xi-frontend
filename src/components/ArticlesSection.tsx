@@ -77,7 +77,7 @@ export default function ArticlesSection() {
               return (
                 <div
                   key={article.id}
-                  className="flex flex-col cursor-pointer transition-transform duration-200 hover:scale-105"
+                  className="flex flex-col cursor-pointer"
                   onClick={() =>{ window.scrollTo({ top: 0, behavior: 'auto' }); handleArticleClick(article.slug)}}
                 >
                   <div className="bg-[#E6DDC6] aspect-square w-full flex items-center justify-center overflow-hidden mb-4">
@@ -99,7 +99,7 @@ export default function ArticlesSection() {
                     )}
                   </div>
                   <h5
-                    className="mb-2 font-serif font-medium text-[#61422D] h-16 overflow-hidden line-clamp-2 text-[20px] md:text-[24px] leading-[28px] md:leading-[32px]"
+                    className="mb-2 font-serif font-medium text-[#61422D] md:h-16 overflow-hidden line-clamp-2 text-[20px] md:text-[24px] leading-[28px] md:leading-[32px]"
                     style={{
                       fontWeight: 600,
                       letterSpacing: '0.2px',
@@ -111,7 +111,7 @@ export default function ArticlesSection() {
                     {article.title}
                   </h5>
                   <div
-                    className="font-pingfang font-normal mb-4 text-base leading-6 h-[72px] overflow-hidden line-clamp-3"
+                    className="font-pingfang font-normal mb-4 text-base leading-6 md:h-[72px] overflow-hidden line-clamp-3"
                     style={{
                       color: '#585550',
                       fontSize: 16,

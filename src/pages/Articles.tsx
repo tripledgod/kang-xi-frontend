@@ -190,7 +190,7 @@ export default function Articles() {
                           />
                         </div>
                         <h5
-                          className="text-2xl font-serif font-semibold mb-2 leading-snug"
+                          className="text-2xl font-serif font-semibold mb-2 line-clamp-2 leading-snug"
                           style={{
                             fontWeight: 600,
                             fontSize: 20,
@@ -202,7 +202,7 @@ export default function Articles() {
                         >
                           {article.title}
                         </h5>
-                        <div className="text-base text-[#585550] mb-3 line-clamp-2 text-left">
+                        <div className="text-base text-[#585550] mb-3 line-clamp-3 text-left">
                           {article.description}
                         </div>
                         <div className="flex-1"></div>

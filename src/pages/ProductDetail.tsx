@@ -20,6 +20,7 @@ import axios from 'axios';
 import { API_URL } from '../utils/constants.ts';
 import { getImageUrl, getImagesUrls } from '../utils';
 import Popup from '../components/Popup.tsx';
+import logo from '../assets/logo.png';
 
 export default function ProductDetail() {
   const { slug } = useParams();
@@ -154,6 +155,16 @@ export default function ProductDetail() {
     }
     setIsDescriptionExpanded(false); // Reset expand state when product changes
   }, [productDetail?.description]);
+
+  // Auto-fill Item Code when opening Acquire form or when productDetail changes
+  useEffect(() => {
+    if (showAcquireModal && productDetail) {
+      setAcquireForm((prev) => ({
+        ...prev,
+        itemCode: productDetail.itemCode || productDetail.documentId || '',
+      }));
+    }
+  }, [showAcquireModal, productDetail]);
 
   const openModal = (idx: number) => {
     setModalIndex(idx);
@@ -429,7 +440,9 @@ export default function ProductDetail() {
           <div className="flex flex-row justify-between text-[14px]  text-[#585550] leading-[20px] font-semibold items-center">
             <span>
               {productDetail.ageFrom} - {productDetail.ageTo}
-              {productDetail.category?.name && <span> ({productDetail.category.name})</span>}
+              {productDetail.category?.name && (
+                <span className="uppercase"> ({productDetail.category.name})</span>
+              )}
             </span>
             <span className="flex items-center gap-1">
               ITEM CODE {productDetail.itemCode || productDetail.documentId}
@@ -590,24 +603,33 @@ export default function ProductDetail() {
       </div>
       {/* Right-side Acquire Modal */}
       {showAcquireModal && (
-        <div className="fixed inset-0 z-50 flex">
-          {/* Overlay */}
-          <div
-            className="fixed inset-0 bg-black/30 transition-opacity duration-300"
-            onClick={() => setShowAcquireModal(false)}
-          />
-          {/* Drawer with slide-in animation */}
-          <div className="ml-auto h-full w-full max-w-xl bg-[#F7F5EA] shadow-xl flex flex-col relative transition-transform duration-300 animate-slide-in-right">
-            {/* Close button */}
-            <button
-              className="absolute top-4 right-4 z-10 text-2xl text-[#A4A7AE] hover:text-[#86684A] focus:outline-none"
-              onClick={() => setShowAcquireModal(false)}
-              aria-label="Close"
-            >
-              <img src={closeIcon} alt="Close" className="w-4 h-4" />
-            </button>
-            {/* Form Content */}
-            <div className="flex-1 flex flex-col justify-center px-6 py-10">
+        <div className="fixed left-0 right-0 top-0 bottom-0 z-50 flex md:inset-0">
+          {/* Modal Header with Logo for mobile */}
+          <div className="w-full max-w-xl bg-[#F7F5EA] shadow-xl flex flex-col relative h-full ml-auto">
+            <div className="flex items-center justify-between px-4 py-3 h-16 md:hidden bg-[#F7F5EA] sticky top-0 z-10">
+              <img src={logo} alt="Logo" className="h-8" 
+                style={{ cursor: 'pointer' }}
+                onClick={() => navigate('/')} 
+              />
+              <button
+                className="p-2"
+                onClick={() => setShowAcquireModal(false)}
+                aria-label="Close"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="w-6 h-6 text-[#A4A7AE]"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            {/* Scrollable form content for mobile */}
+            <div className="flex-1 overflow-y-auto px-6 py-10">
               <h3 className=" font-serif text-[28px] leading-[32px] md:text-[40px] md:leading-[48px] font-semibold text-[#61422D] mb-4 text-center">
                 Secure Your Piece of History
               </h3>

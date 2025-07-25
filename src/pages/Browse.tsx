@@ -254,7 +254,7 @@ const Browse: React.FC = () => {
         <img
           src={heroImgMobile}
           alt="Ceramic by Era Mobile"
-          className="block md:hidden w-full h-[320px] object-contain bg-[#F7F5EA]"
+          className="block md:hidden w-full h-[218px]  object-cover bg-[#F7F5EA] pb-8"
         />
         <img
           src={heroImg}
@@ -267,7 +267,7 @@ const Browse: React.FC = () => {
         <div className="max-w-6xl mx-auto px-4 pt-4 md:pt-20 overflow-x-auto scrollbar-hide">
           <div
             ref={eraTabRef}
-            className="inline-flex items-center gap-x-[18px] md:gap-x-2 justify-start pl-[10px] md:pl-[64px] uppercase whitespace-nowrap"
+            className="inline-flex items-center gap-x-[16px] md:gap-x-2 justify-start pl-[10px] md:pl-[64px] uppercase whitespace-nowrap"
           >
             {eraTabs.map((era, idx) => (
               <React.Fragment key={era.slug}>
