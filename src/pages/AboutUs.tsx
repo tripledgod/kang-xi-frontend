@@ -9,7 +9,6 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { getImageUrl } from '../utils';
 
-
 // Customize the component for <img> tag in markdown
 const MarkdownComponents = {
   img: ({ node, ...props }: any) => (
@@ -18,7 +17,6 @@ const MarkdownComponents = {
     </div>
   ),
 };
-
 
 export default function AboutUs() {
   const [teamIndex, setTeamIndex] = useState(0);
@@ -105,33 +103,35 @@ export default function AboutUs() {
           <div className="text-[18px] leading-[26px] text-[#585550] mb-5">
             {aboutData?.heritage?.body || 'Loading...'}
           </div>
-          <div className="h-[1px] bg-[#D5D4D3] w-full my-4 md:my-8"></div>
-          <div className="flex gap-12">
+          <div className="h-[1px] bg-[#D5D4D3] w-full my-4 md:mt-8"></div>
+          <div className="flex gap-12 ">
             <div>
-              <div
-                className="text-5xl font-medium text-[#7B6142]"
-                
-              >
+              <h2 style={{ letterSpacing: '-1%' }} className="text-5xl font-medium text-[#61422D]">
                 {aboutData?.heritage?.yearsExp || '25'}+
+              </h2>
+              <div
+                style={{ letterSpacing: '0.5px' }}
+                className="text-[14px] leading-[20px] font-semibold text-[#585550] mt-2"
+              >
+                YEARS EXPERIENCES
               </div>
-              <div className="text-xs text-[#585550] mt-1">YEARS EXPERIENCES</div>
             </div>
             <div>
-              <div
-                className="text-5xl font-medium text-[#7B6142]"
-                
-              >
+              <h2 style={{ letterSpacing: '-1%' }} className="text-5xl font-medium text-[#61422D]">
                 {aboutData?.heritage?.rareCollectibleItems || '100'}+
+              </h2>
+              <div
+                style={{ letterSpacing: '0.5px' }}
+                className="text-[14px] leading-[20px] font-semibold text-[#585550] mt-2"
+              >
+                RARE COLLECTIBLE ITEMS
               </div>
-              <div className="text-xs text-[#585550] mt-1">RARE COLLECTIBLE ITEMS</div>
             </div>
           </div>
         </div>
         <div className="flex-1 flex items-center justify-center">
           <img
-
             src={getImageUrl(aboutData?.heritage?.image) || heroImg}
-
             alt="Horse"
             className="w-full max-w-md"
           />
@@ -151,7 +151,9 @@ export default function AboutUs() {
             {aboutData?.journey?.map((item) => (
               <div key={item.id} className="flex flex-col items-center">
                 <img src={getImageUrl(item.icon)} alt={item.title} className="h-12 mb-4" />
-                <h5 className="text-[20px] md:text-[24px] leading-[28px] md:leading-[32px] font-semibold text-[#FAF7F2] mb-2">{item.title}</h5>
+                <h5 className="text-[20px] md:text-[24px] leading-[28px] md:leading-[32px] font-semibold text-[#FAF7F2] mb-2">
+                  {item.title}
+                </h5>
                 <div className="text-[#ABAAA7] text-[16px] leading-[24px]">{item.description}</div>
               </div>
             ))}
@@ -169,43 +171,57 @@ export default function AboutUs() {
         </h4>
 
         <div className="my-5 prose prose-lg max-w-none text-[20px] leading-[28px] [&_img]:my-3 md:[&_img]:my-11 text-[#585550]">
-          <ReactMarkdown 
-            remarkPlugins={[remarkGfm]} 
-            components={MarkdownComponents}
-          >
+          <ReactMarkdown remarkPlugins={[remarkGfm]} components={MarkdownComponents}>
             {aboutData.mainContent}
           </ReactMarkdown>
         </div>
-
       </div>
+      
+    
+      <div className="h-[1px] max-w-[382px] md:max-w-[1120px] mx-auto bg-[#D5D4D3]  opacity-50 w-full md:my-8 my-0 mt-8 px-4"></div>
 
       {/* Team Section */}
-      <div className="w-full bg-[#F7F5EA] py-16">
+      <div className="w-full bg-[#F7F5EA] md:py-16 py-12">
         <div className="max-w-6xl mx-auto px-4">
           <div className="flex items-center justify-between mb-2">
             <div>
-              <h3 className="hidden md:block text-[40px] leading-[48px] font-serif font-semibold text-[#61422D] mb-2 text-left">
+              <h3 className="hidden md:block text-[40px] leading-[48px] font-serif font-semibold text-[#61422D] mb-4 text-left">
                 Meet Our Team
               </h3>
-              <h4 className="block md:hidden text-2xl font-serif font-semibold text-[#61422D] mb-2 text-left">
+              <h4 className="block md:hidden text-2xl font-serif font-semibold text-[#61422D] mb-4 md:mb-5 text-left">
                 Meet Our Team
               </h4>
-              <div className="text-[20px] leading-[28px] text-[#585550] mb-0 text-left">
+              <div className="text-[20px] leading-[28px] text-[#585550] md:mb-8 mb-0 text-left">
                 Meet the dedicated professionals behind our collection.
               </div>
             </div>
             {/* Desktop arrows only */}
-            <div className="hidden md:flex gap-2">
+            <div className="hidden md:flex gap-4">
               <button
-                className="ticket-rounded w-10 h-10 border border-[#7B6142] rounded-lg flex items-center justify-center bg-transparent text-[#7B6142] hover:bg-[#E6DDC6] transition disabled:opacity-30"
+                className="ticket-rounded w-12 h-12 border-2 border-[#DAC497] rounded-lg flex items-center justify-center bg-transparent text-[#93633B] hover:bg-[#E6DDC6] transition "
                 onClick={() => setTeamIndex((i) => Math.max(0, i - 1))}
                 disabled={!canGoLeft}
                 aria-label="Previous"
               >
-                <span className="text-2xl">&#8592;</span>
+                <span className="text-[20px] text-[#93633B] font-semibold">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    className="size-6"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"
+                    />
+                  </svg>
+                </span>
               </button>
               <button
-                className="w-10 h-10 border border-[#7B6142] rounded flex items-center justify-center bg-transparent text-[#7B6142] hover:bg-[#E6DDC6] transition disabled:opacity-30"
+                className="ticket-rounded w-12 h-12 border-2 border-[#DAC497] rounded-lg flex items-center justify-center bg-transparent text-[#93633B] hover:bg-[#E6DDC6] transition "
                 onClick={() =>
                   setTeamIndex((i) =>
                     Math.min((aboutData?.team?.length ?? 0) - visibleCount, i + 1)
@@ -214,7 +230,22 @@ export default function AboutUs() {
                 disabled={!canGoRight}
                 aria-label="Next"
               >
-                <span className="text-2xl">&#8594;</span>
+                <span className="text-[20px] text-[#93633B] font-semibold">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    className="size-6"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"
+                    />
+                  </svg>
+                </span>
               </button>
             </div>
           </div>
@@ -237,9 +268,7 @@ export default function AboutUs() {
                 }}
               >
                 <img
-
                   src={getImageUrl(member.image) || heroImg}
-
                   alt={member.name}
                   className="w-full h-[340px] object-cover mb-6"
                 />

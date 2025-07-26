@@ -9,7 +9,8 @@ import ceramics from '../assets/ceramics.png';
 import chaseCollection from '../assets/chase_collection.png';
 import ceramicsMobile from '../assets/ceramics_mobile.png';
 import ourArticles from '../assets/our_articles.png';
-import articlesCover from '../assets/articles_cover.png';
+import articlesCover from '../assets/hero_image.png';
+import heroMobileImage from '../assets/hero_mobile_image.png';
 import bigLeft from '../assets/big_left_article.png';
 import bigRight from '../assets/big_right_article.png';
 import { getArticles, Article } from '../api/articles';
@@ -57,34 +58,64 @@ export default function Articles() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#F7F5EA] flex items-center justify-center">
+      <div className="min-h-screen bg-[#F7F3E8] flex items-center justify-center">
         <Loading fullScreen={true} text="Loading..." />
       </div>
     );
   }
 
   return (
-    <div className="w-full min-h-screen pb-24 bg-[#F7F5EA] ">
+    <div className="w-full min-h-screen pb-24 bg-[#F7F3E8] ">
       {/* Hero Image */}
-      <div className="relative w-full h-[220px] md:h-[320px] flex items-center justify-center overflow-hidden mb-8">
+      <div className="relative w-full h-[220px] md:h-[312px] flex items-center justify-center overflow-hidden mb-8 md:pt-[96px] md:pb-[96px]">
+        {/* Mobile Hero Image */}
         <img
-          src={articlesCover}
-          alt={articles[0]?.title || 'Articles Cover'}
-          className="absolute inset-0 w-full h-full object-cover object-center"
+          src={heroMobileImage}
+          alt="Articles Cover"
+          className="absolute inset-0 w-full h-full object-cover object-center md:hidden"
           style={{ maxWidth: '100vw' }}
         />
+        {/* Desktop Hero Image */}
+        <img
+          src={articlesCover}
+          alt="Articles Cover"
+          className="absolute inset-0 w-full h-full object-cover object-center hidden md:block"
+          style={{ maxWidth: '100vw' }}
+        />
+        <div className="absolute inset-0 bg-black/40 z-10"></div>
+        {/* Add prominent title on hero image if needed */}
+        <div className="absolute inset-0 flex flex-col items-center justify-center z-20">
+          <h3
+            className="text-white text-[40px] leading-[48px] font-semibold drop-shadow-lg text-center md:hidden"
+            style={{ letterSpacing: '-0.01em' }}
+          >
+            Articles
+          </h3>
+          <h1
+            className="hidden md:block text-white text-[60px] leading-[72px] font-semibold drop-shadow-lg text-center"
+            style={{ letterSpacing: '-0.02em' }}
+          >
+            Articles
+          </h1>
+          <p className="text-white md:hidden drop-shadow-lg  text-[18px] leading-[26px] mt-4">
+            Appreciating Chinese Works of Art
+          </p>
+          <p className="text-white hidden md:block drop-shadow-lg text-[20px] leading-[28px] mt-5">
+            Appreciating Chinese Works of Art
+          </p>
+        </div>
       </div>
       {/* Featured Articles Section */}
-      <div className="max-w-7xl mx-auto w-full pl-6 pr-6  flex flex-col gap-12 md:mt-30">
+      <div className=" md:px-28 px-6 w-full mx-auto flex flex-col gap-12 md:mt-24">
         {/* Featured Articles */}
-        <div className="flex flex-col md:flex-row gap-8">
+        <div className="flex flex-col md:flex-row gap-8 mx-auto">
           {featuredArticles.map((article, idx) => {
             const imageUrl = getCoverUrl(article.cover);
 
             return (
               <div
                 key={article.id}
-                className={`relative h-[340px] md:h-[400px] rounded overflow-hidden group w-full ${idx === 0 ? 'md:w-4/5' : 'md:w-2/5'}`}
+                className={`relative h-[343px] md:h-[480px] overflow-hidden group w-full ${idx === 0 ? 'md:w-[800px]' : 'md:w-[384px]'}`}
               >
                 <img
                   src={imageUrl || articlesCover}
@@ -95,20 +126,23 @@ export default function Articles() {
                     e.currentTarget.src = articlesCover;
                   }}
                 />
-                {/* Could add overlay title/desc/date if needed */}
-                <div className="absolute bottom-0 left-0 right-0 p-4 z-10">
-                  <h5 className="text-[20px] md:text-[24px] leading-[28px] md:leading-[32px] font-semibold text-white mb-2 line-clamp-2">
+                <div className="absolute inset-0 bg-black opacity-40 z-10"></div>
+                {/* Overlay title/desc/date always white and clear */}
+                <div className="absolute bottom-0 left-0 right-0 md:p-6 p-4 z-20">
+                  <h5 className="text-[20px] md:text-[24px] leading-[28px] md:leading-[32px] font-semibold text-white mb-2 line-clamp-2 drop-shadow-lg">
                     {article.title}
                   </h5>
-                  <div className="text-base text-white mb-3 line-clamp-2">
+                  <div className="text-base text-white mb-3 line-clamp-2 drop-shadow-lg">
                     {article.description}
                   </div>
-                  <div className="text-xs text-white font-semibold uppercase tracking-wider">
-                    {new Date(article.publishedAt).toLocaleDateString('en-US', {
-                      day: 'numeric',
-                      month: 'short',
-                      year: 'numeric',
-                    })}
+                  <div className="text-xs text-white font-semibold uppercase tracking-wider drop-shadow-lg">
+                    {new Date(article.publishedAt)
+                      .toLocaleDateString('en-GB', {
+                        day: '2-digit',
+                        month: 'short',
+                        year: 'numeric',
+                      })
+                      .replace(/\b([a-z]{3})\b/i, (m) => m.toUpperCase())}
                   </div>
                 </div>
               </div>
@@ -116,8 +150,8 @@ export default function Articles() {
           })}
         </div>
         {/* Latest Articles */}
-        <div className="flex flex-col md:flex-row gap-8 w-full md:mt-12">
-          <div className="w-full md:w-4/5">
+        <div className="flex flex-col md:flex-row gap-8  md:mt-12 md:ml-10">
+          <div className="w-full md:w-[800px]">
             <h3 className="hidden md:block text-[40px] leading-[48px]font-serif font-semibold text-[#61422D] mb-8 text-left">
               Latest Articles
             </h3>
@@ -128,16 +162,22 @@ export default function Articles() {
               {articles.map((article, idx) => {
                 const imageUrl = getCoverUrl(article.cover);
 
+                // Hàm xử lý scroll lên đầu trước khi chuyển trang
+                const handleArticleClick = (e: React.MouseEvent) => {
+                  window.scrollTo({ top: 0, behavior: 'auto' });
+                };
+
                 return (
                   <Link
                     key={article.id}
                     to={`/article/${article.slug}`}
                     className="w-full"
                     style={{ textDecoration: 'none' }}
+                    onClick={handleArticleClick}
                   >
                     {/* Mobile Card Layout */}
-                    <div className="block md:hidden p-0 w-full transition-colors hover:bg-[#f3efe2]">
-                      <div className="w-full">
+                    <div className="block md:hidden p-0 w-full transition-colors">
+                      <div className="w-full flex flex-col h-full">
                         <div className="w-full h-48 overflow-hidden mb-4 bg-[#E6DDC6] flex items-center justify-center">
                           <img
                             src={imageUrl || articlesCover}
@@ -150,7 +190,7 @@ export default function Articles() {
                           />
                         </div>
                         <h5
-                          className="text-2xl font-serif font-semibold mb-2 leading-snug"
+                          className="text-2xl font-serif font-semibold mb-2 line-clamp-2 leading-snug"
                           style={{
                             fontWeight: 600,
                             fontSize: 20,
@@ -162,23 +202,26 @@ export default function Articles() {
                         >
                           {article.title}
                         </h5>
-                        <div className="text-base text-[#585550] mb-3 line-clamp-2 text-left">
+                        <div className="text-base text-[#585550] mb-3 line-clamp-3 text-left">
                           {article.description}
                         </div>
+                        <div className="flex-1"></div>
                         <div className="text-xs text-[#7B6142] pb-6 font-semibold uppercase tracking-wider text-left">
-                          {new Date(article.publishedAt).toLocaleDateString('en-US', {
-                            day: 'numeric',
-                            month: 'short',
-                            year: 'numeric',
-                          })}
+                          {new Date(article.publishedAt)
+                            .toLocaleDateString('en-GB', {
+                              day: '2-digit',
+                              month: 'short',
+                              year: 'numeric',
+                            })
+                            .replace(/\b([a-z]{3})\b/i, (m) => m.toUpperCase())}
                         </div>
                       </div>
                     </div>
                     {/* Desktop Grid Layout */}
-                    <div className="hidden md:grid grid-cols-[1fr_238px] gap-6 pb-6 w-full hover:bg-[#f3efe2] transition-colors">
-                      <div>
+                    <div className="hidden md:grid grid-cols-[1fr_238px] gap-6 w-full transition-colors">
+                      <div className="flex flex-col h-full">
                         <h5
-                          className="text-2xl font-serif font-semibold mb-2 leading-snug"
+                          className="text-2xl font-serif font-semibold mb-2 leading-snug line-clamp-2"
                           style={{
                             fontWeight: 600,
                             fontSize: 24,
@@ -190,18 +233,21 @@ export default function Articles() {
                         >
                           {article.title}
                         </h5>
-                        <div className="text-base text-[#585550] mb-3 line-clamp-2 text-left">
+                        <div className="text-base text-[#585550] mb-3 line-clamp-3 text-left">
                           {article.description}
                         </div>
+                        <div className="flex-1"></div>
                         <div className="text-[14px] leading-[20px] text-[#585550] font-semibold uppercase tracking-wider text-left">
-                          {new Date(article.publishedAt).toLocaleDateString('en-US', {
-                            day: 'numeric',
-                            month: 'short',
-                            year: 'numeric',
-                          })}
+                          {new Date(article.publishedAt)
+                            .toLocaleDateString('en-GB', {
+                              day: '2-digit',
+                              month: 'short',
+                              year: 'numeric',
+                            })
+                            .replace(/\b([a-z]{3})\b/i, (m) => m.toUpperCase())}
                         </div>
                       </div>
-                      <div className="w-[238px] h-[180px] flex-shrink-0 rounded overflow-hidden bg-[#E6DDC6] flex items-center justify-center md:justify-end">
+                      <div className="w-[238px] h-[180px] flex-shrink-0 overflow-hidden bg-[#E6DDC6] flex items-center justify-center md:justify-end">
                         <img
                           src={imageUrl || articlesCover}
                           alt={article.title}
@@ -215,14 +261,13 @@ export default function Articles() {
                     </div>
                     {/* Faded divider under each article */}
                     {idx !== articles.length - 1 && (
-                      <div className="border-t-2 border-[#E5E1D7] opacity-80 my-6"></div>
+                      <div className="border-t-2 border-[#E5E1D7] opacity-80 mt-8"></div>
                     )}
                   </Link>
                 );
               })}
             </div>
           </div>
-          <div className="hidden md:block md:w-2/5"></div>
         </div>
         {/* Pagination */}
         {totalPages > 1 && (

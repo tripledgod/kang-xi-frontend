@@ -1,4 +1,5 @@
 import typography from '@tailwindcss/typography';
+import lineClamp from '@tailwindcss/line-clamp';
 
 /** @type {import('tailwindcss').Config} */
 export default {
@@ -69,5 +70,6 @@ export default {
       },
     },
   },
-  plugins: [typography],
+  plugins: [typography, lineClamp],
+  safelist: ['line-clamp-9'],
 };

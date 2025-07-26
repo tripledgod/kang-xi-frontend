@@ -15,6 +15,7 @@ import Loading from '../components/Loading';
 import { useTranslation } from 'react-i18next';
 import happendImg from '../assets/happend.jpg';
 import expressImg from '../assets/express.jpg';
+import bgButtonMobile from '../assets/bg_button.png';
 
 const steps = [
   {
@@ -60,6 +61,7 @@ export default function AcquireAnItem() {
   });
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const formRef = React.useRef<HTMLDivElement>(null);
 
   const validateForm = () => {
     const newErrors = {
@@ -121,12 +123,20 @@ export default function AcquireAnItem() {
     }
   };
 
+  const handleScrollToForm = () => {
+    if (formRef.current) {
+      formRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <div className="w-full min-h-screen bg-[#F7F5EA]">
       {/* Show popup when registration is successful */}
       {showSuccess && (
         <Popup
-          title="Thank you for contacting us!"
+          title={'Thank you for\ncontacting us'}
+          titleClassName="md:text-[40px] md:leading-[48px] text-[30px] leading-[36px]"
+          containerClassName=" md:h-[300px] h-[274px] "
           content="We will  be in  touch with you  shortly."
           buttonText="BACK TO HOMEPAGE"
           onButtonClick={() => {
@@ -138,21 +148,40 @@ export default function AcquireAnItem() {
       )}
       {/* Hero Section */}
       <div className="w-full bg-[#23211C] py-12 px-4">
-        <div className="max-w-6xl mx-auto flex flex-col md:flex-row gap-10 items-center">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row gap-10 items-center">
           {/* Left */}
           <div className="flex-1 text-white mb-8 md:mb-0">
             <h1 className="hidden md:block text-[60px] leading-[72px] font-serif font-semibold mb-6">
-              Reserve a Timeless<br />Treasure
+              Reserve a <br />Timeless
+              <br />
+              Treasure
             </h1>
-            <h3 className="block md:hidden text-[40px] leading-[48px] font-serif font-semibold mb-6">
-              Reserve a<br/> Timeless<br />Treasure
+            <h3 className="block md:hidden text-[40px] leading-[48px] font-serif font-semibold mb-4">
+              Reserve a<br /> Timeless
+              <br />
+              Treasure
             </h3>
-            <p className="mb-6 text-[18px] leading-[26px] text-[#FFFFFF] max-w-md opacity-70">
+            <p className="md:mb-16 mb-8 text-[18px] leading-[26px] text-[#FFFFFF] max-w-[478px] opacity-70">
               Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in
               eros elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum
               nulla, ut commodo diam libero vitae erat morbi euismod.
             </p>
-            <Button text="ACQUIRE AN ITEM" />
+            <button
+              type="submit"
+              onClick={handleScrollToForm}
+              
+              className="flex h-[48px] w-[189px] items-center justify-center text-[14px] leading-[20px] font-semibold shadow-none transition-all px-6"
+              style={{
+                backgroundImage: `url(${bgButtonMobile})`,
+                backgroundSize: '100% 100%',
+                backgroundRepeat: 'no-repeat',
+                backgroundPosition: 'center',
+                color: '#fff',
+                
+              }}
+            >
+              ACQUIRE AN ITEM
+            </button> 
           </div>
           {/* Right: Single image */}
           <div className="flex-1">
@@ -167,7 +196,7 @@ export default function AcquireAnItem() {
 
       {/* What Happens Next Section */}
       <div className="w-full pt-16 px-4 md:px-[112px]">
-        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-10 md:gap-24 md:py-12">
+        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-0  md:gap-24 md:py-12">
           {/* Left: Large image */}
           <div className="flex-1 flex items-center justify-center mb-8 md:mb-0 order-1">
             <img
@@ -194,7 +223,9 @@ export default function AcquireAnItem() {
                     {step.icon}
                   </div>
                   <div>
-                    <h5 className="text-[20px] md:text-[24px] leading-[28px] md:leading-[32px] font-semibold text-[#61422D] mb-1">{step.title}</h5>
+                    <h5 className="text-[20px] md:text-[24px] leading-[28px] md:leading-[32px] font-semibold text-[#61422D] mb-1">
+                      {step.title}
+                    </h5>
                     <div className="text-base text-[#6D6A66]">{step.desc}</div>
                   </div>
                 </div>
@@ -205,8 +236,8 @@ export default function AcquireAnItem() {
       </div>
 
       {/* Express Interest Section */}
-      <div className="w-full py-16 px-4 md:px-[112px]">
-        <div className="max-w-6xl mx-auto flex flex-col md:flex-row-reverse items-center gap-10 md:gap-24 md:pb-16">
+      <div className="w-full  pt-12 md:pt-16 pb-28 md:pb-16 px-4 md:px-[112px]">
+        <div className="max-w-6xl mx-auto flex flex-col md:flex-row-reverse items-center gap-0 md:gap-24 md:pb-16">
           {/* Right: Large image */}
           <div className="flex-1 flex items-center justify-center mb-8 md:mb-0 order-1">
             <img
@@ -230,16 +261,17 @@ export default function AcquireAnItem() {
               the next step.
             </p>
             <p className="text-[18px] leading-[26px] text-[#6D6A66]">
-              Each artifact in our curation is unique, often with centuries of history behind it. Due
-              to the rarity and exclusivity of these pieces, availability is limited. To ensure a
-              seamless acquisition process, kindly fill out the form below to express your interest.
+              Each artifact in our curation is unique, often with centuries of history behind it.
+              Due to the rarity and exclusivity of these pieces, availability is limited. To ensure
+              a seamless acquisition process, kindly fill out the form below to express your
+              interest.
             </p>
           </div>
         </div>
       </div>
 
       {/* Form Section */}
-      <div className="w-full bg-[#E6DDC6] py-16 px-4">
+      <div ref={formRef} className="w-full bg-[#E6DDC6] py-16 px-4">
         <div className="max-w-xl mx-auto">
           <h3 className="hidden md:block text-[40px] leading-[48px] font-serif font-semibold text-[#61422D] mb-2 text-center">
             Secure Your Piece of History
@@ -258,7 +290,9 @@ export default function AcquireAnItem() {
             }}
           >
             <div>
-              <label className="block mb-2 text-[#1F1F1F] font-normal text-[14px] leading-[20px]">First Name</label>
+              <label className="block mb-2 text-[#1F1F1F] font-normal text-[14px] leading-[20px]">
+                First Name
+              </label>
               <input
                 type="text"
                 className={`w-full rounded border px-4 py-3 bg-white text-[#23211C] ${
@@ -276,7 +310,9 @@ export default function AcquireAnItem() {
               {errors.firstName && <p className="text-red-500 text-sm mt-1">{errors.firstName}</p>}
             </div>
             <div>
-              <label className="block mb-2 text-[#1F1F1F] font-normal text-[14px] leading-[20px]">Last Name</label>
+              <label className="block mb-2 text-[#1F1F1F] font-normal text-[14px] leading-[20px]">
+                Last Name
+              </label>
               <input
                 type="text"
                 className={`w-full rounded border px-4 py-3 bg-white text-[#23211C] ${
@@ -294,7 +330,9 @@ export default function AcquireAnItem() {
               {errors.lastName && <p className="text-red-500 text-sm mt-1">{errors.lastName}</p>}
             </div>
             <div>
-              <label className="block mb-2 text-[#1F1F1F] font-normal text-[14px] leading-[20px]">Item Code</label>
+              <label className="block mb-2 text-[#1F1F1F] font-normal text-[14px] leading-[20px]">
+                Item Code
+              </label>
               <input
                 type="text"
                 className={`w-full rounded border px-4 py-3 bg-white text-[#23211C] ${
@@ -312,7 +350,9 @@ export default function AcquireAnItem() {
               {errors.itemCode && <p className="text-red-500 text-sm mt-1">{errors.itemCode}</p>}
             </div>
             <div>
-              <label className="block mb-2 text-[#1F1F1F] font-normal text-[14px] leading-[20px]">Contact Number</label>
+              <label className="block mb-2 text-[#1F1F1F] font-normal text-[14px] leading-[20px]">
+                Contact Number
+              </label>
               <PhoneInput
                 country={'sg'}
                 value={phone}

@@ -9,15 +9,16 @@ import customerSupportIcon from '../assets/customer_support.svg';
 import privateViewingIcon from '../assets/private_viewing.svg';
 import secureTransactionIcon from '../assets/secure_transaction.svg';
 import timelessTreasure from '../assets/timeless_treasure.png';
+import bgButtonMobile from '../assets/bg_button.png';
 import verifyLegacy from '../assets/verify_legacy.png';
 import verifyLegacyMobile from '../assets/verify_legacy_mobile.png';
 import logoWhite from '../assets/logo_white.png';
 import icUpload from '../assets/ic_upload.svg';
 import closeCircleBorder from '../assets/close_circle_border.svg';
 import Popup from '../components/Popup';
-import {ACCESS_TOKEN, API_URL} from '../utils/constants';
+import { ACCESS_TOKEN, API_URL } from '../utils/constants';
 import { useNavigate } from 'react-router-dom';
-import axios from "axios";
+import axios from 'axios';
 import terracotaImg from '../assets/terracota.jpg';
 
 const whyItems = [
@@ -59,6 +60,14 @@ export default function AppraiseAnItem() {
     phone: '',
     images: '',
   });
+
+  const formRef = React.useRef<HTMLDivElement>(null);
+
+  const handleScrollToForm = () => {
+    if (formRef.current) {
+      formRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   const validateImageFile = (file: File): string | null => {
     // Check file format
@@ -106,7 +115,7 @@ export default function AppraiseAnItem() {
     }
 
     setErrors(newErrors);
-    return !Object.values(newErrors).some(error => error !== '');
+    return !Object.values(newErrors).some((error) => error !== '');
   };
 
   const submitForm = async (e?: React.FormEvent) => {
@@ -115,8 +124,6 @@ export default function AppraiseAnItem() {
     if (!validateForm()) {
       return;
     }
-
-
 
     setIsLoading(true);
     setSubmitError('');
@@ -127,17 +134,16 @@ export default function AppraiseAnItem() {
       images.forEach((img) => {
         bodyFormData.append('files', img);
       });
-      bodyFormData.append("ref", "api::submissions.submissions");
-      bodyFormData.append("field", "images");
+      bodyFormData.append('ref', 'api::submissions.submissions');
+      bodyFormData.append('field', 'images');
 
-  
       const responseUploadImage = await axios({
         method: 'post',
         url: `${API_URL}/api/upload`,
         data: bodyFormData,
         headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${ACCESS_TOKEN}`
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${ACCESS_TOKEN}`,
         },
       });
 
@@ -151,27 +157,22 @@ export default function AppraiseAnItem() {
           itemCode: appraiseForm.itemCode,
           images: images1,
           contactNumber: `+${phone}`,
-        }
+        },
       };
-
-     
 
       const newItem = await axios(`${API_URL}/api/submission`, {
         method: 'POST',
         data: submissionData,
         headers: {
-          Authorization: `Bearer ${ACCESS_TOKEN}`
-        }
+          Authorization: `Bearer ${ACCESS_TOKEN}`,
+        },
       });
-
-     
 
       setShowSuccess(true);
       setAppraiseForm({ firstName: '', lastName: '', itemCode: '' });
       setPhone('');
       setImages([]);
       setErrors({ firstName: '', lastName: '', itemCode: '', phone: '', images: '' });
-
     } catch (err) {
       console.error('=== SUBMISSION ERROR ===');
       console.error('Error details:', err);
@@ -180,7 +181,9 @@ export default function AppraiseAnItem() {
         console.error('Response data:', err.response?.data);
         console.error('Request config:', err.config);
       }
-      setSubmitError(err instanceof Error ? err.message : 'An unexpected error occurred. Please try again.');
+      setSubmitError(
+        err instanceof Error ? err.message : 'An unexpected error occurred. Please try again.'
+      );
     } finally {
       setIsLoading(false);
     }
@@ -189,21 +192,58 @@ export default function AppraiseAnItem() {
   return (
     <div className="w-full min-h-screen bg-[#F7F5EA] flex flex-col">
       {/* Hero Section */}
-      <div className="w-full bg-[#23211C] flex flex-col items-center justify-center relative">
+      <div className="w-full  bg-[#23211C] flex flex-col items-center justify-center relative">
         <img
           src={verifyLegacyMobile}
           alt="Appraise Hero Mobile"
-          className="w-full object-cover object-center block md:hidden"
+          className="w-full object-cover h-[675px] object-center block md:hidden"
         />
         <img
           src={verifyLegacy}
           alt="Appraise Hero"
           className="w-full object-cover object-center hidden md:block"
         />
+        <div className="absolute inset-0 bg-black opacity-40 z-10"></div>
+        {/* Overlay content: Title & Description */}
+        <div className="absolute inset-0 flex flex-col items-center justify-center text-center md:px-4 px-6 pointer-events-none z-10">
+          <h3 className="block md:hidden text-white font-serif font-semibold text-[40px] leading-[48px] mb-5 pointer-events-auto">
+            Verify the <br /> Legacy of Your <br /> Antique
+          </h3>
+          <h1 className="hidden md:block text-white font-serif font-semibold text-[60px] leading-[72px] drop-shadow-lg mb-5 pointer-events-auto">
+            Verify the Legacy of
+            <br />
+            Your Antique
+          </h1>
+          <p className="text-white text-[18px] leading-[26px] max-w-2xl md:max-w-[664px] mx-auto opacity-90 mb-5 pointer-events-auto">
+            Antiques carry history, but true value lies in authenticity. Whether you have inherited a piece, discovered a rare find, or wish to confirm the provenance of your artifact, Kangxis offers expert authentication services to help you uncover the true story behind your antique
+          </p>
+          <div className="pointer-events-auto md:mt-7 mt-12">  
+          <button
+              type="submit"
+              onClick={handleScrollToForm}
+              
+              className="flex h-[48px] w-[189px] items-center justify-center text-[14px] leading-[20px] font-semibold shadow-none transition-all px-6"
+              style={{
+                backgroundImage: `url(${bgButtonMobile})`,
+                backgroundSize: '100% 100%',
+                backgroundRepeat: 'no-repeat',
+                backgroundPosition: 'center',
+                color: '#fff',
+                
+              }}
+            >
+              APPRAISE AN ITEM
+            </button>  
+                 
+            
+          </div>
+        </div>
       </div>
       {/* Our Services Section */}
       <div className="w-full bg-[#23211C] py-16 flex flex-col items-center justify-center text-center px-4">
-        <div className="text-[#F7F3E8] text-[14px] leading-[20px] mb-2 tracking-widest font-semibold">OUR SERVICES</div>
+        <div className="text-[#F7F3E8] text-[14px] leading-[20px] mb-2 tracking-widest font-semibold">
+          OUR SERVICES
+        </div>
         <h4 className="hidden md:block text-[32px]  leading-[40px] font-serif font-semibold text-white mb-6 max-w-2xl mx-auto">
           With a network of specialists in Chinese antiquities, we provide a meticulous evaluation
           of your piece—examining craftsmanship, materials, historical context, and provenance to
@@ -230,7 +270,9 @@ export default function AppraiseAnItem() {
           {whyItems.map((item, idx) => (
             <div key={idx} className="flex flex-col items-left text-left">
               {item.icon}
-              <h5 className="text-[24px] leading-[32px] font-semibold text-[#61422D] mt-4 mb-2">{item.title}</h5>
+              <h5 className="text-[24px] leading-[32px] font-semibold text-[#61422D] mt-4 mb-2">
+                {item.title}
+              </h5>
               <div className="text-base text-[#6D6A66]">{item.desc}</div>
             </div>
           ))}
@@ -244,7 +286,7 @@ export default function AppraiseAnItem() {
         </div>
       </div>
       {/* Submit Form Section */}
-      <div className="w-full bg-[#E6DDC6] py-16 px-4">
+      <div ref={formRef} className="w-full bg-[#E6DDC6] py-16 px-4">
         <div className="max-w-xl mx-auto">
           <h3 className="hidden md:block text-[40px] leading-[48px]  font-serif font-semibold text-[#61422D] mb-2 text-center">
             Submit Your Antique for Authentication
@@ -258,7 +300,9 @@ export default function AppraiseAnItem() {
           </div>
           <form className="space-y-6" onSubmit={submitForm}>
             <div>
-              <label className="block mb-2 text-[#1F1F1F] font-normal text-[14px] leading-[20px] ">First Name</label>
+              <label className="block mb-2 text-[#1F1F1F] font-normal text-[14px] leading-[20px] ">
+                First Name
+              </label>
               <input
                 type="text"
                 className={`w-full rounded border px-4 py-3 bg-[#F7F5EA] text-[#23211C] ${
@@ -269,16 +313,16 @@ export default function AppraiseAnItem() {
                 onChange={(e) => {
                   setAppraiseForm((f) => ({ ...f, firstName: e.target.value }));
                   if (errors.firstName) {
-                    setErrors(prev => ({ ...prev, firstName: '' }));
+                    setErrors((prev) => ({ ...prev, firstName: '' }));
                   }
                 }}
               />
-              {errors.firstName && (
-                <p className="text-red-500 text-sm mt-1">{errors.firstName}</p>
-              )}
+              {errors.firstName && <p className="text-red-500 text-sm mt-1">{errors.firstName}</p>}
             </div>
             <div>
-              <label className="block mb-2 text-[#1F1F1F] font-normal text-[14px] leading-[20px] ">Last Name</label>
+              <label className="block mb-2 text-[#1F1F1F] font-normal text-[14px] leading-[20px] ">
+                Last Name
+              </label>
               <input
                 type="text"
                 className={`w-full rounded border px-4 py-3 bg-[#F7F5EA] text-[#23211C] ${
@@ -289,16 +333,16 @@ export default function AppraiseAnItem() {
                 onChange={(e) => {
                   setAppraiseForm((f) => ({ ...f, lastName: e.target.value }));
                   if (errors.lastName) {
-                    setErrors(prev => ({ ...prev, lastName: '' }));
+                    setErrors((prev) => ({ ...prev, lastName: '' }));
                   }
                 }}
               />
-              {errors.lastName && (
-                <p className="text-red-500 text-sm mt-1">{errors.lastName}</p>
-              )}
+              {errors.lastName && <p className="text-red-500 text-sm mt-1">{errors.lastName}</p>}
             </div>
             <div>
-              <label className="block mb-2 text-[#1F1F1F] font-normal text-[14px] leading-[20px] ">Item Code</label>
+              <label className="block mb-2 text-[#1F1F1F] font-normal text-[14px] leading-[20px] ">
+                Item Code
+              </label>
               <input
                 type="text"
                 className={`w-full rounded border px-4 py-3 bg-[#F7F5EA] text-[#23211C] ${
@@ -309,23 +353,23 @@ export default function AppraiseAnItem() {
                 onChange={(e) => {
                   setAppraiseForm((f) => ({ ...f, itemCode: e.target.value }));
                   if (errors.itemCode) {
-                    setErrors(prev => ({ ...prev, itemCode: '' }));
+                    setErrors((prev) => ({ ...prev, itemCode: '' }));
                   }
                 }}
               />
-              {errors.itemCode && (
-                <p className="text-red-500 text-sm mt-1">{errors.itemCode}</p>
-              )}
+              {errors.itemCode && <p className="text-red-500 text-sm mt-1">{errors.itemCode}</p>}
             </div>
             <div>
-              <label className="block mb-2 text-[#1F1F1F] font-normal text-[14px] leading-[20px]">Contact Number</label>
+              <label className="block mb-2 text-[#1F1F1F] font-normal text-[14px] leading-[20px]">
+                Contact Number
+              </label>
               <PhoneInput
                 country={'sg'}
                 value={phone}
                 onChange={(value) => {
                   setPhone(value);
                   if (errors.phone) {
-                    setErrors(prev => ({ ...prev, phone: '' }));
+                    setErrors((prev) => ({ ...prev, phone: '' }));
                   }
                 }}
                 inputClass={`w-full rounded border px-4 py-3 bg-[#F7F5EA] text-[#23211C] ${
@@ -336,12 +380,12 @@ export default function AppraiseAnItem() {
                 searchClass="bg-[#F7F5EA] text-[#23211C] border border-[#C7C7B9]"
                 containerClass="phone-input-container"
               />
-              {errors.phone && (
-                <p className="text-red-500 text-sm mt-1">{errors.phone}</p>
-              )}
+              {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone}</p>}
             </div>
             <div>
-              <label className="block mb-2 text-[#1F1F1F] font-normal text-[14px] leading-[20px]">Upload Image</label>
+              <label className="block mb-2 text-[#1F1F1F] font-normal text-[14px] leading-[20px]">
+                Upload Image
+              </label>
               <div
                 className={`w-full bg-[#FDFBF1] border-2 border-dashed rounded-lg flex flex-col items-center justify-center py-8 cursor-pointer transition hover:border-[#7B6142] ${
                   errors.images ? 'border-red-500' : 'border-[#C7C7B9]'
@@ -369,9 +413,9 @@ export default function AppraiseAnItem() {
 
                     if (invalidFiles.length > 0) {
                       // Show error for invalid files
-                      setErrors(prev => ({
+                      setErrors((prev) => ({
                         ...prev,
-                        images: invalidFiles.join('; ')
+                        images: invalidFiles.join('; '),
                       }));
                       return;
                     }
@@ -379,7 +423,7 @@ export default function AppraiseAnItem() {
                     // Add valid files
                     setImages((prev) => [...prev, ...files]);
                     if (errors.images) {
-                      setErrors(prev => ({ ...prev, images: '' }));
+                      setErrors((prev) => ({ ...prev, images: '' }));
                     }
                   }
                 }}
@@ -423,9 +467,9 @@ export default function AppraiseAnItem() {
 
                       if (invalidFiles.length > 0) {
                         // Show error for invalid files
-                        setErrors(prev => ({
+                        setErrors((prev) => ({
                           ...prev,
-                          images: invalidFiles.join('; ')
+                          images: invalidFiles.join('; '),
                         }));
                         return;
                       }
@@ -433,15 +477,13 @@ export default function AppraiseAnItem() {
                       // Add valid files
                       setImages((prev) => [...prev, ...fileArray]);
                       if (errors.images) {
-                        setErrors(prev => ({ ...prev, images: '' }));
+                        setErrors((prev) => ({ ...prev, images: '' }));
                       }
                     }
                   }}
                 />
               </div>
-              {errors.images && (
-                <p className="text-red-500 text-sm mt-1">{errors.images}</p>
-              )}
+              {errors.images && <p className="text-red-500 text-sm mt-1">{errors.images}</p>}
               {images.length > 0 && (
                 <div className="flex flex-wrap gap-4 mt-4">
                   {images.map((img, idx) => (
@@ -458,7 +500,10 @@ export default function AppraiseAnItem() {
                           const newImages = images.filter((_, i) => i !== idx);
                           setImages(newImages);
                           if (newImages.length === 0 && errors.images === '') {
-                            setErrors(prev => ({ ...prev, images: 'At least one image is required' }));
+                            setErrors((prev) => ({
+                              ...prev,
+                              images: 'At least one image is required',
+                            }));
                           }
                         }}
                         aria-label="Remove image"
@@ -472,7 +517,7 @@ export default function AppraiseAnItem() {
             </div>
             <div className="w-full">
               <Button
-                text={isLoading ? "SUBMITTING..." : "SUBMIT FORM"}
+                text={isLoading ? 'SUBMITTING...' : 'SUBMIT FORM'}
                 type="submit"
                 className="submit-form-btn"
                 disabled={isLoading}
@@ -483,16 +528,16 @@ export default function AppraiseAnItem() {
                 <div className="flex items-center">
                   <div className="flex-shrink-0">
                     <svg className="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                      <path
+                        fillRule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                        clipRule="evenodd"
+                      />
                     </svg>
                   </div>
                   <div className="ml-3">
-                    <h3 className="text-sm font-medium text-red-800">
-                      Submission Failed
-                    </h3>
-                    <div className="mt-2 text-sm text-red-700">
-                      {submitError}
-                    </div>
+                    <h3 className="text-sm font-medium text-red-800">Submission Failed</h3>
+                    <div className="mt-2 text-sm text-red-700">{submitError}</div>
                   </div>
                 </div>
               </div>
@@ -502,7 +547,9 @@ export default function AppraiseAnItem() {
       </div>
       {showSuccess && (
         <Popup
-          title="Thank you for your submission!"
+          title={'Thank you for\nyour submission'}
+          titleClassName="md:text-[40px] md:leading-[48px] text-[30px] leading-[36px]"
+          containerClassName=" md:h-[300px] h-[274px] "
           content="We have received your request and will contact you soon."
           buttonText="BACK TO HOMEPAGE"
           onButtonClick={() => {

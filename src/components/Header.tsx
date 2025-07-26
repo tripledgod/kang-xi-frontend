@@ -62,9 +62,9 @@ export default function Header() {
   ];
 
   return (
-    <header className="w-full bg-[#F7F5EA] relative flex items-center px-4 md:px-8 py-4">
+    <header className="w-full bg-[#F7F5EA] relative flex items-center px-4 md:px-28 py-4">
       {/* Logo and Title */}
-      <div className="flex items-center gap-4 flex-shrink-0">
+      <div className="flex items-center gap-4 flex-shrink-0 ">
         <Link to="/">
           <img src={logoMobile} alt="Kang Xi Logo Mobile" className="h-12 block lg:hidden" />
           <img src={logo} alt="Kang Xi Logo" className="h-16 hidden lg:block" />
