@@ -126,8 +126,6 @@ export default function CeramicsByEra() {
     ? CARD_WIDTH * (MOBILE_VISIBLE + MOBILE_PEEK) + CARD_GAP * MOBILE_VISIBLE
     : CARD_WIDTH * (DESKTOP_VISIBLE + DESKTOP_PEEK) + CARD_GAP * DESKTOP_VISIBLE;
 
-  if (loading) return <div className="w-full py-12 text-center">Đang tải...</div>;
-
   return (
     <section className="w-full bg-[#F7F5EA] px-4 py-12 md:pt-21 md:pb-19">
       <div className="max-w-7xl mx-auto md:px-8">
@@ -188,7 +186,10 @@ export default function CeramicsByEra() {
             </button>
             <button
               className="ml-4 w-[218px] h-[48px] flex items-center justify-center text-base font-medium shadow-none transition-all px-6"
-              onClick={() => { window.scrollTo({ top: 0, behavior: 'auto' }); navigate('/browse'); }}
+              onClick={() => {
+                window.scrollTo({ top: 0, behavior: 'auto' });
+                navigate('/browse');
+              }}
               style={{
                 backgroundImage: `url(${bgButton})`,
                 backgroundSize: '100% 100%',
@@ -213,54 +214,66 @@ export default function CeramicsByEra() {
 
         {/* Mobile: vertical stack */}
         <div className="flex flex-col gap-8 mt-4 md:hidden">
-          {eras.map((era, idx) => (
-            <div
-              key={era.name}
-              className="flex flex-col bg-transparent cursor-pointer"
-              onClick={() => {window.scrollTo({ top: 10, behavior: 'auto' }); navigate(`/browse?era=${era.slug}`)}}
-            >
-              <div className="bg-[#E6DDC6] aspect-square w-full flex items-center justify-center overflow-hidden mb-4">
-                {era.img ? (
-                  <img src={era.img} alt={era.name} className="object-cover w-full h-full" />
-                ) : (
-                  <div className="text-[#61422D] text-center p-4">
-                    <div className="text-6xl mb-3 opacity-50">🏺</div>
-                    <div className="text-sm font-medium">No Image</div>
-                    <div className="text-xs opacity-70 mt-1">Ceramic Art</div>
-                  </div>
-                )}
-              </div>
-              <h4
-                className="text-2xl mb-6"
-                style={{
-                  color: COLORS.primary900,
-                  // fontWeight: 500,
-                  fontSize: 32,
-                  lineHeight: '40px',
-                  letterSpacing: 0,
-                }}
-              >
-                {era.name}
-              </h4>
-              <div className="text-base font-semibold border-t border-[#C7C7B9] pt-4 text-[#2E2A24] mb-1">
-                {era.years}
-              </div>
-              <div
-                className="text-base pt-2  "
-                style={{
-                  // fontFamily: 'Noto Sans SC, Inter, -apple-system, BlinkMacSystemFont, sans-serif',
-                  fontWeight: 400,
-                  fontSize: 16,
-                  lineHeight: 1.5,
-                  letterSpacing: 0,
-                  wordSpacing: '2px',
-                  color: '#6D6A66',
-                }}
-              >
-                {era.desc}
+          {loading ? (
+            <div className="flex justify-center items-center py-16 w-full">
+              <div className="flex flex-col items-center">
+                <div className="w-8 h-8 border-2 border-[#61422D] border-t-transparent rounded-full animate-spin mb-4"></div>
+                <span className="text-[#61422D] text-base font-medium">Loading...</span>
               </div>
             </div>
-          ))}
+          ) : (
+            eras.map((era, idx) => (
+              <div
+                key={era.name}
+                className="flex flex-col bg-transparent cursor-pointer"
+                onClick={() => {
+                  window.scrollTo({ top: 10, behavior: 'auto' });
+                  navigate(`/browse?era=${era.slug}`);
+                }}
+              >
+                <div className="bg-[#E6DDC6] aspect-square w-full flex items-center justify-center overflow-hidden mb-4">
+                  {era.img ? (
+                    <img src={era.img} alt={era.name} className="object-cover w-full h-full" />
+                  ) : (
+                    <div className="text-[#61422D] text-center p-4">
+                      <div className="text-6xl mb-3 opacity-50">🏺</div>
+                      <div className="text-sm font-medium">No Image</div>
+                      <div className="text-xs opacity-70 mt-1">Ceramic Art</div>
+                    </div>
+                  )}
+                </div>
+                <h4
+                  className="text-2xl mb-6"
+                  style={{
+                    color: COLORS.primary900,
+                    // fontWeight: 500,
+                    fontSize: 32,
+                    lineHeight: '40px',
+                    letterSpacing: 0,
+                  }}
+                >
+                  {era.name}
+                </h4>
+                <div className="text-base font-semibold border-t border-[#C7C7B9] pt-4 text-[#2E2A24] mb-1">
+                  {era.years}
+                </div>
+                <div
+                  className="text-base pt-2  "
+                  style={{
+                    // fontFamily: 'Noto Sans SC, Inter, -apple-system, BlinkMacSystemFont, sans-serif',
+                    fontWeight: 400,
+                    fontSize: 16,
+                    lineHeight: 1.5,
+                    letterSpacing: 0,
+                    wordSpacing: '2px',
+                    color: '#6D6A66',
+                  }}
+                >
+                  {era.desc}
+                </div>
+              </div>
+            ))
+          )}
           <div className="mt-6">
             <Button text={t('VIEW_ALL_COLLECTION')} onClick={() => navigate('/browse')} />
           </div>
@@ -271,53 +284,65 @@ export default function CeramicsByEra() {
           className="hidden md:flex gap-8 mt-4 md:overflow-x-hidden"
           // style={{ width: containerWidth, maxWidth: '100%' }}
         >
-          {eras.map((era, idx) => (
-            <div
-              key={era.name}
-              className="flex flex-col flex-shrink-0 bg-transparent cursor-pointer"
-              style={{ width: CARD_WIDTH, minWidth: CARD_WIDTH }}
-              onClick={() => {window.scrollTo({ top: 500, behavior: 'auto' }); navigate(`/browse?era=${era.slug}`)}}
-            >
-              <div className="bg-[#E6DDC6] aspect-square w-full flex items-center justify-center overflow-hidden mb-4">
-                {era.img ? (
-                  <img src={era.img} alt={era.name} className="object-cover w-full h-full" />
-                ) : (
-                  <div className="text-[#61422D] text-center p-4">
-                    <div className="text-6xl mb-3 opacity-50">🏺</div>
-                    <div className="text-sm font-medium">No Image</div>
-                    <div className="text-xs opacity-70 mt-1">Ceramic Art</div>
-                  </div>
-                )}
-              </div>
-              <h4
-                className="text-2xl font-serif text-[#61422D] mb-6 font-semibold"
-                style={{
-                  fontWeight: 600,
-                  fontSize: 32,
-                  lineHeight: '40px',
-                  letterSpacing: 0,
-                }}
-              >
-                {era.name}
-              </h4>
-              <div className="text-base font-semibold border-t border-[#C7C7B9] pt-4 text-[#2E2A24] mb-1">
-                {era.years}
-              </div>
-              <div
-                className="text-base pt-2 line-clamp-3 "
-                style={{
-                  fontWeight: 400,
-                  fontSize: 16,
-                  lineHeight: 1.5,
-                  letterSpacing: 0,
-                  wordSpacing: '2px',
-                  color: '#6D6A66',
-                }}
-              >
-                {era.desc}
+          {loading ? (
+            <div className="flex justify-center items-center py-16 w-full">
+              <div className="flex flex-col items-center">
+                <div className="w-8 h-8 border-2 border-[#61422D] border-t-transparent rounded-full animate-spin mb-4"></div>
+                <span className="text-[#61422D] text-base font-medium">Loading...</span>
               </div>
             </div>
-          ))}
+          ) : (
+            eras.map((era, idx) => (
+              <div
+                key={era.name}
+                className="flex flex-col flex-shrink-0 bg-transparent cursor-pointer"
+                style={{ width: CARD_WIDTH, minWidth: CARD_WIDTH }}
+                onClick={() => {
+                  window.scrollTo({ top: 500, behavior: 'auto' });
+                  navigate(`/browse?era=${era.slug}`);
+                }}
+              >
+                <div className="bg-[#E6DDC6] aspect-square w-full flex items-center justify-center overflow-hidden mb-4">
+                  {era.img ? (
+                    <img src={era.img} alt={era.name} className="object-cover w-full h-full" />
+                  ) : (
+                    <div className="text-[#61422D] text-center p-4">
+                      <div className="text-6xl mb-3 opacity-50">🏺</div>
+                      <div className="text-sm font-medium">No Image</div>
+                      <div className="text-xs opacity-70 mt-1">Ceramic Art</div>
+                    </div>
+                  )}
+                </div>
+                <h4
+                  className="text-2xl font-serif text-[#61422D] mb-6 font-semibold"
+                  style={{
+                    fontWeight: 600,
+                    fontSize: 32,
+                    lineHeight: '40px',
+                    letterSpacing: 0,
+                  }}
+                >
+                  {era.name}
+                </h4>
+                <div className="text-base font-semibold border-t border-[#C7C7B9] pt-4 text-[#2E2A24] mb-1">
+                  {era.years}
+                </div>
+                <div
+                  className="text-base pt-2 line-clamp-3 "
+                  style={{
+                    fontWeight: 400,
+                    fontSize: 16,
+                    lineHeight: 1.5,
+                    letterSpacing: 0,
+                    wordSpacing: '2px',
+                    color: '#6D6A66',
+                  }}
+                >
+                  {era.desc}
+                </div>
+              </div>
+            ))
+          )}
         </div>
       </div>
     </section>
