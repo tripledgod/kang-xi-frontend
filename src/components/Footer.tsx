@@ -39,7 +39,7 @@ export default function Footer() {
                 <Link
                   key={link.label}
                   to={link.href}
-                  className="text-[14px] leading-[20px] font-semibold text-[#FFFFFF] hover:text-[#E6DDC6] transition-colors whitespace-nowrap opacity-80"
+                  className="text-[14px] leading-[20px] font-semibold text-[#FFFFFF] whitespace-nowrap opacity-80"
                 >
                   {link.label}
                 </Link>
@@ -50,7 +50,7 @@ export default function Footer() {
                 <Link
                   key={link.label}
                   to={link.href}
-                  className="text-[14px] leading-[20px] font-semibold text-[#FFFFFF] hover:text-[#E6DDC6] transition-colors whitespace-nowrap opacity-80 "
+                  className="text-[14px] leading-[20px] font-semibold text-[#FFFFFF] whitespace-nowrap opacity-80 "
                 >
                   {link.label}
                 </Link>
@@ -60,7 +60,7 @@ export default function Footer() {
         </nav>
         {/* Faint divider line */}
         <div
-          className="w-full max-w-[341px] mx-auto border-t border-[#F7F3E8]/20 opacity-50 md:mb-6 mb-8 md:max-w-7xl"
+          className="w-full max-w-[337px] mx-auto border-t border-[#F7F3E8]/20 opacity-50 md:mb-6 mb-8 md:max-w-7xl"
           style={{ borderTopWidth: '1px' }}
         ></div>
         <div className="w-full max-w-[341px] flex flex-col items-center gap-6 md:flex-row md:items-center md:justify-between md:max-w-7xl md:mx-[112px] mx-17px">

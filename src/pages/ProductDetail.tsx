@@ -416,11 +416,11 @@ export default function ProductDetail() {
               className="object-contain object-top w-full md:h-full"
             />
             {/* Pagination dots for mobile - overlay on image */}
-            <div className="md:hidden absolute left-1/2 -translate-x-1/2 bottom-2 flex flex-row gap-2 z-10 pb-1">
+            <div className="md:hidden absolute left-1/2 -translate-x-1/2 bottom-2 flex flex-row gap-2 z-10 pb-1 items-center">
               {imageUrls.map((_, idx) => (
                 <button
                   key={idx}
-                  className={`w-2 h-2 rounded-full transition ${mainImg === imageUrls[idx] ? 'bg-[#61422D] opacity-100' : 'bg-[#201F1C] opacity-40'}`}
+                  className={`rounded-full transition ${mainImg === imageUrls[idx] ? 'w-2 h-2 bg-[#61422D] opacity-100' : 'w-1.5 h-1.5 bg-[#201F1C] opacity-40'}`}
                   onClick={() => setMainImg(imageUrls[idx])}
                   aria-label={`Go to image ${idx + 1}`}
                 />
@@ -575,15 +575,20 @@ export default function ProductDetail() {
                             </div>
                           )}
                         </div>
-                        <h5 className="text-[20px]  md:text-[24px] md:leading-[32px] leading-[28px]font-serif font-semibold text-[#61422D] mb-2 leading-snug line-clamp-3 min-h-[72px]">
+                        <div className="text-[#585550] text-[14px] leading-[20px] font-semibold uppercase mb-2">
+                          {item.category.name}
+                        </div>
+                        <h5 className="text-[20px]  md:text-[24px] md:leading-[32px] leading-[28px]font-serif font-semibold text-[#61422D] mb-4 md:pb-8 pb-7 leading-snug line-clamp-3 min-h-[72px]">
                           {item.title}
                         </h5>
-                        <div className="border-t-2 border-[#E5E1D7] opacity-80 my-3"></div>
-                        <div className="flex flex-row justify-between text-[14px] leading-[20px] text-[#585550] font-semibold">
-                          <span>
-                            {item.ageFrom} - {item.ageTo}
-                          </span>
-                          <span>ITEM {item.itemCode || item.documentId}</span>
+                        <div className="border-t-2 border-[#E5E1D7] opacity-80 mb-2"></div>
+                        <div className="flex flex-col gap-1 text-[14px] leading-[20px] text-[#585550] font-semibold">
+                          <div className="flex flex-row justify-between">
+                            <span>
+                              {item.ageFrom} - {item.ageTo}
+                            </span>
+                            <span>ITEM {item.itemCode || item.documentId}</span>
+                          </div>
                         </div>
                       </div>
                     );
@@ -606,23 +611,38 @@ export default function ProductDetail() {
         <div className="fixed left-0 right-0 top-0 bottom-0 z-50 flex md:inset-0">
           {/* Modal Header with Logo for mobile */}
           <div className="w-full max-w-xl bg-[#F7F5EA] shadow-xl flex flex-col relative h-full ml-auto">
-            <div className="flex items-center justify-between px-4 py-3 h-16 md:hidden bg-[#F7F5EA] sticky top-0 z-10">
-              <img src={logo} alt="Logo" className="h-8" 
-                style={{ cursor: 'pointer' }}
-                onClick={() => navigate('/')} 
-              />
-              <button
-                className="p-2"
-                onClick={() => setShowAcquireModal(false)}
-                aria-label="Close"
+            <button
+              className="hidden md:block absolute top-4 right-4 p-2 z-20"
+              onClick={() => setShowAcquireModal(false)}
+              aria-label="Close"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-6 h-6 text-[#A4A7AE]"
               >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+            <div className="flex items-center justify-between px-4 py-3 h-16 md:hidden bg-[#F7F5EA] sticky top-0 z-10">
+              <img
+                src={logo}
+                alt="Logo"
+                className="h-10 w-[193px]"
+                style={{ cursor: 'pointer' }}
+                onClick={() => navigate('/')}
+              />
+              <button className="p-2" onClick={() => setShowAcquireModal(false)} aria-label="Close">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
                   strokeWidth={1.5}
                   stroke="currentColor"
-                  className="w-6 h-6 text-[#A4A7AE]"
+                  className="w-6 h-6 text-[#101828]"
                 >
                   <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                 </svg>
@@ -649,7 +669,7 @@ export default function ProductDetail() {
                   </label>
                   <input
                     type="text"
-                    className={`w-full rounded border px-4 py-3 bg-white text-[#23211C] ${
+                    className={`w-full rounded-lg border px-4 py-3 bg-[#FCFAF2] text-[#23211C] ${
                       errors.firstName ? 'border-red-500' : 'border-[#C7C7B9]'
                     }`}
                     placeholder="Enter your first name"
@@ -671,7 +691,7 @@ export default function ProductDetail() {
                   </label>
                   <input
                     type="text"
-                    className={`w-full rounded border px-4 py-3 bg-white text-[#23211C] ${
+                    className={`w-full rounded-lg border px-4 py-3 bg-[#FCFAF2] text-[#23211C] ${
                       errors.lastName ? 'border-red-500' : 'border-[#C7C7B9]'
                     }`}
                     placeholder="Enter your last name"
@@ -693,7 +713,7 @@ export default function ProductDetail() {
                   </label>
                   <input
                     type="text"
-                    className={`w-full rounded border px-4 py-3 bg-white text-[#23211C] ${
+                    className={`w-full rounded-lg border px-4 py-3 bg-[#FCFAF2] text-[#23211C] ${
                       errors.itemCode ? 'border-red-500' : 'border-[#C7C7B9]'
                     }`}
                     placeholder="Enter item code"
@@ -722,12 +742,12 @@ export default function ProductDetail() {
                         setErrors((prev) => ({ ...prev, phone: '' }));
                       }
                     }}
-                    inputClass={`w-full rounded border px-4 py-3 bg-white text-[#23211C] ${
+                    inputClass={`w-full rounded-lg border px-4 py-3 bg-[#FCFAF2] text-[#23211C] ${
                       errors.phone ? 'border-red-500' : 'border-[#C7C7B9]'
                     }`}
-                    buttonClass="rounded-l border border-[#C7C7B9] bg-white"
-                    dropdownClass="bg-white text-[#23211C]"
-                    searchClass="bg-white text-[#23211C] border border-[#C7C7B9]"
+                    buttonClass="  bg-[#FCFAF2]"
+                    dropdownClass="bg-[#FCFAF2] text-[#23211C]"
+                    searchClass="bg-[#FCFAF2] text-[#23211C] border border-[#C7C7B9] rounded-lg"
                     containerClass="phone-input-container"
                   />
                   {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone}</p>}
