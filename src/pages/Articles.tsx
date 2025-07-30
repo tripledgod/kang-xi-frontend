@@ -100,7 +100,7 @@ export default function Articles() {
           <p className="text-white md:hidden drop-shadow-lg  text-[18px] leading-[26px] mt-4">
             Appreciating Chinese Works of Art
           </p>
-          <p className="text-white hidden md:block drop-shadow-lg text-[20px] leading-[28px] mt-5">
+          <p className="text-white hidden md:block drop-shadow-lg text-[20px] leading-[28px] mt-5  ">
             Appreciating Chinese Works of Art
           </p>
         </div>
@@ -108,14 +108,14 @@ export default function Articles() {
       {/* Featured Articles Section */}
       <div className="md:px-28 px-4 w-full mx-auto flex flex-col gap-12 md:mt-24">
         {/* Featured Articles */}
-        <div className="flex flex-col md:flex-row md:gap-8 gap-4 mx-auto w-full">
+        <div className="flex flex-col lg:flex-row lg:gap-8 gap-4 mx-auto w-full">
           {featuredArticles.map((article, idx) => {
             const imageUrl = getCoverUrl(article.cover);
 
             return (
               <div key={article.id} className="w-full">
                 {/* Mobile Layout */}
-                <div className="block md:hidden">
+                <div className="block lg:hidden">
                   <div
                     className="relative h-[343px] overflow-hidden w-full"
                     style={{ backgroundColor: '#E6DDC6' }}
@@ -158,7 +158,7 @@ export default function Articles() {
 
                 {/* Desktop Layout */}
                 <div
-                  className={`hidden md:block relative h-[480px] overflow-hidden group w-full ${idx === 0 ? 'md:w-[800px]' : 'md:w-[384px]'}`}
+                  className={`hidden lg:block relative h-[480px] overflow-hidden group flex-shrink-0 ${idx === 0 ? 'lg:w-[800px]' : 'lg:w-[384px]'}`}
                   style={{ backgroundColor: '#E6DDC6' }}
                 >
                   <img

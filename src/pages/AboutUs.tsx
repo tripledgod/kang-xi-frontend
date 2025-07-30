@@ -263,7 +263,7 @@ export default function AboutUs() {
                 style={{
                   width: window.innerWidth < 768 ? mobileCardWidth : cardWidth,
                   minWidth: window.innerWidth < 768 ? mobileCardWidth : cardWidth,
-                  marginRight: idx === (aboutData?.team?.length ?? 0) - 1 ? 0 : 24,
+                  
                 }}
               >
                 <img

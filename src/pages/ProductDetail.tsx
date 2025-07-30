@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useSwipeable } from 'react-swipeable';
 import Button from '../components/Button';
 import Loading from '../components/Loading';
+import PhoneInput from '../components/PhoneInput';
 import { useLoading } from '../hooks/useLoading';
 import { useLanguage } from '../contexts/LanguageContext';
 import AcquireOrAppraise from '../components/AcquireOrAppraise';
@@ -12,13 +13,11 @@ import icCircleLeft from '../assets/ic_circle_left.svg';
 import icCircleRight from '../assets/ic_circle_right.svg';
 import copyIcon from '../assets/copy.svg';
 import closeIcon from '../assets/close.svg';
-import PhoneInput from 'react-phone-input-2';
-import 'react-phone-input-2/lib/style.css';
 import '../styles/phone-input.css';
 
 import axios from 'axios';
 import { API_URL } from '../utils/constants.ts';
-import { getImageUrl, getImagesUrls } from '../utils';
+import { getImageUrl, getImagesUrls, validatePhoneNumber } from '../utils';
 import Popup from '../components/Popup.tsx';
 import logo from '../assets/logo.png';
 
@@ -248,6 +247,11 @@ export default function ProductDetail() {
 
     if (!phone.trim()) {
       newErrors.phone = 'Contact number is required';
+    } else {
+      // Validate phone number format using utility function
+      if (!validatePhoneNumber(phone)) {
+        newErrors.phone = 'Please enter a valid phone number';
+      }
     }
 
     setErrors(newErrors);
@@ -256,33 +260,58 @@ export default function ProductDetail() {
 
   const submitForm = async () => {
     if (!validateForm()) {
+      console.log('Form validation failed');
       return;
     }
 
     setIsLoading(true);
+    console.log('Submitting form with data:', {
+      firstName: acquireForm.firstName,
+      lastName: acquireForm.lastName,
+      itemCode: acquireForm.itemCode,
+      contactNumber: phone,
+    });
+
     try {
+      const requestBody = {
+        data: {
+          firstName: acquireForm.firstName,
+          lastName: acquireForm.lastName,
+          itemCode: acquireForm.itemCode,
+          contactNumber: phone, // Phone already includes country code from PhoneInput
+        },
+      };
+
+      console.log('Sending request to:', `${API_URL}/api/form-acquire`);
+      console.log('Request body:', JSON.stringify(requestBody, null, 2));
+
       const response = await fetch(`${API_URL}/api/form-acquire`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          data: {
-            firstName: acquireForm.firstName,
-            lastName: acquireForm.lastName,
-            itemCode: acquireForm.itemCode,
-            contactNumber: `+${phone}`,
-          },
-        }),
+        body: JSON.stringify(requestBody),
       });
 
+      console.log('Response status:', response.status);
+      console.log('Response headers:', Object.fromEntries(response.headers.entries()));
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('API Error Response:', errorText);
+        throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
+      }
+
       const data = await response.json();
+      console.log('API Success Response:', data);
+      
       setShowSuccess(true);
       setShowAcquireModal(false);
       setAcquireForm({ firstName: '', lastName: '', itemCode: '' });
       setPhone('');
       setErrors({ firstName: '', lastName: '', itemCode: '', phone: '' });
     } catch (error) {
-      // Could handle error here if needed
       console.error('Error submitting form:', error);
+      // Show error message to user
+      alert(`Failed to submit form: ${error instanceof Error ? error.message : 'Unknown error'}`);
     } finally {
       setIsLoading(false);
     }
@@ -386,7 +415,17 @@ export default function ProductDetail() {
       <div className="w-full border-t border-[#E8DBC0]" />
       {/* Breadcrumb */}
       <div className="w-full px-4 pt-6 text-xs text-[#817F7C] pb-5 md:px-[112px]  md:pb-[48px] font-semibold">
-        <span>Home</span> <span className="mx-1">&gt;</span> <span>Browse</span>{' '}
+        <span 
+          className="cursor-pointer hover:text-[#61422D] transition-colors"
+          onClick={() => navigate('/')}
+        >
+          Home
+        </span> <span className="mx-1">&gt;</span> <span 
+          className="cursor-pointer hover:text-[#61422D] transition-colors"
+          onClick={() => navigate('/browse')}
+        >
+          Browse
+        </span>{' '}
         <span className="mx-1">&gt;</span>{' '}
         <span className="text-[#201F1C] truncate max-w-[220px] md:max-w-full md:truncate-none inline-block align-bottom">
           {productDetail.title}
@@ -488,7 +527,7 @@ export default function ProductDetail() {
       </div>
       {/* Modal/Lightbox */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60" onClick={closeModal}>
           {/* Top center: index */}
           <div className="absolute top-4 left-1/2 -translate-x-1/2 z-60">
             <span className="text-white text-base bg-black/50 rounded px-3 py-1">
@@ -512,7 +551,7 @@ export default function ProductDetail() {
           >
             <img src={icCircleLeft} alt="Previous" className="w-10 h-10" />
           </button>
-          <div className="flex flex-col items-center">
+          <div className="flex flex-col items-center" onClick={(e) => e.stopPropagation()}>
             <img
               src={imageUrls[modalIndex]}
               alt="Zoomed"
@@ -608,162 +647,161 @@ export default function ProductDetail() {
       </div>
       {/* Right-side Acquire Modal */}
       {showAcquireModal && (
-        <div className="fixed left-0 right-0 top-0 bottom-0 z-50 flex md:inset-0">
-          {/* Modal Header with Logo for mobile */}
-          <div className="w-full max-w-xl bg-[#F7F5EA] shadow-xl flex flex-col relative h-full ml-auto">
-            <button
-              className="hidden md:block absolute top-4 right-4 p-2 z-20"
-              onClick={() => setShowAcquireModal(false)}
-              aria-label="Close"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="w-6 h-6 text-[#A4A7AE]"
+        <>
+          {/* Backdrop for mobile */}
+          <div className="fixed inset-0 bg-black/50 z-40 md:hidden" onClick={() => setShowAcquireModal(false)} />
+          
+          {/* Modal for mobile, sidebar for desktop */}
+          <div className="fixed inset-0 z-50 flex md:inset-auto md:right-0 md:top-0 md:bottom-0 md:w-auto">
+            {/* Modal Header with Logo for mobile */}
+            <div className="w-full max-w-xl bg-[#F7F5EA] shadow-xl flex flex-col relative h-full ml-auto">
+              <button
+                className="hidden md:block absolute top-4 right-4 p-2 z-20 hover:bg-[#E6DDC6] rounded transition-colors"
+                onClick={() => setShowAcquireModal(false)}
+                aria-label="Close"
               >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-            <div className="flex items-center justify-between px-4 py-3 h-16 md:hidden bg-[#F7F5EA] sticky top-0 z-10">
-              <img
-                src={logo}
-                alt="Logo"
-                className="h-10 w-[193px]"
-                style={{ cursor: 'pointer' }}
-                onClick={() => navigate('/')}
-              />
-              <button className="p-2" onClick={() => setShowAcquireModal(false)} aria-label="Close">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
                   strokeWidth={1.5}
                   stroke="currentColor"
-                  className="w-6 h-6 text-[#101828]"
+                  className="w-6 h-6 text-[#A4A7AE]"
                 >
                   <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
-            </div>
-            {/* Scrollable form content for mobile */}
-            <div className="flex-1 overflow-y-auto px-6 py-10">
-              <h3 className=" font-serif text-[28px] leading-[32px] md:text-[40px] md:leading-[48px] font-semibold text-[#61422D] mb-4 text-center">
-                Secure Your Piece of History
-              </h3>
-              <div className="text-[20px] leading-[28px] text-[#6D6A66] mb-8 text-center font-normal">
-                Fill in your details below, and we will be in touch with you shortly.
+              <div className="flex items-center justify-between px-4 py-3 h-16 md:hidden bg-[#F7F5EA] sticky top-0 z-10">
+                <img
+                  src={logo}
+                  alt="Logo"
+                  className="h-10 w-[193px]"
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => navigate('/')}
+                />
+                <button className="p-2" onClick={() => setShowAcquireModal(false)} aria-label="Close">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="w-6 h-6 text-[#101828]"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
               </div>
-              <form
-                className="space-y-6"
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  submitForm();
-                }}
-              >
-                <div>
-                  <label className="block mb-2 text-[#1F1F1F] font-normal text-[14px] leading-[20px]">
-                    First Name
-                  </label>
-                  <input
-                    type="text"
-                    className={`w-full rounded-lg border px-4 py-3 bg-[#FCFAF2] text-[#23211C] ${
-                      errors.firstName ? 'border-red-500' : 'border-[#C7C7B9]'
-                    }`}
-                    placeholder="Enter your first name"
-                    value={acquireForm.firstName}
-                    onChange={(e) => {
-                      setAcquireForm((f) => ({ ...f, firstName: e.target.value }));
-                      if (errors.firstName) {
-                        setErrors((prev) => ({ ...prev, firstName: '' }));
-                      }
-                    }}
-                  />
-                  {errors.firstName && (
-                    <p className="text-red-500 text-sm mt-1">{errors.firstName}</p>
-                  )}
+              {/* Scrollable form content for mobile */}
+              <div className="flex-1 overflow-y-auto px-6 py-10">
+                <h3 className=" font-serif text-[28px] leading-[32px] md:text-[40px] md:leading-[48px] font-semibold text-[#61422D] mb-4 text-center">
+                  Secure Your Piece of History
+                </h3>
+                <div className="text-[20px] leading-[28px] text-[#6D6A66] mb-8 text-center font-normal">
+                  Fill in your details below, and we will be in touch with you shortly.
                 </div>
-                <div>
-                  <label className="block mb-2 text-[#1F1F1F] font-normal text-[14px] leading-[20px]">
-                    Last Name
-                  </label>
-                  <input
-                    type="text"
-                    className={`w-full rounded-lg border px-4 py-3 bg-[#FCFAF2] text-[#23211C] ${
-                      errors.lastName ? 'border-red-500' : 'border-[#C7C7B9]'
-                    }`}
-                    placeholder="Enter your last name"
-                    value={acquireForm.lastName}
-                    onChange={(e) => {
-                      setAcquireForm((f) => ({ ...f, lastName: e.target.value }));
-                      if (errors.lastName) {
-                        setErrors((prev) => ({ ...prev, lastName: '' }));
-                      }
-                    }}
-                  />
-                  {errors.lastName && (
-                    <p className="text-red-500 text-sm mt-1">{errors.lastName}</p>
-                  )}
-                </div>
-                <div>
-                  <label className="block mb-2 text-[#1F1F1F] font-normal text-[14px] leading-[20px]">
-                    Item Code
-                  </label>
-                  <input
-                    type="text"
-                    className={`w-full rounded-lg border px-4 py-3 bg-[#FCFAF2] text-[#23211C] ${
-                      errors.itemCode ? 'border-red-500' : 'border-[#C7C7B9]'
-                    }`}
-                    placeholder="Enter item code"
-                    value={acquireForm.itemCode}
-                    onChange={(e) => {
-                      setAcquireForm((f) => ({ ...f, itemCode: e.target.value }));
-                      if (errors.itemCode) {
-                        setErrors((prev) => ({ ...prev, itemCode: '' }));
-                      }
-                    }}
-                  />
-                  {errors.itemCode && (
-                    <p className="text-red-500 text-sm mt-1">{errors.itemCode}</p>
-                  )}
-                </div>
-                <div>
-                  <label className="block mb-2 text-[#1F1F1F] font-normal text-[14px] leading-[20px]">
-                    Contact Number
-                  </label>
-                  <PhoneInput
-                    country={'sg'}
-                    value={phone}
-                    onChange={(value) => {
-                      setPhone(value);
-                      if (errors.phone) {
-                        setErrors((prev) => ({ ...prev, phone: '' }));
-                      }
-                    }}
-                    inputClass={`w-full rounded-lg border px-4 py-3 bg-[#FCFAF2] text-[#23211C] ${
-                      errors.phone ? 'border-red-500' : 'border-[#C7C7B9]'
-                    }`}
-                    buttonClass="  bg-[#FCFAF2]"
-                    dropdownClass="bg-[#FCFAF2] text-[#23211C]"
-                    searchClass="bg-[#FCFAF2] text-[#23211C] border border-[#C7C7B9] rounded-lg"
-                    containerClass="phone-input-container"
-                  />
-                  {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone}</p>}
-                </div>
-                <div className="w-full pt-2">
-                  <Button
-                    text={isLoading ? t('SUBMITTING') : t('SUBMIT_FORM')}
-                    type="submit"
-                    className="submit-form-btn"
-                    disabled={isLoading}
-                  />
-                </div>
-              </form>
+                <form
+                  className="space-y-6"
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    submitForm();
+                  }}
+                >
+                  <div>
+                    <label className="block mb-2 text-[#1F1F1F] font-normal text-[14px] leading-[20px]">
+                      First Name
+                    </label>
+                    <input
+                      type="text"
+                      className={`w-full rounded-lg border px-4 py-3 bg-[#FCFAF2] text-[#23211C] ${
+                        errors.firstName ? 'border-red-500' : 'border-[#C7C7B9]'
+                      }`}
+                      placeholder="Enter your first name"
+                      value={acquireForm.firstName}
+                      onChange={(e) => {
+                        setAcquireForm((f) => ({ ...f, firstName: e.target.value }));
+                        if (errors.firstName) {
+                          setErrors((prev) => ({ ...prev, firstName: '' }));
+                        }
+                      }}
+                    />
+                    {errors.firstName && (
+                      <p className="text-red-500 text-sm mt-1">{errors.firstName}</p>
+                    )}
+                  </div>
+                  <div>
+                    <label className="block mb-2 text-[#1F1F1F] font-normal text-[14px] leading-[20px]">
+                      Last Name
+                    </label>
+                    <input
+                      type="text"
+                      className={`w-full rounded-lg border px-4 py-3 bg-[#FCFAF2] text-[#23211C] ${
+                        errors.lastName ? 'border-red-500' : 'border-[#C7C7B9]'
+                      }`}
+                      placeholder="Enter your last name"
+                      value={acquireForm.lastName}
+                      onChange={(e) => {
+                        setAcquireForm((f) => ({ ...f, lastName: e.target.value }));
+                        if (errors.lastName) {
+                          setErrors((prev) => ({ ...prev, lastName: '' }));
+                        }
+                      }}
+                    />
+                    {errors.lastName && (
+                      <p className="text-red-500 text-sm mt-1">{errors.lastName}</p>
+                    )}
+                  </div>
+                  <div>
+                    <label className="block mb-2 text-[#1F1F1F] font-normal text-[14px] leading-[20px]">
+                      Item Code
+                    </label>
+                    <input
+                      type="text"
+                      className={`w-full rounded-lg border px-4 py-3 bg-[#FCFAF2] text-[#23211C] ${
+                        errors.itemCode ? 'border-red-500' : 'border-[#C7C7B9]'
+                      }`}
+                      placeholder="Enter item code"
+                      value={acquireForm.itemCode}
+                      onChange={(e) => {
+                        setAcquireForm((f) => ({ ...f, itemCode: e.target.value }));
+                        if (errors.itemCode) {
+                          setErrors((prev) => ({ ...prev, itemCode: '' }));
+                        }
+                      }}
+                    />
+                    {errors.itemCode && (
+                      <p className="text-red-500 text-sm mt-1">{errors.itemCode}</p>
+                    )}
+                  </div>
+                  <div>
+                    <PhoneInput
+                      label="Contact Number"
+                      country="sg"
+                      value={phone}
+                      onChange={(value) => {
+                        setPhone(value);
+                        if (errors.phone) {
+                          setErrors((prev) => ({ ...prev, phone: '' }));
+                        }
+                      }}
+                      error={errors.phone}
+                      required
+                      placeholder="Enter your contact number"
+                    />
+                  </div>
+                  <div className="w-full pt-2">
+                    <Button
+                      text={isLoading ? t('SUBMITTING') : t('SUBMIT_FORM')}
+                      type="submit"
+                      className="submit-form-btn"
+                      disabled={isLoading}
+                    />
+                  </div>
+                </form>
+              </div>
             </div>
           </div>
-        </div>
+        </>
       )}
       {isLoading && <Loading fullScreen={true} text="Submitting your request..." />}
     </div>

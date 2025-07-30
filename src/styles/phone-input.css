@@ -1,68 +1,289 @@
-.phone-input-container {
-  width: 100%;
+/* Custom Phone Input Styles - Two Separate Boxes */
+.phone-input-custom-container {
+  display: flex !important;
+  gap: 8px !important;
+  align-items: stretch !important;
+  width: 100% !important;
 }
 
-.phone-input-container .form-control {
-  height: 48px !important;
+/* Custom country selector button wrapper */
+.phone-input-custom-button-wrapper {
+  width: 120px !important;
+  min-width: 120px !important;
+}
+
+/* Custom country selector button - separate box */
+.phone-input-custom-button {
   width: 100% !important;
-  font-size: 16px !important;
-  border-radius: 0.375rem !important;
-  border: 1px solid #c7c7b9 !important;
-  background-color: #f7f5ea !important;
-  color: #23211c !important;
+  height: 48px !important;
+  padding: 0 12px !important;
+  background: #FCFAF2 !important;
+  border: 1px solid #C7C7B9 !important;
+  border-radius: 8px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  cursor: pointer !important;
+  transition: border-color 0.2s ease !important;
+  position: relative !important;
+}
+
+.phone-input-custom-button:hover {
+  border-color: #61422D !important;
+}
+
+.phone-input-custom-button .flag {
+  font-size: 20px !important;
+  margin-right: 8px !important;
+  flex-shrink: 0 !important;
+  line-height: 1 !important;
+  display: inline-block !important;
+  width: 24px !important;
+  height: 16px !important;
+  text-align: center !important;
+}
+
+.phone-input-custom-button .dial-code {
+  color: #23211C !important;
+  font-weight: 500 !important;
+  font-size: 14px !important;
+  flex: 1 !important;
+  text-align: center !important;
+}
+
+.phone-input-custom-button .arrow {
+  width: 16px !important;
+  height: 16px !important;
+  color: #23211C !important;
+  transition: transform 0.2s ease !important;
+  flex-shrink: 0 !important;
+}
+
+.phone-input-custom-button .arrow.rotate-180 {
+  transform: rotate(180deg) !important;
+}
+
+/* Custom phone number input - separate box */
+.phone-input-custom-input {
+  flex: 1 !important;
+  width: auto !important;
+  height: 48px !important;
+  padding: 0 16px !important;
+  background: #FCFAF2 !important;
+  border: 1px solid #C7C7B9 !important;
+  border-radius: 8px !important;
+  color: #23211C !important;
+  font-size: 14px !important;
+  line-height: 1.5 !important;
+  transition: border-color 0.2s ease !important;
   margin-left: 0 !important;
 }
 
-.phone-input-container .flag-dropdown {
-  border-radius: 0.375rem 0 0 0.375rem !important;
-  border: 1px solid #c7c7b9 !important;
-  background-color: #f7f5ea !important;
-  border-right: none !important;
+.phone-input-custom-input:focus {
+  border-color: #61422D !important;
+  outline: none !important;
   box-shadow: none !important;
 }
 
-.phone-input-container .selected-flag {
-  border-radius: 0.375rem 0 0 0.375rem !important;
-  background-color: #f7f5ea !important;
+.phone-input-custom-input::placeholder {
+  color: #817F7C !important;
 }
 
-.phone-input-container .flag-dropdown {
-  border-right: 1px solid #c7c7b9 !important;
+/* Dropdown styles */
+.phone-input-custom-dropdown {
+  position: absolute !important;
+  top: 100% !important;
+  left: 0 !important;
+  right: 0 !important;
+  background: #FCFAF2 !important;
+  border: 1px solid #C7C7B9 !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+  max-height: 240px !important;
+  overflow-y: auto !important;
+  z-index: 1000 !important;
+  margin-top: 4px !important;
 }
 
-.phone-input-container .form-control {
-  border-radius: 0 0.375rem 0.375rem 0 !important;
+.phone-input-custom-dropdown .country-option {
+  width: 100% !important;
+  padding: 8px 12px !important;
+  display: flex !important;
+  align-items: center !important;
+  cursor: pointer !important;
+  transition: background-color 0.2s ease !important;
+  background: transparent !important;
+  border: none !important;
+  text-align: left !important;
 }
 
-.phone-input-container .country-list {
-  border-radius: 0.375rem !important;
-  border: 1px solid #c7c7b9 !important;
-  background-color: #f7f5ea !important;
-  color: #23211c !important;
+.phone-input-custom-dropdown .country-option:hover {
+  background-color: #E6DDC6 !important;
 }
 
-.phone-input-container .country-list .country {
-  color: #23211c !important;
+.phone-input-custom-dropdown .country-option .flag {
+  font-size: 18px !important;
+  margin-right: 8px !important;
+  flex-shrink: 0 !important;
+  line-height: 1 !important;
+  display: inline-block !important;
+  width: 22px !important;
+  height: 14px !important;
+  text-align: center !important;
 }
 
-.phone-input-container .country-list .country:hover {
-  background-color: #e6ddc6 !important;
+.phone-input-custom-dropdown .country-option .dial-code {
+  color: #23211C !important;
+  font-weight: 500 !important;
+  margin-right: 8px !important;
+  flex-shrink: 0 !important;
 }
 
-.phone-input-container .country-list .country.highlight {
-  background-color: #e6ddc6 !important;
+.phone-input-custom-dropdown .country-option .country-name {
+  color: #585550 !important;
+  font-size: 13px !important;
+  flex: 1 !important;
 }
 
-.phone-input-container .search-box {
-  border-radius: 0.375rem !important;
-  border: 1px solid #c7c7b9 !important;
-  background-color: #f7f5ea !important;
-  color: #23211c !important;
-  margin: 0 !important;
-  padding: 8px !important;
+/* CSS Flags as fallback - đảm bảo khớp với mã quốc gia */
+.flag-css {
+  width: 24px !important;
+  height: 16px !important;
+  border-radius: 2px !important;
+  display: inline-block !important;
+  background-size: cover !important;
+  background-position: center !important;
 }
 
-.phone-input-container .search-box:focus {
-  outline: none !important;
-  border-color: #a48b6c !important;
+.flag-css.sg {
+  /* Singapore flag - Red and white */
+  background: linear-gradient(to bottom, #ED2939 50%, #FFFFFF 50%) !important;
+}
+
+.flag-css.vn {
+  /* Vietnam flag - Red and yellow star */
+  background: #DA251D !important;
+  position: relative !important;
+}
+
+.flag-css.vn::before {
+  content: '★' !important;
+  color: #FFFF00 !important;
+  position: absolute !important;
+  top: 2px !important;
+  left: 6px !important;
+  font-size: 8px !important;
+}
+
+.flag-css.cn {
+  /* China flag - Red with yellow stars */
+  background: #DE2910 !important;
+  position: relative !important;
+}
+
+.flag-css.cn::before {
+  content: '★' !important;
+  color: #FFDE00 !important;
+  position: absolute !important;
+  top: 1px !important;
+  left: 2px !important;
+  font-size: 8px !important;
+}
+
+.flag-css.us {
+  /* United States flag - Stars and stripes */
+  background: linear-gradient(to bottom, #B22234 0%, #B22234 7.7%, #FFFFFF 7.7%, #FFFFFF 15.4%, #3C3B6E 15.4%, #3C3B6E 23.1%, #FFFFFF 23.1%, #FFFFFF 30.8%, #B22234 30.8%, #B22234 38.5%, #FFFFFF 38.5%, #FFFFFF 46.2%, #3C3B6E 46.2%, #3C3B6E 53.9%, #FFFFFF 53.9%, #FFFFFF 61.6%, #B22234 61.6%, #B22234 69.3%, #FFFFFF 69.3%, #FFFFFF 77%, #3C3B6E 77%, #3C3B6E 84.7%, #FFFFFF 84.7%, #FFFFFF 92.4%, #B22234 92.4%, #B22234 100%) !important;
+}
+
+.flag-css.gb {
+  /* United Kingdom flag - Union Jack */
+  background: #012169 !important;
+  position: relative !important;
+}
+
+.flag-css.gb::before {
+  content: '✕' !important;
+  color: #FFFFFF !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  font-size: 12px !important;
+  text-align: center !important;
+  line-height: 16px !important;
+}
+
+.flag-css.au {
+  /* Australia flag - Blue with Union Jack and stars */
+  background: #012169 !important;
+  position: relative !important;
+}
+
+.flag-css.au::before {
+  content: '★' !important;
+  color: #FFFFFF !important;
+  position: absolute !important;
+  top: 1px !important;
+  left: 2px !important;
+  font-size: 8px !important;
+}
+
+.flag-css.ca {
+  /* Canada flag - Red with maple leaf */
+  background: #FF0000 !important;
+  position: relative !important;
+}
+
+.flag-css.ca::before {
+  content: '🍁' !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 4px !important;
+  font-size: 10px !important;
+}
+
+/* Disabled state */
+.phone-input-custom-container.disabled .phone-input-custom-button,
+.phone-input-custom-container.disabled .phone-input-custom-input {
+  opacity: 0.5 !important;
+  cursor: not-allowed !important;
+}
+
+/* Error state */
+.phone-input-custom-input.border-red-500 {
+  border-color: #ef4444 !important;
+}
+
+.phone-input-custom-button.border-red-500 {
+  border-color: #ef4444 !important;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .phone-input-custom-button-wrapper {
+    width: 100px !important;
+    min-width: 100px !important;
+  }
+  
+  .phone-input-custom-button {
+    height: 44px !important;
+    padding: 0 8px !important;
+  }
+  
+  .phone-input-custom-button .flag {
+    font-size: 18px !important;
+    width: 20px !important;
+    height: 14px !important;
+  }
+  
+  .phone-input-custom-button .dial-code {
+    font-size: 13px !important;
+  }
+  
+  .phone-input-custom-input {
+    height: 44px !important;
+    padding: 0 12px !important;
+    font-size: 13px !important;
+  }
 }
