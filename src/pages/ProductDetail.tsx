@@ -386,7 +386,17 @@ export default function ProductDetail() {
       <div className="w-full border-t border-[#E8DBC0]" />
       {/* Breadcrumb */}
       <div className="w-full px-4 pt-6 text-xs text-[#817F7C] pb-5 md:px-[112px]  md:pb-[48px] font-semibold">
-        <span>Home</span> <span className="mx-1">&gt;</span> <span>Browse</span>{' '}
+        <span
+          className="cursor-pointer hover:text-[#61422D] transition-colors"
+          onClick={() => navigate('/')}
+        >
+          Home
+        </span> <span className="mx-1">&gt;</span> <span
+          className="cursor-pointer hover:text-[#61422D] transition-colors"
+          onClick={() => navigate('/browse')}
+        >
+          Browse
+        </span>{' '}
         <span className="mx-1">&gt;</span>{' '}
         <span className="text-[#201F1C] truncate max-w-[220px] md:max-w-full md:truncate-none inline-block align-bottom">
           {productDetail.title}
