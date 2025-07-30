@@ -101,7 +101,7 @@ function RelatedArticles({ related }: { related: Article[] }) {
             {/* Description with fixed height of 3 lines only on desktop */}
             <div className="md:h-20 mb-4">
               <div
-                className="font-pingfang text-base font-normal leading-6 overflow-hidden"
+                className="font-pingfang text-base leading-6 overflow-hidden"
                 style={{
                   color: '#585550',
                   display: '-webkit-box',

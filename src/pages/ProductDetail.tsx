@@ -667,7 +667,7 @@ export default function ProductDetail() {
               <h3 className=" font-serif text-[28px] leading-[32px] md:text-[40px] md:leading-[48px] font-semibold text-[#61422D] mb-4 text-center md:pt-13">
                 Secure Your Piece<br/> of History
               </h3>
-              <div className="text-[20px] leading-[28px] text-[#6D6A66] mb-8 text-center font-normal">
+              <div className="text-[20px] leading-[28px] text-[#6D6A66] mb-8 text-center ">
                 Fill in your details below, and we will be in touch with you shortly.
               </div>
               <form
@@ -678,7 +678,7 @@ export default function ProductDetail() {
                 }}
               >
                 <div>
-                  <label className="block mb-2 text-[#1F1F1F] font-normal text-[14px] leading-[20px]">
+                  <label className="block mb-2 text-[#1F1F1F]  text-[14px] leading-[20px]">
                     First Name
                   </label>
                   <input
@@ -700,7 +700,7 @@ export default function ProductDetail() {
                   )}
                 </div>
                 <div>
-                  <label className="block mb-2 text-[#1F1F1F] font-normal text-[14px] leading-[20px]">
+                  <label className="block mb-2 text-[#1F1F1F]  text-[14px] leading-[20px]">
                     Last Name
                   </label>
                   <input
@@ -722,7 +722,7 @@ export default function ProductDetail() {
                   )}
                 </div>
                 <div>
-                  <label className="block mb-2 text-[#1F1F1F] font-normal text-[14px] leading-[20px]">
+                  <label className="block mb-2 text-[#1F1F1F]  text-[14px] leading-[20px]">
                     Item Code
                   </label>
                   <input
@@ -744,7 +744,7 @@ export default function ProductDetail() {
                   )}
                 </div>
                 <div>
-                  <label className="block mb-2 text-[#1F1F1F] font-normal text-[14px] leading-[20px]">
+                  <label className="block mb-2 text-[#1F1F1F]  text-[14px] leading-[20px]">
                     Contact Number
                   </label>
                   <PhoneInput
