@@ -618,25 +618,9 @@ export default function ProductDetail() {
       </div>
       {/* Right-side Acquire Modal */}
       {showAcquireModal && (
-        <div className="fixed right-0 top-0 bottom-0 z-50 flex w-full md:w-[480px]">
+        <div className="fixed right-0 top-0 bottom-0 z-50 flex w-full md:w-[592px]">
           <div className="w-full max-w-xl bg-[#F7F5EA] shadow-xl flex flex-col relative h-full ml-auto">
-            {/* Desktop close button - only visible on desktop */}
-            <button
-              className="hidden md:block absolute right-4  p-3 z-20"
-              onClick={() => setShowAcquireModal(false)}
-              aria-label="Close"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="w-6 h-6 text-[#A4A7AE]"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
+            
             {/* Mobile close button - only visible on mobile */}
             <div className="flex items-center justify-between px-4 py-3 h-16 md:hidden bg-[#F7F5EA] sticky top-0 z-10">
               <img
@@ -660,8 +644,27 @@ export default function ProductDetail() {
               </button>
             </div>
             {/* Scrollable form content for mobile */}
-            <div className="flex-1 overflow-y-auto px-6 py-10">
-              <h3 className=" font-serif text-[28px] leading-[32px] md:text-[40px] md:leading-[48px] font-semibold text-[#61422D] mb-4 text-center">
+            <div className="flex-1 overflow-y-auto md:px-10 px-4 py-10">
+              {/* Desktop close button - only visible on desktop, right aligned */}
+              <div className="hidden md:flex w-full justify-end">
+                <button
+                  className=" z-20"
+                  onClick={() => setShowAcquireModal(false)}
+                  aria-label="Close"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="w-6 h-6 text-[#A4A7AE]"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+              <h3 className=" font-serif text-[28px] leading-[32px] md:text-[40px] md:leading-[48px] font-semibold text-[#61422D] mb-4 text-center md:pt-13">
                 Secure Your Piece<br/> of History
               </h3>
               <div className="text-[20px] leading-[28px] text-[#6D6A66] mb-8 text-center font-normal">
