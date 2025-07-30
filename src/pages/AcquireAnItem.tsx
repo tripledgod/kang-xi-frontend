@@ -290,7 +290,7 @@ export default function AcquireAnItem() {
             }}
           >
             <div>
-              <label className="block mb-2 text-[#1F1F1F] font-normal text-[14px] leading-[20px]">
+              <label className="block mb-2 text-[#1F1F1F]  text-[14px] leading-[20px]">
                 First Name
               </label>
               <input
@@ -310,7 +310,7 @@ export default function AcquireAnItem() {
               {errors.firstName && <p className="text-red-500 text-sm mt-1">{errors.firstName}</p>}
             </div>
             <div>
-              <label className="block mb-2 text-[#1F1F1F] font-normal text-[14px] leading-[20px]">
+              <label className="block mb-2 text-[#1F1F1F]  text-[14px] leading-[20px]">
                 Last Name
               </label>
               <input
@@ -330,7 +330,7 @@ export default function AcquireAnItem() {
               {errors.lastName && <p className="text-red-500 text-sm mt-1">{errors.lastName}</p>}
             </div>
             <div>
-              <label className="block mb-2 text-[#1F1F1F] font-normal text-[14px] leading-[20px]">
+              <label className="block mb-2 text-[#1F1F1F]  text-[14px] leading-[20px]">
                 Item Code
               </label>
               <input
@@ -350,7 +350,7 @@ export default function AcquireAnItem() {
               {errors.itemCode && <p className="text-red-500 text-sm mt-1">{errors.itemCode}</p>}
             </div>
             <div>
-              <label className="block mb-2 text-[#1F1F1F] font-normal text-[14px] leading-[20px]">
+              <label className="block mb-2 text-[#1F1F1F]  text-[14px] leading-[20px]">
                 Contact Number
               </label>
               <PhoneInput

@@ -55,7 +55,7 @@ export default function ArticlesSection() {
           </h2>
         )}
         <div
-          className="text-[18px] leading-[26px] mb-12 text-center font-normal text-[#342216]"
+          className="text-[18px] leading-[26px] mb-12 text-center  text-[#342216]"
           style={{
             
             fontSize: 18,
@@ -119,7 +119,7 @@ export default function ArticlesSection() {
                     {article.title}
                   </h5>
                   <div
-                    className="font-pingfang font-normal mb-4 text-base leading-6 md:h-[72px] overflow-hidden line-clamp-3"
+                    className="font-pingfang  mb-4 text-base leading-6 md:h-[72px] overflow-hidden line-clamp-3"
                     style={{
                       color: '#585550',
                       fontSize: 16,

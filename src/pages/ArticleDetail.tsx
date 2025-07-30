@@ -145,7 +145,7 @@ export default function ArticleDetail() {
   const { locale } = useLanguage();
   const [error, setError] = useState<string | null>(null);
 
-  // Scroll to top when slug changes (mỗi lần chuyển bài viết)
+  // Scroll to top when slug changes (every time article changes)
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'auto' });
   }, [slug]);
