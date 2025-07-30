@@ -19,7 +19,7 @@ interface PhoneInputProps {
   onFocus?: () => void;
 }
 
-// Danh sách quốc gia đầy đủ với mã điện thoại
+// Complete list of countries with phone codes
 const COUNTRIES_DATA = [
   { code: 'sg', iso: 'SG', name: 'Singapore', dialCode: '+65' },
   { code: 'vn', iso: 'VN', name: 'Vietnam', dialCode: '+84' },
@@ -136,7 +136,7 @@ const PhoneInput: React.FC<PhoneInputProps> = ({
   error,
   className = '',
   label,
-  labelClassName = 'block mb-2 text-[#1F1F1F] font-normal text-[14px] leading-[20px]',
+  labelClassName = 'block mb-2 text-[#1F1F1F]  text-[14px] leading-[20px]',
   onBlur,
   onFocus,
 }) => {

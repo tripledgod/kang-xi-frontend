@@ -1,5 +1,49 @@
 @import 'tailwindcss';
 
+/* Custom click states for buttons and links */
+/* Button click states */
+button:active {
+  transform: scale(0.98);
+  transition: transform 0.1s ease-in-out;
+}
+
+/* Link click states */
+a:active {
+  opacity: 0.7;
+  transition: opacity 0.1s ease-in-out;
+}
+
+/* Custom button with click feedback */
+.btn-clickable {
+  transition: all 0.1s ease-in-out;
+}
+
+.btn-clickable:active {
+  transform: scale(0.95);
+  opacity: 0.8;
+}
+
+/* Link with click feedback */
+.link-clickable {
+  transition: opacity 0.1s ease-in-out;
+}
+
+.link-clickable:active {
+  opacity: 0.7;
+}
+
+/* Focus states for accessibility */
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid #61422D;
+  outline-offset: 2px;
+}
+
+/* Disabled state */
+button:disabled:active {
+  transform: none;
+}
+
 @font-face {
   font-family: 'PingFang SC';
   src: url('/fonts/PingFangSC-Ultralight.otf') format('opentype');
@@ -58,8 +102,6 @@ h6 {
     'source-han-serif-sc', 'PingFang SC', 'Noto Serif SC', 'Microsoft YaHei', 'SimSun', serif;
   font-weight: 600;
 }
-
-@tailwind utilities;
 
 @keyframes slide-in-right {
   from {

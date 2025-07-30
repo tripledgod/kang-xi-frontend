@@ -74,7 +74,7 @@ export default function AboutUs() {
           <p className="text-[#61422D] text-lg mb-4">Failed to load about us data</p>
           <button
             onClick={() => window.location.reload()}
-            className="px-4 py-2 bg-[#7B6142] text-white rounded hover:bg-[#6a5437]"
+            className="px-4 py-2 bg-[#7B6142] text-white rounded hover:bg-[#6a5437] btn-clickable"
           >
             Try Again
           </button>
@@ -91,13 +91,13 @@ export default function AboutUs() {
       {/* Legacy Section */}
       <div className="max-w-6xl mx-auto px-4 md:flex md:items-center md:gap-12 mb-16">
         <div className="flex-1 mb-8 md:mb-0">
-          <div className="text-[14px] leading-[20px] text-[#585550] font-semibold uppercase tracking-wider mb-2">
+          <div className="text-[14px] leading-[20px] text-[#585550] uppercase tracking-wider mb-2">
             Heritage
           </div>
-          <h3 className="hidden md:block text-[40px] leading-[48px] font-serif font-semibold text-[#61422D] mb-4">
+          <h3 className="hidden md:block text-[40px] leading-[48px] font-serif  text-[#61422D] mb-4">
             {aboutData?.heritage?.title || 'The Legacy of Kangxi Private Collection'}
           </h3>
-          <h4 className="block md:hidden text-[32px] leading-[40px] font-serif font-semibold text-[#61422D] mb-4">
+          <h4 className="block md:hidden text-[32px] leading-[40px] font-serif  text-[#61422D] mb-4">
             {aboutData?.heritage?.title || 'The Legacy of Kangxi Private Collection'}
           </h4>
           <div className="text-[18px] leading-[26px] text-[#585550] mb-5">
@@ -111,7 +111,7 @@ export default function AboutUs() {
               </h2>
               <div
                 style={{ letterSpacing: '0.5px' }}
-                className="text-[14px] leading-[20px] font-semibold text-[#585550] mt-2"
+                className="text-[14px] leading-[20px] text-[#585550] mt-2"
               >
                 YEARS EXPERIENCES
               </div>
@@ -122,7 +122,7 @@ export default function AboutUs() {
               </h2>
               <div
                 style={{ letterSpacing: '0.5px' }}
-                className="text-[14px] leading-[20px] font-semibold text-[#585550] mt-2"
+                className="text-[14px] leading-[20px] text-[#585550] mt-2"
               >
                 RARE COLLECTIBLE ITEMS
               </div>
@@ -141,17 +141,17 @@ export default function AboutUs() {
       {/* Journey Section */}
       <div className="w-full bg-[#2E2A24] py-16 mb-16 md:mt-8">
         <div className="max-w-6xl mx-auto text-center">
-          <h3 className="hidden md:block text-[40px] leading-[48px] font-serif font-semibold text-white mb-16">
+          <h3 className="hidden md:block text-[40px] leading-[48px] font-serif text-white mb-16">
             The Journey of Antique Chinese Porcelain
           </h3>
-          <h4 className="block md:hidden text-[32px] leading-[40px]font-serif font-semibold text-white mb-10">
+          <h4 className="block md:hidden text-[32px] leading-[40px]font-serif text-white mb-10">
             Our Services
           </h4>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
             {aboutData?.journey?.map((item) => (
               <div key={item.id} className="flex flex-col items-center">
                 <img src={getImageUrl(item.icon)} alt={item.title} className="h-12 mb-4" />
-                <h5 className="text-[20px] md:text-[24px] leading-[28px] md:leading-[32px] font-semibold text-[#FAF7F2] mb-2">
+                <h5 className="text-[20px] md:text-[24px] leading-[28px] md:leading-[32px] text-[#FAF7F2] mb-2">
                   {item.title}
                 </h5>
                 <div className="text-[#ABAAA7] text-[16px] leading-[24px]">{item.description}</div>
@@ -163,10 +163,10 @@ export default function AboutUs() {
 
       {/* History Section */}
       <div className="max-w-6xl mx-auto px-4 mb-16">
-        <h3 className="hidden md:block text-[40px] leading-[48px] font-serif font-semibold text-[#61422D] mb-2">
+        <h3 className="hidden md:block text-[40px] leading-[48px] font-serif text-[#61422D] mb-2">
           {aboutData?.title || 'The History of Ceramics'}
         </h3>
-        <h4 className="block md:hidden text-[32px] leading-[40px] font-serif font-semibold text-[#61422D] mb-2">
+        <h4 className="block md:hidden text-[32px] leading-[40px] font-serif text-[#61422D] mb-2">
           {aboutData?.title || 'The History of Ceramics'}
         </h4>
 
@@ -184,10 +184,10 @@ export default function AboutUs() {
         <div className="max-w-6xl mx-auto px-4">
           <div className="flex items-center justify-between mb-2">
             <div>
-              <h3 className="hidden md:block text-[40px] leading-[48px] font-serif font-semibold text-[#61422D] mb-4 text-left">
+              <h3 className="hidden md:block text-[40px] leading-[48px] font-serif text-[#61422D] mb-4 text-left">
                 Meet Our Team
               </h3>
-              <h4 className="block md:hidden text-2xl font-serif font-semibold text-[#61422D] mb-4 md:mb-5 text-left">
+              <h4 className="block md:hidden text-2xl font-serif text-[#61422D] mb-4 md:mb-5 text-left">
                 Meet Our Team
               </h4>
               <div className="text-[20px] leading-[28px] text-[#585550] md:mb-8 mb-0 text-left">
@@ -197,12 +197,12 @@ export default function AboutUs() {
             {/* Desktop arrows only */}
             <div className="hidden md:flex gap-4">
               <button
-                className="ticket-rounded w-12 h-12 border-2 border-[#DAC497] rounded-lg flex items-center justify-center bg-transparent text-[#93633B] hover:bg-[#E6DDC6] transition "
+                className="ticket-rounded w-12 h-12 border-2 border-[#DAC497] rounded-lg flex items-center justify-center bg-transparent text-[#93633B] hover:bg-[#E6DDC6] transition btn-clickable"
                 onClick={() => setTeamIndex((i) => Math.max(0, i - 1))}
                 disabled={!canGoLeft}
                 aria-label="Previous"
               >
-                <span className="text-[20px] text-[#93633B] font-semibold">
+                <span className="text-[20px] text-[#93633B]">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -220,7 +220,7 @@ export default function AboutUs() {
                 </span>
               </button>
               <button
-                className="ticket-rounded w-12 h-12 border-2 border-[#DAC497] rounded-lg flex items-center justify-center bg-transparent text-[#93633B] hover:bg-[#E6DDC6] transition "
+                className="ticket-rounded w-12 h-12 border-2 border-[#DAC497] rounded-lg flex items-center justify-center bg-transparent text-[#93633B] hover:bg-[#E6DDC6] transition btn-clickable"
                 onClick={() =>
                   setTeamIndex((i) =>
                     Math.min((aboutData?.team?.length ?? 0) - visibleCount, i + 1)
@@ -229,7 +229,7 @@ export default function AboutUs() {
                 disabled={!canGoRight}
                 aria-label="Next"
               >
-                <span className="text-[20px] text-[#93633B] font-semibold">
+                <span className="text-[20px] text-[#93633B]">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -271,10 +271,10 @@ export default function AboutUs() {
                   alt={member.name}
                   className="w-full h-[340px] object-cover mb-6"
                 />
-                <h5 className="text-2xl font-serif font-semibold text-[#61422D] mb-1 text-left">
+                <h5 className="text-2xl font-serif text-[#61422D] mb-1 text-left">
                   {member.name}
                 </h5>
-                <div className="text-base font-semibold text-[#61422D] mb-2 text-left">
+                <div className="text-base text-[#61422D] mb-2 text-left">
                   {member.position}
                 </div>
                 <div className="text-base text-[#585550] text-left">{member.bio}</div>

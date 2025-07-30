@@ -225,4 +225,3 @@ export interface Ceramic {
   image: string;
   category: number | string;
 }
-

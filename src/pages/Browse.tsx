@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import Loading from '../components/Loading';
+import Header from '../components/Header';
 import { useLoading } from '../hooks/useLoading';
 import { useLanguage } from '../contexts/LanguageContext';
 import heroImg from '../assets/ceramic_cover.png';
@@ -31,12 +32,14 @@ const Browse: React.FC = () => {
   const [products, setProducts] = useState<any[]>([]);
   const { loading: productsLoading, withLoading: withProductsLoading } = useLoading(false);
   const [errorProducts, setErrorProducts] = useState<string | null>(null);
+  const [showStickyHeader, setShowStickyHeader] = useState(false);
   const navigate = useNavigate();
   const { locale } = useLanguage();
   const [searchParams] = useSearchParams();
   const eraTabRef = useRef<HTMLDivElement>(null);
   const eraTabWrapperRef = useRef<HTMLDivElement>(null);
   const eraButtonRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const heroRef = useRef<HTMLDivElement>(null);
 
   // Scroll to top when URL changes
 
@@ -69,6 +72,19 @@ const Browse: React.FC = () => {
       setActiveEra('tang');
     }
   }, [activeEra]);
+
+  // Handle scroll to show/hide sticky header
+  useEffect(() => {
+    const handleScroll = () => {
+      if (heroRef.current) {
+        const heroBottom = heroRef.current.getBoundingClientRect().bottom;
+        setShowStickyHeader(heroBottom <= 0);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   // Fetch categories from API to get id for each era
   useEffect(() => {
@@ -199,7 +215,7 @@ const Browse: React.FC = () => {
           {product.description}
         </div>
         <div className="border-t-2 border-[#E5E1D7] opacity-80 my-3"></div>
-        <div className="flex flex-row justify-between text-[14px] leading-[20px] text-[#585550] font-semibold">
+        <div className="flex flex-row justify-between text-[14px] leading-[20px] text-[#585550]">
           <span>
             {product.ageFrom} - {product.ageTo}
           </span>
@@ -250,7 +266,7 @@ const Browse: React.FC = () => {
   return (
     <div className="w-full min-h-screen bg-[#F7F5EA]">
       {/* Hero Section */}
-      <div className="w-full relative">
+      <div ref={heroRef} className="w-full relative">
         <img
           src={heroImgMobile}
           alt="Ceramic by Era Mobile"
@@ -262,37 +278,73 @@ const Browse: React.FC = () => {
           className="hidden md:block w-full h-[420px] object-cover object-center"
         />
       </div>
-      {/* Era Tabs */}
-      <div className="w-full sticky top-[0px] z-30 bg-[#F7F5EA]">
-        <div className="max-w-6xl mx-auto px-4 pt-4 md:pt-20 overflow-x-auto scrollbar-hide">
-          <div
-            ref={eraTabRef}
-            className="inline-flex items-center gap-x-[16px] md:gap-x-2 justify-start pl-[10px] md:pl-[64px] uppercase whitespace-nowrap"
-          >
-            {eraTabs.map((era, idx) => (
-              <React.Fragment key={era.slug}>
-                <button
-                  ref={(el) => {
-                    eraButtonRefs.current[idx] = el;
-                  }}
-                  className={` transition-colors uppercase text-[17px] relative ${activeEra === era.slug ? 'border-b-2 border-[#23211C] text-[#23211C] font-semibold opacity-90 z-20' : 'text-[#23211C] border-b-0'}`}
-                  onClick={() => handleEraClick(era.slug)}
-                >
-                  {era.name}
-                </button>
-                {idx < eraTabs.length - 1 && (
-                  <span className="text-[#D6C7A1] text-lg mx-2 flex items-center  select-none mb-[5px] ">
-                    +
-                  </span>
-                )}
-              </React.Fragment>
-            ))}
+      
+      {/* Era Tabs - Original (non-sticky) - Only show when NOT scrolled */}
+      {!showStickyHeader && (
+        <div className="w-full bg-[#F7F3E8]">
+          <div className="max-w-7xl mx-auto px-4 md:px-0 pt-4 md:pt-24 pb-3 md:pb-5 overflow-x-auto scrollbar-hide">
+            <div
+              ref={eraTabRef}
+              className="inline-flex items-center gap-x-[16px] md:gap-x-2 justify-start pl-[10px] md:pl-0 uppercase whitespace-nowrap"
+            >
+              {eraTabs.map((era, idx) => (
+                <React.Fragment key={era.slug}>
+                  <button
+                    ref={(el) => {
+                      eraButtonRefs.current[idx] = el;
+                    }}
+                    className={` transition-colors uppercase text-[17px] relative pb-3 btn-clickable ${activeEra === era.slug ? 'border-b-2 border-[#23211C] text-[#23211C] opacity-90 z-20' : 'text-[#23211C] border-b-0'}`}
+                    onClick={() => handleEraClick(era.slug)}
+                  >
+                    {era.name}
+                  </button>
+                  {idx < eraTabs.length - 1 && (
+                    <span className="text-[#D6C7A1] text-lg mx-2 flex items-center select-none mb-[5px] pb-3">
+                      +
+                    </span>
+                  )}
+                </React.Fragment>
+              ))}
+            </div>
           </div>
         </div>
-      </div>
+      )}
+
+      {/* Sticky Navigation Container - Only show when scrolled past hero */}
+      {showStickyHeader && (
+        <div className="w-full sticky top-0 z-40 bg-[#F7F5EA]">
+          {/* Header */}
+          <Header />
+          
+          {/* Era Tabs */}
+          <div className="w-full border-b border-[#C0BFBD]">
+            <div className="max-w-7xl mx-auto px-4 md:px-0 pt-4 md:pt-6  overflow-x-auto scrollbar-hide">
+              <div
+                className="inline-flex items-center gap-x-[16px] md:gap-x-2 justify-start pl-[10px] md:pl-0 uppercase whitespace-nowrap"
+              >
+                {eraTabs.map((era, idx) => (
+                  <React.Fragment key={era.slug}>
+                    <button
+                      className={` transition-colors uppercase text-[17px] relative pb-3 btn-clickable ${activeEra === era.slug ? 'border-b-2 border-[#23211C] text-[#23211C] opacity-90 z-20' : 'text-[#23211C] border-b-0'}`}
+                      onClick={() => handleEraClick(era.slug)}
+                    >
+                      {era.name}
+                    </button>
+                    {idx < eraTabs.length - 1 && (
+                      <span className="text-[#D6C7A1] text-lg mx-2 flex items-center select-none mb-[5px] pb-3">
+                        +
+                      </span>
+                    )}
+                  </React.Fragment>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Categories Grid */}
-      <div className="w-full max-w-6xl mx-auto px-4 mt-10 grid grid-cols-1 md:grid-cols-3 gap-10 md:pl-[80px] pl-[20px]">
+      <div className="w-full max-w-7xl mx-auto px-4 mt-10 grid grid-cols-1 md:grid-cols-3 gap-10 md:pl-0 pl-[20px]">
         {productsLoading ? (
           <div className="flex justify-center py-16">
             <Loading size="large" text="Loading..." />

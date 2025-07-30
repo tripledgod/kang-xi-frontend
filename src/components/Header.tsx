@@ -20,7 +20,7 @@ function LanguageSwitcher({ className = '' }) {
       style={{ boxSizing: 'border-box' }}
     >
       <button
-        className={`ticket-rounded flex-1 flex items-center justify-center transition-all duration-200 ${!isChinese ? 'bg-[#E6DDC6]' : 'bg-[#FDFBF1]'} ${!isChinese ? 'rounded-lg' : 'rounded-l-lg'} z-10`}
+        className={`ticket-rounded flex-1 flex items-center justify-center transition-all duration-200 btn-clickable ${!isChinese ? 'bg-[#E6DDC6]' : 'bg-[#FDFBF1]'} ${!isChinese ? 'rounded-lg' : 'rounded-l-lg'} z-10`}
         style={{ outline: 'none', border: 'none', padding: '12px 10px' }}
         onClick={() => setLocale('en')}
         aria-label="Switch to English"
@@ -28,7 +28,7 @@ function LanguageSwitcher({ className = '' }) {
         <img src={english} alt="English" className="w-12 h-8 object-cover rounded-lg" />
       </button>
       <button
-        className={`ticket-rounded flex-1 flex items-center justify-center transition-all duration-200 ${isChinese ? 'bg-[#E6DDC6]' : 'bg-[#FDFBF1]'} ${isChinese ? 'rounded-lg' : 'rounded-r-lg'} z-10`}
+        className={`ticket-rounded flex-1 flex items-center justify-center transition-all duration-200 btn-clickable ${isChinese ? 'bg-[#E6DDC6]' : 'bg-[#FDFBF1]'} ${isChinese ? 'rounded-lg' : 'rounded-r-lg'} z-10`}
         style={{ outline: 'none', border: 'none', padding: '12px 10px' }}
         onClick={() => setLocale('zh-CN')}
         aria-label="Switch to Chinese"
@@ -78,7 +78,7 @@ export default function Header() {
             {idx > 0 && <img src={plus} alt="plus" className="h-3 w-3 mx-2 opacity-40" />}
             <Link
               to={link.href}
-              className="text-lg font-medium text-gray-800"
+              className="text-lg font-medium text-gray-800 link-clickable"
             >
               {link.label}
             </Link>
@@ -92,7 +92,7 @@ export default function Header() {
       {/* Mobile Hamburger Menu (mobile and tablet) */}
       {!drawerOpen && (
         <button
-          className="ml-auto block xl:hidden z-40"
+          className="ml-auto block xl:hidden z-40 btn-clickable"
           onClick={() => setDrawerOpen(true)}
           aria-label="Open menu"
         >
@@ -105,14 +105,14 @@ export default function Header() {
           {/* Header with logo and close icon */}
           <div className="flex items-center justify-between px-4 pt-6">
             <div className="flex items-center gap-4">
-              <Link to="/" onClick={() => setDrawerOpen(false)}>
+              <Link to="/" onClick={() => setDrawerOpen(false)} className="link-clickable">
                 <img src={logoMobile} alt="Kang Xi Logo Mobile" className="h-12 block lg:hidden" />
                 <img src={logo} alt="Kang Xi Logo" className="h-16 hidden lg:block" />
               </Link>
               <div className="text-left"></div>
             </div>
             <button
-              className="p-2 z-50"
+              className="p-2 z-50 btn-clickable"
               onClick={() => setDrawerOpen(false)}
               aria-label="Close menu"
             >
@@ -128,7 +128,7 @@ export default function Header() {
                 )}
                 <Link
                   to={link.href}
-                  className="text-3xl font-medium text-[#23211C] tracking-wide"
+                  className="text-3xl font-medium text-[#23211C] tracking-wide link-clickable"
                   onClick={() => setDrawerOpen(false)}
                 >
                   {link.label}

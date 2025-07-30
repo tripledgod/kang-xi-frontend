@@ -343,7 +343,7 @@ export default function ProductDetail() {
           <p className="text-[#61422D] text-lg mb-4">{error || 'Product not found'}</p>
           <button
             onClick={() => navigate('/browse')}
-            className="px-4 py-2 bg-[#7B6142] text-white rounded hover:bg-[#6a5437]"
+            className="px-4 py-2 bg-[#7B6142] text-white rounded hover:bg-[#6a5437] btn-clickable"
           >
             Back to Browse
           </button>
@@ -385,14 +385,14 @@ export default function ProductDetail() {
 
       <div className="w-full border-t border-[#E8DBC0]" />
       {/* Breadcrumb */}
-      <div className="w-full px-4 pt-6 text-xs text-[#817F7C] pb-5 md:px-[112px]  md:pb-[48px] font-semibold">
+              <div className="w-full px-4 pt-6 text-xs text-[#817F7C] pb-5 md:px-[112px]  md:pb-[48px]">
         <span
-          className="cursor-pointer hover:text-[#61422D] transition-colors"
+          className="cursor-pointer link-clickable"
           onClick={() => navigate('/')}
         >
           Home
         </span> <span className="mx-1">&gt;</span> <span
-          className="cursor-pointer hover:text-[#61422D] transition-colors"
+          className="cursor-pointer link-clickable"
           onClick={() => navigate('/browse')}
         >
           Browse
@@ -403,7 +403,7 @@ export default function ProductDetail() {
         </span>
       </div>
       {/* Main Section */}
-      <div className="w-full flex flex-col md:flex-row gap-10 md:items-start items-start md:px-[112px] pb-8 md:pb-22">
+      <div className="w-full flex flex-col md:flex-row md:gap-4  gap-6 md:items-start items-start md:px-[112px] pb-8 md:pb-22">
         {/* Thumbnails (desktop only) */}
         <div className="hidden md:flex flex-col gap-4 w-[109px] flex-shrink-0">
           {imageUrls.map((img: string, idx: number) => (
@@ -423,7 +423,7 @@ export default function ProductDetail() {
             <img
               src={mainImg}
               alt={productDetail.title}
-              className="object-contain object-top w-full md:h-full"
+              className="object-cover object-center w-full md:h-full"
             />
             {/* Pagination dots for mobile - overlay on image */}
             <div className="md:hidden absolute left-1/2 -translate-x-1/2 bottom-2 flex flex-row gap-2 z-10 pb-1 items-center">
@@ -437,7 +437,7 @@ export default function ProductDetail() {
               ))}
             </div>
             <button
-              className="absolute top-2 right-2 bg-white rounded-full p-2 shadow hover:scale-110 transition md:block hidden"
+              className="absolute top-2 right-2 bg-white rounded-full p-2 shadow md:block hidden btn-clickable"
               onClick={() => openModal(0)}
               aria-label="Zoom in"
             >
@@ -447,7 +447,7 @@ export default function ProductDetail() {
         </div>
         {/* Product content, always visible */}
         <div className="flex-1 md:pl-12 flex flex-col gap-4 md:min-h-[636px] md:px-0 px-4">
-          <div className="flex flex-row justify-between text-[14px]  text-[#585550] leading-[20px] font-semibold items-center">
+          <div className="flex flex-row justify-between text-[14px]  text-[#585550] leading-[20px] items-center">
             <span>
               {productDetail.ageFrom} - {productDetail.ageTo}
               {productDetail.category?.name && (
@@ -458,7 +458,7 @@ export default function ProductDetail() {
               ITEM CODE {productDetail.itemCode || productDetail.documentId}
               <button
                 onClick={handleCopy}
-                className="ml-1 p-1 hover:bg-[#E6DDC6] rounded transition-colors duration-200"
+                className="ml-1 p-1 rounded btn-clickable"
                 aria-label="Copy Item Code"
                 title="Copy item code to clipboard"
               >
@@ -474,7 +474,7 @@ export default function ProductDetail() {
             {productDetail.title}
           </h4>
           <div className="max-w-xl">
-            <div className="text-[14px] leading-[20px] text-[#2E2A24] font-semibold mb-2">
+            <div className="text-[14px] leading-[20px] text-[#2E2A24] mb-2">
               Description
             </div>
             <div id="product-description" className="text-[16px] leading-[24px] text-[#585550]">
@@ -483,7 +483,7 @@ export default function ProductDetail() {
             {isLongDescription && (
               <button
                 onClick={() => setIsDescriptionExpanded((prev) => !prev)}
-                className="text-[#201F1C] uppercase  text-[14px] leading-[20px] font-semibold"
+                className="text-[#201F1C] uppercase  text-[14px] leading-[20px] btn-clickable"
               >
                 {isDescriptionExpanded ? 'Read Less' : 'Read More'}
               </button>
@@ -507,16 +507,16 @@ export default function ProductDetail() {
           </div>
           {/* Top right: close button */}
           <div className="absolute top-4 right-4 z-60">
-            <button
-              className="text-white text-3xl font-semibold"
-              onClick={closeModal}
-              aria-label="Close"
-            >
-              &times;
-            </button>
+                      <button
+            className="text-white text-3xl btn-clickable"
+            onClick={closeModal}
+            aria-label="Close"
+          >
+            &times;
+          </button>
           </div>
           <button
-            className="absolute left-8 top-1/2 -translate-y-1/2 bg-transparent rounded-full shadow-none p-2 z-60"
+            className="absolute left-8 top-1/2 -translate-y-1/2 bg-transparent rounded-full shadow-none p-2 z-60 btn-clickable"
             onClick={e => { e.stopPropagation(); prevImg(); }}
             aria-label="Previous"
           >
@@ -530,7 +530,7 @@ export default function ProductDetail() {
             />
           </div>
           <button
-            className="absolute right-8 top-1/2 -translate-y-1/2 bg-transparent rounded-full shadow-none p-2 z-60"
+            className="absolute right-8 top-1/2 -translate-y-1/2 bg-transparent rounded-full shadow-none p-2 z-60 btn-clickable"
             onClick={e => { e.stopPropagation(); nextImg(); }}
             aria-label="Next"
           >
@@ -545,11 +545,11 @@ export default function ProductDetail() {
         <div className="w-full bg-[#FAF7F2] py-8 md:py-20 ">
           <div className="w-full md:px-[112px] px-4">
             <div className="flex flex-row justify-between items-center mb-8">
-              <h4 className="text-[26px] md:text-[32px] leading-[34px] md:leading-[40px] font-serif font-semibold text-[#201F1C]  md:pb-4 md:pt-0">
+              <h4 className="text-[26px] md:text-[32px] leading-[34px] md:leading-[40px] font-serif text-[#201F1C]  md:pb-4 md:pt-0">
                 You might be interested
               </h4>
               <button
-                className="text-[#020202] text-sm font-semibold hidden md:flex"
+                className="text-[#020202] text-sm hidden md:flex btn-clickable"
                 onClick={() => navigate('/browse')}
               >
                 {t('VIEW_ALL')}
@@ -557,20 +557,20 @@ export default function ProductDetail() {
             </div>
             <div className="relative">
               {/* Carousel Arrows */}
-              <button className="absolute -left-6 top-3/8 -translate-y-1/2 rounded-full  p-2  z-10 hidden md:block">
-                <img src={icCircleLeft} alt="Previous" className="w-8 h-8" />
+              <button className="absolute -left-6 top-5/16 -translate-y-1/2 rounded-full  p-2  z-10 hidden md:block btn-clickable">
+                <img src={icCircleLeft} alt="Previous" className="w-10 h-10" />
               </button>
               <div className="overflow-x-auto">
-                <div className="flex gap-8">
+                <div className="flex md:gap-8 gap-[22px]">
                   {relatedProducts.map((item: any, idx: number) => {
                     const relatedImageUrl =
                       item.images && item.images.length > 0 ? getImageUrl(item.images[0]) : '';
                     return (
-                      <div
-                        key={item.id}
-                        className="min-w-[260px] max-w-xs flex flex-col cursor-pointer hover:shadow-lg transition-shadow rounded"
-                        onClick={() => navigate(`/products/${item.slug}`)}
-                      >
+                                              <div
+                          key={item.id}
+                          className="min-w-[260px] max-w-xs flex flex-col cursor-pointer rounded link-clickable"
+                          onClick={() => navigate(`/products/${item.slug}`)}
+                        >
                         <div className="bg-[#E6DDC6] aspect-square w-full flex items-center justify-center overflow-hidden mb-4">
                           {relatedImageUrl ? (
                             <img
@@ -585,14 +585,14 @@ export default function ProductDetail() {
                             </div>
                           )}
                         </div>
-                        <div className="text-[#585550] text-[14px] leading-[20px] font-semibold uppercase mb-2">
+                        <div className="text-[#585550] text-[14px] leading-[20px] uppercase mb-2">
                           {item.category.name}
                         </div>
-                        <h5 className="text-[20px]  md:text-[24px] md:leading-[32px] leading-[28px]font-serif font-semibold text-[#61422D] mb-4 md:pb-8 pb-7 leading-snug line-clamp-3 min-h-[72px]">
+                        <h5 className="text-[20px] md:text-[24px] md:leading-[32px] leading-[28px] font-serif text-[#61422D] mb-4 md:pb-8 pb-7 leading-snug line-clamp-3 md:h-[128px] md:flex md:items-start">
                           {item.title}
                         </h5>
                         <div className="border-t-2 border-[#E5E1D7] opacity-80 mb-2"></div>
-                        <div className="flex flex-col gap-1 text-[14px] leading-[20px] text-[#585550] font-semibold">
+                        <div className="flex flex-col gap-1 text-[14px] leading-[20px] text-[#585550]">
                           <div className="flex flex-row justify-between">
                             <span>
                               {item.ageFrom} - {item.ageTo}
@@ -605,8 +605,8 @@ export default function ProductDetail() {
                   })}
                 </div>
               </div>
-              <button className="absolute -right-6 top-3/8 -translate-y-1/2 rounded-full  p-2 z-10 hidden md:block">
-                <img src={icCircleRight} alt="Next" className="w-8 h-8" />
+              <button className="absolute -right-6 top-5/16 -translate-y-1/2 rounded-full  p-2 z-10 hidden md:block btn-clickable">
+                <img src={icCircleRight} alt="Next" className="w-10 h-10" />
               </button>
             </div>
           </div>
@@ -630,7 +630,7 @@ export default function ProductDetail() {
                 style={{ cursor: 'pointer' }}
                 onClick={() => navigate('/')}
               />
-              <button className="p-2" onClick={() => setShowAcquireModal(false)} aria-label="Close">
+              <button className="p-2 btn-clickable" onClick={() => setShowAcquireModal(false)} aria-label="Close">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -648,7 +648,7 @@ export default function ProductDetail() {
               {/* Desktop close button - only visible on desktop, right aligned */}
               <div className="hidden md:flex w-full justify-end">
                 <button
-                  className=" z-20"
+                  className=" z-20 btn-clickable"
                   onClick={() => setShowAcquireModal(false)}
                   aria-label="Close"
                 >
@@ -664,7 +664,7 @@ export default function ProductDetail() {
                   </svg>
                 </button>
               </div>
-              <h3 className=" font-serif text-[28px] leading-[32px] md:text-[40px] md:leading-[48px] font-semibold text-[#61422D] mb-4 text-center md:pt-13">
+              <h3 className=" font-serif text-[28px] leading-[32px] md:text-[40px] md:leading-[48px] text-[#61422D] mb-4 text-center md:pt-13">
                 Secure Your Piece<br/> of History
               </h3>
               <div className="text-[20px] leading-[28px] text-[#6D6A66] mb-8 text-center ">

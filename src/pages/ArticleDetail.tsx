@@ -79,7 +79,7 @@ function RelatedArticles({ related }: { related: Article[] }) {
             {/* Title with fixed height of 2 lines only on desktop */}
             <div>
               <h5
-                className="md:text-[24px] md:leading-[32px] text-20[px] leading[28px] font-semibold text-[#61422D] mb-[8px] md:mb-[9px]"
+                className="md:text-[24px] md:leading-[32px] text-20[px] leading[28px] text-[#61422D] mb-[8px] md:mb-[9px]"
                 style={{
                   // fontFamily: 'Noto Serif SC, serif',
                   // fontWeight: 600,
@@ -115,7 +115,7 @@ function RelatedArticles({ related }: { related: Article[] }) {
               </div>
             </div>
 
-            <div className="text-[14px] leading-[20px]text-[#585550] font-semibold uppercase tracking-wider mt-auto">
+            <div className="text-[14px] leading-[20px]text-[#585550] uppercase tracking-wider mt-auto">
               {new Date(article.publishedAt).toLocaleDateString('en-US', {
                 day: 'numeric',
                 month: 'short',
@@ -206,7 +206,7 @@ export default function ArticleDetail() {
     return (
       <div className="min-h-screen bg-[#F7F5EA] flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-serif font-semibold text-[#61422D] mb-4">
+          <h1 className="text-2xl font-serif text-[#61422D] mb-4">
             {error || 'Article not found'}
           </h1>
           <Button text="Back to Articles" onClick={() => navigate('/articles')} />
@@ -218,17 +218,17 @@ export default function ArticleDetail() {
   return (
     <div className="w-full min-h-screen bg-[#F7F5EA]">
       <div className="max-w-2xl mx-auto px-4 pt-8">
-        <div className="text-[14px]  leading-[20px] text-[#6D6A66] font-semibold uppercase tracking-wider mb-2">
+        <div className="text-[14px]  leading-[20px] text-[#6D6A66] uppercase tracking-wider mb-2">
           {new Date(article.publishedAt).toLocaleDateString('en-US', {
             day: 'numeric',
             month: 'short',
             year: 'numeric',
           })}
         </div>
-        <h3 className="hidden md:block text-[40px] leading-[48px] text-[#61422D] mb-2 font-semibold">
+        <h3 className="hidden md:block text-[40px] leading-[48px] text-[#61422D] mb-2">
           {article.title}
         </h3>
-        <h4 className="block md:hidden text-[32px] leading-[40px] text-[#61422D] mb-2 font-semibold">
+        <h4 className="block md:hidden text-[32px] leading-[40px] text-[#61422D] mb-2">
           {article.title}
         </h4>
         {article.shortDescription && (

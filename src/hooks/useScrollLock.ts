@@ -5,7 +5,7 @@ export const useScrollLock = (isLocked: boolean) => {
     if (isLocked) {
       // Save current scroll position
       const scrollY = window.scrollY;
-      
+
       // Add style to disable scrolling
       const style = document.createElement('style');
       style.id = 'scroll-lock-style';
@@ -19,7 +19,7 @@ export const useScrollLock = (isLocked: boolean) => {
         }
       `;
       document.head.appendChild(style);
-      
+
       // Cleanup function
       return () => {
         const styleElement = document.getElementById('scroll-lock-style');
@@ -31,4 +31,4 @@ export const useScrollLock = (isLocked: boolean) => {
       };
     }
   }, [isLocked]);
-}; 
+};

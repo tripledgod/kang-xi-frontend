@@ -64,7 +64,7 @@ const Popup: React.FC<PopupProps> = ({
         {/* Button */}
         <div className="w-full flex justify-center mx-auto">
           <button
-            className="w-full h-[48px]  items-center justify-center text-[14px] leading-[24px] font-semibold shadow-none transition-all    hidden md:block mx-5"
+            className="w-full h-[48px]  items-center justify-center text-[14px] leading-[24px]  shadow-none transition-all    hidden md:block mx-5 btn-clickable"
             style={{
               backgroundImage: `url(${bgButtonSubmitForm})`,
               backgroundSize: '100% 100%',
@@ -80,7 +80,7 @@ const Popup: React.FC<PopupProps> = ({
             {buttonText}
           </button>
           <button
-            className="w-full  h-[48px] flex items-center justify-center text-[14px] leading-[24px] font-semibold shadow-none transition-all     md:hidden"
+            className="w-full  h-[48px] flex items-center justify-center text-[14px] leading-[24px]  shadow-none transition-all     md:hidden btn-clickable"
             style={{
               backgroundImage: `url(${bgButtonMobile})`,
               backgroundSize: '100% 100%',
