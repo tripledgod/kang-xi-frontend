@@ -1,21 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import  { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Button from './Button';
-import Loading from './Loading';
 import { useNavigate } from 'react-router-dom';
 import { getArticles, Article } from '../api/articles';
-import { useLoading } from '../hooks/useLoading';
 import { useLanguage } from '../contexts/LanguageContext';
 import { getCoverUrl } from '../utils';
 
 export default function ArticlesSection() {
   const navigate = useNavigate();
   const [articles, setArticles] = useState<Article[]>([]);
-  const { loading, withLoading } = useLoading(true);
+  const [isLoading, setIsLoading] = useState(true);
   const { locale } = useLanguage();
   const { t } = useTranslation();
 
-  // Add a variable to check for mobile
+  // Responsive
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 768);
@@ -23,18 +21,22 @@ export default function ArticlesSection() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  // Fetch articles
   useEffect(() => {
     const fetchArticles = async () => {
       try {
-        const response = await getArticles(1, 3, locale); // Get 3 latest articles per month
-        setArticles(response.data);
+        setIsLoading(true);
+        const response = await getArticles(1, 3, locale);
+        setArticles(response.data || []);
       } catch (error) {
         console.error('Error fetching articles:', error);
+        setArticles([]);
+      } finally {
+        setIsLoading(false);
       }
     };
-
-    withLoading(fetchArticles);
-  }, [locale]); // Re-fetch when locale changes
+    fetchArticles();
+  }, [locale]);
 
   const handleArticleClick = (slug: string) => {
     navigate(`/article/${slug}`);
@@ -53,9 +55,9 @@ export default function ArticlesSection() {
           </h2>
         )}
         <div
-          className="text-[18px] leading-[26px] mb-12 text-center font-normal text-[#342216]"
+          className="text-[18px] leading-[26px] mb-12 text-center  text-[#342216]"
           style={{
-            fontWeight: 400,
+            
             fontSize: 18,
             lineHeight: '26px',
             letterSpacing: 0,
@@ -65,20 +67,25 @@ export default function ArticlesSection() {
         >
           Feature articles of the month
         </div>
-        <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-          {loading ? (
-            <div className="col-span-3 flex justify-center py-8">
-              <Loading size="large" text="Loading..." />
+        <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-8 mb-12 min-h-[320px] flex-1">
+          {isLoading ? (
+            <div className="col-span-3 flex justify-center items-center py-16 w-full">
+              <div className="flex flex-col items-center">
+                <div className="w-8 h-8 border-2 border-[#61422D] border-t-transparent rounded-full animate-spin mb-4"></div>
+                <span className="text-[#61422D] text-base font-medium">Loading...</span>
+              </div>
             </div>
           ) : (
             articles.map((article) => {
               const imageUrl = getCoverUrl(article.cover);
-
               return (
                 <div
                   key={article.id}
                   className="flex flex-col cursor-pointer"
-                  onClick={() =>{ window.scrollTo({ top: 0, behavior: 'auto' }); handleArticleClick(article.slug)}}
+                  onClick={() => {
+                    window.scrollTo({ top: 0, behavior: 'auto' });
+                    handleArticleClick(article.slug);
+                  }}
                 >
                   <div className="bg-[#E6DDC6] aspect-square w-full flex items-center justify-center overflow-hidden mb-4">
                     {imageUrl ? (
@@ -86,6 +93,7 @@ export default function ArticlesSection() {
                         src={imageUrl}
                         alt={article.title}
                         className="object-cover w-full h-full"
+                        loading="lazy"
                         onError={(e) => {
                           console.error('Image failed to load:', imageUrl);
                           e.currentTarget.style.display = 'none';
@@ -111,7 +119,7 @@ export default function ArticlesSection() {
                     {article.title}
                   </h5>
                   <div
-                    className="font-pingfang font-normal mb-4 text-base leading-6 md:h-[72px] overflow-hidden line-clamp-3"
+                    className="font-pingfang  mb-4 text-base leading-6 md:h-[72px] overflow-hidden line-clamp-3"
                     style={{
                       color: '#585550',
                       fontSize: 16,
@@ -142,7 +150,10 @@ export default function ArticlesSection() {
           <Button
             text={t('VIEW_ALL_ARTICLES')}
             variant="outline"
-            onClick={() => { window.scrollTo({ top: 0, behavior: 'auto' }); navigate('/articles'); }}
+            onClick={() => {
+              window.scrollTo({ top: 0, behavior: 'auto' });
+              navigate('/articles');
+            }}
           />
         </div>
       </div>

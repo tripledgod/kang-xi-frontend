@@ -101,7 +101,7 @@ function RelatedArticles({ related }: { related: Article[] }) {
             {/* Description with fixed height of 3 lines only on desktop */}
             <div className="md:h-20 mb-4">
               <div
-                className="font-pingfang text-base font-normal leading-6 overflow-hidden"
+                className="font-pingfang text-base leading-6 overflow-hidden"
                 style={{
                   color: '#585550',
                   display: '-webkit-box',
@@ -145,7 +145,7 @@ export default function ArticleDetail() {
   const { locale } = useLanguage();
   const [error, setError] = useState<string | null>(null);
 
-  // Scroll to top when slug changes (mỗi lần chuyển bài viết)
+  // Scroll to top when slug changes (every time article changes)
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'auto' });
   }, [slug]);

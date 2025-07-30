@@ -62,9 +62,9 @@ export default function Header() {
   ];
 
   return (
-    <header className="w-full bg-[#F7F5EA] relative flex items-center px-4 md:px-28 py-4">
+    <header className="w-full bg-[#F7F5EA] relative flex items-center px-4 md:px-16 lg:px-28 py-4">
       {/* Logo and Title */}
-      <div className="flex items-center gap-4 flex-shrink-0 ">
+      <div className="flex items-center gap-4 flex-shrink-0">
         <Link to="/">
           <img src={logoMobile} alt="Kang Xi Logo Mobile" className="h-12 block lg:hidden" />
           <img src={logo} alt="Kang Xi Logo" className="h-16 hidden lg:block" />
@@ -72,13 +72,13 @@ export default function Header() {
         <div className="text-left"></div>
       </div>
       {/* Centered navLinks (desktop only) */}
-      <nav className="hidden lg:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 items-center gap-8">
+      <nav className="hidden xl:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 items-center gap-8">
         {navLinks.map((link, idx) => (
           <React.Fragment key={link.label}>
             {idx > 0 && <img src={plus} alt="plus" className="h-3 w-3 mx-2 opacity-40" />}
             <Link
               to={link.href}
-              className="text-lg font-medium text-gray-800 hover:text-red-700 transition-colors"
+              className="text-lg font-medium text-gray-800"
             >
               {link.label}
             </Link>
@@ -86,13 +86,13 @@ export default function Header() {
         ))}
       </nav>
       {/* Language Switcher (desktop only) */}
-      <div className="hidden lg:flex items-center ml-auto">
+      <div className="hidden xl:flex items-center ml-auto">
         <LanguageSwitcher />
       </div>
-      {/* Mobile Hamburger Menu (mobile only, never on desktop) */}
+      {/* Mobile Hamburger Menu (mobile and tablet) */}
       {!drawerOpen && (
         <button
-          className="ml-auto block lg:hidden z-40"
+          className="ml-auto block xl:hidden z-40"
           onClick={() => setDrawerOpen(true)}
           aria-label="Open menu"
         >

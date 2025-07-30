@@ -56,8 +56,8 @@ const Popup: React.FC<PopupProps> = ({
         </div>
         {/* Content */}
         <div
-          className="text-center mb-8 md:mb-8 font-normal md:leading-[28px] md:text[20px] text-[18px] leading-[26px]"
-          style={{ fontWeight: 400, color: COLORS.secondary600 }}
+          className="text-center mb-8 md:mb-8  md:leading-[28px] md:text[20px] text-[18px] leading-[26px]"
+          style={{ color: COLORS.secondary600 }}
         >
           {content}
         </div>

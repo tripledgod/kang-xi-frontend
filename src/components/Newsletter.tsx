@@ -104,7 +104,7 @@ export default function Newsletter() {
               className="font-pingfang text-[18px] leading-[26px] tracking-[0px] text-left mb-8 md:w-[400px]"
               style={{
                 color: COLORS.secondary700,
-                fontWeight: 400,
+
                 fontSize: 18,
                 lineHeight: '26px',
                 letterSpacing: 0,

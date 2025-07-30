@@ -176,8 +176,7 @@ export default function AboutUs() {
           </ReactMarkdown>
         </div>
       </div>
-      
-    
+
       <div className="h-[1px] max-w-[382px] md:max-w-[1120px] mx-auto bg-[#D5D4D3]  opacity-50 w-full md:my-8 my-0 mt-8 px-4"></div>
 
       {/* Team Section */}
@@ -251,7 +250,7 @@ export default function AboutUs() {
           </div>
           <div
             ref={containerRef}
-            className="flex gap-8 mt-8 overflow-x-auto scrollbar-hide pr-12"
+            className="flex gap-4 md:gap-8 mt-8 overflow-x-auto scrollbar-hide pr-12"
             style={{
               width: `calc(100vw - 2rem)`,
               maxWidth: `${cardWidth * (visibleCount + peekWidth) + 24 * visibleCount}px`,
@@ -264,7 +263,7 @@ export default function AboutUs() {
                 style={{
                   width: window.innerWidth < 768 ? mobileCardWidth : cardWidth,
                   minWidth: window.innerWidth < 768 ? mobileCardWidth : cardWidth,
-                  marginRight: idx === (aboutData?.team?.length ?? 0) - 1 ? 0 : 24,
+                  
                 }}
               >
                 <img
