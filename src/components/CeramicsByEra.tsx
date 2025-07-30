@@ -200,7 +200,7 @@ export default function CeramicsByEra() {
                 padding: 0,
                 minWidth: 0,
                 // fontFamily: 'Noto Sans SC, Inter, -apple-system, BlinkMacSystemFont, sans-serif',
-                fontWeight: 400,
+               
                 fontSize: 14,
                 lineHeight: 1.25,
                 letterSpacing: '0.5px',
@@ -260,8 +260,8 @@ export default function CeramicsByEra() {
                 <div
                   className="text-base pt-2  "
                   style={{
-                    // fontFamily: 'Noto Sans SC, Inter, -apple-system, BlinkMacSystemFont, sans-serif',
-                    fontWeight: 400,
+                   
+                  
                     fontSize: 16,
                     lineHeight: 1.5,
                     letterSpacing: 0,
@@ -330,7 +330,7 @@ export default function CeramicsByEra() {
                 <div
                   className="text-base pt-2 line-clamp-3 "
                   style={{
-                    fontWeight: 400,
+                    
                     fontSize: 16,
                     lineHeight: 1.5,
                     letterSpacing: 0,

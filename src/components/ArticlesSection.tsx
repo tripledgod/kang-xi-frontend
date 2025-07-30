@@ -57,7 +57,7 @@ export default function ArticlesSection() {
         <div
           className="text-[18px] leading-[26px] mb-12 text-center font-normal text-[#342216]"
           style={{
-            fontWeight: 400,
+            
             fontSize: 18,
             lineHeight: '26px',
             letterSpacing: 0,
