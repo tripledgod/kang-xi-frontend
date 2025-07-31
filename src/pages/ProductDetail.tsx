@@ -766,17 +766,28 @@ export default function ProductDetail() {
                   />
                   {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone}</p>}
                 </div>
-                <div className="w-full pt-2">
-                  <Button
-                    text={isLoading ? t('SUBMITTING') : t('SUBMIT_FORM')}
-                    type="submit"
-                    className="submit-form-btn"
-                    disabled={isLoading}
-                  />
-                </div>
-              </form>
-            </div>
-          </div>
+                                 <div className="w-full pt-2 md:block hidden">
+                   <Button
+                     text={isLoading ? t('SUBMITTING') : t('SUBMIT_FORM')}
+                     type="submit"
+                     className="submit-form-btn"
+                     disabled={isLoading}
+                   />
+                 </div>
+                             </form>
+             </div>
+             {/* Mobile Submit Button */}
+             <div className="md:hidden bg-[#FAF7F2] border-t border-[#D5D4D3] px-4 py-4 mt-4">
+               <Button
+                 text={isLoading ? t('SUBMITTING') : t('SUBMIT_FORM')}
+                 type="submit"
+                 className="w-full"
+                 disabled={isLoading}
+                 onClick={submitForm}
+                 forceMobile={true}
+               />
+             </div>
+           </div>
         </div>
       )}
       {isLoading && <Loading fullScreen={true} text="Submitting your request..." />}

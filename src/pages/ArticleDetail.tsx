@@ -115,12 +115,12 @@ function RelatedArticles({ related }: { related: Article[] }) {
               </div>
             </div>
 
-            <div className="text-[14px] leading-[20px]text-[#585550] uppercase tracking-wider mt-auto">
-              {new Date(article.publishedAt).toLocaleDateString('en-US', {
-                day: 'numeric',
+            <div className="text-[14px] leading-[20px] text-[#585550] uppercase tracking-wider mt-auto">
+              {new Date(article.publishedAt).toLocaleDateString('en-GB', {
+                day: '2-digit',
                 month: 'short',
                 year: 'numeric',
-              })}
+              }).toUpperCase().replace(/,/g, '')}
             </div>
           </div>
         ))}
@@ -218,12 +218,12 @@ export default function ArticleDetail() {
   return (
     <div className="w-full min-h-screen bg-[#F7F5EA]">
       <div className="max-w-2xl mx-auto px-4 pt-8">
-        <div className="text-[14px]  leading-[20px] text-[#6D6A66] uppercase tracking-wider mb-2">
-          {new Date(article.publishedAt).toLocaleDateString('en-US', {
-            day: 'numeric',
+        <div className="text-[14px] leading-[20px] text-[#6D6A66] uppercase tracking-wider mb-2">
+          {new Date(article.publishedAt).toLocaleDateString('en-GB', {
+            day: '2-digit',
             month: 'short',
             year: 'numeric',
-          })}
+          }).toUpperCase().replace(/,/g, '')}
         </div>
         <h3 className="hidden md:block text-[40px] leading-[48px] text-[#61422D] mb-2">
           {article.title}
