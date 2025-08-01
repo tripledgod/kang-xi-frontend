@@ -222,7 +222,7 @@ export default function AppraiseAnItem() {
               type="submit"
               onClick={handleScrollToForm}
               
-              className="flex h-[48px] w-[189px] items-center justify-center text-[14px] leading-[20px] shadow-none transition-all px-6"
+              className="flex h-[48px] font-semibold w-[189px] items-center justify-center text-[14px] leading-[20px] shadow-none transition-all px-6"
               style={{
                 backgroundImage: `url(${bgButtonMobile})`,
                 backgroundSize: '100% 100%',
@@ -241,7 +241,7 @@ export default function AppraiseAnItem() {
       </div>
       {/* Our Services Section */}
       <div className="w-full bg-[#23211C] py-16 flex flex-col items-center justify-center text-center px-4">
-        <div className="text-[#F7F3E8] text-[14px] leading-[20px] mb-2 tracking-widest">
+        <div className="text-[#F7F3E8] text-[14px] leading-[20px] mb-2 tracking-widest  font-semibold">
           OUR SERVICES
         </div>
         <h4 className="hidden md:block text-[32px]  leading-[40px] font-serif text-white mb-6 max-w-2xl mx-auto">

@@ -86,7 +86,7 @@ export default function AcquireOrAppraise() {
             <p className="text-base leading-6 text-[#ABAAA7] mb-10 max-w-lg">{section.desc}</p>
             <div className="w-[220px] flex justify-center">
               <button
-                className="w-full md:w-[189px] h-[48px] flex items-center justify-center text-base shadow-none transition-all px-6 btn-clickable"
+                className="w-full font-semibold md:w-[189px] h-[48px] flex items-center justify-center text-base shadow-none transition-all px-6 btn-clickable"
                 onClick={
                   section.link === '/acquire-an-item' ? handleAcquireClick : handleAppraiseClick
                 }

@@ -324,7 +324,7 @@ export default function CeramicsByEra() {
                 >
                   {era.name}
                 </h4>
-                <div className="text-base  border-t border-[#C7C7B9] pt-4 text-[#2E2A24] mb-1">
+                <div className="text-base  border-t border-[#C7C7B9] pt-4 text-[#2E2A24] mb-1  font-semibold">
                   {era.years}
                 </div>
                 <div

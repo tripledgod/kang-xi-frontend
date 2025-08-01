@@ -215,7 +215,7 @@ const Browse: React.FC = () => {
           {product.description}
         </div>
         <div className="border-t-2 border-[#E5E1D7] opacity-80 my-3"></div>
-        <div className="flex flex-row justify-between text-[14px] leading-[20px] text-[#585550]">
+        <div className="flex flex-row justify-between text-[14px] leading-[20px] text-[#585550] font-semibold">
           <span>
             {product.ageFrom} - {product.ageTo}
           </span>
@@ -293,7 +293,7 @@ const Browse: React.FC = () => {
                     ref={(el) => {
                       eraButtonRefs.current[idx] = el;
                     }}
-                    className={` transition-colors uppercase text-[17px] relative pb-3 btn-clickable ${activeEra === era.slug ? 'border-b-2 border-[#23211C] text-[#23211C] opacity-90 z-20' : 'text-[#23211C] border-b-0'}`}
+                    className={` transition-colors uppercase text-[16px] relative pb-3 btn-clickable ${activeEra === era.slug ? 'border-b-2 border-[#23211C] text-[#23211C] opacity-90 z-20 font-semibold' : 'text-[#23211C] border-b-0'}`}
                     onClick={() => handleEraClick(era.slug)}
                   >
                     {era.name}
@@ -325,7 +325,7 @@ const Browse: React.FC = () => {
                 {eraTabs.map((era, idx) => (
                   <React.Fragment key={era.slug}>
                     <button
-                      className={` transition-colors uppercase text-[17px] relative pb-3 btn-clickable ${activeEra === era.slug ? 'border-b-2 border-[#23211C] text-[#23211C] opacity-90 z-20' : 'text-[#23211C] border-b-0'}`}
+                      className={` transition-colors uppercase  text-[16px] relative pb-3 btn-clickable ${activeEra === era.slug ? 'border-b-2 border-[#23211C]  text-[#23211C] opacity-90 z-20 font-semibold' : 'text-[#23211C] border-b-0 '}`}
                       onClick={() => handleEraClick(era.slug)}
                     >
                       {era.name}

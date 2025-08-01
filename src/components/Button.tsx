@@ -79,7 +79,7 @@ const Button: React.FC<ButtonProps> = ({
       }}
     >
       <span
-        className="relative z-10 w-full h-full flex items-center justify-center text-base md:text-lg leading-[20px] md:leading-[24px]"
+        className="relative  z-10 w-full h-full flex items-center justify-center text-base md:text-lg leading-[20px] md:leading-[24px]"
         style={{
           color: isOutline ? '#7B6142' : '#fff',
           fontWeight: 600,

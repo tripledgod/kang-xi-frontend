@@ -39,7 +39,7 @@ export default function Footer() {
                 <Link
                   key={link.label}
                   to={link.href}
-                  className="text-[14px] leading-[20px]  text-[#FFFFFF] whitespace-nowrap opacity-80"
+                  className="text-[14px] leading-[20px]  text-[#FFFFFF] whitespace-nowrap opacity-80 font-normal"
                 >
                   {link.label}
                 </Link>
@@ -50,7 +50,7 @@ export default function Footer() {
                 <Link
                   key={link.label}
                   to={link.href}
-                  className="text-[14px] leading-[20px]  text-[#FFFFFF] whitespace-nowrap opacity-80 "
+                  className="text-[14px] leading-[20px]  text-[#FFFFFF] whitespace-nowrap opacity-80 font-normal "
                 >
                   {link.label}
                 </Link>

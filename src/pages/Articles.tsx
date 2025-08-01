@@ -144,7 +144,7 @@ export default function Articles() {
                       <div className="text-base text-white mb-3 line-clamp-2 drop-shadow-lg">
                         {article.description}
                       </div>
-                                              <div className="text-xs text-white uppercase tracking-wider drop-shadow-lg">
+                                              <div className="text-xs text-white uppercase font-semibold tracking-wider drop-shadow-lg">
                         {new Date(article.publishedAt)
                           .toLocaleDateString('en-GB', {
                             day: '2-digit',
@@ -186,7 +186,7 @@ export default function Articles() {
                     <div className="text-base text-white mb-3 line-clamp-2 drop-shadow-lg">
                       {article.description}
                     </div>
-                    <div className="text-[14px]  leading-[20px] text-white uppercase tracking-wider drop-shadow-lg">
+                    <div className="text-[14px]  leading-[20px] text-white uppercase tracking-wider font-semibold drop-shadow-lg">
                       {new Date(article.publishedAt)
                         .toLocaleDateString('en-GB', {
                           day: '2-digit',
@@ -258,7 +258,7 @@ export default function Articles() {
                           {article.description}
                         </div>
                         <div className="flex-1"></div>
-                        <div className="text-xs text-[#7B6142] pb-6 uppercase tracking-wider text-left">
+                        <div className="text-xs font-semibold text-[#7B6142] pb-6 uppercase tracking-wider text-left">
                           {new Date(article.publishedAt)
                             .toLocaleDateString('en-GB', {
                               day: '2-digit',
@@ -289,7 +289,7 @@ export default function Articles() {
                           {article.description}
                         </div>
                         <div className="flex-1"></div>
-                        <div className="text-[14px] leading-[20px] text-[#585550] uppercase tracking-wider text-left">
+                        <div className="text-[14px] font-semibold leading-[20px] text-[#585550] uppercase tracking-wider text-left">
                           {new Date(article.publishedAt)
                             .toLocaleDateString('en-GB', {
                               day: '2-digit',

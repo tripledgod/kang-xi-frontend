@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
 import logo from '../assets/logo.png';
 import logoMobile from '../assets/logo_mobile.png';
@@ -42,6 +42,7 @@ function LanguageSwitcher({ className = '' }) {
 export default function Header() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const { t } = useTranslation();
+  const location = useLocation();
 
   // Lock body scroll when drawer is open
   useEffect(() => {
@@ -61,6 +62,10 @@ export default function Header() {
     { label: t('ABOUT_US'), href: '/about-us' },
   ];
 
+  const isActiveLink = (href: string) => {
+    return location.pathname === href;
+  };
+
   return (
     <header className="w-full bg-[#F7F5EA] relative flex items-center px-4 md:px-16 lg:px-28 py-4">
       {/* Logo and Title */}
@@ -75,10 +80,12 @@ export default function Header() {
       <nav className="hidden xl:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 items-center gap-8">
         {navLinks.map((link, idx) => (
           <React.Fragment key={link.label}>
-            {idx > 0 && <img src={plus} alt="plus" className="h-3 w-3 mx-2 opacity-40" />}
+            {idx > 0 && <img src={plus} alt="plus" className="h-[9px] w-[9px]  text-[#DAC497]" />}
             <Link
               to={link.href}
-              className="text-lg font-medium text-gray-800 link-clickable"
+              className={`text-lg md:text-[14px] md:leading-[20px]  font-semibold link-clickable ${
+                isActiveLink(link.href) ? 'text-[#61422D]' : 'text-[#2E2A24]'
+              }`}
             >
               {link.label}
             </Link>
@@ -128,7 +135,9 @@ export default function Header() {
                 )}
                 <Link
                   to={link.href}
-                  className="text-3xl font-medium text-[#23211C] tracking-wide link-clickable"
+                  className={`text-3xl font-medium tracking-wide link-clickable ${
+                    isActiveLink(link.href) ? 'text-[#61422D]' : 'text-[#23211C]'
+                  }`}
                   onClick={() => setDrawerOpen(false)}
                 >
                   {link.label}

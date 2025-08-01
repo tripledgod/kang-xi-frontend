@@ -130,7 +130,7 @@ export default function ArticlesSection() {
                     {article.description}
                   </div>
                   <div
-                    className="text-[14px]  leading-[20px] line-clamp-2 uppercase"
+                    className="text-[14px]  leading-[20px] line-clamp-2 uppercase font-semibold"
                     style={{ color: '#585550' }}
                   >
                     {new Date(article.publishedAt)

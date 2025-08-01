@@ -91,7 +91,7 @@ export default function AboutUs() {
       {/* Legacy Section */}
       <div className="max-w-6xl mx-auto px-4 md:flex md:items-center md:gap-12 mb-16">
         <div className="flex-1 mb-8 md:mb-0">
-          <div className="text-[14px] leading-[20px] text-[#585550] uppercase tracking-wider mb-2">
+          <div className="text-[14px] leading-[20px] text-[#585550] uppercase font-semibold tracking-wider mb-2">
             Heritage
           </div>
           <h3 className="hidden md:block text-[40px] leading-[48px] font-serif  text-[#61422D] mb-4">
@@ -111,7 +111,7 @@ export default function AboutUs() {
               </h2>
               <div
                 style={{ letterSpacing: '0.5px' }}
-                className="text-[14px] leading-[20px] text-[#585550] mt-2"
+                className="text-[14px] leading-[20px] text-[#585550] font-semibold mt-2"
               >
                 YEARS EXPERIENCES
               </div>
@@ -122,7 +122,7 @@ export default function AboutUs() {
               </h2>
               <div
                 style={{ letterSpacing: '0.5px' }}
-                className="text-[14px] leading-[20px] text-[#585550] mt-2"
+                className="text-[14px] leading-[20px] text-[#585550] font-semibold mt-2"
               >
                 RARE COLLECTIBLE ITEMS
               </div>

@@ -170,7 +170,7 @@ export default function AcquireAnItem() {
               type="submit"
               onClick={handleScrollToForm}
               
-              className="flex h-[48px] w-[189px] items-center justify-center text-[14px] leading-[20px] shadow-none transition-all px-6"
+              className="flex h-[48px]   font-semibold w-[189px] items-center justify-center text-[14px] leading-[20px] shadow-none transition-all px-6"
               style={{
                 backgroundImage: `url(${bgButtonMobile})`,
                 backgroundSize: '100% 100%',

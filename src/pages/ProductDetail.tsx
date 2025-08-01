@@ -387,18 +387,18 @@ export default function ProductDetail() {
       {/* Breadcrumb */}
               <div className="w-full px-4 pt-6 text-xs text-[#817F7C] pb-5 md:px-[112px]  md:pb-[48px]">
         <span
-          className="cursor-pointer link-clickable"
+          className="cursor-pointer link-clickable font-semibold"
           onClick={() => navigate('/')}
         >
           Home
         </span> <span className="mx-1">&gt;</span> <span
-          className="cursor-pointer link-clickable"
+          className="cursor-pointer link-clickable font-semibold"
           onClick={() => navigate('/browse')}
         >
           Browse
         </span>{' '}
         <span className="mx-1">&gt;</span>{' '}
-        <span className="text-[#201F1C] truncate max-w-[220px] md:max-w-full md:truncate-none inline-block align-bottom">
+        <span className="text-[#201F1C] truncate max-w-[220px] md:max-w-full md:truncate-none inline-block align-bottom font-semibold">
           {productDetail.title}
         </span>
       </div>
@@ -447,7 +447,7 @@ export default function ProductDetail() {
         </div>
         {/* Product content, always visible */}
         <div className="flex-1 md:pl-12 flex flex-col gap-4 md:min-h-[636px] md:px-0 px-4">
-          <div className="flex flex-row justify-between text-[14px]  text-[#585550] leading-[20px] items-center">
+          <div className="flex flex-row justify-between text-[14px]  text-[#585550] leading-[20px] items-center font-semibold">
             <span>
               {productDetail.ageFrom} - {productDetail.ageTo}
               {productDetail.category?.name && (
@@ -474,7 +474,7 @@ export default function ProductDetail() {
             {productDetail.title}
           </h4>
           <div className="max-w-xl">
-            <div className="text-[14px] leading-[20px] text-[#2E2A24] mb-2">
+            <div className="text-[14px] leading-[20px] text-[#2E2A24] mb-2 font-semibold">
               Description
             </div>
             <div id="product-description" className="text-[16px] leading-[24px] text-[#585550]">
@@ -483,7 +483,7 @@ export default function ProductDetail() {
             {isLongDescription && (
               <button
                 onClick={() => setIsDescriptionExpanded((prev) => !prev)}
-                className="text-[#201F1C] uppercase  text-[14px] leading-[20px] btn-clickable"
+                className="text-[#201F1C] uppercase  text-[14px] leading-[20px] btn-clickable font-semibold"
               >
                 {isDescriptionExpanded ? 'Read Less' : 'Read More'}
               </button>
@@ -549,7 +549,7 @@ export default function ProductDetail() {
                 You might be interested
               </h4>
               <button
-                className="text-[#020202] text-sm hidden md:flex btn-clickable"
+                className="text-[#020202] text-sm hidden md:flex btn-clickable  font-semibold"
                 onClick={() => navigate('/browse')}
               >
                 {t('VIEW_ALL')}
@@ -585,14 +585,14 @@ export default function ProductDetail() {
                             </div>
                           )}
                         </div>
-                        <div className="text-[#585550] text-[14px] leading-[20px] uppercase mb-2">
+                        <div className="text-[#585550] text-[14px] leading-[20px] uppercase mb-2 font-semibold">
                           {item.category.name}
                         </div>
                         <h5 className="text-[20px] md:text-[24px] md:leading-[32px] leading-[28px] font-serif text-[#61422D] mb-4 md:pb-8 pb-7 leading-snug line-clamp-3 md:h-[128px] md:flex md:items-start">
                           {item.title}
                         </h5>
                         <div className="border-t-2 border-[#E5E1D7] opacity-80 mb-2"></div>
-                        <div className="flex flex-col gap-1 text-[14px] leading-[20px] text-[#585550]">
+                        <div className="flex flex-col gap-1 text-[14px] leading-[20px] text-[#585550] font-semibold">
                           <div className="flex flex-row justify-between">
                             <span>
                               {item.ageFrom} - {item.ageTo}
