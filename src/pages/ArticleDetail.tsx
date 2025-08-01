@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect, useLayoutEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import Button from '../components/Button';
@@ -53,8 +53,6 @@ function RelatedArticles({ related }: { related: Article[] }) {
   const { t } = useTranslation();
 
   const handleArticleClick = (slug: string) => {
-    // Scroll to top before navigating
-    window.scrollTo(0, 0);
     navigate(`/article/${slug}`);
   };
 
@@ -146,9 +144,7 @@ export default function ArticleDetail() {
   const [error, setError] = useState<string | null>(null);
 
   // Scroll to top when slug changes (every time article changes)
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'auto' });
-  }, [slug]);
+  // Removed - handled by global ScrollToTop component
 
   useEffect(() => {
     const fetchArticle = async () => {

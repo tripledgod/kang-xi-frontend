@@ -179,7 +179,6 @@ const Browse: React.FC = () => {
         key={product.id}
         className="flex flex-col cursor-pointer rounded"
         onClick={() => {
-          window.scrollTo(0, 0);
           navigate(`/products/${product.slug}`);
         }}
       >
@@ -234,7 +233,7 @@ const Browse: React.FC = () => {
       const containerRect = tabContainer.getBoundingClientRect();
       const btnRect = btn.getBoundingClientRect();
       if (btnRect.left < containerRect.left || btnRect.right > containerRect.right) {
-        btn.scrollIntoView({ behavior: 'auto', inline: 'center', block: 'nearest' });
+        btn.scrollIntoView({ behavior: 'instant', inline: 'center', block: 'nearest' });
       }
     }
   }, [activeEra, eras]);

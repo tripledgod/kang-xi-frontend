@@ -83,7 +83,6 @@ export default function ArticlesSection() {
                   key={article.id}
                   className="flex flex-col cursor-pointer"
                   onClick={() => {
-                    window.scrollTo({ top: 0, behavior: 'auto' });
                     handleArticleClick(article.slug);
                   }}
                 >
@@ -151,7 +150,6 @@ export default function ArticlesSection() {
             text={t('VIEW_ALL_ARTICLES')}
             variant="outline"
             onClick={() => {
-              window.scrollTo({ top: 0, behavior: 'auto' });
               navigate('/articles');
             }}
           />

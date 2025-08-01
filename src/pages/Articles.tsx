@@ -15,6 +15,7 @@ import bigLeft from '../assets/big_left_article.png';
 import bigRight from '../assets/big_right_article.png';
 import { getArticles, Article } from '../api/articles';
 import { getCoverUrl } from '../utils';
+import { useScrollToTop } from '../hooks/useScrollToTop';
 
 const ARTICLES_PER_PAGE = 5;
 
@@ -24,6 +25,7 @@ export default function Articles() {
   const [totalPages, setTotalPages] = useState(1);
   const { loading, withLoading } = useLoading(true);
   const { locale } = useLanguage();
+  const scrollToTop = useScrollToTop();
 
   const featuredArticles = articles.slice(0, 2);
 
@@ -216,7 +218,7 @@ export default function Articles() {
 
                 // Function to handle scroll to top before page navigation
                 const handleArticleClick = (e: React.MouseEvent) => {
-                  window.scrollTo({ top: 0, behavior: 'auto' });
+                  scrollToTop();
                 };
 
                 return (

@@ -48,12 +48,10 @@ export default function AcquireOrAppraise() {
   ];
 
   const handleAcquireClick = () => {
-    window.scrollTo({ top: 0, behavior: 'auto' });
     navigate('/acquire-an-item');
   };
 
   const handleAppraiseClick = () => {
-    window.scrollTo({ top: 0, behavior: 'auto' });
     navigate('/appraise-an-item');
   };
 

@@ -138,9 +138,8 @@ export default function ProductDetail() {
     }
   }, [slug, locale]); // Re-fetch when locale changes
 
-  useLayoutEffect(() => {
-    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
-  }, [slug]);
+  // Scroll to top when slug changes (every time product changes)
+  // Removed - handled by global ScrollToTop component
 
   // Measure description lines only when description changes
   useEffect(() => {
