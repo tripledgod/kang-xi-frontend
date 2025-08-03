@@ -29,9 +29,13 @@ const Browse: React.FC = () => {
   const { loading: categoriesLoading, withLoading: withCategoriesLoading } = useLoading(true);
   const [error, setError] = useState<string | null>(null);
   const [activeEra, setActiveEra] = useState<string>('');
+  
+  // Cache for products by era to avoid re-fetching
+  const [productsCache, setProductsCache] = useState<Record<string, any[]>>({});
   const [products, setProducts] = useState<any[]>([]);
   const { loading: productsLoading, withLoading: withProductsLoading } = useLoading(false);
   const [errorProducts, setErrorProducts] = useState<string | null>(null);
+  const [preloadingProgress, setPreloadingProgress] = useState<Record<string, boolean>>({});
   const [showStickyHeader, setShowStickyHeader] = useState(false);
   const navigate = useNavigate();
   const { locale } = useLanguage();
@@ -44,7 +48,7 @@ const Browse: React.FC = () => {
   // Scroll to top when URL changes
 
   // Standard era slug list, only display these 5 eras in this order
-  const eraOrder = ['tang', 'song', 'yuan', 'ming', 'quing'];
+  const eraOrder = ['tang', 'song', 'yuan', 'ming', 'qing'];
 
   // Filter and sort flattenedCategories in standard order
   const filteredSortedCategories = flattenedCategories
@@ -57,21 +61,33 @@ const Browse: React.FC = () => {
     label: category.name,
   }));
 
-  // Hardcode 5 eras
-  const eraTabs = [
-    { slug: 'tang', name: 'TANG' },
-    { slug: 'song', name: 'SONG' },
-    { slug: 'yuan', name: 'YUAN' },
-    { slug: 'ming', name: 'MING' },
-    { slug: 'quing', name: 'QUING' },
-  ];
+  
+  const eraTabs = filteredSortedCategories.length > 0 
+    ? filteredSortedCategories.map((category) => ({
+        slug: category.slug,
+        name: category.name.toUpperCase(),
+      }))
+    : [
+        { slug: 'tang', name: 'TANG' },
+        { slug: 'song', name: 'SONG' },
+        { slug: 'yuan', name: 'YUAN' },
+        { slug: 'ming', name: 'MING' },
+        { slug: 'qing', name: 'QING' },
+      ]; // Fallback while loading
+  
 
-  // When loading page, if no activeEra, set default to 'tang'
+
+  // When loading page, check URL params first, then set default era
   useEffect(() => {
-    if (!activeEra) {
-      setActiveEra('tang');
+    const eraFromUrl = searchParams.get('era');
+    if (eraFromUrl && eraTabs.some(era => era.slug === eraFromUrl)) {
+      setActiveEra(eraFromUrl);
+    } else if (!activeEra && eraTabs.length > 0) {
+      setActiveEra(eraTabs[0].slug);
+    } else if (!activeEra) {
+      setActiveEra('tang'); // Fallback default
     }
-  }, [activeEra]);
+  }, [activeEra, eraTabs, searchParams]);
 
   // Handle scroll to show/hide sticky header
   useEffect(() => {
@@ -85,6 +101,60 @@ const Browse: React.FC = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // Update flattenedCategories when categories change
+  useEffect(() => {
+    if (categories.length > 0) {
+      const flattened = categories.map((cat) => flattenCategory(cat));
+      setFlattenedCategories(flattened);
+    }
+  }, [categories]);
+
+  // Preload products for all eras when categories are available
+  useEffect(() => {
+    if (flattenedCategories.length > 0) {
+      // Preload products for all eras in background
+      const preloadAllProducts = async () => {
+        const eraSlugs = ['tang', 'song', 'yuan', 'ming', 'qing'];
+        
+        for (const eraSlug of eraSlugs) {
+          // Skip if already cached
+          if (productsCache[eraSlug]) continue;
+          
+          // Mark as preloading
+          setPreloadingProgress(prev => ({ ...prev, [eraSlug]: true }));
+          
+          const category = flattenedCategories.find((cat) => cat.slug === eraSlug);
+          if (category) {
+            try {
+              const productsData = await getProductsByCategory(category.id, locale);
+              const flattened = productsData && productsData.length > 0 
+                ? productsData.map((prod) => flattenProduct(prod))
+                : [];
+              
+              setProductsCache(prev => ({
+                ...prev,
+                [eraSlug]: flattened
+              }));
+            } catch (err) {
+              console.warn(`Failed to preload products for ${eraSlug}:`, err);
+              // Cache empty array on error
+              setProductsCache(prev => ({
+                ...prev,
+                [eraSlug]: []
+              }));
+            }
+          }
+          
+          // Mark as completed
+          setPreloadingProgress(prev => ({ ...prev, [eraSlug]: false }));
+        }
+      };
+      
+      // Start preloading in background (don't await)
+      preloadAllProducts();
+    }
+  }, [flattenedCategories, locale]);
 
   // Fetch categories from API to get id for each era
   useEffect(() => {
@@ -104,18 +174,25 @@ const Browse: React.FC = () => {
     withCategoriesLoading(fetchCategories);
   }, [locale]);
 
-  // Fetch products by activeEra (use categories to get id)
+  // Fetch products by activeEra with caching
   useEffect(() => {
-    if (!activeEra || categories.length === 0) return;
+    if (!activeEra || flattenedCategories.length === 0) return;
+    
+    // Check if products are already cached for this era
+    if (productsCache[activeEra]) {
+      setProducts(productsCache[activeEra]);
+      setErrorProducts(null);
+      return;
+    }
+    
     // Find category by slug
-    const category = categories
-      .map((cat) => flattenCategory(cat))
-      .find((cat) => cat.slug === activeEra);
+    const category = flattenedCategories.find((cat) => cat.slug === activeEra);
     if (!category) {
       setProducts([]);
       setErrorProducts('No data for this era');
       return;
     }
+    
     const fetchProducts = async () => {
       try {
         setErrorProducts(null);
@@ -123,17 +200,32 @@ const Browse: React.FC = () => {
         if (productsData && productsData.length > 0) {
           const flattened = productsData.map((prod) => flattenProduct(prod));
           setProducts(flattened);
+          // Cache the products for this era
+          setProductsCache(prev => ({
+            ...prev,
+            [activeEra]: flattened
+          }));
         } else {
           setProducts([]);
           setErrorProducts('No data for this era');
+          // Cache empty array to avoid re-fetching
+          setProductsCache(prev => ({
+            ...prev,
+            [activeEra]: []
+          }));
         }
       } catch (err) {
         console.error('Error fetching products:', err);
         setErrorProducts('Unable to load product list');
+        // Cache empty array on error to avoid re-fetching
+        setProductsCache(prev => ({
+          ...prev,
+          [activeEra]: []
+        }));
       }
     };
     withProductsLoading(fetchProducts);
-  }, [activeEra, categories, locale]);
+  }, [activeEra, flattenedCategories, locale]);
 
   const handleEraClick = (eraSlug: string) => {
     if (eraSlug !== activeEra) {
@@ -296,6 +388,9 @@ const Browse: React.FC = () => {
                     onClick={() => handleEraClick(era.slug)}
                   >
                     {era.name}
+                    {preloadingProgress[era.slug] && (
+                      <span className="ml-1 text-xs text-[#7B6142]">●</span>
+                    )}
                   </button>
                   {idx < eraTabs.length - 1 && (
                     <span className="text-[#D6C7A1] text-lg mx-2 flex items-center select-none mb-[5px] pb-3">
@@ -328,6 +423,9 @@ const Browse: React.FC = () => {
                       onClick={() => handleEraClick(era.slug)}
                     >
                       {era.name}
+                      {preloadingProgress[era.slug] && (
+                        <span className="ml-1 text-xs text-[#7B6142]">●</span>
+                      )}
                     </button>
                     {idx < eraTabs.length - 1 && (
                       <span className="text-[#D6C7A1] text-lg mx-2 flex items-center select-none mb-[5px] pb-3">
