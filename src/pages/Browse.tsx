@@ -30,8 +30,7 @@ const Browse: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [activeEra, setActiveEra] = useState<string>('');
   
-  // Cache for products by era to avoid re-fetching
-  const [productsCache, setProductsCache] = useState<Record<string, any[]>>({});
+  // Products state - no cache, always fetch fresh data
   const [products, setProducts] = useState<any[]>([]);
   const { loading: productsLoading, withLoading: withProductsLoading } = useLoading(false);
   const [errorProducts, setErrorProducts] = useState<string | null>(null);
@@ -99,7 +98,7 @@ const Browse: React.FC = () => {
     }
   }, [categories]);
 
-  // Preload products for all eras when categories are available
+  // Preload products for all eras when categories are available (no cache, just preload)
   useEffect(() => {
     if (sortedCategories.length > 0) {
       // Preload products for all eras in background
@@ -107,31 +106,17 @@ const Browse: React.FC = () => {
         const eraSlugs = sortedCategories.map(cat => cat.slug);
         
         for (const eraSlug of eraSlugs) {
-          // Skip if already cached
-          if (productsCache[eraSlug]) continue;
-          
           // Mark as preloading
           setPreloadingProgress(prev => ({ ...prev, [eraSlug]: true }));
           
           const category = sortedCategories.find((cat) => cat.slug === eraSlug);
           if (category) {
             try {
+              // Always fetch fresh data, no cache
               const productsData = await getProductsByCategory(category.id, locale);
-              const flattened = productsData && productsData.length > 0 
-                ? productsData.map((prod) => flattenProduct(prod))
-                : [];
-              
-              setProductsCache(prev => ({
-                ...prev,
-                [eraSlug]: flattened
-              }));
+              // Preload successful, but don't cache - just mark as loaded
             } catch (err) {
               console.warn(`Failed to preload products for ${eraSlug}:`, err);
-              // Cache empty array on error
-              setProductsCache(prev => ({
-                ...prev,
-                [eraSlug]: []
-              }));
             }
           }
           
@@ -163,16 +148,9 @@ const Browse: React.FC = () => {
     withCategoriesLoading(fetchCategories);
   }, [locale]);
 
-  // Fetch products by activeEra with caching
+  // Fetch products by activeEra (no cache, always fresh data)
   useEffect(() => {
     if (!activeEra || sortedCategories.length === 0) return;
-    
-    // Check if products are already cached for this era
-    if (productsCache[activeEra]) {
-      setProducts(productsCache[activeEra]);
-      setErrorProducts(null);
-      return;
-    }
     
     // Find category by slug
     const category = sortedCategories.find((cat) => cat.slug === activeEra);
@@ -185,32 +163,18 @@ const Browse: React.FC = () => {
     const fetchProducts = async () => {
       try {
         setErrorProducts(null);
+        // Always fetch fresh data from API
         const productsData = await getProductsByCategory(category.id, locale);
         if (productsData && productsData.length > 0) {
           const flattened = productsData.map((prod) => flattenProduct(prod));
           setProducts(flattened);
-          // Cache the products for this era
-          setProductsCache(prev => ({
-            ...prev,
-            [activeEra]: flattened
-          }));
         } else {
           setProducts([]);
           setErrorProducts('No data for this era');
-          // Cache empty array to avoid re-fetching
-          setProductsCache(prev => ({
-            ...prev,
-            [activeEra]: []
-          }));
         }
       } catch (err) {
         console.error('Error fetching products:', err);
         setErrorProducts('Unable to load product list');
-        // Cache empty array on error to avoid re-fetching
-        setProductsCache(prev => ({
-          ...prev,
-          [activeEra]: []
-        }));
       }
     };
     withProductsLoading(fetchProducts);
@@ -377,9 +341,9 @@ const Browse: React.FC = () => {
                     onClick={() => handleEraClick(era.slug)}
                   >
                     {era.name}
-                    {preloadingProgress[era.slug] && (
+                    {/* {preloadingProgress[era.slug] && ( // Removed preloading state
                       <span className="ml-1 text-xs text-[#7B6142]">●</span>
-                    )}
+                    )} */}
                   </button>
                   {idx < eraTabs.length - 1 && (
                     <span className="text-[#D6C7A1] text-lg mx-2 flex items-center select-none mb-[5px] pb-3">
@@ -412,9 +376,9 @@ const Browse: React.FC = () => {
                       onClick={() => handleEraClick(era.slug)}
                     >
                       {era.name}
-                      {preloadingProgress[era.slug] && (
+                      {/* {preloadingProgress[era.slug] && ( // Removed preloading state
                         <span className="ml-1 text-xs text-[#7B6142]">●</span>
-                      )}
+                      )} */}
                     </button>
                     {idx < eraTabs.length - 1 && (
                       <span className="text-[#D6C7A1] text-lg mx-2 flex items-center select-none mb-[5px] pb-3">
