@@ -1,26 +1,28 @@
 // Import React hooks
-import { useEffect, useState } from 'react';
+import { useEffect, useState, lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation, useParams } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Newsletter from './components/Newsletter';
 import Loading from './components/Loading';
 import ScrollToTop from './components/ScrollToTop';
-import Home from './pages/Home';
-import Browse from './pages/Browse';
-import Articles from './pages/Articles.tsx';
-import AboutUs from './pages/AboutUs';
-import TermsAndCondition from './pages/TermsAndCondition';
-import ArticleDetail from './pages/ArticleDetail';
-import AcquireAnItem from './pages/AcquireAnItem.tsx';
-import ProductDetail from './pages/ProductDetail';
-import AppraiseAnItem from './pages/AppraiseAnItem.tsx';
+import PageTransition from './components/PageTransition';
 import { useLoading } from './hooks/useLoading';
 import { LanguageProvider, useLanguage } from './contexts/LanguageContext';
 import { getArticles, Article } from './api/articles';
 
-// import { API_URL } from './utils/constants.ts';
+// Lazy load all pages
+const Home = lazy(() => import('./pages/Home'));
+const Browse = lazy(() => import('./pages/Browse'));
+const Articles = lazy(() => import('./pages/Articles'));
+const AboutUs = lazy(() => import('./pages/AboutUs'));
+const TermsAndCondition = lazy(() => import('./pages/TermsAndCondition'));
+const ArticleDetail = lazy(() => import('./pages/ArticleDetail'));
+const AcquireAnItem = lazy(() => import('./pages/AcquireAnItem'));
+const ProductDetail = lazy(() => import('./pages/ProductDetail'));
+const AppraiseAnItem = lazy(() => import('./pages/AppraiseAnItem'));
 
+// import { API_URL } from './utils/constants.ts';
 import { API_URL } from './utils/constants.ts';
 
 // Create a wrapper component to access location
@@ -28,10 +30,10 @@ function AppContent() {
   const location = useLocation();
   const [articles, setArticles] = useState<Article[]>([]);
   const { slug } = useParams();
-  const { loading, withLoading } = useLoading(true);
+  const { loading, withLoading } = useLoading(false);
   const { locale } = useLanguage();
 
-  // fetch articles
+  // Fetch articles data
   const getArticlesData = async () => {
     try {
       const response = await getArticles(1, 5, locale);
@@ -53,7 +55,12 @@ function AppContent() {
   };
 
   useEffect(() => {
-    withLoading(getArticlesData);
+    // Only show loading for initial load, not for locale changes
+    if (articles.length === 0) {
+      withLoading(getArticlesData);
+    } else {
+      getArticlesData();
+    }
   }, [locale]); // Re-fetch when locale changes
 
   // Array of paths where Newsletter should be hidden
@@ -61,7 +68,7 @@ function AppContent() {
   const shouldShowNewsletter = !hideNewsletterPaths.includes(location.pathname);
 
   if (loading) {
-    return <Loading fullScreen={true} text="Loading..." />;
+    return <Loading fullScreen={true} text="Initializing..." size="large" />;
   }
 
   return (
@@ -69,17 +76,21 @@ function AppContent() {
       <ScrollToTop />
       <Header />
       <main className="flex-grow">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/browse" element={<Browse />} />
-          <Route path="/articles" element={<Articles />} />
-          <Route path="/article/:slug" element={<ArticleDetail />} />
-          <Route path="/products/:slug" element={<ProductDetail />} />
-          <Route path="/about-us" element={<AboutUs />} />
-          <Route path="/terms-and-condition" element={<TermsAndCondition />} />
-          <Route path="/acquire-an-item" element={<AcquireAnItem />} />
-          <Route path="/appraise-an-item" element={<AppraiseAnItem />} />
-        </Routes>
+        <PageTransition>
+          <Suspense fallback={<Loading fullScreen={true} text="Loading page..." size="large" />}>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/browse" element={<Browse />} />
+              <Route path="/articles" element={<Articles />} />
+              <Route path="/article/:slug" element={<ArticleDetail />} />
+              <Route path="/products/:slug" element={<ProductDetail />} />
+              <Route path="/about-us" element={<AboutUs />} />
+              <Route path="/terms-and-condition" element={<TermsAndCondition />} />
+              <Route path="/acquire-an-item" element={<AcquireAnItem />} />
+              <Route path="/appraise-an-item" element={<AppraiseAnItem />} />
+            </Routes>
+          </Suspense>
+        </PageTransition>
       </main>
       {shouldShowNewsletter && <Newsletter />}
       <Footer />

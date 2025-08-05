@@ -108,9 +108,9 @@ export default function Articles() {
         </div>
       </div>
       {/* Featured Articles Section */}
-      <div className="md:px-28 px-4 w-full mx-auto flex flex-col gap-12 md:mt-24">
+      <div className="md:px-28  px-4 w-full mx-auto flex flex-col gap-12 md:mt-24">
         {/* Featured Articles */}
-        <div className="flex flex-col lg:flex-row lg:gap-8 gap-4 mx-auto w-full">
+        <div className="flex flex-col lg:flex-row gap-4 md:gap-6 lg:gap-8 mx-auto w-full transition-all duration-300">
           {featuredArticles.map((article, idx) => {
             const imageUrl = getCoverUrl(article.cover);
 
@@ -119,7 +119,7 @@ export default function Articles() {
                 {/* Mobile Layout */}
                 <div className="block lg:hidden">
                   <div
-                    className="relative h-[343px] overflow-hidden w-full"
+                    className="relative h-[343px] overflow-hidden w-full transition-all duration-300"
                     style={{ backgroundColor: '#E6DDC6' }}
                   >
                     <img
@@ -161,7 +161,7 @@ export default function Articles() {
 
                 {/* Desktop Layout */}
                 <div
-                  className={`hidden lg:block relative h-[480px] overflow-hidden group flex-shrink-0 ${idx === 0 ? 'lg:w-[800px]' : 'lg:w-[384px]'}`}
+                  className={`hidden lg:block relative h-[480px] overflow-hidden group flex-shrink-0 transition-all duration-300 ${idx === 0 ? 'lg:w-[800px]' : 'lg:w-[384px]'}`}
                   style={{ backgroundColor: '#E6DDC6' }}
                 >
                   <img
@@ -204,7 +204,7 @@ export default function Articles() {
           })}
         </div>
         {/* Latest Articles */}
-        <div className="flex flex-col md:flex-row gap-8  md:mt-12 ">
+        <div className="flex flex-col md:flex-row gap-8 md:mt-12 transition-all duration-300">
           <div className="w-full md:w-[800px]">
             <h3 className="hidden md:block text-[40px] leading-[48px]font-serif text-[#61422D] mb-8 text-left">
               Latest Articles
