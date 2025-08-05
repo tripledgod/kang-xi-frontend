@@ -47,33 +47,23 @@ const Browse: React.FC = () => {
 
   // Scroll to top when URL changes
 
-  // Standard era slug list, only display these 5 eras in this order
-  const eraOrder = ['tang', 'song', 'yuan', 'ming', 'qing'];
+  // Display all eras in ascending order from API
+  const sortedCategories = flattenedCategories
+    .sort((a, b) => a.order - b.order); // Sort by order field from API
 
-  // Filter and sort flattenedCategories in standard order
-  const filteredSortedCategories = flattenedCategories
-    .filter((cat) => eraOrder.includes(cat.slug))
-    .sort((a, b) => eraOrder.indexOf(a.slug) - eraOrder.indexOf(b.slug));
-
-  // Convert categories to eras (only take 5 standard eras, correct order)
-  const eras: Era[] = filteredSortedCategories.map((category) => ({
+  // Convert categories to eras (all eras from API, sorted by order)
+  const eras: Era[] = sortedCategories.map((category) => ({
     key: category.slug,
     label: category.name,
   }));
 
   
-  const eraTabs = filteredSortedCategories.length > 0 
-    ? filteredSortedCategories.map((category) => ({
+  const eraTabs = sortedCategories.length > 0 
+    ? sortedCategories.map((category) => ({
         slug: category.slug,
         name: category.name.toUpperCase(),
       }))
-    : [
-        { slug: 'tang', name: 'TANG' },
-        { slug: 'song', name: 'SONG' },
-        { slug: 'yuan', name: 'YUAN' },
-        { slug: 'ming', name: 'MING' },
-        { slug: 'qing', name: 'QING' },
-      ]; // Fallback while loading
+    : []; // No fallback, wait for API data
   
 
 
@@ -84,9 +74,8 @@ const Browse: React.FC = () => {
       setActiveEra(eraFromUrl);
     } else if (!activeEra && eraTabs.length > 0) {
       setActiveEra(eraTabs[0].slug);
-    } else if (!activeEra) {
-      setActiveEra('tang'); // Fallback default
     }
+    // No fallback default - wait for API data
   }, [activeEra, eraTabs, searchParams]);
 
   // Handle scroll to show/hide sticky header
@@ -112,10 +101,10 @@ const Browse: React.FC = () => {
 
   // Preload products for all eras when categories are available
   useEffect(() => {
-    if (flattenedCategories.length > 0) {
+    if (sortedCategories.length > 0) {
       // Preload products for all eras in background
       const preloadAllProducts = async () => {
-        const eraSlugs = ['tang', 'song', 'yuan', 'ming', 'qing'];
+        const eraSlugs = sortedCategories.map(cat => cat.slug);
         
         for (const eraSlug of eraSlugs) {
           // Skip if already cached
@@ -124,7 +113,7 @@ const Browse: React.FC = () => {
           // Mark as preloading
           setPreloadingProgress(prev => ({ ...prev, [eraSlug]: true }));
           
-          const category = flattenedCategories.find((cat) => cat.slug === eraSlug);
+          const category = sortedCategories.find((cat) => cat.slug === eraSlug);
           if (category) {
             try {
               const productsData = await getProductsByCategory(category.id, locale);
@@ -154,7 +143,7 @@ const Browse: React.FC = () => {
       // Start preloading in background (don't await)
       preloadAllProducts();
     }
-  }, [flattenedCategories, locale]);
+  }, [sortedCategories, locale]);
 
   // Fetch categories from API to get id for each era
   useEffect(() => {
@@ -176,7 +165,7 @@ const Browse: React.FC = () => {
 
   // Fetch products by activeEra with caching
   useEffect(() => {
-    if (!activeEra || flattenedCategories.length === 0) return;
+    if (!activeEra || sortedCategories.length === 0) return;
     
     // Check if products are already cached for this era
     if (productsCache[activeEra]) {
@@ -186,7 +175,7 @@ const Browse: React.FC = () => {
     }
     
     // Find category by slug
-    const category = flattenedCategories.find((cat) => cat.slug === activeEra);
+    const category = sortedCategories.find((cat) => cat.slug === activeEra);
     if (!category) {
       setProducts([]);
       setErrorProducts('No data for this era');
@@ -225,7 +214,7 @@ const Browse: React.FC = () => {
       }
     };
     withProductsLoading(fetchProducts);
-  }, [activeEra, flattenedCategories, locale]);
+  }, [activeEra, sortedCategories, locale]);
 
   const handleEraClick = (eraSlug: string) => {
     if (eraSlug !== activeEra) {
