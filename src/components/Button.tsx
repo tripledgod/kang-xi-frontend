@@ -11,6 +11,7 @@ interface ButtonProps {
   type?: 'button' | 'submit' | 'reset';
   variant?: 'filled' | 'outline';
   disabled?: boolean;
+  forceMobile?: boolean; // add this prop
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -20,6 +21,7 @@ const Button: React.FC<ButtonProps> = ({
   type = 'button',
   variant = 'filled',
   disabled = false,
+  forceMobile = false, // add default value
 }) => {
   const isOutline = variant === 'outline';
   const btnRef = useRef<HTMLButtonElement>(null);
@@ -27,11 +29,15 @@ const Button: React.FC<ButtonProps> = ({
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
+    if (forceMobile) {
+      setIsMobile(true);
+      return;
+    }
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
     checkMobile();
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
-  }, []);
+  }, [forceMobile]);
 
   useEffect(() => {
     if (btnRef.current && !isMobile) {
@@ -58,22 +64,22 @@ const Button: React.FC<ButtonProps> = ({
       type={type}
       onClick={onClick}
       disabled={disabled}
-      className={`w-full  md:w-[222px] h-[48px] flex items-center justify-center text-base font-semibold shadow-none transition-all px-6 ${className} ${
+      className={`group relative w-full md:w-[222px] h-[48px] flex items-center justify-center text-base shadow-none transition-all px-6 overflow-hidden before:absolute before:inset-0 before:bg-[#6B5341] before:opacity-0 before:transition-opacity before:duration-200 hover:before:opacity-100 btn-clickable ${className} ${
         disabled ? 'opacity-50 cursor-not-allowed' : ''
       }`}
       style={{
-        backgroundImage: `url(${backgroundImage})`,
-        backgroundSize: '100% 100%',
-        backgroundRepeat: 'no-repeat',
-        backgroundPosition: 'center',
         color: isOutline ? '#7B6142' : '#fff',
         border: 'none',
         padding: 0,
         minWidth: 0,
+        backgroundImage: `url(${backgroundImage})`,
+        backgroundSize: '100% 100%',
+        backgroundRepeat: 'no-repeat',
+        backgroundPosition: 'center',
       }}
     >
       <span
-        className="w-full h-full flex items-center justify-center font-semibold text-base md:text-lg leading-[20px] md:leading-[24px]"
+        className="relative  z-10 w-full h-full flex items-center justify-center text-base md:text-lg leading-[20px] md:leading-[24px]"
         style={{
           color: isOutline ? '#7B6142' : '#fff',
           fontWeight: 600,

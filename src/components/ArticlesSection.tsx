@@ -46,11 +46,11 @@ export default function ArticlesSection() {
     <section className="w-full bg-[#F7F5EA] px-4 py-16">
       <div className="max-w-7xl mx-auto flex flex-col items-center">
         {isMobile ? (
-          <h4 className="text-[32px] leading-[40px]  font-semibold text-[#61422D] mb-2 text-center">
+          <h4 className="text-[32px] leading-[40px]   text-[#61422D] mb-2 text-center">
             Our Articles
           </h4>
         ) : (
-          <h2 className="text-[48px] leading-[58px]  font-semibold text-[#61422D] mb-2 text-center">
+          <h2 className="text-[48px] leading-[58px]   text-[#61422D] mb-2 text-center">
             Our Articles
           </h2>
         )}
@@ -83,7 +83,6 @@ export default function ArticlesSection() {
                   key={article.id}
                   className="flex flex-col cursor-pointer"
                   onClick={() => {
-                    window.scrollTo({ top: 0, behavior: 'auto' });
                     handleArticleClick(article.slug);
                   }}
                 >
@@ -130,7 +129,7 @@ export default function ArticlesSection() {
                     {article.description}
                   </div>
                   <div
-                    className="text-[14px] font-semibold leading-[20px] line-clamp-2 uppercase"
+                    className="text-[14px]  leading-[20px] line-clamp-2 uppercase font-semibold"
                     style={{ color: '#585550' }}
                   >
                     {new Date(article.publishedAt)
@@ -151,7 +150,6 @@ export default function ArticlesSection() {
             text={t('VIEW_ALL_ARTICLES')}
             variant="outline"
             onClick={() => {
-              window.scrollTo({ top: 0, behavior: 'auto' });
               navigate('/articles');
             }}
           />

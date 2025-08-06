@@ -75,7 +75,7 @@ export default function Newsletter() {
           <div className="w-full md:w-[420px]">
             {isMobile ? (
               <h5
-                className="mb-4 font-semibold"
+                className="mb-4 "
                 style={{
                   fontSize: 24,
                   color: COLORS.secondary900,
@@ -88,7 +88,7 @@ export default function Newsletter() {
               </h5>
             ) : (
               <h4
-                className="mb-4 font-semibold"
+                className="mb-4 "
                 style={{
                   fontSize: 32,
                   color: COLORS.secondary900,

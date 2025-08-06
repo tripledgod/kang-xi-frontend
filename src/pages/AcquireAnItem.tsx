@@ -151,12 +151,12 @@ export default function AcquireAnItem() {
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row gap-10 items-center">
           {/* Left */}
           <div className="flex-1 text-white mb-8 md:mb-0">
-            <h1 className="hidden md:block text-[60px] leading-[72px] font-serif font-semibold mb-6">
+            <h1 className="hidden md:block text-[60px] leading-[72px] font-serif mb-6">
               Reserve a <br />Timeless
               <br />
               Treasure
             </h1>
-            <h3 className="block md:hidden text-[40px] leading-[48px] font-serif font-semibold mb-4">
+            <h3 className="block md:hidden text-[40px] leading-[48px] font-serif mb-4">
               Reserve a<br /> Timeless
               <br />
               Treasure
@@ -170,7 +170,7 @@ export default function AcquireAnItem() {
               type="submit"
               onClick={handleScrollToForm}
               
-              className="flex h-[48px] w-[189px] items-center justify-center text-[14px] leading-[20px] font-semibold shadow-none transition-all px-6"
+              className="flex h-[48px]   font-semibold w-[189px] items-center justify-center text-[14px] leading-[20px] shadow-none transition-all px-6"
               style={{
                 backgroundImage: `url(${bgButtonMobile})`,
                 backgroundSize: '100% 100%',
@@ -207,10 +207,10 @@ export default function AcquireAnItem() {
           </div>
           {/* Right: Steps */}
           <div className="flex-1 order-2">
-            <h3 className="hidden md:block  text-[40px] leading-[48px] font-serif font-semibold text-[#61422D] mb-6 text-left">
+            <h3 className="hidden md:block  text-[40px] leading-[48px] font-serif text-[#61422D] mb-6 text-left">
               What Happens Next?
             </h3>
-            <h4 className="block md:hidden text-[32px] leading-[40px] font-serif font-semibold text-[#61422D] mb-6 text-left">
+            <h4 className="block md:hidden text-[32px] leading-[40px] font-serif text-[#61422D] mb-6 text-left">
               What Happens Next?
             </h4>
             <div className="flex flex-col gap-10">
@@ -223,7 +223,7 @@ export default function AcquireAnItem() {
                     {step.icon}
                   </div>
                   <div>
-                    <h5 className="text-[20px] md:text-[24px] leading-[28px] md:leading-[32px] font-semibold text-[#61422D] mb-1">
+                    <h5 className="text-[20px] md:text-[24px] leading-[28px] md:leading-[32px] text-[#61422D] mb-1">
                       {step.title}
                     </h5>
                     <div className="text-base text-[#6D6A66]">{step.desc}</div>
@@ -248,10 +248,10 @@ export default function AcquireAnItem() {
           </div>
           {/* Left: Text */}
           <div className="flex-1 order-2">
-            <h3 className="hidden md:block text-[40px] leading-[48px] font-serif font-semibold text-[#61422D] mb-4">
+            <h3 className="hidden md:block text-[40px] leading-[48px] font-serif text-[#61422D] mb-4">
               Express Your Interest in a Piece of History
             </h3>
-            <h4 className="block md:hidden text-[32px] leading-[40px] font-serif font-semibold text-[#61422D] mb-4">
+            <h4 className="block md:hidden text-[32px] leading-[40px] font-serif text-[#61422D] mb-4">
               Express Your Interest in a Piece of History
             </h4>
             <p className="text-[18px] leading-[26px] text-[#6D6A66] mb-5">
@@ -273,10 +273,10 @@ export default function AcquireAnItem() {
       {/* Form Section */}
       <div ref={formRef} className="w-full bg-[#E6DDC6] py-16 px-4">
         <div className="max-w-xl mx-auto">
-          <h3 className="hidden md:block text-[40px] leading-[48px] font-serif font-semibold text-[#61422D] mb-2 text-center">
+          <h3 className="hidden md:block text-[40px] leading-[48px] font-serif text-[#61422D] mb-2 text-center">
             Secure Your Piece of History
           </h3>
-          <h4 className="block md:hidden text-[32px]  leading-[40px] font-serif font-semibold text-[#61422D] mb-2 text-center">
+          <h4 className="block md:hidden text-[32px]  leading-[40px] font-serif text-[#61422D] mb-2 text-center">
             Secure Your Piece of History
           </h4>
           <div className="text-[20px] leading-[28px] text-[#585550] mb-8 text-center">

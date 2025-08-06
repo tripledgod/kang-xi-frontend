@@ -206,10 +206,10 @@ export default function AppraiseAnItem() {
         <div className="absolute inset-0 bg-black opacity-40 z-10"></div>
         {/* Overlay content: Title & Description */}
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center md:px-4 px-6 pointer-events-none z-10">
-          <h3 className="block md:hidden text-white font-serif font-semibold text-[40px] leading-[48px] mb-5 pointer-events-auto">
+          <h3 className="block md:hidden text-white font-serif text-[40px] leading-[48px] mb-5 pointer-events-auto">
             Verify the <br /> Legacy of Your <br /> Antique
           </h3>
-          <h1 className="hidden md:block text-white font-serif font-semibold text-[60px] leading-[72px] drop-shadow-lg mb-5 pointer-events-auto">
+          <h1 className="hidden md:block text-white font-serif text-[60px] leading-[72px] drop-shadow-lg mb-5 pointer-events-auto">
             Verify the Legacy of
             <br />
             Your Antique
@@ -222,7 +222,7 @@ export default function AppraiseAnItem() {
               type="submit"
               onClick={handleScrollToForm}
               
-              className="flex h-[48px] w-[189px] items-center justify-center text-[14px] leading-[20px] font-semibold shadow-none transition-all px-6"
+              className="flex h-[48px] font-semibold w-[189px] items-center justify-center text-[14px] leading-[20px] shadow-none transition-all px-6"
               style={{
                 backgroundImage: `url(${bgButtonMobile})`,
                 backgroundSize: '100% 100%',
@@ -241,15 +241,15 @@ export default function AppraiseAnItem() {
       </div>
       {/* Our Services Section */}
       <div className="w-full bg-[#23211C] py-16 flex flex-col items-center justify-center text-center px-4">
-        <div className="text-[#F7F3E8] text-[14px] leading-[20px] mb-2 tracking-widest font-semibold">
+        <div className="text-[#F7F3E8] text-[14px] leading-[20px] mb-2 tracking-widest  font-semibold">
           OUR SERVICES
         </div>
-        <h4 className="hidden md:block text-[32px]  leading-[40px] font-serif font-semibold text-white mb-6 max-w-2xl mx-auto">
+        <h4 className="hidden md:block text-[32px]  leading-[40px] font-serif text-white mb-6 max-w-2xl mx-auto">
           With a network of specialists in Chinese antiquities, we provide a meticulous evaluation
           of your piece—examining craftsmanship, materials, historical context, and provenance to
           determine its authenticity and significance.
         </h4>
-        <h5 className="block md:hidden text-[24px]  leading-[32px]  font-serif font-semibold text-white mb-6 max-w-2xl mx-auto">
+        <h5 className="block md:hidden text-[24px]  leading-[32px]  font-serif text-white mb-6 max-w-2xl mx-auto">
           With a network of specialists in Chinese antiquities, we provide a meticulous evaluation
           of your piece—examining craftsmanship, materials, historical context, and provenance to
           determine its authenticity and significance.
@@ -260,17 +260,17 @@ export default function AppraiseAnItem() {
       </div>
       {/* Why Authenticate Section */}
       <div className="w-full bg-[#F7F5EA] py-12 px-4 md:py-28">
-        <h3 className="hidden md:block text-[40px] leading-[48px] font-serif font-semibold text-[#61422D] mb-10 text-left max-w-7xl mx-auto">
+        <h3 className="hidden md:block text-[40px] leading-[48px] font-serif text-[#61422D] mb-10 text-left max-w-7xl mx-auto">
           Why Authenticate with Kangxis?
         </h3>
-        <h4 className="block md:hidden text-[32px] leading-[40px] font-serif font-semibold text-[#61422D] mb-10 text-left max-w-7xl mx-auto">
+        <h4 className="block md:hidden text-[32px] leading-[40px] font-serif text-[#61422D] mb-10 text-left max-w-7xl mx-auto">
           Why Authenticate with Kangxis?
         </h4>
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-10 mb-12 md:mb-28">
           {whyItems.map((item, idx) => (
             <div key={idx} className="flex flex-col items-left text-left">
               {item.icon}
-              <h5 className="text-[24px] leading-[32px] font-semibold text-[#61422D] mt-4 mb-2">
+              <h5 className="text-[24px] leading-[32px] text-[#61422D] mt-4 mb-2">
                 {item.title}
               </h5>
               <div className="text-base text-[#6D6A66]">{item.desc}</div>
@@ -288,10 +288,10 @@ export default function AppraiseAnItem() {
       {/* Submit Form Section */}
       <div ref={formRef} className="w-full bg-[#E6DDC6] py-16 px-4">
         <div className="max-w-xl mx-auto">
-          <h3 className="hidden md:block text-[40px] leading-[48px]  font-serif font-semibold text-[#61422D] mb-2 text-center">
+          <h3 className="hidden md:block text-[40px] leading-[48px]  font-serif text-[#61422D] mb-2 text-center">
             Submit Your Antique for Authentication
           </h3>
-          <h4 className="block md:hidden text-[32px] leading-[40px] font-serif font-semibold text-[#61422D] mb-2 text-center">
+          <h4 className="block md:hidden text-[32px] leading-[40px] font-serif text-[#61422D] mb-2 text-center">
             Submit Your Antique for Authentication
           </h4>
           <div className="text-[20px] leading-[28px] text-[#585550] mb-8 text-center">
@@ -429,7 +429,7 @@ export default function AppraiseAnItem() {
                 }}
               >
                 <img src={icUpload} alt="Upload" className="w-[19px] h-[23px] mb-2" />
-                <div className="font-semibold text-[#2E2A24] text-[14px] leading-[20px] text-center">
+                <div className="text-[#2E2A24] text-[14px] leading-[20px] text-center">
                   Drag &amp; Drop or{' '}
                   <span
                     className="text-[#BE9051] underline cursor-pointer"

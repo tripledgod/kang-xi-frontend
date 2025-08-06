@@ -141,7 +141,7 @@ export default function CeramicsByEra() {
           )}
           <div className="hidden md:flex items-center gap-4 self-end md:self-auto">
             <button
-              className="w-12 h-12 flex items-center justify-center text-base font-medium shadow-none transition-all rounded-[6px] border border-[#C7B08A] bg-[#F7F3E8] hover:border-[#86684A]"
+              className="w-12 h-12 flex items-center justify-center text-base font-medium shadow-none transition-all rounded-[6px] border border-[#C7B08A] bg-[#F7F3E8] hover:border-[#86684A] hover:bg-[#E6DDC6] hover:scale-105 btn-clickable"
               onClick={() => setIndex((i) => Math.max(0, i - 1))}
               disabled={!canGoLeft}
               style={{
@@ -163,7 +163,7 @@ export default function CeramicsByEra() {
               />
             </button>
             <button
-              className="w-12 h-12 flex items-center justify-center text-base font-medium shadow-none transition-all rounded-[6px] border border-[#C7B08A] bg-[#F7F3E8] hover:border-[#86684A]"
+              className="w-12 h-12 flex items-center justify-center text-base font-medium shadow-none transition-all rounded-[6px] border border-[#C7B08A] bg-[#F7F3E8] hover:border-[#86684A] hover:bg-[#E6DDC6] hover:scale-105 btn-clickable"
               onClick={() => setIndex((i) => Math.min(eras.length - DESKTOP_VISIBLE, i + 1))}
               disabled={!canGoRight}
               style={{
@@ -185,9 +185,8 @@ export default function CeramicsByEra() {
               />
             </button>
             <button
-              className="ml-4 w-[218px] h-[48px] flex items-center justify-center text-base font-medium shadow-none transition-all px-6"
+              className="ml-4 w-[218px] h-[48px] flex items-center justify-center text-base font-medium shadow-none transition-all px-6 btn-clickable"
               onClick={() => {
-                window.scrollTo({ top: 0, behavior: 'auto' });
                 navigate('/browse');
               }}
               style={{
@@ -227,7 +226,6 @@ export default function CeramicsByEra() {
                 key={era.name}
                 className="flex flex-col bg-transparent cursor-pointer"
                 onClick={() => {
-                  window.scrollTo({ top: 10, behavior: 'auto' });
                   navigate(`/browse?era=${era.slug}`);
                 }}
               >
@@ -254,7 +252,7 @@ export default function CeramicsByEra() {
                 >
                   {era.name}
                 </h4>
-                <div className="text-base font-semibold border-t border-[#C7C7B9] pt-4 text-[#2E2A24] mb-1">
+                <div className="text-base  border-t border-[#C7C7B9] pt-4 text-[#2E2A24] mb-1">
                   {era.years}
                 </div>
                 <div
@@ -298,7 +296,6 @@ export default function CeramicsByEra() {
                 className="flex flex-col flex-shrink-0 bg-transparent cursor-pointer"
                 style={{ width: CARD_WIDTH, minWidth: CARD_WIDTH }}
                 onClick={() => {
-                  window.scrollTo({ top: 500, behavior: 'auto' });
                   navigate(`/browse?era=${era.slug}`);
                 }}
               >
@@ -314,7 +311,7 @@ export default function CeramicsByEra() {
                   )}
                 </div>
                 <h4
-                  className="text-2xl font-serif text-[#61422D] mb-6 font-semibold"
+                  className="text-2xl font-serif text-[#61422D] mb-6 "
                   style={{
                     fontWeight: 600,
                     fontSize: 32,
@@ -324,7 +321,7 @@ export default function CeramicsByEra() {
                 >
                   {era.name}
                 </h4>
-                <div className="text-base font-semibold border-t border-[#C7C7B9] pt-4 text-[#2E2A24] mb-1">
+                <div className="text-base  border-t border-[#C7C7B9] pt-4 text-[#2E2A24] mb-1  font-semibold">
                   {era.years}
                 </div>
                 <div

@@ -1,0 +1,76 @@
+/* Click states for all interactive elements */
+
+/* Global button click states */
+button:active {
+  transform: scale(0.98);
+  transition: transform 0.1s ease-in-out;
+}
+
+/* Global link click states */
+a:active {
+  opacity: 0.7;
+  transition: opacity 0.1s ease-in-out;
+}
+
+/* Custom clickable classes */
+.btn-clickable {
+  transition: all 0.1s ease-in-out;
+  cursor: pointer;
+}
+
+.btn-clickable:active {
+  transform: scale(0.95);
+  opacity: 0.8;
+}
+
+.link-clickable {
+  transition: opacity 0.1s ease-in-out;
+  cursor: pointer;
+}
+
+.link-clickable:active {
+  opacity: 0.7;
+}
+
+/* Focus states for accessibility */
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid #61422D;
+  outline-offset: 2px;
+}
+
+/* Disabled state */
+button:disabled:active {
+  transform: none;
+}
+
+/* Image click states */
+img[onClick]:active {
+  opacity: 0.8;
+  transition: opacity 0.1s ease-in-out;
+}
+
+/* Div click states */
+div[onClick]:active {
+  opacity: 0.8;
+  transition: opacity 0.1s ease-in-out;
+}
+
+/* Span click states */
+span[onClick]:active {
+  opacity: 0.7;
+  transition: opacity 0.1s ease-in-out;
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+  /* On touch devices, use hover states for better feedback */
+  .btn-clickable:hover {
+    transform: scale(0.98);
+    opacity: 0.9;
+  }
+  
+  .link-clickable:hover {
+    opacity: 0.8;
+  }
+} 

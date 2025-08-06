@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import Loading from '../components/Loading';
+import Header from '../components/Header';
 import { useLoading } from '../hooks/useLoading';
 import { useLanguage } from '../contexts/LanguageContext';
 import heroImg from '../assets/ceramic_cover.png';
@@ -28,47 +29,80 @@ const Browse: React.FC = () => {
   const { loading: categoriesLoading, withLoading: withCategoriesLoading } = useLoading(true);
   const [error, setError] = useState<string | null>(null);
   const [activeEra, setActiveEra] = useState<string>('');
+  
+  // Products state - no cache, always fetch fresh data
   const [products, setProducts] = useState<any[]>([]);
   const { loading: productsLoading, withLoading: withProductsLoading } = useLoading(false);
   const [errorProducts, setErrorProducts] = useState<string | null>(null);
+  const [preloadingProgress, setPreloadingProgress] = useState<Record<string, boolean>>({});
+  const [showStickyHeader, setShowStickyHeader] = useState(false);
   const navigate = useNavigate();
   const { locale } = useLanguage();
   const [searchParams] = useSearchParams();
   const eraTabRef = useRef<HTMLDivElement>(null);
   const eraTabWrapperRef = useRef<HTMLDivElement>(null);
   const eraButtonRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const heroRef = useRef<HTMLDivElement>(null);
 
-  // Scroll to top when URL changes
+  // Memoize sorted categories to prevent unnecessary recalculations
+  const sortedCategories = useMemo(() => {
+    return flattenedCategories.sort((a, b) => a.order - b.order);
+  }, [flattenedCategories]);
 
-  // Standard era slug list, only display these 5 eras in this order
-  const eraOrder = ['tang', 'song', 'yuan', 'ming', 'quing'];
+  // Memoize eras to prevent unnecessary recalculations
+  const eras: Era[] = useMemo(() => {
+    return sortedCategories.map((category) => ({
+      key: category.slug,
+      label: category.name,
+    }));
+  }, [sortedCategories]);
 
-  // Filter and sort flattenedCategories in standard order
-  const filteredSortedCategories = flattenedCategories
-    .filter((cat) => eraOrder.includes(cat.slug))
-    .sort((a, b) => eraOrder.indexOf(a.slug) - eraOrder.indexOf(b.slug));
+  // Memoize era tabs to prevent unnecessary recalculations
+  const eraTabs = useMemo(() => {
+    return sortedCategories.length > 0 
+      ? sortedCategories.map((category) => ({
+          slug: category.slug,
+          name: category.name.toUpperCase(),
+        }))
+      : [];
+  }, [sortedCategories]);
 
-  // Convert categories to eras (only take 5 standard eras, correct order)
-  const eras: Era[] = filteredSortedCategories.map((category) => ({
-    key: category.slug,
-    label: category.name,
-  }));
-
-  // Hardcode 5 eras
-  const eraTabs = [
-    { slug: 'tang', name: 'TANG' },
-    { slug: 'song', name: 'SONG' },
-    { slug: 'yuan', name: 'YUAN' },
-    { slug: 'ming', name: 'MING' },
-    { slug: 'quing', name: 'QUING' },
-  ];
-
-  // When loading page, if no activeEra, set default to 'tang'
+  // When loading page, check URL params first, then set default era
   useEffect(() => {
-    if (!activeEra) {
-      setActiveEra('tang');
+    const eraFromUrl = searchParams.get('era');
+    if (eraFromUrl && eraTabs.some(era => era.slug === eraFromUrl)) {
+      setActiveEra(eraFromUrl);
+      // Scroll to top when era changes via URL
+      const isMobile = window.innerWidth < 768; // md breakpoint
+      window.scrollTo({ 
+        top: isMobile ? 0 : 400, 
+        behavior: 'smooth' 
+      });
+    } else if (!activeEra && eraTabs.length > 0) {
+      setActiveEra(eraTabs[0].slug);
     }
-  }, [activeEra]);
+  }, [eraTabs, searchParams, activeEra]);
+
+  // Handle scroll to show/hide sticky header
+  useEffect(() => {
+    const handleScroll = () => {
+      if (heroRef.current) {
+        const heroBottom = heroRef.current.getBoundingClientRect().bottom;
+        setShowStickyHeader(heroBottom <= 0);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Update flattenedCategories when categories change
+  useEffect(() => {
+    if (categories.length > 0) {
+      const flattened = categories.map((cat) => flattenCategory(cat));
+      setFlattenedCategories(flattened);
+    }
+  }, [categories]);
 
   // Fetch categories from API to get id for each era
   useEffect(() => {
@@ -86,24 +120,44 @@ const Browse: React.FC = () => {
       }
     };
     withCategoriesLoading(fetchCategories);
-  }, [locale]);
+  }, [locale, withCategoriesLoading]);
 
-  // Fetch products by activeEra (use categories to get id)
+  // Fetch products by activeEra (no cache, always fresh data)
   useEffect(() => {
-    if (!activeEra || categories.length === 0) return;
-    // Find category by slug
-    const category = categories
-      .map((cat) => flattenCategory(cat))
-      .find((cat) => cat.slug === activeEra);
-    if (!category) {
-      setProducts([]);
-      setErrorProducts('No data for this era');
+    let isMounted = true;
+    
+    if (!activeEra || sortedCategories.length === 0) {
+      // Clear products when no active era or no categories
+      if (isMounted) {
+        setProducts([]);
+        setErrorProducts(null);
+      }
       return;
     }
+    
+    // Find category by slug
+    const category = sortedCategories.find((cat) => cat.slug === activeEra);
+    if (!category) {
+      if (isMounted) {
+        setProducts([]);
+        setErrorProducts('No data for this era');
+      }
+      return;
+    }
+    
     const fetchProducts = async () => {
       try {
-        setErrorProducts(null);
+
+        if (isMounted) {
+          setErrorProducts(null);
+          setProducts([]); // Clear previous products immediately
+        }
+        
+        // Always fetch fresh data from API
         const productsData = await getProductsByCategory(category.id, locale);
+        
+        if (!isMounted) return; // Check if component is still mounted
+        
         if (productsData && productsData.length > 0) {
           const flattened = productsData.map((prod) => flattenProduct(prod));
           setProducts(flattened);
@@ -112,19 +166,90 @@ const Browse: React.FC = () => {
           setErrorProducts('No data for this era');
         }
       } catch (err) {
+        if (!isMounted) return;
         console.error('Error fetching products:', err);
         setErrorProducts('Unable to load product list');
+        setProducts([]);
       }
     };
+    
     withProductsLoading(fetchProducts);
-  }, [activeEra, categories, locale]);
+    
+    // Cleanup function
+    return () => {
+      isMounted = false;
+    };
+  }, [activeEra, sortedCategories, locale, withProductsLoading]);
 
-  const handleEraClick = (eraSlug: string) => {
+  // Preload products for all eras when categories are available (no cache, just preload)
+  useEffect(() => {
+    let isMounted = true;
+    
+    if (sortedCategories.length > 0) {
+      // Preload products for all eras in background
+      const preloadAllProducts = async () => {
+        const eraSlugs = sortedCategories.map(cat => cat.slug);
+        
+        for (const eraSlug of eraSlugs) {
+          if (!isMounted) break; // Stop if component unmounted
+          
+          // Skip if this is the currently active era (already being fetched)
+          if (eraSlug === activeEra) continue;
+          
+          // Mark as preloading
+          if (isMounted) {
+            setPreloadingProgress(prev => ({ ...prev, [eraSlug]: true }));
+          }
+          
+          const category = sortedCategories.find((cat) => cat.slug === eraSlug);
+          if (category) {
+            try {
+              // Always fetch fresh data, no cache
+              const productsData = await getProductsByCategory(category.id, locale);
+
+            } catch (err) {
+              if (isMounted) {
+                console.warn(`Failed to preload products for ${eraSlug}:`, err);
+              }
+            }
+          }
+          
+          // Mark as completed
+          if (isMounted) {
+            setPreloadingProgress(prev => ({ ...prev, [eraSlug]: false }));
+          }
+        }
+      };
+      
+      // Start preloading in background (don't await)
+      preloadAllProducts();
+    }
+    
+    // Cleanup function
+    return () => {
+      isMounted = false;
+    };
+  }, [sortedCategories, locale, activeEra]);
+
+
+
+    const handleEraClick = useCallback((eraSlug: string) => {
     if (eraSlug !== activeEra) {
+ 
+      // Clear current products immediately when switching
+      setProducts([]);
+      setErrorProducts(null);
       setActiveEra(eraSlug);
       navigate(`/browse?era=${eraSlug}`, { replace: true });
+      
+      // Scroll to top of the page when switching era
+      const isMobile = window.innerWidth < 768; // md breakpoint
+      window.scrollTo({ 
+        top: isMobile ? 0 : 400, 
+        behavior: 'smooth' 
+      });
     }
-  };
+  }, [activeEra, navigate]);
 
   // Component ProductCard to manage image state for each product
   const ProductCard: React.FC<{ product: any; navigate: any }> = ({ product, navigate }) => {
@@ -163,7 +288,6 @@ const Browse: React.FC = () => {
         key={product.id}
         className="flex flex-col cursor-pointer rounded"
         onClick={() => {
-          window.scrollTo(0, 0);
           navigate(`/products/${product.slug}`);
         }}
       >
@@ -218,7 +342,7 @@ const Browse: React.FC = () => {
       const containerRect = tabContainer.getBoundingClientRect();
       const btnRect = btn.getBoundingClientRect();
       if (btnRect.left < containerRect.left || btnRect.right > containerRect.right) {
-        btn.scrollIntoView({ behavior: 'auto', inline: 'center', block: 'nearest' });
+        btn.scrollIntoView({ behavior: 'instant', inline: 'center', block: 'nearest' });
       }
     }
   }, [activeEra, eras]);
@@ -250,7 +374,7 @@ const Browse: React.FC = () => {
   return (
     <div className="w-full min-h-screen bg-[#F7F5EA]">
       {/* Hero Section */}
-      <div className="w-full relative">
+      <div ref={heroRef} className="w-full relative">
         <img
           src={heroImgMobile}
           alt="Ceramic by Era Mobile"
@@ -262,37 +386,79 @@ const Browse: React.FC = () => {
           className="hidden md:block w-full h-[420px] object-cover object-center"
         />
       </div>
-      {/* Era Tabs */}
-      <div className="w-full sticky top-[0px] z-30 bg-[#F7F5EA]">
-        <div className="max-w-6xl mx-auto px-4 pt-4 md:pt-20 overflow-x-auto scrollbar-hide">
-          <div
-            ref={eraTabRef}
-            className="inline-flex items-center gap-x-[16px] md:gap-x-2 justify-start pl-[10px] md:pl-[64px] uppercase whitespace-nowrap"
-          >
-            {eraTabs.map((era, idx) => (
-              <React.Fragment key={era.slug}>
-                <button
-                  ref={(el) => {
-                    eraButtonRefs.current[idx] = el;
-                  }}
-                  className={` transition-colors uppercase text-[17px] relative ${activeEra === era.slug ? 'border-b-2 border-[#23211C] text-[#23211C] font-semibold opacity-90 z-20' : 'text-[#23211C] border-b-0'}`}
-                  onClick={() => handleEraClick(era.slug)}
-                >
-                  {era.name}
-                </button>
-                {idx < eraTabs.length - 1 && (
-                  <span className="text-[#D6C7A1] text-lg mx-2 flex items-center  select-none mb-[5px] ">
-                    +
-                  </span>
-                )}
-              </React.Fragment>
-            ))}
+      
+      {/* Era Tabs - Original (non-sticky) - Only show when NOT scrolled */}
+      {!showStickyHeader && (
+        <div className="w-full bg-[#F7F3E8]">
+          <div className="max-w-7xl mx-auto px-4 md:px-0 pt-4 md:pt-24 pb-3 md:pb-5 overflow-x-auto scrollbar-hide">
+            <div
+              ref={eraTabRef}
+              className="inline-flex items-center gap-x-[16px] md:gap-x-2 justify-start pl-[10px] md:pl-0 uppercase whitespace-nowrap"
+            >
+              {eraTabs.map((era, idx) => (
+                <React.Fragment key={era.slug}>
+                  <button
+                    ref={(el) => {
+                      eraButtonRefs.current[idx] = el;
+                    }}
+                    className={` transition-colors uppercase text-[16px] relative pb-3 btn-clickable ${activeEra === era.slug ? 'border-b-2 border-[#23211C] text-[#23211C] opacity-90 z-20 font-semibold' : 'text-[#23211C] border-b-0'}`}
+                    onClick={() => handleEraClick(era.slug)}
+                  >
+                    {era.name}
+                    {/* {preloadingProgress[era.slug] && ( // Removed preloading state
+                      <span className="ml-1 text-xs text-[#7B6142]">●</span>
+                    )} */}
+                  </button>
+                  {idx < eraTabs.length - 1 && (
+                    <span className="text-[#D6C7A1] text-lg mx-2 flex items-center select-none mb-[5px] pb-3">
+                      +
+                    </span>
+                  )}
+                </React.Fragment>
+              ))}
+            </div>
           </div>
         </div>
-      </div>
+      )}
+
+      {/* Sticky Navigation Container - Only show when scrolled past hero */}
+      {showStickyHeader && (
+        <div className="w-full sticky top-0 z-40 bg-[#F7F5EA]">
+          {/* Header */}
+          <Header />
+          
+          {/* Era Tabs */}
+          <div className="w-full border-b border-[#C0BFBD]">
+            <div className="max-w-7xl mx-auto px-4 md:px-0 pt-4 md:pt-6  overflow-x-auto scrollbar-hide">
+              <div
+                className="inline-flex items-center gap-x-[16px] md:gap-x-2 justify-start pl-[10px] md:pl-0 uppercase whitespace-nowrap"
+              >
+                {eraTabs.map((era, idx) => (
+                  <React.Fragment key={era.slug}>
+                    <button
+                      className={` transition-colors uppercase  text-[16px] relative pb-3 btn-clickable ${activeEra === era.slug ? 'border-b-2 border-[#23211C]  text-[#23211C] opacity-90 z-20 font-semibold' : 'text-[#23211C] border-b-0 '}`}
+                      onClick={() => handleEraClick(era.slug)}
+                    >
+                      {era.name}
+                      {/* {preloadingProgress[era.slug] && ( // Removed preloading state
+                        <span className="ml-1 text-xs text-[#7B6142]">●</span>
+                      )} */}
+                    </button>
+                    {idx < eraTabs.length - 1 && (
+                      <span className="text-[#D6C7A1] text-lg mx-2 flex items-center select-none mb-[5px] pb-3">
+                        +
+                      </span>
+                    )}
+                  </React.Fragment>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Categories Grid */}
-      <div className="w-full max-w-6xl mx-auto px-4 mt-10 grid grid-cols-1 md:grid-cols-3 gap-10 md:pl-[80px] pl-[20px]">
+      <div className="w-full max-w-7xl mx-auto px-4 mt-10 grid grid-cols-1 md:grid-cols-3 gap-10 md:pl-0 pl-[20px]">
         {productsLoading ? (
           <div className="flex justify-center py-16">
             <Loading size="large" text="Loading..." />

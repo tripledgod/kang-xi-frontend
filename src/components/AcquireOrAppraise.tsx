@@ -48,12 +48,10 @@ export default function AcquireOrAppraise() {
   ];
 
   const handleAcquireClick = () => {
-    window.scrollTo({ top: 0, behavior: 'auto' });
     navigate('/acquire-an-item');
   };
 
   const handleAppraiseClick = () => {
-    window.scrollTo({ top: 0, behavior: 'auto' });
     navigate('/appraise-an-item');
   };
 
@@ -86,8 +84,10 @@ export default function AcquireOrAppraise() {
             <p className="text-base leading-6 text-[#ABAAA7] mb-10 max-w-lg">{section.desc}</p>
             <div className="w-[220px] flex justify-center">
               <button
-                className="w-full md:w-[189px] h-[48px] flex items-center justify-center text-base font-semibold shadow-none transition-all px-6"
-                onClick={section.link === '/acquire-an-item' ? handleAcquireClick : handleAppraiseClick}
+                className="w-full font-semibold md:w-[189px] h-[48px] flex items-center justify-center text-base shadow-none transition-all px-6 btn-clickable"
+                onClick={
+                  section.link === '/acquire-an-item' ? handleAcquireClick : handleAppraiseClick
+                }
                 style={{
                   backgroundImage: `url(${bgButton})`,
                   backgroundSize: '100% 100%',
