@@ -35,6 +35,24 @@ export default function ProductDetail() {
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
   const descRef = useRef<HTMLDivElement>(null);
   const [showAcquireModal, setShowAcquireModal] = useState(false);
+
+// Ẩn thanh cuộn body và html khi mở modal acquire (mobile & desktop)
+useEffect(() => {
+  const body = document.body;
+  const html = document.documentElement;
+  if (showAcquireModal) {
+    body.classList.add('overflow-hidden');
+    html.classList.add('overflow-hidden');
+  } else {
+    body.classList.remove('overflow-hidden');
+    html.classList.remove('overflow-hidden');
+  }
+  // Cleanup khi unmount
+  return () => {
+    body.classList.remove('overflow-hidden');
+    html.classList.remove('overflow-hidden');
+  };
+}, [showAcquireModal]);
   const [phone, setPhone] = useState('');
   const { loading, withLoading } = useLoading(true);
   const [error, setError] = useState<string | null>(null);
@@ -658,8 +676,8 @@ export default function ProductDetail() {
                    </svg>
                  </button>
                </div>
-               {/* Scrollable form content for mobile */}
-               <div className="flex-1 overflow-y-auto md:px-10 px-4 py-10">
+                               {/* Form content - scrollable on desktop, fixed on mobile */}
+                <div className="flex-1 overflow-y-auto md:overflow-y-auto overflow-hidden px-4 md:px-10 py-10">
                  {/* Desktop close button - only visible on desktop, right aligned */}
                  <div className="hidden md:flex w-full justify-end">
                    <button
