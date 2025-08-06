@@ -589,9 +589,9 @@ export default function ProductDetail() {
                         <div className="text-[#585550] text-[14px] leading-[20px] uppercase mb-2 font-semibold">
                           {item.category.name}
                         </div>
-                        <h5 className="text-[20px] md:text-[24px] md:leading-[32px] leading-[28px] font-serif text-[#61422D] mb-4 md:pb-8 pb-7 leading-snug line-clamp-3 md:h-[128px] md:flex md:items-start">
-                          {item.title}
-                        </h5>
+                                                 <h5 className="text-[20px] md:text-[24px] md:leading-[32px] leading-[28px] font-serif text-[#61422D] mb-4 md:pb-8 pb-7 leading-snug line-clamp-3 h-[110px] md:h-[128px] flex items-start">
+                           {item.title}
+                         </h5>
                         <div className="border-t-2 border-[#E5E1D7] opacity-80 mb-2"></div>
                         <div className="flex flex-col gap-1 text-[14px] leading-[20px] text-[#585550] font-semibold">
                           <div className="flex flex-row justify-between">
