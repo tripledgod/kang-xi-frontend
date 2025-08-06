@@ -114,12 +114,23 @@ export default function Articles() {
           {featuredArticles.map((article, idx) => {
             const imageUrl = getCoverUrl(article.cover);
 
+            // Function to handle scroll to top before page navigation
+            const handleFeaturedArticleClick = (e: React.MouseEvent) => {
+              scrollToTop();
+            };
+
             return (
-              <div key={article.id} className={`w-full ${idx === 0 ? 'flex-2' : 'flex-1'}`}>
+              <Link
+                key={article.id}
+                to={`/article/${article.slug}`}
+                className={`w-full ${idx === 0 ? 'flex-2' : 'flex-1'}`}
+                style={{ textDecoration: 'none' }}
+                onClick={handleFeaturedArticleClick}
+              >
                 {/* Mobile Layout */}
                 <div className="block lg:hidden">
                   <div
-                    className="relative h-[343px] overflow-hidden w-full transition-all duration-300"
+                    className="relative h-[343px] overflow-hidden w-full transition-all duration-300 cursor-pointer"
                     style={{ backgroundColor: '#E6DDC6' }}
                   >
                     <img
@@ -146,7 +157,7 @@ export default function Articles() {
                       <div className="text-base text-white mb-3 line-clamp-2 drop-shadow-lg">
                         {article.description}
                       </div>
-                                              <div className="text-xs text-white uppercase font-semibold tracking-wider drop-shadow-lg">
+                      <div className="text-xs text-white uppercase font-semibold tracking-wider drop-shadow-lg">
                         {new Date(article.publishedAt)
                           .toLocaleDateString('en-GB', {
                             day: '2-digit',
@@ -161,7 +172,7 @@ export default function Articles() {
 
                 {/* Desktop Layout */}
                 <div
-                  className="hidden lg:block relative h-[480px] overflow-hidden group flex-shrink-0 transition-all duration-300 w-full"
+                  className="hidden lg:block relative h-[480px] overflow-hidden group flex-shrink-0 transition-all duration-300 w-full cursor-pointer"
                   style={{ backgroundColor: '#E6DDC6' }}
                 >
                   <img
@@ -199,7 +210,7 @@ export default function Articles() {
                     </div>
                   </div>
                 </div>
-              </div>
+              </Link>
             );
           })}
         </div>
