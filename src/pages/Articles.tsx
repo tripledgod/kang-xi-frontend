@@ -115,7 +115,7 @@ export default function Articles() {
             const imageUrl = getCoverUrl(article.cover);
 
             return (
-              <div key={article.id} className="w-full">
+              <div key={article.id} className={`w-full ${idx === 0 ? 'flex-2' : 'flex-1'}`}>
                 {/* Mobile Layout */}
                 <div className="block lg:hidden">
                   <div
@@ -161,7 +161,7 @@ export default function Articles() {
 
                 {/* Desktop Layout */}
                 <div
-                  className={`hidden lg:block relative h-[480px] overflow-hidden group flex-shrink-0 transition-all duration-300 ${idx === 0 ? 'lg:w-[800px]' : 'lg:w-[384px]'}`}
+                  className="hidden lg:block relative h-[480px] overflow-hidden group flex-shrink-0 transition-all duration-300 w-full"
                   style={{ backgroundColor: '#E6DDC6' }}
                 >
                   <img
@@ -204,8 +204,9 @@ export default function Articles() {
           })}
         </div>
         {/* Latest Articles */}
-        <div className="flex flex-col md:flex-row gap-8 md:mt-12 transition-all duration-300">
-          <div className="w-full md:w-[800px]">
+        <div className="flex flex-col lg:flex-row gap-8 md:mt-12 transition-all duration-300">
+          <div className="w-full lg:w-2/3">
+            <div className="md:pr-6">
             <h3 className="hidden md:block text-[40px] leading-[48px]font-serif text-[#61422D] mb-8 text-left">
               Latest Articles
             </h3>
@@ -273,7 +274,7 @@ export default function Articles() {
                     </div>
                     {/* Desktop Grid Layout */}
                     <div className="hidden md:grid grid-cols-[1fr_238px] gap-6 w-full">
-                      <div className="flex flex-col h-full">
+                      <div className="flex flex-col h-full min-w-0">
                         <h5
                           className="text-2xl font-serif mb-2 leading-snug line-clamp-2"
                           style={{
@@ -301,7 +302,7 @@ export default function Articles() {
                             .replace(/\b([a-z]{3})\b/i, (m) => m.toUpperCase())}
                         </div>
                       </div>
-                      <div className="w-[238px] h-[180px] flex-shrink-0 overflow-hidden bg-[#E6DDC6] flex items-center justify-center md:justify-end">
+                      <div className="w-[238px] h-[180px] flex-shrink-0 overflow-hidden bg-[#E6DDC6] flex items-center justify-center">
                         <img
                           src={imageUrl || articlesCover}
                           alt={article.title}
@@ -320,6 +321,7 @@ export default function Articles() {
                   </Link>
                 );
               })}
+            </div>
             </div>
           </div>
         </div>
