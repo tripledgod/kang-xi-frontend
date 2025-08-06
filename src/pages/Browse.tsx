@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import Loading from '../components/Loading';
 import Header from '../components/Header';
@@ -44,38 +44,44 @@ const Browse: React.FC = () => {
   const eraButtonRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const heroRef = useRef<HTMLDivElement>(null);
 
-  // Scroll to top when URL changes
+  // Memoize sorted categories to prevent unnecessary recalculations
+  const sortedCategories = useMemo(() => {
+    return flattenedCategories.sort((a, b) => a.order - b.order);
+  }, [flattenedCategories]);
 
-  // Display all eras in ascending order from API
-  const sortedCategories = flattenedCategories
-    .sort((a, b) => a.order - b.order); // Sort by order field from API
+  // Memoize eras to prevent unnecessary recalculations
+  const eras: Era[] = useMemo(() => {
+    return sortedCategories.map((category) => ({
+      key: category.slug,
+      label: category.name,
+    }));
+  }, [sortedCategories]);
 
-  // Convert categories to eras (all eras from API, sorted by order)
-  const eras: Era[] = sortedCategories.map((category) => ({
-    key: category.slug,
-    label: category.name,
-  }));
-
-  
-  const eraTabs = sortedCategories.length > 0 
-    ? sortedCategories.map((category) => ({
-        slug: category.slug,
-        name: category.name.toUpperCase(),
-      }))
-    : []; // No fallback, wait for API data
-  
-
+  // Memoize era tabs to prevent unnecessary recalculations
+  const eraTabs = useMemo(() => {
+    return sortedCategories.length > 0 
+      ? sortedCategories.map((category) => ({
+          slug: category.slug,
+          name: category.name.toUpperCase(),
+        }))
+      : [];
+  }, [sortedCategories]);
 
   // When loading page, check URL params first, then set default era
   useEffect(() => {
     const eraFromUrl = searchParams.get('era');
     if (eraFromUrl && eraTabs.some(era => era.slug === eraFromUrl)) {
       setActiveEra(eraFromUrl);
+      // Scroll to top when era changes via URL
+      const isMobile = window.innerWidth < 768; // md breakpoint
+      window.scrollTo({ 
+        top: isMobile ? 0 : 400, 
+        behavior: 'smooth' 
+      });
     } else if (!activeEra && eraTabs.length > 0) {
       setActiveEra(eraTabs[0].slug);
     }
-    // No fallback default - wait for API data
-  }, [activeEra, eraTabs, searchParams]);
+  }, [eraTabs, searchParams, activeEra]);
 
   // Handle scroll to show/hide sticky header
   useEffect(() => {
@@ -98,38 +104,6 @@ const Browse: React.FC = () => {
     }
   }, [categories]);
 
-  // Preload products for all eras when categories are available (no cache, just preload)
-  useEffect(() => {
-    if (sortedCategories.length > 0) {
-      // Preload products for all eras in background
-      const preloadAllProducts = async () => {
-        const eraSlugs = sortedCategories.map(cat => cat.slug);
-        
-        for (const eraSlug of eraSlugs) {
-          // Mark as preloading
-          setPreloadingProgress(prev => ({ ...prev, [eraSlug]: true }));
-          
-          const category = sortedCategories.find((cat) => cat.slug === eraSlug);
-          if (category) {
-            try {
-              // Always fetch fresh data, no cache
-              const productsData = await getProductsByCategory(category.id, locale);
-              // Preload successful, but don't cache - just mark as loaded
-            } catch (err) {
-              console.warn(`Failed to preload products for ${eraSlug}:`, err);
-            }
-          }
-          
-          // Mark as completed
-          setPreloadingProgress(prev => ({ ...prev, [eraSlug]: false }));
-        }
-      };
-      
-      // Start preloading in background (don't await)
-      preloadAllProducts();
-    }
-  }, [sortedCategories, locale]);
-
   // Fetch categories from API to get id for each era
   useEffect(() => {
     const fetchCategories = async () => {
@@ -146,25 +120,44 @@ const Browse: React.FC = () => {
       }
     };
     withCategoriesLoading(fetchCategories);
-  }, [locale]);
+  }, [locale, withCategoriesLoading]);
 
   // Fetch products by activeEra (no cache, always fresh data)
   useEffect(() => {
-    if (!activeEra || sortedCategories.length === 0) return;
+    let isMounted = true;
+    
+    if (!activeEra || sortedCategories.length === 0) {
+      // Clear products when no active era or no categories
+      if (isMounted) {
+        setProducts([]);
+        setErrorProducts(null);
+      }
+      return;
+    }
     
     // Find category by slug
     const category = sortedCategories.find((cat) => cat.slug === activeEra);
     if (!category) {
-      setProducts([]);
-      setErrorProducts('No data for this era');
+      if (isMounted) {
+        setProducts([]);
+        setErrorProducts('No data for this era');
+      }
       return;
     }
     
     const fetchProducts = async () => {
       try {
-        setErrorProducts(null);
+
+        if (isMounted) {
+          setErrorProducts(null);
+          setProducts([]); // Clear previous products immediately
+        }
+        
         // Always fetch fresh data from API
         const productsData = await getProductsByCategory(category.id, locale);
+        
+        if (!isMounted) return; // Check if component is still mounted
+        
         if (productsData && productsData.length > 0) {
           const flattened = productsData.map((prod) => flattenProduct(prod));
           setProducts(flattened);
@@ -173,19 +166,90 @@ const Browse: React.FC = () => {
           setErrorProducts('No data for this era');
         }
       } catch (err) {
+        if (!isMounted) return;
         console.error('Error fetching products:', err);
         setErrorProducts('Unable to load product list');
+        setProducts([]);
       }
     };
+    
     withProductsLoading(fetchProducts);
-  }, [activeEra, sortedCategories, locale]);
+    
+    // Cleanup function
+    return () => {
+      isMounted = false;
+    };
+  }, [activeEra, sortedCategories, locale, withProductsLoading]);
 
-  const handleEraClick = (eraSlug: string) => {
+  // Preload products for all eras when categories are available (no cache, just preload)
+  useEffect(() => {
+    let isMounted = true;
+    
+    if (sortedCategories.length > 0) {
+      // Preload products for all eras in background
+      const preloadAllProducts = async () => {
+        const eraSlugs = sortedCategories.map(cat => cat.slug);
+        
+        for (const eraSlug of eraSlugs) {
+          if (!isMounted) break; // Stop if component unmounted
+          
+          // Skip if this is the currently active era (already being fetched)
+          if (eraSlug === activeEra) continue;
+          
+          // Mark as preloading
+          if (isMounted) {
+            setPreloadingProgress(prev => ({ ...prev, [eraSlug]: true }));
+          }
+          
+          const category = sortedCategories.find((cat) => cat.slug === eraSlug);
+          if (category) {
+            try {
+              // Always fetch fresh data, no cache
+              const productsData = await getProductsByCategory(category.id, locale);
+
+            } catch (err) {
+              if (isMounted) {
+                console.warn(`Failed to preload products for ${eraSlug}:`, err);
+              }
+            }
+          }
+          
+          // Mark as completed
+          if (isMounted) {
+            setPreloadingProgress(prev => ({ ...prev, [eraSlug]: false }));
+          }
+        }
+      };
+      
+      // Start preloading in background (don't await)
+      preloadAllProducts();
+    }
+    
+    // Cleanup function
+    return () => {
+      isMounted = false;
+    };
+  }, [sortedCategories, locale, activeEra]);
+
+
+
+    const handleEraClick = useCallback((eraSlug: string) => {
     if (eraSlug !== activeEra) {
+ 
+      // Clear current products immediately when switching
+      setProducts([]);
+      setErrorProducts(null);
       setActiveEra(eraSlug);
       navigate(`/browse?era=${eraSlug}`, { replace: true });
+      
+      // Scroll to top of the page when switching era
+      const isMobile = window.innerWidth < 768; // md breakpoint
+      window.scrollTo({ 
+        top: isMobile ? 0 : 400, 
+        behavior: 'smooth' 
+      });
     }
-  };
+  }, [activeEra, navigate]);
 
   // Component ProductCard to manage image state for each product
   const ProductCard: React.FC<{ product: any; navigate: any }> = ({ product, navigate }) => {
