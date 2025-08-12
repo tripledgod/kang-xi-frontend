@@ -111,7 +111,7 @@ export default function Newsletter() {
                 opacity: 0.8,
               }}
             >
-              Subscribe to get our 2020 catalog as well as get exclusive invites to our private
+              Subscribe to get our {new Date().getFullYear()} catalog as well as get exclusive invites to our private
               events
             </p>
           </div>
@@ -143,7 +143,7 @@ export default function Newsletter() {
               {error || ''}
             </div>
           </div>
-          <div className="w-full justify-center md:w-1/3 h-[48px] flex items-center">
+          <div className={`w-full justify-center md:w-1/3 h-[48px] flex items-center ${error ? 'mt-4' : ''} md:mt-0`}>
             {/* Button desktop */}
             <button
               type="submit"
