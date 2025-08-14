@@ -45,7 +45,7 @@ export const validatePhoneNumber = (phone: string): boolean => {
   if (!phone || !phone.trim()) {
     return false;
   }
-  
+
   // Phone number should start with + and have 1-15 digits after country code
   const phoneRegex = /^\+[1-9]\d{1,14}$/;
   return phoneRegex.test(phone.trim());
@@ -58,15 +58,15 @@ export const validatePhoneNumber = (phone: string): boolean => {
  */
 export const formatPhoneNumber = (phone: string): string => {
   if (!phone) return '';
-  
+
   // Remove all non-digit characters except +
   const cleaned = phone.replace(/[^\d+]/g, '');
-  
+
   // Ensure it starts with +
   if (!cleaned.startsWith('+')) {
     return `+${cleaned}`;
   }
-  
+
   return cleaned;
 };
 
@@ -80,19 +80,19 @@ export const testApiCall = async (endpoint: string, data: any) => {
   try {
     console.log(`Testing API call to: ${endpoint}`);
     console.log('Test data:', JSON.stringify(data, null, 2));
-    
+
     const response = await fetch(endpoint, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
     });
-    
+
     console.log('Test response status:', response.status);
     console.log('Test response headers:', Object.fromEntries(response.headers.entries()));
-    
+
     const responseText = await response.text();
     console.log('Test response body:', responseText);
-    
+
     return {
       success: response.ok,
       status: response.status,

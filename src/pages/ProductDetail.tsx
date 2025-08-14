@@ -8,6 +8,7 @@ import Loading from '../components/Loading';
 import { useLoading } from '../hooks/useLoading';
 import { useLanguage } from '../contexts/LanguageContext';
 import AcquireOrAppraise from '../components/AcquireOrAppraise';
+import Header from '../components/Header';
 import zoomInIcon from '../assets/zoom_in.svg';
 import icCircleLeft from '../assets/ic_circle_left.svg';
 import icCircleRight from '../assets/ic_circle_right.svg';
@@ -23,6 +24,7 @@ import { getImageUrl, getImagesUrls } from '../utils';
 import Popup from '../components/Popup.tsx';
 import logo from '../assets/logo.png';
 
+
 export default function ProductDetail() {
   const { slug } = useParams();
   const [mainImg, setMainImg] = useState<string>('');
@@ -36,23 +38,23 @@ export default function ProductDetail() {
   const descRef = useRef<HTMLDivElement>(null);
   const [showAcquireModal, setShowAcquireModal] = useState(false);
 
-// Ẩn thanh cuộn body và html khi mở modal acquire (mobile & desktop)
-useEffect(() => {
-  const body = document.body;
-  const html = document.documentElement;
-  if (showAcquireModal) {
-    body.classList.add('overflow-hidden');
-    html.classList.add('overflow-hidden');
-  } else {
-    body.classList.remove('overflow-hidden');
-    html.classList.remove('overflow-hidden');
-  }
-  // Cleanup khi unmount
-  return () => {
-    body.classList.remove('overflow-hidden');
-    html.classList.remove('overflow-hidden');
-  };
-}, [showAcquireModal]);
+  // Ẩn thanh cuộn body và html khi mở modal acquire (mobile & desktop)
+  useEffect(() => {
+    const body = document.body;
+    const html = document.documentElement;
+    if (showAcquireModal) {
+      body.classList.add('overflow-hidden');
+      html.classList.add('overflow-hidden');
+    } else {
+      body.classList.remove('overflow-hidden');
+      html.classList.remove('overflow-hidden');
+    }
+    // Cleanup khi unmount
+    return () => {
+      body.classList.remove('overflow-hidden');
+      html.classList.remove('overflow-hidden');
+    };
+  }, [showAcquireModal]);
   const [phone, setPhone] = useState('');
   const { loading, withLoading } = useLoading(true);
   const [error, setError] = useState<string | null>(null);
@@ -65,10 +67,14 @@ useEffect(() => {
   });
   const [relatedProducts, setRelatedProducts] = useState<any[]>([]);
   const navigate = useNavigate();
-  const { locale } = useLanguage();
+  const { locale, setLocale } = useLanguage();
   const { t } = useTranslation();
   const [descLineCount, setDescLineCount] = useState(0);
   const [showReadMore, setShowReadMore] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(false);
+  const [showTaskBar, setShowTaskBar] = useState(false);
+  
+
 
   // Add validation and loading states
   const [isLoading, setIsLoading] = useState(false);
@@ -183,6 +189,56 @@ useEffect(() => {
       }));
     }
   }, [showAcquireModal, productDetail]);
+
+  // Check screen size for responsive button rendering
+  useEffect(() => {
+    const checkScreenSize = () => {
+      const desktop = window.innerWidth >= 768;
+      setIsDesktop(desktop);
+    };
+    
+    checkScreenSize();
+    window.addEventListener('resize', checkScreenSize);
+    
+    return () => window.removeEventListener('resize', checkScreenSize);
+  }, []);
+
+	// Track scroll position for task bar (smooth + hysteresis)
+	useEffect(() => {
+		// Hysteresis to avoid flicker: show at 700px, hide at 650px
+		const SHOW_THRESHOLD = 700;
+		const HIDE_THRESHOLD = 650;
+
+		let rafId: number | null = null;
+		let lastY = window.scrollY || 0;
+
+		const update = () => {
+			rafId = null;
+			if (!isDesktop) {
+				if (showTaskBar) setShowTaskBar(false);
+				return;
+			}
+			// Apply hysteresis based on current visibility
+			if (!showTaskBar && lastY > SHOW_THRESHOLD) {
+				setShowTaskBar(true);
+			} else if (showTaskBar && lastY < HIDE_THRESHOLD) {
+				setShowTaskBar(false);
+			}
+		};
+
+		const onScroll = () => {
+			lastY = window.scrollY || window.pageYOffset;
+			if (rafId == null) {
+				rafId = requestAnimationFrame(update);
+			}
+		};
+
+		window.addEventListener('scroll', onScroll, { passive: true });
+		return () => {
+			if (rafId != null) cancelAnimationFrame(rafId);
+			window.removeEventListener('scroll', onScroll);
+		};
+	}, [isDesktop, showTaskBar]);
 
   const openModal = (idx: number) => {
     setModalIndex(idx);
@@ -384,448 +440,625 @@ useEffect(() => {
       : description;
 
   return (
-    <div className="w-full min-h-screen bg-[#F7F3E8]  ">
-      {/* Show popup when registration is successful */}
-      {showSuccess && (
-        <Popup
-          title={`Thank you for\n contacting us`}
-          titleClassName="md:text-[40px] md:leading-[48px] text-[30px] leading-[36px]"
-          containerClassName=" md:h-[300px] h-[274px] "
-          content="We will  be in  touch with you  shortly."
-          buttonText="BACK TO HOMEPAGE"
-          onButtonClick={() => {
-            setShowSuccess(false);
-            navigate('/');
+    <>
+      {/* Desktop Scroll Header with Task Bar - Shows when scrolling down */}
+      {isDesktop && productDetail && mainImg && createPortal(
+        <div
+          style={{
+            position: 'fixed',
+            top: 0, // Position at the very top
+            left: 0,
+            right: 0,
+            zIndex: 999999,
+            backgroundColor: '#E8DBC0',
+            borderBottom: '1px solid #E8DBC0',
+            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+            width: '100%',
+            height: 'auto',
+            transform: showTaskBar ? 'translateY(0)' : 'translateY(-110%)',
+            opacity: showTaskBar ? 1 : 0,
+            transition: 'transform 240ms ease, opacity 240ms ease',
+            willChange: 'transform, opacity',
+            pointerEvents: showTaskBar ? 'auto' : 'none'
           }}
-          onClose={() => setShowSuccess(false)}
-        />
+        >
+          {/* Header component - same as main header */}
+          <Header />
+          
+          {/* Task bar section */}
+          <div 
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              padding: '16px 112px',
+              width: '100%',
+              minHeight: '72px',
+              boxSizing: 'border-box'
+            }}
+          >
+            {/* Left side: Product image and title */}
+            <div 
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '16px',
+                flexShrink: 0,
+                minWidth: '0'
+              }}
+            >
+              <div 
+                style={{
+                  width: '48px',
+                  height: '48px',
+                  backgroundColor: '#F7F3E8',
+                  borderRadius: '4px',
+                  overflow: 'hidden',
+                  flexShrink: 0
+                }}
+              >
+                <img
+                  src={mainImg}
+                  alt={productDetail.title}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover'
+                  }}
+                />
+              </div>
+              <div 
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  minWidth: '0',
+                  flex: 1
+                }}
+              >
+                <h5 
+                  style={{
+                    fontSize: '18px',
+                    lineHeight: '22px',
+                    fontFamily: 'serif',
+                    fontWeight: 500,
+                    color: '#61422D',
+                    margin: 0,
+                    padding: 0,
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap'
+                  }}
+                >
+                  {productDetail.title}
+                </h5>
+                
+              </div>
+            </div>
+            
+                         {/* Right side: Acquire button */}
+             <div 
+               style={{
+                 flexShrink: 0,
+                 marginLeft: '16px'
+               }}
+             >
+               <Button
+                 text={t('ACQUIRE_THIS_ITEM')}
+                 className="w-[189px]"
+                 onClick={() => setShowAcquireModal(true)}
+               />
+             </div>
+          </div>
+        </div>,
+        document.body
       )}
 
-      <div className="w-full border-t border-[#E8DBC0]" />
-      {/* Breadcrumb */}
-              <div className="w-full px-4 pt-6 text-xs text-[#817F7C] pb-5 md:px-[112px]  md:pb-[48px]">
-        <span
-          className="cursor-pointer link-clickable font-semibold"
-          onClick={() => navigate('/')}
-        >
-          Home
-        </span> <span className="mx-1">&gt;</span> <span
-          className="cursor-pointer link-clickable font-semibold"
-          onClick={() => navigate('/browse')}
-        >
-          Browse
-        </span>{' '}
-        <span className="mx-1">&gt;</span>{' '}
-        <span className="text-[#201F1C] truncate max-w-[220px] md:max-w-full md:truncate-none inline-block align-bottom font-semibold">
-          {productDetail.title}
-        </span>
-      </div>
-      {/* Main Section */}
-      <div className="w-full flex flex-col md:flex-row md:gap-4  gap-6 md:items-start items-start md:px-[112px] pb-8 md:pb-22">
-        {/* Thumbnails (desktop only) */}
-        <div className="hidden md:flex flex-col gap-4 w-[109px] flex-shrink-0">
-          {imageUrls.map((img: string, idx: number) => (
-            <img
-              key={idx}
-              src={img}
-              alt={`Gallery Thumb ${idx + 1}`}
-              className={`w-[109px] h-[109px] object-cover cursor-pointer ${mainImg === img ? 'border border-[1px] border-[#61422D]' : 'border-none'}`}
-              onClick={() => setMainImg(img)}
-              onDoubleClick={() => openModal(idx)}
-            />
-          ))}
-        </div>
-        {/* Main Image */}
-        <div className="md:flex-shrink-0 md:flex md:items-start md:justify-center md:w-[539px] md:h-[636px] w-full">
-          <div className="relative bg-[#F7F3E8] w-full md:h-full flex items-start justify-center">
-            <img
-              src={mainImg}
-              alt={productDetail.title}
-              className="object-cover object-center w-full md:h-full"
-            />
-            {/* Pagination dots for mobile - overlay on image */}
-            <div className="md:hidden absolute left-1/2 -translate-x-1/2 bottom-2 flex flex-row gap-2 z-10 pb-1 items-center">
-              {imageUrls.map((_, idx) => (
-                <button
-                  key={idx}
-                  className={`rounded-full transition ${mainImg === imageUrls[idx] ? 'w-2 h-2 bg-[#61422D] opacity-100' : 'w-1.5 h-1.5 bg-[#201F1C] opacity-40'}`}
-                  onClick={() => setMainImg(imageUrls[idx])}
-                  aria-label={`Go to image ${idx + 1}`}
-                />
-              ))}
-            </div>
-            <button
-              className="absolute top-2 right-2 bg-white rounded-full p-2 shadow md:block hidden btn-clickable"
-              onClick={() => openModal(0)}
-              aria-label="Zoom in"
-            >
-              <img src={zoomInIcon} alt="Zoom In" className="w-6 h-6" />
-            </button>
-          </div>
-        </div>
-        {/* Product content, always visible */}
-        <div className="flex-1 md:pl-12 flex flex-col gap-4 md:min-h-[636px] md:px-0 px-4">
-          <div className="flex flex-row justify-between text-[14px]  text-[#585550] leading-[20px] items-center font-semibold">
-            <span>
-              {productDetail.ageFrom} - {productDetail.ageTo}
-              {productDetail.category?.name && (
-                <span className="uppercase"> ({productDetail.category.name})</span>
-              )}
-            </span>
-            <span className="flex items-center gap-1">
-              ITEM CODE {productDetail.itemCode || productDetail.documentId}
-              <button
-                onClick={handleCopy}
-                className="ml-1 p-1 rounded btn-clickable"
-                aria-label="Copy Item Code"
-                title="Copy item code to clipboard"
-              >
-                <img src={copyIcon} alt="Copy" className="w-4 h-4" />
-              </button>
-              {copied && <span className="text-xs text-green-600 ml-1 font-medium">Copied!</span>}
-              {copyError && !copied && (
-                <span className="text-xs text-red-600 ml-1 font-medium">{copyError}</span>
-              )}
-            </span>
-          </div>
-          <h4 className="text-[26px] md:text-[32px] leading-[34px] md:leading-[40px] font-serif font-medium text-[#61422D] pb-1 ">
+                    <div className={`w-full min-h-screen bg-[#F7F3E8] pb-20 md:pb-0 transition-all duration-300 ease-in-out ${
+          showTaskBar && isDesktop ? 'pt-64' : 'pt-0'
+        }`}>
+        {/* Show popup when registration is successful */}
+        {showSuccess && (
+          <Popup
+            title={`Thank you for\n contacting us`}
+            titleClassName="md:text-[40px] md:leading-[48px] text-[30px] leading-[36px]"
+            containerClassName=" md:h-[300px] h-[274px] "
+            content="We will  be in  touch with you  shortly."
+            buttonText="BACK TO HOMEPAGE"
+            onButtonClick={() => {
+              setShowSuccess(false);
+              navigate('/');
+            }}
+            onClose={() => setShowSuccess(false)}
+          />
+        )}
+
+        <div className="w-full border-t border-[#E8DBC0]" />
+        {/* Breadcrumb */}
+        <div className="w-full px-4 pt-6 text-xs text-[#817F7C] pb-5 md:px-[112px]  md:pb-[48px]">
+          <span
+            className="cursor-pointer link-clickable font-semibold"
+            onClick={() => navigate('/')}
+          >
+            Home
+          </span>{' '}
+          <span className="mx-1">&gt;</span>{' '}
+          <span
+            className="cursor-pointer link-clickable font-semibold"
+            onClick={() => navigate('/browse')}
+          >
+            Browse
+          </span>{' '}
+          <span className="mx-1">&gt;</span>{' '}
+          <span className="text-[#201F1C] truncate max-w-[220px] md:max-w-full md:truncate-none inline-block align-bottom font-semibold">
             {productDetail.title}
-          </h4>
-          <div className="max-w-xl">
-            <div className="text-[14px] leading-[20px] text-[#2E2A24] mb-2 font-semibold">
-              Description
-            </div>
-            <div id="product-description" className="text-[16px] leading-[24px] text-[#585550]">
-              {renderDescriptionParagraphs(displayedDescription)}
-            </div>
-            {isLongDescription && (
+          </span>
+        </div>
+        {/* Main Section */}
+        <div className="w-full flex flex-col md:flex-row md:gap-4  gap-6 md:items-start items-start md:px-[112px] pb-8 md:pb-22">
+          {/* Thumbnails (desktop only) */}
+          <div className="hidden md:flex flex-col gap-4 w-[109px] flex-shrink-0">
+            {imageUrls.map((img: string, idx: number) => (
+              <img
+                key={idx}
+                src={img}
+                alt={`Gallery Thumb ${idx + 1}`}
+                className={`w-[109px] h-[109px] object-cover cursor-pointer ${mainImg === img ? 'border border-[1px] border-[#61422D]' : 'border-none'}`}
+                onClick={() => setMainImg(img)}
+                onDoubleClick={() => openModal(idx)}
+              />
+            ))}
+          </div>
+          {/* Main Image */}
+          <div className="md:flex-shrink-0 md:flex md:items-start md:justify-center md:w-[539px] md:h-[636px] w-full">
+            <div className="relative bg-[#F7F3E8] w-full md:h-full flex items-start justify-center">
+              <img
+                src={mainImg}
+                alt={productDetail.title}
+                className="object-cover object-center w-full md:h-full"
+              />
+              {/* Pagination dots for mobile - overlay on image */}
+              <div className="md:hidden absolute left-1/2 -translate-x-1/2 bottom-2 flex flex-row gap-2 z-10 pb-1 items-center">
+                {imageUrls.map((_, idx) => (
+                  <button
+                    key={idx}
+                    className={`rounded-full transition ${mainImg === imageUrls[idx] ? 'w-2 h-2 bg-[#61422D] opacity-100' : 'w-1.5 h-1.5 bg-[#201F1C] opacity-40'}`}
+                    onClick={() => setMainImg(imageUrls[idx])}
+                    aria-label={`Go to image ${idx + 1}`}
+                  />
+                ))}
+              </div>
               <button
-                onClick={() => setIsDescriptionExpanded((prev) => !prev)}
-                className="text-[#201F1C] uppercase  text-[14px] leading-[20px] btn-clickable font-semibold"
+                className="absolute top-2 right-2 bg-white rounded-full p-2 shadow md:block hidden btn-clickable"
+                onClick={() => openModal(0)}
+                aria-label="Zoom in"
               >
-                {isDescriptionExpanded ? 'Read Less' : 'Read More'}
+                <img src={zoomInIcon} alt="Zoom In" className="w-6 h-6" />
               </button>
-            )}
-            <Button
-              text={t('ACQUIRE_THIS_ITEM')}
-              className="submit-form-btn mt-[34px] md:mt-10"
-              onClick={() => setShowAcquireModal(true)}
-            />
+            </div>
+          </div>
+          {/* Product content, always visible */}
+          <div className="flex-1 md:pl-12 flex flex-col gap-4 md:min-h-[636px] md:px-0 px-4">
+            <div className="flex flex-row justify-between text-[14px]  text-[#585550] leading-[20px] items-center font-semibold">
+              <span>
+                {productDetail.ageFrom} - {productDetail.ageTo}
+                {productDetail.category?.name && (
+                  <span className="uppercase"> ({productDetail.category.name})</span>
+                )}
+              </span>
+              <span className="flex items-center gap-1">
+                ITEM CODE {productDetail.itemCode || productDetail.documentId}
+                <button
+                  onClick={handleCopy}
+                  className="ml-1 p-1 rounded btn-clickable"
+                  aria-label="Copy Item Code"
+                  title="Copy item code to clipboard"
+                >
+                  <img src={copyIcon} alt="Copy" className="w-4 h-4" />
+                </button>
+                {copied && <span className="text-xs text-green-600 ml-1 font-medium">Copied!</span>}
+                {copyError && !copied && (
+                  <span className="text-xs text-red-600 ml-1 font-medium">{copyError}</span>
+                )}
+              </span>
+            </div>
+            <h4 className="text-[26px] md:text-[32px] leading-[34px] md:leading-[40px] font-serif font-medium text-[#61422D] pb-1 ">
+              {productDetail.title}
+            </h4>
+            <div className="max-w-xl">
+              <div className="text-[14px] leading-[20px] text-[#2E2A24] mb-2 font-semibold">
+                Description
+              </div>
+              <div id="product-description" className="text-[16px] leading-[24px] text-[#585550]">
+                {renderDescriptionParagraphs(displayedDescription)}
+              </div>
+              {isLongDescription && (
+                <button
+                  onClick={() => setIsDescriptionExpanded((prev) => !prev)}
+                  className="text-[#201F1C] uppercase  text-[14px] leading-[20px] btn-clickable font-semibold"
+                >
+                  {isDescriptionExpanded ? 'Read Less' : 'Read More'}
+                </button>
+              )}
+              {/* Desktop Button - Only render on desktop */}
+              {isDesktop && (
+                <Button
+                  text={t('ACQUIRE_THIS_ITEM')}
+                  className="submit-form-btn mt-[34px] md:mt-10"
+                  onClick={() => setShowAcquireModal(true)}
+                />
+              )}
+            </div>
           </div>
         </div>
-      </div>
-                           {/* Modal/Lightbox */}
-        {isModalOpen && createPortal(
-          <div className="fixed inset-0 z-[999999] flex items-center justify-center bg-black/60" onClick={closeModal}>
-           {/* Top center: index */}
-           <div className="absolute top-4 left-1/2 -translate-x-1/2 z-60">
-             <span className="text-white text-base bg-black/50 rounded px-3 py-1">
-               {modalIndex + 1}/{imageUrls.length}
-             </span>
-           </div>
-           {/* Top right: close button */}
-           <div className="absolute top-4 right-4 z-60">
-                       <button
-             className="text-white text-3xl btn-clickable"
-             onClick={closeModal}
-             aria-label="Close"
-           >
-             &times;
-           </button>
-           </div>
-           <button
-             className="absolute left-8 top-1/2 -translate-y-1/2 bg-transparent rounded-full shadow-none p-2 z-60 btn-clickable"
-             onClick={e => { e.stopPropagation(); prevImg(); }}
-             aria-label="Previous"
-           >
-             <img src={icCircleLeft} alt="Previous" className="w-10 h-10" />
-           </button>
-           <div className="flex flex-col items-center" onClick={e => e.stopPropagation()}>
-             <img
-               src={imageUrls[modalIndex]}
-               alt="Zoomed"
-               className="max-h-[90vh] max-w-[98vw] rounded shadow-lg"
-             />
-           </div>
-           <button
-             className="absolute right-8 top-1/2 -translate-y-1/2 bg-transparent rounded-full shadow-none p-2 z-60 btn-clickable"
-             onClick={e => { e.stopPropagation(); nextImg(); }}
-             aria-label="Next"
-           >
-             <img src={icCircleRight} alt="Next" className="w-10 h-10" />
-           </button>
-         </div>,
-         document.body
-       )}
-      {/* Related Products Carousel */}
-      {(() => {
-        return relatedProducts.length > 0;
-      })() && (
-        <div className="w-full bg-[#FAF7F2] py-8 md:py-20 ">
-          <div className="w-full md:px-[112px] px-4">
-            <div className="flex flex-row justify-between items-center mb-8">
-              <h4 className="text-[26px] md:text-[32px] leading-[34px] md:leading-[40px] font-serif text-[#201F1C]  md:pb-4 md:pt-0">
-                You might be interested
-              </h4>
+        {/* Modal/Lightbox */}
+        {isModalOpen &&
+          createPortal(
+            <div
+              className="fixed inset-0 z-[999999] flex items-center justify-center bg-black/60"
+              onClick={closeModal}
+            >
+              {/* Top center: index */}
+              <div className="absolute top-4 left-1/2 -translate-x-1/2 z-60">
+                <span className="text-white text-base bg-black/50 rounded px-3 py-1">
+                  {modalIndex + 1}/{imageUrls.length}
+                </span>
+              </div>
+              {/* Top right: close button */}
+              <div className="absolute top-4 right-4 z-60">
+                <button
+                  className="text-white text-3xl btn-clickable"
+                  onClick={closeModal}
+                  aria-label="Close"
+                >
+                  &times;
+                </button>
+              </div>
               <button
-                className="text-[#020202] text-sm hidden md:flex btn-clickable  font-semibold"
-                onClick={() => navigate('/browse')}
+                className="absolute left-8 top-1/2 -translate-y-1/2 bg-transparent rounded-full shadow-none p-2 z-60 btn-clickable"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  prevImg();
+                }}
+                aria-label="Previous"
               >
-                {t('VIEW_ALL')}
-              </button>
-            </div>
-            <div className="relative">
-              {/* Carousel Arrows */}
-              <button className="absolute -left-6 top-5/16 -translate-y-1/2 rounded-full  p-2  z-10 hidden md:block btn-clickable">
                 <img src={icCircleLeft} alt="Previous" className="w-10 h-10" />
               </button>
-              <div className="md:overflow-x-auto overflow-x-hidden scroll-smooth">
-                <div className="flex md:gap-8 gap-[22px] md:scroll-smooth">
-                  {relatedProducts.map((item: any, idx: number) => {
-                    const relatedImageUrl =
-                      item.images && item.images.length > 0 ? getImageUrl(item.images[0]) : '';
-                    return (
-                                              <div
+              <div className="flex flex-col items-center" onClick={(e) => e.stopPropagation()}>
+                <img
+                  src={imageUrls[modalIndex]}
+                  alt="Zoomed"
+                  className="max-h-[90vh] max-w-[98vw] rounded shadow-lg"
+                />
+              </div>
+              <button
+                className="absolute right-8 top-1/2 -translate-y-1/2 bg-transparent rounded-full shadow-none p-2 z-60 btn-clickable"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  nextImg();
+                }}
+                aria-label="Next"
+              >
+                <img src={icCircleRight} alt="Next" className="w-10 h-10" />
+              </button>
+            </div>,
+            document.body
+          )}
+        {/* Related Products Carousel */}
+        {(() => {
+          return relatedProducts.length > 0;
+        })() && (
+          <div className="w-full bg-[#FAF7F2] py-8 md:py-20 ">
+            <div className="w-full md:px-[112px] px-4">
+              <div className="flex flex-row justify-between items-center mb-8">
+                <h4 className="text-[26px] md:text-[32px] leading-[34px] md:leading-[40px] font-serif text-[#201F1C]  md:pb-4 md:pt-0">
+                  You might be interested
+                </h4>
+                <button
+                  className="text-[#020202] text-sm hidden md:flex btn-clickable  font-semibold"
+                  onClick={() => navigate('/browse')}
+                >
+                  {t('VIEW_ALL')}
+                </button>
+              </div>
+              <div className="relative">
+                {/* Carousel Arrows */}
+                <button className="absolute -left-6 top-5/16 -translate-y-1/2 rounded-full  p-2  z-10 hidden md:block btn-clickable">
+                  <img src={icCircleLeft} alt="Previous" className="w-10 h-10" />
+                </button>
+                <div className="md:overflow-x-auto overflow-x-hidden scroll-smooth">
+                  <div className="flex md:gap-8 gap-[22px] md:scroll-smooth">
+                    {relatedProducts.map((item: any, idx: number) => {
+                      const relatedImageUrl =
+                        item.images && item.images.length > 0 ? getImageUrl(item.images[0]) : '';
+                      return (
+                        <div
                           key={item.id}
                           className="min-w-[260px] max-w-xs flex flex-col cursor-pointer rounded link-clickable"
                           onClick={() => navigate(`/products/${item.slug}`)}
                         >
-                        <div className="bg-[#E6DDC6] aspect-square w-full flex items-center justify-center overflow-hidden mb-4">
-                          {relatedImageUrl ? (
-                            <img
-                              src={relatedImageUrl}
-                              alt={item.title}
-                              className="object-contain w-full h-full"
-                            />
-                          ) : (
-                            <div className="text-[#61422D] text-center">
-                              <div className="text-4xl mb-2 opacity-50">🏺</div>
-                              <div className="text-xs">No Image</div>
+                          <div className="bg-[#E6DDC6] aspect-square w-full flex items-center justify-center overflow-hidden mb-4">
+                            {relatedImageUrl ? (
+                              <img
+                                src={relatedImageUrl}
+                                alt={item.title}
+                                className="object-contain w-full h-full"
+                              />
+                            ) : (
+                              <div className="text-[#61422D] text-center">
+                                <div className="text-4xl mb-2 opacity-50">🏺</div>
+                                <div className="text-xs">No Image</div>
+                              </div>
+                            )}
+                          </div>
+                          <div className="text-[#585550] text-[14px] leading-[20px] uppercase mb-2 font-semibold">
+                            {item.category.name}
+                          </div>
+                          <h5 className="text-[20px] md:text-[24px] md:leading-[32px] leading-[28px] font-serif text-[#61422D] mb-4 md:pb-8 pb-7 leading-snug line-clamp-3 h-[110px] md:h-[128px] flex items-start">
+                            {item.title}
+                          </h5>
+                          <div className="border-t-2 border-[#E5E1D7] opacity-80 mb-2"></div>
+                          <div className="flex flex-col gap-1 text-[14px] leading-[20px] text-[#585550] font-semibold">
+                            <div className="flex flex-row justify-between">
+                              <span>
+                                {item.ageFrom} - {item.ageTo}
+                              </span>
+                              <span>ITEM {item.itemCode || item.documentId}</span>
                             </div>
-                          )}
-                        </div>
-                        <div className="text-[#585550] text-[14px] leading-[20px] uppercase mb-2 font-semibold">
-                          {item.category.name}
-                        </div>
-                                                 <h5 className="text-[20px] md:text-[24px] md:leading-[32px] leading-[28px] font-serif text-[#61422D] mb-4 md:pb-8 pb-7 leading-snug line-clamp-3 h-[110px] md:h-[128px] flex items-start">
-                           {item.title}
-                         </h5>
-                        <div className="border-t-2 border-[#E5E1D7] opacity-80 mb-2"></div>
-                        <div className="flex flex-col gap-1 text-[14px] leading-[20px] text-[#585550] font-semibold">
-                          <div className="flex flex-row justify-between">
-                            <span>
-                              {item.ageFrom} - {item.ageTo}
-                            </span>
-                            <span>ITEM {item.itemCode || item.documentId}</span>
                           </div>
                         </div>
-                      </div>
-                    );
-                  })}
+                      );
+                    })}
+                  </div>
                 </div>
+                <button className="absolute -right-6 top-5/16 -translate-y-1/2 rounded-full  p-2 z-10 hidden md:block btn-clickable">
+                  <img src={icCircleRight} alt="Next" className="w-10 h-10" />
+                </button>
               </div>
-              <button className="absolute -right-6 top-5/16 -translate-y-1/2 rounded-full  p-2 z-10 hidden md:block btn-clickable">
-                <img src={icCircleRight} alt="Next" className="w-10 h-10" />
-              </button>
             </div>
           </div>
+        )}
+        {/* Acquire or Appraise Section */}
+        <div className="mt-8 md:mt-0">
+          <AcquireOrAppraise />
         </div>
-      )}
-      {/* Acquire or Appraise Section */}
-      <div className="mt-8 md:mt-0">
-        <AcquireOrAppraise />
-      </div>
-                           {/* Right-side Acquire Modal */}
-        {showAcquireModal && createPortal(
-          <div className="fixed inset-0 z-[99999] flex" style={{ top: 0, left: 0, right: 0, bottom: 0 }}>
-                         {/* Overlay background - covers entire screen including header */}
-                           <div 
+
+        {/* Right-side Acquire Modal */}
+        {showAcquireModal &&
+          createPortal(
+            <div
+              className="fixed inset-0 z-[99999] flex"
+              style={{ top: 0, left: 0, right: 0, bottom: 0 }}
+            >
+              {/* Overlay background - covers entire screen including header */}
+              <div
                 className="absolute inset-0 pointer-events-auto"
-                style={{ 
-                  top: 0, 
-                  left: 0, 
-                  right: 0, 
+                style={{
+                  top: 0,
+                  left: 0,
+                  right: 0,
                   bottom: 0,
-                  backgroundColor: '#0000008F'
+                  backgroundColor: '#0000008F',
                 }}
                 onClick={() => setShowAcquireModal(false)}
               />
-                         {/* Modal content - full height including header area */}
-             <div className="relative ml-auto w-full md:w-[635px] h-screen">
-               <div className="w-full bg-[#F7F5EA] shadow-xl flex flex-col h-screen ml-auto">
-              
-               {/* Mobile close button - only visible on mobile */}
-               <div className="flex items-center justify-between px-4 py-3 h-16 md:hidden bg-[#F7F5EA] sticky top-0 z-10 flex-shrink-0">
-                 <img
-                   src={logo}
-                   alt="Logo"
-                   className="h-10 w-[193px]"
-                   style={{ cursor: 'pointer' }}
-                   onClick={() => navigate('/')}
-                 />
-                 <button className="p-2 btn-clickable" onClick={() => setShowAcquireModal(false)} aria-label="Close">
-                   <svg
-                     xmlns="http://www.w3.org/2000/svg"
-                     fill="none"
-                     viewBox="0 0 24 24"
-                     strokeWidth={1.5}
-                     stroke="currentColor"
-                     className="w-6 h-6 text-[#101828]"
-                   >
-                     <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                   </svg>
-                 </button>
-               </div>
-                               {/* Form content - scrollable on desktop, fixed on mobile */}
-                <div className="flex-1 overflow-y-auto md:overflow-y-auto overflow-hidden px-4 md:px-10 py-10">
-                 {/* Desktop close button - only visible on desktop, right aligned */}
-                 <div className="hidden md:flex w-full justify-end">
-                   <button
-                     className=" z-20 btn-clickable"
-                     onClick={() => setShowAcquireModal(false)}
-                     aria-label="Close"
-                   >
-                     <svg
-                       xmlns="http://www.w3.org/2000/svg"
-                       fill="none"
-                       viewBox="0 0 24 24"
-                       strokeWidth={1.5}
-                       stroke="currentColor"
-                       className="w-6 h-6 text-[#A4A7AE]"
-                     >
-                       <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                     </svg>
-                   </button>
-                 </div>
-                 <h3 className=" font-serif text-[28px] leading-[32px] md:text-[40px] md:leading-[48px] text-[#61422D] mb-4 text-center md:pt-13">
-                   Secure Your Piece<br/> of History
-                 </h3>
-                 <div className="text-[20px] leading-[28px] text-[#6D6A66] mb-8 text-center ">
-                   Fill in your details below, and we will be in touch with you shortly.
-                 </div>
-                 <form
-                   className="space-y-6"
-                   onSubmit={(e) => {
-                     e.preventDefault();
-                     submitForm();
-                   }}
-                 >
-                   <div>
-                     <label className="block mb-2 text-[#1F1F1F]  text-[14px] leading-[20px]">
-                       First Name
-                     </label>
-                     <input
-                       type="text"
-                       className={`w-full rounded-lg border px-4 py-3 bg-[#FCFAF2] text-[#23211C] ${
-                         errors.firstName ? 'border-red-500' : 'border-[#C7C7B9]'
-                       }`}
-                       placeholder="Enter your first name"
-                       value={acquireForm.firstName}
-                       onChange={(e) => {
-                         setAcquireForm((f) => ({ ...f, firstName: e.target.value }));
-                         if (errors.firstName) {
-                           setErrors((prev) => ({ ...prev, firstName: '' }));
-                         }
-                       }}
-                     />
-                     {errors.firstName && (
-                       <p className="text-red-500 text-sm mt-1">{errors.firstName}</p>
-                     )}
-                   </div>
-                   <div>
-                     <label className="block mb-2 text-[#1F1F1F]  text-[14px] leading-[20px]">
-                       Last Name
-                     </label>
-                     <input
-                       type="text"
-                       className={`w-full rounded-lg border px-4 py-3 bg-[#FCFAF2] text-[#23211C] ${
-                         errors.lastName ? 'border-red-500' : 'border-[#C7C7B9]'
-                       }`}
-                       placeholder="Enter your last name"
-                       value={acquireForm.lastName}
-                       onChange={(e) => {
-                         setAcquireForm((f) => ({ ...f, lastName: e.target.value }));
-                         if (errors.lastName) {
-                           setErrors((prev) => ({ ...prev, lastName: '' }));
-                         }
-                       }}
-                     />
-                     {errors.lastName && (
-                       <p className="text-red-500 text-sm mt-1">{errors.lastName}</p>
-                     )}
-                   </div>
-                   <div>
-                     <label className="block mb-2 text-[#1F1F1F]  text-[14px] leading-[20px]">
-                       Item Code
-                     </label>
-                     <input
-                       type="text"
-                       className={`w-full rounded-lg border px-4 py-3 bg-[#FCFAF2] text-[#23211C] ${
-                         errors.itemCode ? 'border-red-500' : 'border-[#C7C7B9]'
-                       }`}
-                       placeholder="Enter item code"
-                       value={acquireForm.itemCode}
-                       onChange={(e) => {
-                         setAcquireForm((f) => ({ ...f, itemCode: e.target.value }));
-                         if (errors.itemCode) {
-                           setErrors((prev) => ({ ...prev, itemCode: '' }));
-                         }
-                       }}
-                     />
-                     {errors.itemCode && (
-                       <p className="text-red-500 text-sm mt-1">{errors.itemCode}</p>
-                     )}
-                   </div>
-                   <div>
-                     <label className="block mb-2 text-[#1F1F1F]  text-[14px] leading-[20px]">
-                       Contact Number
-                     </label>
-                     <PhoneInput
-                       country={'sg'}
-                       value={phone}
-                       onChange={(value) => {
-                         setPhone(value);
-                         if (errors.phone) {
-                           setErrors((prev) => ({ ...prev, phone: '' }));
-                         }
-                       }}
-                       inputClass={`w-full rounded-lg border px-4 py-3 bg-[#FCFAF2] text-[#23211C] ${
-                         errors.phone ? 'border-red-500' : 'border-[#C7C7B9]'
-                       }`}
-                       buttonClass="  bg-[#FCFAF2]"
-                       dropdownClass="bg-[#FCFAF2] text-[#23211C]"
-                       searchClass="bg-[#FCFAF2] text-[#23211C] border border-[#C7C7B9] rounded-lg"
-                       containerClass="phone-input-container"
-                     />
-                     {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone}</p>}
-                   </div>
-                   <div className="w-full pt-2 md:block hidden">
-                     <Button
-                       text={isLoading ? t('SUBMITTING') : t('SUBMIT_FORM')}
-                       type="submit"
-                       className="submit-form-btn w-full"
-                       disabled={isLoading}
-                     />
-                   </div>
-                 </form>
-               </div>
-               {/* Mobile Submit Button */}
-               <div className="md:hidden bg-[#FAF7F2] border-t border-[#D5D4D3] px-4 py-4 flex-shrink-0">
-                 <Button
-                   text={isLoading ? t('SUBMITTING') : t('SUBMIT_FORM')}
-                   type="submit"
-                   className="w-full"
-                   disabled={isLoading}
-                   onClick={submitForm}
-                   forceMobile={true}
-                 />
-               </div>
-             </div>
-           </div>
-         </div>,
-         document.body
-       )}
-      {isLoading && <Loading fullScreen={true} text="Submitting your request..." />}
-    </div>
+              {/* Modal content - full height including header area */}
+              <div className="relative ml-auto w-full md:w-[635px] h-screen">
+                <div className="w-full bg-[#F7F5EA] shadow-xl flex flex-col h-screen ml-auto">
+                  {/* Mobile close button - only visible on mobile */}
+                  <div className="flex items-center justify-between px-4 py-3 h-16 md:hidden bg-[#F7F5EA] sticky top-0 z-10 flex-shrink-0">
+                    <img
+                      src={logo}
+                      alt="Logo"
+                      className="h-10 w-[193px]"
+                      style={{ cursor: 'pointer' }}
+                      onClick={() => navigate('/')}
+                    />
+                    <button
+                      className="p-2 btn-clickable"
+                      onClick={() => setShowAcquireModal(false)}
+                      aria-label="Close"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="w-6 h-6 text-[#101828]"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M6 18L18 6M6 6l12 12"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                  {/* Form content - scrollable on desktop, fixed on mobile */}
+                  <div className="flex-1 overflow-y-auto md:overflow-y-auto overflow-hidden px-4 md:px-10 py-10">
+                    {/* Desktop close button - only visible on desktop, right aligned */}
+                    <div className="hidden md:flex w-full justify-end">
+                      <button
+                        className=" z-20 btn-clickable"
+                        onClick={() => setShowAcquireModal(false)}
+                        aria-label="Close"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          strokeWidth={1.5}
+                          stroke="currentColor"
+                          className="w-6 h-6 text-[#A4A7AE]"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M6 18L18 6M6 6l12 12"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+                    <h3 className=" font-serif text-[28px] leading-[32px] md:text-[40px] md:leading-[48px] text-[#61422D] mb-4 text-center md:pt-13">
+                      Secure Your Piece
+                      <br /> of History
+                    </h3>
+                    <div className="text-[20px] leading-[28px] text-[#6D6A66] mb-8 text-center ">
+                      Fill in your details below, and we will be in touch with you shortly.
+                    </div>
+                    <form
+                      className="space-y-6"
+                      onSubmit={(e) => {
+                        e.preventDefault();
+                        submitForm();
+                      }}
+                    >
+                      <div>
+                        <label className="block mb-2 text-[#1F1F1F]  text-[14px] leading-[20px]">
+                          First Name
+                        </label>
+                        <input
+                          type="text"
+                          className={`w-full rounded-lg border px-4 py-3 bg-[#FCFAF2] text-[#23211C] ${
+                            errors.firstName ? 'border-red-500' : 'border-[#C7C7B9]'
+                          }`}
+                          placeholder="Enter your first name"
+                          value={acquireForm.firstName}
+                          onChange={(e) => {
+                            setAcquireForm((f) => ({ ...f, firstName: e.target.value }));
+                            if (errors.firstName) {
+                              setErrors((prev) => ({ ...prev, firstName: '' }));
+                            }
+                          }}
+                        />
+                        {errors.firstName && (
+                          <p className="text-red-500 text-sm mt-1">{errors.firstName}</p>
+                        )}
+                      </div>
+                      <div>
+                        <label className="block mb-2 text-[#1F1F1F]  text-[14px] leading-[20px]">
+                          Last Name
+                        </label>
+                        <input
+                          type="text"
+                          className={`w-full rounded-lg border px-4 py-3 bg-[#FCFAF2] text-[#23211C] ${
+                            errors.lastName ? 'border-red-500' : 'border-[#C7C7B9]'
+                          }`}
+                          placeholder="Enter your last name"
+                          value={acquireForm.lastName}
+                          onChange={(e) => {
+                            setAcquireForm((f) => ({ ...f, lastName: e.target.value }));
+                            if (errors.lastName) {
+                              setErrors((prev) => ({ ...prev, lastName: '' }));
+                            }
+                          }}
+                        />
+                        {errors.lastName && (
+                          <p className="text-red-500 text-sm mt-1">{errors.lastName}</p>
+                        )}
+                      </div>
+                      <div>
+                        <label className="block mb-2 text-[#1F1F1F]  text-[14px] leading-[20px]">
+                          Item Code
+                        </label>
+                        <input
+                          type="text"
+                          className={`w-full rounded-lg border px-4 py-3 bg-[#FCFAF2] text-[#23211C] ${
+                            errors.itemCode ? 'border-red-500' : 'border-[#C7C7B9]'
+                          }`}
+                          placeholder="Enter item code"
+                          value={acquireForm.itemCode}
+                          onChange={(e) => {
+                            setAcquireForm((f) => ({ ...f, itemCode: e.target.value }));
+                            if (errors.itemCode) {
+                              setErrors((prev) => ({ ...prev, itemCode: '' }));
+                            }
+                          }}
+                        />
+                        {errors.itemCode && (
+                          <p className="text-red-500 text-sm mt-1">{errors.itemCode}</p>
+                        )}
+                      </div>
+                      <div>
+                        <label className="block mb-2 text-[#1F1F1F]  text-[14px] leading-[20px]">
+                          Contact Number
+                        </label>
+                        <PhoneInput
+                          country={'sg'}
+                          value={phone}
+                          onChange={(value) => {
+                            setPhone(value);
+                            if (errors.phone) {
+                              setErrors((prev) => ({ ...prev, phone: '' }));
+                            }
+                          }}
+                          inputClass={`w-full rounded-lg border px-4 py-3 bg-[#FCFAF2] text-[#23211C] ${
+                            errors.phone ? 'border-red-500' : 'border-[#C7C7B9]'
+                          }`}
+                          buttonClass="  bg-[#FCFAF2]"
+                          dropdownClass="bg-[#FCFAF2] text-[#23211C]"
+                          searchClass="bg-[#FCFAF2] text-[#23211C] border border-[#C7C7B9] rounded-lg"
+                          containerClass="phone-input-container"
+                        />
+                        {errors.phone && (
+                          <p className="text-red-500 text-sm mt-1">{errors.phone}</p>
+                        )}
+                      </div>
+                      <div className="w-full pt-2 md:block hidden">
+                        <Button
+                          text={isLoading ? t('SUBMITTING') : t('SUBMIT_FORM')}
+                          type="submit"
+                          className="submit-form-btn w-full"
+                          disabled={isLoading}
+                        />
+                      </div>
+                    </form>
+                  </div>
+                  {/* Mobile Submit Button */}
+                  <div className="md:hidden bg-[#FAF7F2] border-t border-[#D5D4D3] px-4 py-4 flex-shrink-0">
+                    <Button
+                      text={isLoading ? t('SUBMITTING') : t('SUBMIT_FORM')}
+                      type="submit"
+                      className="w-full"
+                      disabled={isLoading}
+                      onClick={submitForm}
+                      forceMobile={true}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>,
+            document.body
+          )}
+        {isLoading && <Loading fullScreen={true} text="Submitting your request..." />}
+      </div>
+
+      {/* Mobile Acquire Button - Portal to document.body for perfect positioning */}
+      {!showAcquireModal &&
+        createPortal(
+          <div
+            className="md:hidden"
+            style={{
+              position: 'fixed',
+              bottom: 0,
+              left: 0,
+              right: 0,
+
+              backgroundColor: '#FAF7F2',
+              borderTop: '1px solid #D5D4D3',
+              padding: '16px',
+              boxShadow: '0 -4px 6px -1px rgba(0, 0, 0, 0.1)',
+            }}
+          >
+            <Button
+              text={t('ACQUIRE_THIS_ITEM')}
+              className="w-full"
+              onClick={() => setShowAcquireModal(true)}
+              forceMobile={true}
+            />
+          </div>,
+          document.body
+        )}
+    </>
   );
 }

@@ -41,9 +41,7 @@ const Loading: React.FC<LoadingProps> = ({
         style={{ animationDuration: '1s' }}
       />
       {/* Center dot */}
-      <div
-        className="absolute inset-0 flex items-center justify-center"
-      >
+      <div className="absolute inset-0 flex items-center justify-center">
         <div className="w-1 h-1 bg-[#61422D] rounded-full animate-pulse" />
       </div>
     </div>
@@ -54,13 +52,20 @@ const Loading: React.FC<LoadingProps> = ({
       <LoadingSpinner />
       {text && (
         <div className="text-center">
-          <p className="text-base font-medium text-[#61422D] mb-1">
-            {text}
-          </p>
+          <p className="text-base font-medium text-[#61422D] mb-1">{text}</p>
           <div className="flex space-x-1 justify-center">
-            <div className="w-1 h-1 bg-[#61422D] rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-            <div className="w-1 h-1 bg-[#61422D] rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-            <div className="w-1 h-1 bg-[#61422D] rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+            <div
+              className="w-1 h-1 bg-[#61422D] rounded-full animate-bounce"
+              style={{ animationDelay: '0ms' }}
+            />
+            <div
+              className="w-1 h-1 bg-[#61422D] rounded-full animate-bounce"
+              style={{ animationDelay: '150ms' }}
+            />
+            <div
+              className="w-1 h-1 bg-[#61422D] rounded-full animate-bounce"
+              style={{ animationDelay: '300ms' }}
+            />
           </div>
         </div>
       )}
@@ -71,8 +76,9 @@ const Loading: React.FC<LoadingProps> = ({
     return (
       <div
         className="fixed inset-0 z-50 flex items-center justify-center bg-[#F7F3E8]"
-        style={{ 
-          backgroundImage: 'radial-gradient(circle at 50% 50%, rgba(247, 243, 232, 0.95) 0%, rgba(230, 221, 198, 0.1) 100%)'
+        style={{
+          backgroundImage:
+            'radial-gradient(circle at 50% 50%, rgba(247, 243, 232, 0.95) 0%, rgba(230, 221, 198, 0.1) 100%)',
         }}
       >
         <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-lg border border-[#E6DDC6]/50">

@@ -263,7 +263,6 @@ export default function AboutUs() {
                 style={{
                   width: window.innerWidth < 768 ? mobileCardWidth : cardWidth,
                   minWidth: window.innerWidth < 768 ? mobileCardWidth : cardWidth,
-                  
                 }}
               >
                 <img
@@ -271,12 +270,8 @@ export default function AboutUs() {
                   alt={member.name}
                   className="w-full h-[340px] object-cover mb-6"
                 />
-                <h5 className="text-2xl font-serif text-[#61422D] mb-1 text-left">
-                  {member.name}
-                </h5>
-                <div className="text-base text-[#61422D] mb-2 text-left">
-                  {member.position}
-                </div>
+                <h5 className="text-2xl font-serif text-[#61422D] mb-1 text-left">{member.name}</h5>
+                <div className="text-base text-[#61422D] mb-2 text-left">{member.position}</div>
                 <div className="text-base text-[#585550] text-left">{member.bio}</div>
               </div>
             ))}

@@ -2,8 +2,10 @@ import React from 'react';
 import Button from './Button';
 
 import { COLORS } from './colors.ts';
-import bgButtonSubmitForm from '../assets/bg_button_submit_form.png';
+import bgButtonSubmitForm from '../assets/bg_button_submit_form1.png';
 import bgButtonMobile from '../assets/bg_button_mobile.png';
+import bgButtonSubmitFormHover from '../assets/bg_button_submit_form_hover.png';
+import bgButtonMobileHover from '../assets/bg_button_mobile_hover.png';
 
 interface PopupProps {
   title: string;
@@ -31,7 +33,7 @@ const Popup: React.FC<PopupProps> = ({
       >
         {/* Close icon */}
         <button
-          className="absolute top-4 right-4 text-4xl text-[#A4A7AE] hover:text-[#86684A] focus:outline-none"
+          className="absolute top-4 right-4 text-4xl text-[#A4A7AE] hover:text-[#86684A] focus:outline-none btn-clickable"
           onClick={onClose}
           aria-label="Close"
         >
@@ -65,6 +67,12 @@ const Popup: React.FC<PopupProps> = ({
         <div className="w-full flex justify-center mx-auto">
           <button
             className="w-full h-[48px]  items-center justify-center text-[14px] leading-[24px]  shadow-none transition-all    hidden md:block mx-5 btn-clickable"
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundImage = `url(${bgButtonSubmitFormHover})`;
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundImage = `url(${bgButtonSubmitForm})`;
+            }}
             style={{
               backgroundImage: `url(${bgButtonSubmitForm})`,
               backgroundSize: '100% 100%',
@@ -81,6 +89,12 @@ const Popup: React.FC<PopupProps> = ({
           </button>
           <button
             className="w-full  h-[48px] flex items-center justify-center text-[14px] leading-[24px]  shadow-none transition-all     md:hidden btn-clickable"
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundImage = `url(${bgButtonMobileHover})`;
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundImage = `url(${bgButtonMobile})`;
+            }}
             style={{
               backgroundImage: `url(${bgButtonMobile})`,
               backgroundSize: '100% 100%',

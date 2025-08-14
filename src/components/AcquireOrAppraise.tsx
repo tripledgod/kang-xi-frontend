@@ -10,6 +10,8 @@ import bgButton from '../assets/bg_button.png';
 import Button from './Button';
 import { COLORS } from './colors';
 import { useNavigate } from 'react-router-dom';
+import bgButtonHover from '../assets/bg_button_hover.png';
+import bgButtonMobileHover from '../assets/bg_button_mobile_hover.png';
 
 export default function AcquireOrAppraise() {
   const navigate = useNavigate();
@@ -64,7 +66,7 @@ export default function AcquireOrAppraise() {
           style={{ background: COLORS.secondary900 }}
         >
           {/* Mobile: order-2, Desktop: order-1 (content) */}
-          <div className="flex-1 flex flex-col items-center justify-center px-6 py-8 md:py-0 md:px-0 text-center order-2 md:order-1">
+          <div className="flex-1 flex flex-col items-center justify-center px-6 py-[45px] md:py-0 md:px-0 text-center order-2 md:order-1">
             <img src={section.icon} alt="icon" className="mb-8 w-16 h-16" />
             {isMobile ? (
               <h5
@@ -88,6 +90,17 @@ export default function AcquireOrAppraise() {
                 onClick={
                   section.link === '/acquire-an-item' ? handleAcquireClick : handleAppraiseClick
                 }
+                onMouseEnter={(e) => {
+                  const target = e.currentTarget;
+                  if (isMobile) {
+                    target.style.backgroundImage = `url(${bgButtonMobileHover})`;
+                  } else {
+                    target.style.backgroundImage = `url(${bgButtonHover})`;
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundImage = `url(${bgButton})`;
+                }}
                 style={{
                   backgroundImage: `url(${bgButton})`,
                   backgroundSize: '100% 100%',

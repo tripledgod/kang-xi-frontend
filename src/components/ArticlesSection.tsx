@@ -1,4 +1,4 @@
-import  { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Button from './Button';
 import { useNavigate } from 'react-router-dom';
@@ -57,7 +57,6 @@ export default function ArticlesSection() {
         <div
           className="text-[18px] leading-[26px] mb-12 text-center  text-[#342216]"
           style={{
-            
             fontSize: 18,
             lineHeight: '26px',
             letterSpacing: 0,

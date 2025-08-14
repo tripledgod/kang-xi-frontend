@@ -20,6 +20,7 @@ import { ACCESS_TOKEN, API_URL } from '../utils/constants';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import terracotaImg from '../assets/terracota.jpg';
+import bgButtonHover from '../assets/bg_button_hover.png';
 
 const whyItems = [
   {
@@ -215,27 +216,32 @@ export default function AppraiseAnItem() {
             Your Antique
           </h1>
           <p className="text-white text-[18px] leading-[26px] max-w-2xl md:max-w-[664px] mx-auto opacity-90 mb-5 pointer-events-auto">
-            Antiques carry history, but true value lies in authenticity. Whether you have inherited a piece, discovered a rare find, or wish to confirm the provenance of your artifact, Kangxis offers expert authentication services to help you uncover the true story behind your antique
+            Antiques carry history, but true value lies in authenticity. Whether you have inherited
+            a piece, discovered a rare find, or wish to confirm the provenance of your artifact,
+            Kangxis offers expert authentication services to help you uncover the true story behind
+            your antique
           </p>
-          <div className="pointer-events-auto md:mt-7 mt-12">  
-          <button
+          <div className="pointer-events-auto md:mt-7 mt-12">
+            <button
               type="submit"
               onClick={handleScrollToForm}
-              
               className="flex h-[48px] font-semibold w-[189px] items-center justify-center text-[14px] leading-[20px] shadow-none transition-all px-6"
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundImage = `url(${bgButtonHover})`;
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundImage = `url(${bgButtonMobile})`;
+              }}
               style={{
                 backgroundImage: `url(${bgButtonMobile})`,
                 backgroundSize: '100% 100%',
                 backgroundRepeat: 'no-repeat',
                 backgroundPosition: 'center',
                 color: '#fff',
-                
               }}
             >
               APPRAISE AN ITEM
-            </button>  
-                 
-            
+            </button>
           </div>
         </div>
       </div>
@@ -270,9 +276,7 @@ export default function AppraiseAnItem() {
           {whyItems.map((item, idx) => (
             <div key={idx} className="flex flex-col items-left text-left">
               {item.icon}
-              <h5 className="text-[24px] leading-[32px] text-[#61422D] mt-4 mb-2">
-                {item.title}
-              </h5>
+              <h5 className="text-[24px] leading-[32px] text-[#61422D] mt-4 mb-2">{item.title}</h5>
               <div className="text-base text-[#6D6A66]">{item.desc}</div>
             </div>
           ))}

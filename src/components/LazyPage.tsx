@@ -6,15 +6,11 @@ interface LazyPageProps {
   fallback?: React.ReactNode;
 }
 
-const LazyPage: React.FC<LazyPageProps> = ({ 
-  children, 
-  fallback = <Loading fullScreen={true} text="Loading page..." size="large" />
+const LazyPage: React.FC<LazyPageProps> = ({
+  children,
+  fallback = <Loading fullScreen={true} text="Loading page..." size="large" />,
 }) => {
-  return (
-    <Suspense fallback={fallback}>
-      {children}
-    </Suspense>
-  );
+  return <Suspense fallback={fallback}>{children}</Suspense>;
 };
 
-export default LazyPage; 
+export default LazyPage;

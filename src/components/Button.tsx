@@ -2,7 +2,10 @@ import React, { useRef, useEffect, useState } from 'react';
 import bgButton from '../assets/bg_button.png';
 import bgButtonMobile from '../assets/bg_button_mobile.png';
 import bgButtonOutline from '../assets/bg_button_outline.png';
-import bgButtonSubmitForm from '../assets/bg_button_submit_form.png';
+import bgButtonSubmitForm from '../assets/bg_button_submit_form1.png';
+import bgButtonHover from '../assets/bg_button_hover.png';
+import bgButtonOutlineHover from '../assets/bg_button_outline_hover1.png';
+import bgButtonSubmitFormHover from '../assets/bg_button_submit_form_hover.png';
 
 interface ButtonProps {
   text: string;
@@ -27,6 +30,7 @@ const Button: React.FC<ButtonProps> = ({
   const btnRef = useRef<HTMLButtonElement>(null);
   const [isWide, setIsWide] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
     if (forceMobile) {
@@ -49,7 +53,14 @@ const Button: React.FC<ButtonProps> = ({
   // Choose the right background
   let backgroundImage = '';
   if (isOutline) {
-    backgroundImage = bgButtonOutline;
+    backgroundImage = isHovered ? bgButtonOutlineHover : bgButtonOutline;
+  } else if (isHovered) {
+    // Use specific hover backgrounds based on button type
+    if (isWide) {
+      backgroundImage = bgButtonSubmitFormHover;
+    } else {
+      backgroundImage = bgButtonHover;
+    }
   } else if (isMobile) {
     backgroundImage = bgButtonMobile;
   } else if (isWide) {
@@ -64,7 +75,9 @@ const Button: React.FC<ButtonProps> = ({
       type={type}
       onClick={onClick}
       disabled={disabled}
-      className={`group relative w-full md:w-[222px] h-[48px] flex items-center justify-center text-base shadow-none transition-all px-6 overflow-hidden before:absolute before:inset-0 before:bg-[#6B5341] before:opacity-0 before:transition-opacity before:duration-200 hover:before:opacity-100 btn-clickable ${className} ${
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      className={`group relative w-full md:w-[189px] h-[48px] flex items-center justify-center text-base shadow-none transition-all px-6 overflow-hidden before:absolute before:inset-0 before:opacity-0 before:transition-opacity before:duration-200 hover:before:opacity-100 btn-clickable ${className} ${
         disabled ? 'opacity-50 cursor-not-allowed' : ''
       }`}
       style={{
