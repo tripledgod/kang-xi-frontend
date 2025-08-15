@@ -29,7 +29,7 @@ const Browse: React.FC = () => {
   const { loading: categoriesLoading, withLoading: withCategoriesLoading } = useLoading(true);
   const [error, setError] = useState<string | null>(null);
   const [activeEra, setActiveEra] = useState<string>('');
-  
+
   // Products state - no cache, always fetch fresh data
   const [products, setProducts] = useState<any[]>([]);
   const { loading: productsLoading, withLoading: withProductsLoading } = useLoading(false);
@@ -59,7 +59,7 @@ const Browse: React.FC = () => {
 
   // Memoize era tabs to prevent unnecessary recalculations
   const eraTabs = useMemo(() => {
-    return sortedCategories.length > 0 
+    return sortedCategories.length > 0
       ? sortedCategories.map((category) => ({
           slug: category.slug,
           name: category.name.toUpperCase(),
@@ -70,13 +70,13 @@ const Browse: React.FC = () => {
   // When loading page, check URL params first, then set default era
   useEffect(() => {
     const eraFromUrl = searchParams.get('era');
-    if (eraFromUrl && eraTabs.some(era => era.slug === eraFromUrl)) {
+    if (eraFromUrl && eraTabs.some((era) => era.slug === eraFromUrl)) {
       setActiveEra(eraFromUrl);
       // Scroll to top when era changes via URL
       const isMobile = window.innerWidth < 768; // md breakpoint
-      window.scrollTo({ 
-        top: isMobile ? 0 : 400, 
-        behavior: 'smooth' 
+      window.scrollTo({
+        top: isMobile ? 0 : 400,
+        behavior: 'smooth',
       });
     } else if (!activeEra && eraTabs.length > 0) {
       setActiveEra(eraTabs[0].slug);
@@ -125,7 +125,7 @@ const Browse: React.FC = () => {
   // Fetch products by activeEra (no cache, always fresh data)
   useEffect(() => {
     let isMounted = true;
-    
+
     if (!activeEra || sortedCategories.length === 0) {
       // Clear products when no active era or no categories
       if (isMounted) {
@@ -134,7 +134,7 @@ const Browse: React.FC = () => {
       }
       return;
     }
-    
+
     // Find category by slug
     const category = sortedCategories.find((cat) => cat.slug === activeEra);
     if (!category) {
@@ -144,20 +144,19 @@ const Browse: React.FC = () => {
       }
       return;
     }
-    
+
     const fetchProducts = async () => {
       try {
-
         if (isMounted) {
           setErrorProducts(null);
           setProducts([]); // Clear previous products immediately
         }
-        
+
         // Always fetch fresh data from API
         const productsData = await getProductsByCategory(category.id, locale);
-        
+
         if (!isMounted) return; // Check if component is still mounted
-        
+
         if (productsData && productsData.length > 0) {
           const flattened = productsData.map((prod) => flattenProduct(prod));
           setProducts(flattened);
@@ -172,9 +171,9 @@ const Browse: React.FC = () => {
         setProducts([]);
       }
     };
-    
+
     withProductsLoading(fetchProducts);
-    
+
     // Cleanup function
     return () => {
       isMounted = false;
@@ -184,72 +183,71 @@ const Browse: React.FC = () => {
   // Preload products for all eras when categories are available (no cache, just preload)
   useEffect(() => {
     let isMounted = true;
-    
+
     if (sortedCategories.length > 0) {
       // Preload products for all eras in background
       const preloadAllProducts = async () => {
-        const eraSlugs = sortedCategories.map(cat => cat.slug);
-        
+        const eraSlugs = sortedCategories.map((cat) => cat.slug);
+
         for (const eraSlug of eraSlugs) {
           if (!isMounted) break; // Stop if component unmounted
-          
+
           // Skip if this is the currently active era (already being fetched)
           if (eraSlug === activeEra) continue;
-          
+
           // Mark as preloading
           if (isMounted) {
-            setPreloadingProgress(prev => ({ ...prev, [eraSlug]: true }));
+            setPreloadingProgress((prev) => ({ ...prev, [eraSlug]: true }));
           }
-          
+
           const category = sortedCategories.find((cat) => cat.slug === eraSlug);
           if (category) {
             try {
               // Always fetch fresh data, no cache
               const productsData = await getProductsByCategory(category.id, locale);
-
             } catch (err) {
               if (isMounted) {
                 console.warn(`Failed to preload products for ${eraSlug}:`, err);
               }
             }
           }
-          
+
           // Mark as completed
           if (isMounted) {
-            setPreloadingProgress(prev => ({ ...prev, [eraSlug]: false }));
+            setPreloadingProgress((prev) => ({ ...prev, [eraSlug]: false }));
           }
         }
       };
-      
+
       // Start preloading in background (don't await)
       preloadAllProducts();
     }
-    
+
     // Cleanup function
     return () => {
       isMounted = false;
     };
   }, [sortedCategories, locale, activeEra]);
 
+  const handleEraClick = useCallback(
+    (eraSlug: string) => {
+      if (eraSlug !== activeEra) {
+        // Clear current products immediately when switching
+        setProducts([]);
+        setErrorProducts(null);
+        setActiveEra(eraSlug);
+        navigate(`/browse?era=${eraSlug}`, { replace: true });
 
-
-    const handleEraClick = useCallback((eraSlug: string) => {
-    if (eraSlug !== activeEra) {
- 
-      // Clear current products immediately when switching
-      setProducts([]);
-      setErrorProducts(null);
-      setActiveEra(eraSlug);
-      navigate(`/browse?era=${eraSlug}`, { replace: true });
-      
-      // Scroll to top of the page when switching era
-      const isMobile = window.innerWidth < 768; // md breakpoint
-      window.scrollTo({ 
-        top: isMobile ? 0 : 400, 
-        behavior: 'smooth' 
-      });
-    }
-  }, [activeEra, navigate]);
+        // Scroll to top of the page when switching era
+        const isMobile = window.innerWidth < 768; // md breakpoint
+        window.scrollTo({
+          top: isMobile ? 0 : 400,
+          behavior: 'smooth',
+        });
+      }
+    },
+    [activeEra, navigate]
+  );
 
   // Component ProductCard to manage image state for each product
   const ProductCard: React.FC<{ product: any; navigate: any }> = ({ product, navigate }) => {
@@ -386,7 +384,7 @@ const Browse: React.FC = () => {
           className="hidden md:block w-full h-[420px] object-cover object-center"
         />
       </div>
-      
+
       {/* Era Tabs - Original (non-sticky) - Only show when NOT scrolled */}
       {!showStickyHeader && (
         <div className="w-full bg-[#F7F3E8]">
@@ -426,13 +424,11 @@ const Browse: React.FC = () => {
         <div className="w-full sticky top-0 z-40 bg-[#F7F5EA]">
           {/* Header */}
           <Header />
-          
+
           {/* Era Tabs */}
           <div className="w-full border-b border-[#C0BFBD]">
             <div className="max-w-7xl mx-auto px-4 md:px-0 pt-4 md:pt-6  overflow-x-auto scrollbar-hide">
-              <div
-                className="inline-flex items-center gap-x-[16px] md:gap-x-2 justify-start pl-[10px] md:pl-0 uppercase whitespace-nowrap"
-              >
+              <div className="inline-flex items-center gap-x-[16px] md:gap-x-2 justify-start pl-[10px] md:pl-0 uppercase whitespace-nowrap">
                 {eraTabs.map((era, idx) => (
                   <React.Fragment key={era.slug}>
                     <button

@@ -23,6 +23,8 @@ export default function Articles() {
   const [page, setPage] = useState(1);
   const [articles, setArticles] = useState<Article[]>([]);
   const [totalPages, setTotalPages] = useState(1);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
   const { loading, withLoading } = useLoading(true);
   const { locale } = useLanguage();
   const scrollToTop = useScrollToTop();
@@ -30,6 +32,12 @@ export default function Articles() {
   const featuredArticles = articles.slice(0, 2);
 
   useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+    useEffect(() => {
     const fetchArticles = async () => {
       try {
         const response = await getArticles(page, ARTICLES_PER_PAGE, locale);
@@ -43,20 +51,88 @@ export default function Articles() {
     withLoading(fetchArticles);
   }, [page, locale]); // Re-fetch when locale changes
 
-  const getPageNumbers = (current: number, total: number) => {
-    const delta = 2;
-    const range = [];
-    for (let i = Math.max(2, current - delta); i <= Math.min(total - 1, current + delta); i++) {
-      range.push(i);
+  // Scroll to top when page changes
+  useEffect(() => {
+    if (page > 1) {
+      scrollToTop();
     }
-    if (current - delta > 2) range.unshift('...');
-    if (current + delta < total - 1) range.push('...');
-    range.unshift(1);
-    if (total > 1) range.push(total);
-    return range;
+  }, [page, scrollToTop]);
+
+  const getPageNumbers = (current: number, total: number, isMobile: boolean = false) => {
+    if (isMobile) {
+      // Mobile: show 2 pages at start, 2 pages at end, with ... in between
+      const range = [];
+
+      if (total <= 6) {
+        // If total pages <= 6, show all pages
+        for (let i = 1; i <= total; i++) {
+          range.push(i);
+        }
+      } else {
+        // Show first 2 pages
+        range.push(1, 2);
+
+        if (current <= 3) {
+          // If current page is in first 3 pages, show next 2 pages
+          range.push(3, 4);
+          if (total > 4) range.push('...');
+        } else if (current >= total - 2) {
+          // If current page is in last 3 pages, show previous 2 pages
+          if (current > total - 2) range.push('...');
+          range.push(total - 3, total - 2);
+        } else {
+          // Show ... and current page with neighbors
+          range.push('...');
+          range.push(current - 1, current, current + 1);
+          range.push('...');
+        }
+
+        // Show last 2 pages
+        if (total > 2) {
+          range.push(total - 1, total);
+        }
+      }
+
+      return range;
+    } else {
+      // Desktop: show 3 pages at start, 3 pages at end, with ... in between
+      const range = [];
+
+      if (total <= 8) {
+        // If total pages <= 8, show all pages
+        for (let i = 1; i <= total; i++) {
+          range.push(i);
+        }
+      } else {
+        // Show first 3 pages
+        range.push(1, 2, 3);
+
+        if (current <= 4) {
+          // If current page is in first 4 pages, show next 3 pages
+          range.push(4, 5, 6);
+          if (total > 6) range.push('...');
+        } else if (current >= total - 3) {
+          // If current page is in last 4 pages, show previous 3 pages
+          if (current > total - 3) range.push('...');
+          range.push(total - 5, total - 4, total - 3);
+        } else {
+          // Show ... and current page with neighbors
+          range.push('...');
+          range.push(current - 1, current, current + 1);
+          range.push('...');
+        }
+
+        // Show last 3 pages
+        if (total > 3) {
+          range.push(total - 2, total - 1, total);
+        }
+      }
+
+      return range;
+    }
   };
 
-  const pageNumbers = getPageNumbers(page, totalPages);
+  const pageNumbers = getPageNumbers(page, totalPages, isMobile); // Determine if mobile
 
   if (loading) {
     return (
@@ -67,7 +143,7 @@ export default function Articles() {
   }
 
   return (
-    <div className="w-full min-h-screen pb-24 bg-[#F7F3E8] ">
+    <div className="w-full min-h-screen md:pb-24 pb-12 bg-[#F7F3E8] ">
       {/* Hero Image */}
       <div className="relative w-full h-[220px] md:h-[312px] flex items-center justify-center overflow-hidden mb-6 md:pt-[96px] md:pb-[96px]">
         {/* Mobile Hero Image */}
@@ -108,7 +184,7 @@ export default function Articles() {
         </div>
       </div>
       {/* Featured Articles Section */}
-      <div className="md:px-28  px-4 w-full mx-auto flex flex-col gap-12 md:mt-24">
+      <div className="md:px-28  px-4 w-full mx-auto flex flex-col md:gap-12 gap-6 md:mt-24">
         {/* Featured Articles */}
         <div className="flex flex-col lg:flex-row gap-4 md:gap-6 lg:gap-8 mx-auto w-full transition-all duration-300">
           {featuredArticles.map((article, idx) => {
@@ -142,10 +218,10 @@ export default function Articles() {
                         console.error('Featured image failed to load:', imageUrl);
                         e.currentTarget.src = articlesCover;
                       }}
-                      style={{ 
+                      style={{
                         minHeight: '343px',
                         width: '100%',
-                        height: '100%'
+                        height: '100%',
                       }}
                     />
                     <div className="absolute inset-0 bg-black opacity-40 z-20"></div>
@@ -184,10 +260,10 @@ export default function Articles() {
                       console.error('Featured image failed to load:', imageUrl);
                       e.currentTarget.src = articlesCover;
                     }}
-                    style={{ 
+                    style={{
                       minHeight: '480px',
                       width: '100%',
-                      height: '100%'
+                      height: '100%',
                     }}
                   />
                   <div className="absolute inset-0 bg-black opacity-40 z-20"></div>
@@ -218,33 +294,102 @@ export default function Articles() {
         <div className="flex flex-col lg:flex-row gap-8 md:mt-12 transition-all duration-300">
           <div className="w-full lg:w-2/3">
             <div className="md:pr-6">
-            <h3 className="hidden md:block text-[40px] leading-[48px]font-serif text-[#61422D] mb-8 text-left">
-              Latest Articles
-            </h3>
-            <h5 className="block md:hidden text-[32px] leading-[40px] font-serif text-[#61422D] mb-8 text-left">
-              Latest Articles
-            </h5>
-            <div className="flex flex-col gap-8 items-start">
-              {articles.map((article, idx) => {
-                const imageUrl = getCoverUrl(article.cover);
+              <h3 className="hidden md:block text-[40px] leading-[48px]font-serif text-[#61422D] mb-8 text-left">
+                Latest Articles
+              </h3>
+              <h5 className="block md:hidden text-[32px] leading-[40px] font-serif text-[#61422D] mb-8 text-left">
+                Latest Articles
+              </h5>
+              <div className="flex flex-col gap-8 items-start">
+                {articles.map((article, idx) => {
+                  const imageUrl = getCoverUrl(article.cover);
 
-                // Function to handle scroll to top before page navigation
-                const handleArticleClick = (e: React.MouseEvent) => {
-                  scrollToTop();
-                };
+                  // Function to handle scroll to top before page navigation
+                  const handleArticleClick = (e: React.MouseEvent) => {
+                    scrollToTop();
+                  };
 
-                return (
-                  <Link
-                    key={article.id}
-                    to={`/article/${article.slug}`}
-                    className="w-full"
-                    style={{ textDecoration: 'none' }}
-                    onClick={handleArticleClick}
-                  >
-                    {/* Mobile Card Layout */}
-                    <div className="block md:hidden p-0 w-full">
-                      <div className="w-full flex flex-col h-full">
-                        <div className="w-full h-48 overflow-hidden mb-4 bg-[#E6DDC6] flex items-center justify-center">
+                  return (
+                    <Link
+                      key={article.id}
+                      to={`/article/${article.slug}`}
+                      className="w-full"
+                      style={{ textDecoration: 'none' }}
+                      onClick={handleArticleClick}
+                    >
+                      {/* Mobile Card Layout */}
+                      <div className="block md:hidden p-0 w-full">
+                        <div className="w-full flex flex-col h-full">
+                          <div className="w-full h-48 overflow-hidden mb-4 bg-[#E6DDC6] flex items-center justify-center">
+                            <img
+                              src={imageUrl || articlesCover}
+                              alt={article.title}
+                              className="object-cover w-full h-full"
+                              onError={(e) => {
+                                console.error('Image failed to load:', imageUrl);
+                                e.currentTarget.src = articlesCover;
+                              }}
+                            />
+                          </div>
+                          <h5
+                            className="text-2xl font-serif mb-2 line-clamp-2 leading-snug"
+                            style={{
+                              fontWeight: 600,
+                              fontSize: 20,
+                              lineHeight: '28px',
+                              letterSpacing: 0,
+                              textAlign: 'left',
+                              color: '#61422D',
+                            }}
+                          >
+                            {article.title}
+                          </h5>
+                          <div className="text-base text-[#585550] mb-3 line-clamp-3 text-left">
+                            {article.description}
+                          </div>
+                          <div className="flex-1"></div>
+                          <div className="text-xs font-semibold text-[#7B6142] md:pb-6 pb-0 uppercase tracking-wider text-left">
+                            {new Date(article.publishedAt)
+                              .toLocaleDateString('en-GB', {
+                                day: '2-digit',
+                                month: 'short',
+                                year: 'numeric',
+                              })
+                              .replace(/\b([a-z]{3})\b/i, (m) => m.toUpperCase())}
+                          </div>
+                        </div>
+                      </div>
+                      {/* Desktop Grid Layout */}
+                      <div className="hidden md:grid grid-cols-[1fr_238px] gap-6 w-full">
+                        <div className="flex flex-col h-full min-w-0">
+                          <h5
+                            className="text-2xl font-serif mb-2 leading-snug line-clamp-2"
+                            style={{
+                              fontWeight: 600,
+                              fontSize: 24,
+                              lineHeight: '32px',
+                              letterSpacing: 0,
+                              textAlign: 'left',
+                              color: '#61422D',
+                            }}
+                          >
+                            {article.title}
+                          </h5>
+                          <div className="text-base text-[#585550] mb-3 line-clamp-3 text-left">
+                            {article.description}
+                          </div>
+                          <div className="flex-1"></div>
+                          <div className="text-[14px] font-semibold leading-[20px] text-[#585550] uppercase tracking-wider text-left">
+                            {new Date(article.publishedAt)
+                              .toLocaleDateString('en-GB', {
+                                day: '2-digit',
+                                month: 'short',
+                                year: 'numeric',
+                              })
+                              .replace(/\b([a-z]{3})\b/i, (m) => m.toUpperCase())}
+                          </div>
+                        </div>
+                        <div className="w-[238px] h-[180px] flex-shrink-0 overflow-hidden bg-[#E6DDC6] flex items-center justify-center">
                           <img
                             src={imageUrl || articlesCover}
                             alt={article.title}
@@ -255,94 +400,31 @@ export default function Articles() {
                             }}
                           />
                         </div>
-                        <h5
-                          className="text-2xl font-serif mb-2 line-clamp-2 leading-snug"
-                          style={{
-                            fontWeight: 600,
-                            fontSize: 20,
-                            lineHeight: '28px',
-                            letterSpacing: 0,
-                            textAlign: 'left',
-                            color: '#61422D',
-                          }}
-                        >
-                          {article.title}
-                        </h5>
-                        <div className="text-base text-[#585550] mb-3 line-clamp-3 text-left">
-                          {article.description}
-                        </div>
-                        <div className="flex-1"></div>
-                        <div className="text-xs font-semibold text-[#7B6142] pb-6 uppercase tracking-wider text-left">
-                          {new Date(article.publishedAt)
-                            .toLocaleDateString('en-GB', {
-                              day: '2-digit',
-                              month: 'short',
-                              year: 'numeric',
-                            })
-                            .replace(/\b([a-z]{3})\b/i, (m) => m.toUpperCase())}
-                        </div>
                       </div>
-                    </div>
-                    {/* Desktop Grid Layout */}
-                    <div className="hidden md:grid grid-cols-[1fr_238px] gap-6 w-full">
-                      <div className="flex flex-col h-full min-w-0">
-                        <h5
-                          className="text-2xl font-serif mb-2 leading-snug line-clamp-2"
-                          style={{
-                            fontWeight: 600,
-                            fontSize: 24,
-                            lineHeight: '32px',
-                            letterSpacing: 0,
-                            textAlign: 'left',
-                            color: '#61422D',
-                          }}
-                        >
-                          {article.title}
-                        </h5>
-                        <div className="text-base text-[#585550] mb-3 line-clamp-3 text-left">
-                          {article.description}
-                        </div>
-                        <div className="flex-1"></div>
-                        <div className="text-[14px] font-semibold leading-[20px] text-[#585550] uppercase tracking-wider text-left">
-                          {new Date(article.publishedAt)
-                            .toLocaleDateString('en-GB', {
-                              day: '2-digit',
-                              month: 'short',
-                              year: 'numeric',
-                            })
-                            .replace(/\b([a-z]{3})\b/i, (m) => m.toUpperCase())}
-                        </div>
-                      </div>
-                      <div className="w-[238px] h-[180px] flex-shrink-0 overflow-hidden bg-[#E6DDC6] flex items-center justify-center">
-                        <img
-                          src={imageUrl || articlesCover}
-                          alt={article.title}
-                          className="object-cover w-full h-full"
-                          onError={(e) => {
-                            console.error('Image failed to load:', imageUrl);
-                            e.currentTarget.src = articlesCover;
-                          }}
-                        />
-                      </div>
-                    </div>
-                    {/* Faded divider under each article */}
-                    {idx !== articles.length - 1 && (
-                      <div className="border-t-2 border-[#E5E1D7] opacity-80 mt-8"></div>
-                    )}
-                  </Link>
-                );
-              })}
-            </div>
+                      {/* Faded divider under each article */}
+                      {idx !== articles.length - 1 && (
+                        <div className="border-t-2 border-[#E5E1D7] opacity-80 mt-8"></div>
+                      )}
+                    </Link>
+                  );
+                })}
+              </div>
             </div>
           </div>
         </div>
         {/* Pagination */}
         {totalPages > 1 && (
-          <div className="flex justify-center items-center gap-2 mt-12 select-none">
+          <div className="flex justify-center items-center gap-2 md:mt-12 mt-6 mb-6 select-none">
             <button
               className="ticket-rounded px-2 py-1 text-[#414651]  rounded-lg btn-clickable"
               disabled={page === 1}
-              onClick={() => setPage(page - 1)}
+              onClick={() => {
+                setPage(page - 1);
+                // Immediate scroll to top for better UX
+                if (page > 1) {
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+              }}
             >
               &lt;
             </button>
@@ -351,9 +433,15 @@ export default function Articles() {
                 <button
                   key={num}
                   className={`ticket-rounded w-9 h-9 rounded-lg flex items-center justify-center text-[#535862] btn-clickable ${
-                    page === num ? 'bg-[#133A4A] text-white' : ''
+                    page === num ? 'md:bg-[#133A4A] bg-[#83644B] text-white' : ''
                   }`}
-                  onClick={() => setPage(num)}
+                  onClick={() => {
+                    setPage(num);
+                    // Immediate scroll to top for better UX
+                    if (num !== page) {
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }
+                  }}
                 >
                   {num}
                 </button>
@@ -366,7 +454,13 @@ export default function Articles() {
             <button
               className="ticket-rounded px-2 py-1 text-[#414651]  rounded-lg btn-clickable"
               disabled={page === totalPages}
-              onClick={() => setPage(page + 1)}
+              onClick={() => {
+                setPage(page + 1);
+                // Immediate scroll to top for better UX
+                if (page < totalPages) {
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+              }}
             >
               &gt;
             </button>

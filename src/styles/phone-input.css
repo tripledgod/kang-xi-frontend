@@ -8,7 +8,7 @@
   font-size: 16px !important;
   border-radius: 0.5rem !important;
   border: 1px solid #c7c7b9 !important;
-  background-color: #FCFAF2 !important;
+  background-color: #fcfaf2 !important;
   color: #23211c !important;
   margin-left: 0 !important;
 }
@@ -16,20 +16,19 @@
 .phone-input-container .flag-dropdown {
   border-radius: 0.5rem 0 0 0.5rem !important;
   border: 1px solid #c7c7b9 !important;
-  background-color: #FCFAF2 !important;
+  background-color: #fcfaf2 !important;
   border-right: none !important;
   box-shadow: none !important;
 }
 
 .phone-input-container .selected-flag {
   border-radius: 0.5rem 0 0 0.5rem !important;
-  background-color: #FCFAF2 !important;
+  background-color: #fcfaf2 !important;
 }
 
 .phone-input-container .flag-dropdown {
   border-right: 1px solid #c7c7b9 !important;
   border-radius: 0.5rem 0 0 0.5rem !important;
-  
 }
 
 .phone-input-container .form-control {
@@ -39,7 +38,7 @@
 .phone-input-container .country-list {
   border-radius: 0.5rem !important;
   border: 1px solid #c7c7b9 !important;
-  background-color: #FCFAF2 !important;
+  background-color: #fcfaf2 !important;
   color: #23211c !important;
 }
 
@@ -58,7 +57,7 @@
 .phone-input-container .search-box {
   border-radius: 0.5rem !important;
   border: 1px solid #c7c7b9 !important;
-  background-color: #FCFAF2 !important;
+  background-color: #fcfaf2 !important;
   color: #23211c !important;
   margin: 0 !important;
   padding: 8px !important;

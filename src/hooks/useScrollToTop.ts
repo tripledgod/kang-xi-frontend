@@ -6,4 +6,4 @@ export const useScrollToTop = () => {
   }, []);
 
   return scrollToTop;
-}; 
+};

@@ -16,6 +16,8 @@ import { useTranslation } from 'react-i18next';
 import happendImg from '../assets/happend.jpg';
 import expressImg from '../assets/express.jpg';
 import bgButtonMobile from '../assets/bg_button.png';
+import bgButtonMobileHover from '../assets/bg_button_mobile_hover.png';
+import bgButtonHover from '../assets/bg_button_hover.png';
 
 const steps = [
   {
@@ -152,7 +154,8 @@ export default function AcquireAnItem() {
           {/* Left */}
           <div className="flex-1 text-white mb-8 md:mb-0">
             <h1 className="hidden md:block text-[60px] leading-[72px] font-serif mb-6">
-              Reserve a <br />Timeless
+              Reserve a <br />
+              Timeless
               <br />
               Treasure
             </h1>
@@ -169,19 +172,23 @@ export default function AcquireAnItem() {
             <button
               type="submit"
               onClick={handleScrollToForm}
-              
-              className="flex h-[48px]   font-semibold w-[189px] items-center justify-center text-[14px] leading-[20px] shadow-none transition-all px-6"
+              className="flex h-[48px]   font-semibold w-[189px] items-center justify-center text-[14px] leading-[20px] shadow-none transition-all px-6 btn-clickable"
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundImage = `url(${bgButtonHover})`;
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundImage = `url(${bgButtonMobile})`;
+              }}
               style={{
                 backgroundImage: `url(${bgButtonMobile})`,
                 backgroundSize: '100% 100%',
                 backgroundRepeat: 'no-repeat',
                 backgroundPosition: 'center',
                 color: '#fff',
-                
               }}
             >
               ACQUIRE AN ITEM
-            </button> 
+            </button>
           </div>
           {/* Right: Single image */}
           <div className="flex-1">

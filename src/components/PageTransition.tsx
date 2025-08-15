@@ -13,7 +13,7 @@ const PageTransition: React.FC<PageTransitionProps> = ({ children }) => {
   useEffect(() => {
     // Set loading to true when location changes
     setIsLoading(true);
-    
+
     // Clear loading after a brief delay for smooth transition
     const timer = setTimeout(() => {
       setIsLoading(false);
@@ -32,11 +32,7 @@ const PageTransition: React.FC<PageTransitionProps> = ({ children }) => {
   }
 
   // Show content with fade-in animation
-  return (
-    <div className="animate-fade-in">
-      {children}
-    </div>
-  );
+  return <div className="animate-fade-in">{children}</div>;
 };
 
-export default PageTransition; 
+export default PageTransition;

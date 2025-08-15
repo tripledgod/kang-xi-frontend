@@ -10,6 +10,8 @@ import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
 import { getCategories, flattenCategory } from '../api/categories';
 import { API_URL } from '../utils/constants';
+import bgButtonHover from '../assets/bg_button_hover.png';
+import bgButtonMobileHover from '../assets/bg_button_mobile_hover.png';
 
 const CARD_WIDTH = 320;
 const CARD_GAP = 32;
@@ -141,53 +143,61 @@ export default function CeramicsByEra() {
           )}
           <div className="hidden md:flex items-center gap-4 self-end md:self-auto">
             <button
-              className="w-12 h-12 flex items-center justify-center text-base font-medium shadow-none transition-all rounded-[6px] border border-[#C7B08A] bg-[#F7F3E8] hover:border-[#86684A] hover:bg-[#E6DDC6] hover:scale-105 btn-clickable"
+              className="ticket-rounded w-12 h-12 border-2 border-[#DAC497] rounded-lg flex items-center justify-center bg-transparent text-[#93633B] hover:bg-[#E6DDC6] transition btn-clickable"
               onClick={() => setIndex((i) => Math.max(0, i - 1))}
               disabled={!canGoLeft}
-              style={{
-                color: '#C7B08A',
-                border: '1px solid #C7B08A',
-                background: '#F7F3E8',
-                padding: 0,
-                minWidth: 0,
-                opacity: !canGoLeft ? 0.5 : 1,
-                height: '48px',
-                width: '48px',
-              }}
+              aria-label="Previous"
             >
-              <img
-                src={icLeft}
-                alt="left"
-                className="w-6 h-6"
-                style={{ display: 'inline-block', filter: 'none', color: '#C7B08A' }}
-              />
+              <span className="text-[20px] text-[#93633B]">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  className="size-6"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"
+                  />
+                </svg>
+              </span>
             </button>
             <button
-              className="w-12 h-12 flex items-center justify-center text-base font-medium shadow-none transition-all rounded-[6px] border border-[#C7B08A] bg-[#F7F3E8] hover:border-[#86684A] hover:bg-[#E6DDC6] hover:scale-105 btn-clickable"
+              className="ticket-rounded w-12 h-12 border-2 border-[#DAC497] rounded-lg flex items-center justify-center bg-transparent text-[#93633B] hover:bg-[#E6DDC6] transition btn-clickable"
               onClick={() => setIndex((i) => Math.min(eras.length - DESKTOP_VISIBLE, i + 1))}
               disabled={!canGoRight}
-              style={{
-                color: '#C7B08A',
-                border: '1px solid #C7B08A',
-                background: '#F7F3E8',
-                padding: 0,
-                minWidth: 0,
-                opacity: !canGoRight ? 0.5 : 1,
-                height: '48px',
-                width: '48px',
-              }}
+              aria-label="Next"
             >
-              <img
-                src={icRight}
-                alt="right"
-                className="w-6 h-6"
-                style={{ display: 'inline-block', filter: 'none', color: '#C7B08A' }}
-              />
+              <span className="text-[20px] text-[#93633B]">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  className="size-6"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"
+                  />
+                </svg>
+              </span>
             </button>
             <button
               className="ml-4 w-[218px] h-[48px] flex items-center justify-center text-base font-medium shadow-none transition-all px-6 btn-clickable"
               onClick={() => {
                 navigate('/browse');
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundImage = `url(${bgButtonHover})`;
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundImage = `url(${bgButton})`;
               }}
               style={{
                 backgroundImage: `url(${bgButton})`,
@@ -199,7 +209,7 @@ export default function CeramicsByEra() {
                 padding: 0,
                 minWidth: 0,
                 // fontFamily: 'Noto Sans SC, Inter, -apple-system, BlinkMacSystemFont, sans-serif',
-               
+
                 fontSize: 14,
                 lineHeight: 1.25,
                 letterSpacing: '0.5px',
@@ -258,8 +268,6 @@ export default function CeramicsByEra() {
                 <div
                   className="text-base pt-2  "
                   style={{
-                   
-                  
                     fontSize: 16,
                     lineHeight: 1.5,
                     letterSpacing: 0,
@@ -327,7 +335,6 @@ export default function CeramicsByEra() {
                 <div
                   className="text-base pt-2 line-clamp-3 "
                   style={{
-                    
                     fontSize: 16,
                     lineHeight: 1.5,
                     letterSpacing: 0,

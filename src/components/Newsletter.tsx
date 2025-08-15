@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useLocation } from 'react-router-dom';
 import { COLORS } from './colors';
 import bgButton from '../assets/bg_button.png';
 import bgButtonMobile from '../assets/bg_button_mobile.png';
 import Popup from './Popup';
 import Button from './Button';
 import { subscribe } from '../api/newsletter';
+import bgButtonHover from '../assets/bg_button_hover.png';
+import bgButtonMobileHover from '../assets/bg_button_mobile_hover.png';
 
 export default function Newsletter() {
   const [showPopup, setShowPopup] = useState(false);
@@ -14,12 +17,21 @@ export default function Newsletter() {
   const [loading, setLoading] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const { t } = useTranslation();
+  const location = useLocation();
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 768);
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
+  // Reset error message when location changes (user navigates to different page)
+  useEffect(() => {
+    setError('');
+    setFirstName('');
+    setShowPopup(false);
+    setLoading(false);
+  }, [location.pathname]);
 
   const validateFirstName = (name: string) => {
     return name.trim().length > 0;
@@ -111,8 +123,8 @@ export default function Newsletter() {
                 opacity: 0.8,
               }}
             >
-              Subscribe to get our 2020 catalog as well as get exclusive invites to our private
-              events
+              Subscribe to get our {new Date().getFullYear()} catalog as well as get exclusive
+              invites to our private events
             </p>
           </div>
         </div>
@@ -126,7 +138,19 @@ export default function Newsletter() {
               type="text"
               placeholder="Enter your first name"
               value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
+              onChange={(e) => {
+                setFirstName(e.target.value);
+                // Clear error message when user starts typing
+                if (error) {
+                  setError('');
+                }
+              }}
+              onFocus={() => {
+                // Clear error message when user focuses on input
+                if (error) {
+                  setError('');
+                }
+              }}
               disabled={loading}
               className="w-full h-[48px] rounded-lg border px-6 text-lg focus:outline-none focus:ring-2 text-[16px] leading-[24px]"
               style={{
@@ -143,12 +167,22 @@ export default function Newsletter() {
               {error || ''}
             </div>
           </div>
-          <div className="w-full justify-center md:w-1/3 h-[48px] flex items-center">
+          <div
+            className={`w-full justify-center md:w-1/3 h-[48px] flex items-center ${error ? 'mt-4' : ''} md:mt-0`}
+          >
             {/* Button desktop */}
             <button
               type="submit"
               disabled={loading}
               className="hidden md:flex w-full h-full items-center justify-center text-[16px] leading-[20px] font-medium shadow-none transition-all px-6"
+              onMouseEnter={(e) => {
+                if (!loading) {
+                  e.currentTarget.style.backgroundImage = `url(${bgButtonHover})`;
+                }
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundImage = `url(${bgButton})`;
+              }}
               style={{
                 backgroundImage: `url(${bgButton})`,
                 backgroundSize: '100% 100%',
@@ -167,6 +201,14 @@ export default function Newsletter() {
               type="submit"
               disabled={loading}
               className="flex md:hidden w-full h-full items-center justify-center text-[16px] leading-[24px] font-medium shadow-none transition-all px-6"
+              onMouseEnter={(e) => {
+                if (!loading) {
+                  e.currentTarget.style.backgroundImage = `url(${bgButtonMobileHover})`;
+                }
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundImage = `url(${bgButtonMobile})`;
+              }}
               style={{
                 backgroundImage: `url(${bgButtonMobile})`,
                 backgroundSize: '100% 100%',
