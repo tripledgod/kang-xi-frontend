@@ -768,7 +768,7 @@ export default function ProductDetail() {
                 <button className="absolute -left-6 top-5/16 -translate-y-1/2 rounded-full  p-2  z-10 hidden md:block btn-clickable">
                   <img src={icCircleLeft} alt="Previous" className="w-10 h-10" />
                 </button>
-                <div className="md:overflow-x-auto overflow-x-hidden scroll-smooth">
+                <div className="md:overflow-x-auto overflow-x-auto scroll-smooth scrollbar-hide">
                   <div className="flex md:gap-8 gap-[22px] md:scroll-smooth">
                     {relatedProducts.map((item: any, idx: number) => {
                       const relatedImageUrl =
