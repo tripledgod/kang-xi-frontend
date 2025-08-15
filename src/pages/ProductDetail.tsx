@@ -471,6 +471,7 @@ export default function ProductDetail() {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
+              backgroundColor: '#E8DBC0',
               padding: '16px 112px',
               width: '100%',
               minHeight: '72px',
@@ -489,8 +490,8 @@ export default function ProductDetail() {
             >
               <div 
                 style={{
-                  width: '48px',
-                  height: '48px',
+                  width: '64px',
+                  height: '64px',
                   backgroundColor: '#F7F3E8',
                   borderRadius: '4px',
                   overflow: 'hidden',
@@ -515,12 +516,12 @@ export default function ProductDetail() {
                   flex: 1
                 }}
               >
-                <h5 
+                <p 
                   style={{
                     fontSize: '18px',
-                    lineHeight: '22px',
-                    fontFamily: 'serif',
-                    fontWeight: 500,
+                    lineHeight: '26px',
+                    
+                    fontWeight: 600,
                     color: '#61422D',
                     margin: 0,
                     padding: 0,
@@ -530,7 +531,7 @@ export default function ProductDetail() {
                   }}
                 >
                   {productDetail.title}
-                </h5>
+                </p>
                 
               </div>
             </div>
@@ -575,23 +576,25 @@ export default function ProductDetail() {
         <div className="w-full border-t border-[#E8DBC0]" />
         {/* Breadcrumb */}
         <div className="w-full px-4 pt-6 text-xs text-[#817F7C] pb-5 md:px-[112px]  md:pb-[48px]">
-          <span
-            className="cursor-pointer link-clickable font-semibold"
-            onClick={() => navigate('/')}
-          >
-            Home
-          </span>{' '}
-          <span className="mx-1">&gt;</span>{' '}
-          <span
-            className="cursor-pointer link-clickable font-semibold"
-            onClick={() => navigate('/browse')}
-          >
-            Browse
-          </span>{' '}
-          <span className="mx-1">&gt;</span>{' '}
-          <span className="text-[#201F1C] truncate max-w-[220px] md:max-w-full md:truncate-none inline-block align-bottom font-semibold">
-            {productDetail.title}
-          </span>
+          <div className="flex items-center overflow-hidden whitespace-nowrap">
+            <span
+              className="cursor-pointer link-clickable font-semibold flex-shrink-0"
+              onClick={() => navigate('/')}
+            >
+              Home
+            </span>
+            <span className="mx-1 flex-shrink-0">&gt;</span>
+            <span
+              className="cursor-pointer link-clickable font-semibold flex-shrink-0"
+              onClick={() => navigate('/browse')}
+            >
+              Browse
+            </span>
+            <span className="mx-1 flex-shrink-0">&gt;</span>
+            <span className="text-[#201F1C] font-semibold truncate min-w-0">
+              {productDetail.title}
+            </span>
+          </div>
         </div>
         {/* Main Section */}
         <div className="w-full flex flex-col md:flex-row md:gap-4  gap-6 md:items-start items-start md:px-[112px] pb-8 md:pb-22">
