@@ -1,9 +1,9 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import icLeft from '../assets/ic_left.svg';
-import icRight from '../assets/ic_right.svg';
+// import icLeft from '../assets/ic_left.svg';
+// import icRight from '../assets/ic_right.svg';
 import bgButton from '../assets/bg_button.png';
-import bgButtonMobile from '../assets/bg_button_mobile.png';
+// import bgButtonMobile from '../assets/bg_button_mobile.png';
 import { COLORS } from './colors.ts';
 import Button from './Button.tsx';
 import { useNavigate } from 'react-router-dom';
@@ -11,14 +11,15 @@ import { useLanguage } from '../contexts/LanguageContext';
 import { getCategories, flattenCategory } from '../api/categories';
 import { API_URL } from '../utils/constants';
 import bgButtonHover from '../assets/bg_button_hover.png';
-import bgButtonMobileHover from '../assets/bg_button_mobile_hover.png';
+// import bgButtonMobileHover from '../assets/bg_button_mobile_hover.png';
+import bgButtonPressed from '../assets/bg_button_pressed.png';
 
 const CARD_WIDTH = 320;
 const CARD_GAP = 32;
 const DESKTOP_VISIBLE = 3;
-const DESKTOP_PEEK = 0.3; // 30% of 4th card
-const MOBILE_VISIBLE = 1;
-const MOBILE_PEEK = 0.2;
+// const DESKTOP_PEEK = 0.3; // 30% of 4th card
+// const MOBILE_VISIBLE = 1;
+// const MOBILE_PEEK = 0.2;
 
 export default function CeramicsByEra() {
   const [index, setIndex] = useState(0);
@@ -124,9 +125,9 @@ export default function CeramicsByEra() {
   const canGoRight = index < eras.length - DESKTOP_VISIBLE;
 
   // Container width
-  const containerWidth = isMobile
-    ? CARD_WIDTH * (MOBILE_VISIBLE + MOBILE_PEEK) + CARD_GAP * MOBILE_VISIBLE
-    : CARD_WIDTH * (DESKTOP_VISIBLE + DESKTOP_PEEK) + CARD_GAP * DESKTOP_VISIBLE;
+  // const containerWidth = isMobile
+  //   ? CARD_WIDTH * (MOBILE_VISIBLE + MOBILE_PEEK) + CARD_GAP * MOBILE_VISIBLE
+  //   : CARD_WIDTH * (DESKTOP_VISIBLE + DESKTOP_PEEK) + CARD_GAP * DESKTOP_VISIBLE;
 
   return (
     <section className="w-full bg-[#F7F5EA] px-4 py-12 md:pt-21 md:pb-19">
@@ -147,6 +148,22 @@ export default function CeramicsByEra() {
               onClick={() => setIndex((i) => Math.max(0, i - 1))}
               disabled={!canGoLeft}
               aria-label="Previous"
+              onMouseDown={(e) => {
+                (e.currentTarget as HTMLButtonElement).style.backgroundColor = '#DAC497';
+              }}
+              onMouseUp={(e) => {
+                // Clear inline style so Tailwind hover can take effect
+                (e.currentTarget as HTMLButtonElement).style.backgroundColor = '';
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLButtonElement).style.backgroundColor = '';
+              }}
+              onTouchStart={(e) => {
+                (e.currentTarget as HTMLButtonElement).style.backgroundColor = '#DAC497';
+              }}
+              onTouchEnd={(e) => {
+                (e.currentTarget as HTMLButtonElement).style.backgroundColor = '';
+              }}
             >
               <span className="text-[20px] text-[#93633B]">
                 <svg
@@ -170,6 +187,21 @@ export default function CeramicsByEra() {
               onClick={() => setIndex((i) => Math.min(eras.length - DESKTOP_VISIBLE, i + 1))}
               disabled={!canGoRight}
               aria-label="Next"
+              onMouseDown={(e) => {
+                (e.currentTarget as HTMLButtonElement).style.backgroundColor = '#DAC497';
+              }}
+              onMouseUp={(e) => {
+                (e.currentTarget as HTMLButtonElement).style.backgroundColor = '';
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLButtonElement).style.backgroundColor = '';
+              }}
+              onTouchStart={(e) => {
+                (e.currentTarget as HTMLButtonElement).style.backgroundColor = '#DAC497';
+              }}
+              onTouchEnd={(e) => {
+                (e.currentTarget as HTMLButtonElement).style.backgroundColor = '';
+              }}
             >
               <span className="text-[20px] text-[#93633B]">
                 <svg
@@ -197,6 +229,18 @@ export default function CeramicsByEra() {
                 e.currentTarget.style.backgroundImage = `url(${bgButtonHover})`;
               }}
               onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundImage = `url(${bgButton})`;
+              }}
+              onMouseDown={(e) => {
+                e.currentTarget.style.backgroundImage = `url(${bgButtonPressed})`;
+              }}
+              onMouseUp={(e) => {
+                e.currentTarget.style.backgroundImage = `url(${bgButton})`;
+              }}
+              onTouchStart={(e) => {
+                e.currentTarget.style.backgroundImage = `url(${bgButtonPressed})`;
+              }}
+              onTouchEnd={(e) => {
                 e.currentTarget.style.backgroundImage = `url(${bgButton})`;
               }}
               style={{
@@ -231,7 +275,7 @@ export default function CeramicsByEra() {
               </div>
             </div>
           ) : (
-            eras.map((era, idx) => (
+            eras.map((era) => (
               <div
                 key={era.name}
                 className="flex flex-col bg-transparent cursor-pointer"
@@ -298,7 +342,7 @@ export default function CeramicsByEra() {
               </div>
             </div>
           ) : (
-            eras.map((era, idx) => (
+            eras.map((era) => (
               <div
                 key={era.name}
                 className="flex flex-col flex-shrink-0 bg-transparent cursor-pointer"

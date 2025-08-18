@@ -8,7 +8,7 @@ import Loading from '../components/Loading';
 import customerSupportIcon from '../assets/customer_support.svg';
 import privateViewingIcon from '../assets/private_viewing.svg';
 import secureTransactionIcon from '../assets/secure_transaction.svg';
-import timelessTreasure from '../assets/timeless_treasure.png';
+// import timelessTreasure from '../assets/timeless_treasure.png';
 import bgButtonMobile from '../assets/bg_button.png';
 import verifyLegacy from '../assets/verify_legacy.png';
 import verifyLegacyMobile from '../assets/verify_legacy_mobile.png';
@@ -21,6 +21,8 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import terracotaImg from '../assets/terracota.jpg';
 import bgButtonHover from '../assets/bg_button_hover.png';
+import bgButtonPressed from '../assets/bg_button_pressed.png';
+import bgButtonMobilePressed from '../assets/bg_button_mobile_pressed.png';
 
 const whyItems = [
   {
@@ -161,7 +163,7 @@ export default function AppraiseAnItem() {
         },
       };
 
-      const newItem = await axios(`${API_URL}/api/submission`, {
+      await axios(`${API_URL}/api/submission`, {
         method: 'POST',
         data: submissionData,
         headers: {
@@ -227,9 +229,23 @@ export default function AppraiseAnItem() {
               onClick={handleScrollToForm}
               className="flex h-[48px] font-semibold w-[189px] items-center justify-center text-[14px] leading-[20px] shadow-none transition-all px-6"
               onMouseEnter={(e) => {
+                // Desktop hover only
                 e.currentTarget.style.backgroundImage = `url(${bgButtonHover})`;
               }}
               onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundImage = `url(${bgButtonMobile})`;
+              }}
+              onMouseDown={(e) => {
+                e.currentTarget.style.backgroundImage = `url(${bgButtonPressed})`;
+              }}
+              onMouseUp={(e) => {
+                // Return to default on mouse up to avoid hover state on touch devices
+                e.currentTarget.style.backgroundImage = `url(${bgButtonMobile})`;
+              }}
+              onTouchStart={(e) => {
+                e.currentTarget.style.backgroundImage = `url(${bgButtonMobilePressed})`;
+              }}
+              onTouchEnd={(e) => {
                 e.currentTarget.style.backgroundImage = `url(${bgButtonMobile})`;
               }}
               style={{

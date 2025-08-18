@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import chaseIcon from '../assets/chase.svg';
 import letterIcon from '../assets/letter.svg';
@@ -7,11 +7,13 @@ import chaseCollectionMobile from '../assets/chase_collection_mobile.jpg';
 import image from '../assets/image.png';
 import imageMobile from '../assets/image_mobile.jpg';
 import bgButton from '../assets/bg_button.png';
-import Button from './Button';
+// import Button from './Button';
 import { COLORS } from './colors';
 import { useNavigate } from 'react-router-dom';
 import bgButtonHover from '../assets/bg_button_hover.png';
-import bgButtonMobileHover from '../assets/bg_button_mobile_hover.png';
+// import bgButtonMobileHover from '../assets/bg_button_mobile_hover.png';
+import bgButtonPressed from '../assets/bg_button_pressed.png';
+import bgButtonMobilePressed from '../assets/bg_button_mobile_pressed.png';
 
 export default function AcquireOrAppraise() {
   const navigate = useNavigate();
@@ -59,7 +61,7 @@ export default function AcquireOrAppraise() {
 
   return (
     <div className="w-full">
-      {sections.map((section, idx) => (
+      {sections.map((section) => (
         <section
           key={section.title}
           className={`w-full flex flex-col md:flex-row ${section.reverse ? 'md:flex-row-reverse' : ''}`}
@@ -92,13 +94,31 @@ export default function AcquireOrAppraise() {
                 }
                 onMouseEnter={(e) => {
                   const target = e.currentTarget;
-                  if (isMobile) {
-                    target.style.backgroundImage = `url(${bgButtonMobileHover})`;
-                  } else {
+                  if (!isMobile) {
                     target.style.backgroundImage = `url(${bgButtonHover})`;
                   }
                 }}
                 onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundImage = `url(${bgButton})`;
+                }}
+                onMouseDown={(e) => {
+                  const target = e.currentTarget;
+                  if (isMobile) {
+                    target.style.backgroundImage = `url(${bgButtonMobilePressed})`;
+                  } else {
+                    target.style.backgroundImage = `url(${bgButtonPressed})`;
+                  }
+                }}
+                onMouseUp={(e) => {
+                  const target = e.currentTarget;
+                  if (!isMobile) {
+                    target.style.backgroundImage = `url(${bgButtonHover})`;
+                  }
+                }}
+                onTouchStart={(e) => {
+                  e.currentTarget.style.backgroundImage = `url(${bgButtonMobilePressed})`;
+                }}
+                onTouchEnd={(e) => {
                   e.currentTarget.style.backgroundImage = `url(${bgButton})`;
                 }}
                 style={{

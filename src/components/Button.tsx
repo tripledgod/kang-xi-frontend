@@ -4,8 +4,12 @@ import bgButtonMobile from '../assets/bg_button_mobile.png';
 import bgButtonOutline from '../assets/bg_button_outline.png';
 import bgButtonSubmitForm from '../assets/bg_button_submit_form1.png';
 import bgButtonHover from '../assets/bg_button_hover.png';
-import bgButtonOutlineHover from '../assets/bg_button_outline_hover1.png';
+// Outline hover will use pressed background as well
 import bgButtonSubmitFormHover from '../assets/bg_button_submit_form_hover.png';
+import bgButtonPressed from '../assets/bg_button_pressed.png';
+import bgButtonMobilePressed from '../assets/bg_button_mobile_pressed.png';
+import bgButtonSubmitFormPressed from '../assets/bg_button_submitt_form_pressed.png';
+import bgButtonOutlinePressed from '../assets/bg_button_outline_pressed.png';
 
 interface ButtonProps {
   text: string;
@@ -31,6 +35,7 @@ const Button: React.FC<ButtonProps> = ({
   const [isWide, setIsWide] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+  const [isPressed, setIsPressed] = useState(false);
 
   useEffect(() => {
     if (forceMobile) {
@@ -53,7 +58,15 @@ const Button: React.FC<ButtonProps> = ({
   // Choose the right background
   let backgroundImage = '';
   if (isOutline) {
-    backgroundImage = isHovered ? bgButtonOutlineHover : bgButtonOutline;
+    backgroundImage = isHovered || isPressed ? bgButtonOutlinePressed : bgButtonOutline;
+  } else if (isPressed) {
+    if (isMobile) {
+      backgroundImage = bgButtonMobilePressed;
+    } else if (isWide) {
+      backgroundImage = bgButtonSubmitFormPressed;
+    } else {
+      backgroundImage = bgButtonPressed;
+    }
   } else if (isHovered) {
     // Use specific hover backgrounds based on button type
     if (isWide) {
@@ -75,13 +88,22 @@ const Button: React.FC<ButtonProps> = ({
       type={type}
       onClick={onClick}
       disabled={disabled}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      onMouseEnter={() => {
+        if (!isMobile) setIsHovered(true);
+      }}
+      onMouseLeave={() => {
+        setIsHovered(false);
+        setIsPressed(false);
+      }}
+      onMouseDown={() => setIsPressed(true)}
+      onMouseUp={() => setIsPressed(false)}
+      onTouchStart={() => setIsPressed(true)}
+      onTouchEnd={() => setIsPressed(false)}
       className={`group relative w-full md:w-[189px] h-[48px] flex items-center justify-center text-base shadow-none transition-all px-6 overflow-hidden before:absolute before:inset-0 before:opacity-0 before:transition-opacity before:duration-200 hover:before:opacity-100 btn-clickable ${className} ${
         disabled ? 'opacity-50 cursor-not-allowed' : ''
       }`}
       style={{
-        color: isOutline ? '#7B6142' : '#fff',
+        color: isOutline ? (isHovered || isPressed ? '#676767' : '#020202') : '#fff',
         border: 'none',
         padding: 0,
         minWidth: 0,
@@ -92,9 +114,9 @@ const Button: React.FC<ButtonProps> = ({
       }}
     >
       <span
-        className="relative  z-10 w-full h-full flex items-center justify-center text-base md:text-lg leading-[20px] md:leading-[24px]"
+        className="relative  z-10 w-full h-full flex items-center justify-center leading-[24px] md:leading-[20px]"
         style={{
-          color: isOutline ? '#7B6142' : '#fff',
+          color: isOutline ? (isHovered || isPressed ? '#676767' : '#020202') : '#fff',
           fontWeight: 600,
           fontSize: 14,
           letterSpacing: 0,
