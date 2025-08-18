@@ -157,12 +157,12 @@ const PhoneInput: React.FC<PhoneInputProps> = ({
   }, [value, selectedCountry]);
 
   const getCountryCode = (countryCode: string) => {
-    const country = COUNTRIES_DATA.find(c => c.code === countryCode);
+    const country = COUNTRIES_DATA.find((c) => c.code === countryCode);
     return country ? country.dialCode : '+65';
   };
 
   const getCountryFlagIcon = (countryCode: string) => {
-    const country = COUNTRIES_DATA.find(c => c.code === countryCode);
+    const country = COUNTRIES_DATA.find((c) => c.code === countryCode);
     if (!country) return '🇸🇬';
 
     try {
@@ -172,24 +172,112 @@ const PhoneInput: React.FC<PhoneInputProps> = ({
     } catch (error) {
       // Fallback to emoji if flag library fails
     }
-    
+
     // Fallback to emoji flags for common countries
     const emojiFlags: { [key: string]: string } = {
-      sg: '🇸🇬', vn: '🇻🇳', cn: '🇨🇳', us: '🇺🇸', gb: '🇬🇧', au: '🇦🇺', ca: '🇨🇦',
-      jp: '🇯🇵', kr: '🇰🇷', th: '🇹🇭', my: '🇲🇾', id: '🇮🇩', ph: '🇵🇭', in: '🇮🇳',
-      de: '🇩🇪', fr: '🇫🇷', it: '🇮🇹', es: '🇪🇸', nl: '🇳🇱', be: '🇧🇪', ch: '🇨🇭',
-      at: '🇦🇹', se: '🇸🇪', no: '🇳🇴', dk: '🇩🇰', fi: '🇫🇮', pl: '🇵🇱', cz: '🇨🇿',
-      hu: '🇭🇺', ro: '🇷🇴', bg: '🇧🇬', hr: '🇭🇷', si: '🇸🇮', sk: '🇸🇰', ee: '🇪🇪',
-      lv: '🇱🇻', lt: '🇱🇹', ie: '🇮🇪', pt: '🇵🇹', gr: '🇬🇷', cy: '🇨🇾', mt: '🇲🇹',
-      lu: '🇱🇺', is: '🇮🇸', nz: '🇳🇿', br: '🇧🇷', ar: '🇦🇷', mx: '🇲🇽', cl: '🇨🇱',
-      co: '🇨🇴', pe: '🇵🇪', ve: '🇻🇪', uy: '🇺🇾', py: '🇵🇾', bo: '🇧🇴', ec: '🇪🇨',
-      za: '🇿🇦', eg: '🇪🇬', ng: '🇳🇬', ke: '🇰🇪', gh: '🇬🇭', ug: '🇺🇬', tz: '🇹🇿',
-      et: '🇪🇹', ma: '🇲🇦', dz: '🇩🇿', tn: '🇹🇳', ly: '🇱🇾', sd: '🇸🇩', sa: '🇸🇦',
-      ae: '🇦🇪', qa: '🇶🇦', kw: '🇰🇼', bh: '🇧🇭', om: '🇴🇲', jo: '🇯🇴', lb: '🇱🇧',
-      sy: '🇸🇾', iq: '🇮🇶', ir: '🇮🇷', tr: '🇹🇷', il: '🇮🇱', pk: '🇵🇰', bd: '🇧🇩',
-      lk: '🇱🇰', np: '🇳🇵', mm: '🇲🇲', kh: '🇰🇭', la: '🇱🇦', mn: '🇲🇳', kz: '🇰🇿',
-      uz: '🇺🇿', kg: '🇰🇬', tj: '🇹🇯', tm: '🇹🇲', af: '🇦🇫', ru: '🇷🇺', ua: '🇺🇦',
-      by: '🇧🇾', md: '🇲🇩', ge: '🇬🇪', am: '🇦🇲', az: '🇦🇿',
+      sg: '🇸🇬',
+      vn: '🇻🇳',
+      cn: '🇨🇳',
+      us: '🇺🇸',
+      gb: '🇬🇧',
+      au: '🇦🇺',
+      ca: '🇨🇦',
+      jp: '🇯🇵',
+      kr: '🇰🇷',
+      th: '🇹🇭',
+      my: '🇲🇾',
+      id: '🇮🇩',
+      ph: '🇵🇭',
+      in: '🇮🇳',
+      de: '🇩🇪',
+      fr: '🇫🇷',
+      it: '🇮🇹',
+      es: '🇪🇸',
+      nl: '🇳🇱',
+      be: '🇧🇪',
+      ch: '🇨🇭',
+      at: '🇦🇹',
+      se: '🇸🇪',
+      no: '🇳🇴',
+      dk: '🇩🇰',
+      fi: '🇫🇮',
+      pl: '🇵🇱',
+      cz: '🇨🇿',
+      hu: '🇭🇺',
+      ro: '🇷🇴',
+      bg: '🇧🇬',
+      hr: '🇭🇷',
+      si: '🇸🇮',
+      sk: '🇸🇰',
+      ee: '🇪🇪',
+      lv: '🇱🇻',
+      lt: '🇱🇹',
+      ie: '🇮🇪',
+      pt: '🇵🇹',
+      gr: '🇬🇷',
+      cy: '🇨🇾',
+      mt: '🇲🇹',
+      lu: '🇱🇺',
+      is: '🇮🇸',
+      nz: '🇳🇿',
+      br: '🇧🇷',
+      ar: '🇦🇷',
+      mx: '🇲🇽',
+      cl: '🇨🇱',
+      co: '🇨🇴',
+      pe: '🇵🇪',
+      ve: '🇻🇪',
+      uy: '🇺🇾',
+      py: '🇵🇾',
+      bo: '🇧🇴',
+      ec: '🇪🇨',
+      za: '🇿🇦',
+      eg: '🇪🇬',
+      ng: '🇳🇬',
+      ke: '🇰🇪',
+      gh: '🇬🇭',
+      ug: '🇺🇬',
+      tz: '🇹🇿',
+      et: '🇪🇹',
+      ma: '🇲🇦',
+      dz: '🇩🇿',
+      tn: '🇹🇳',
+      ly: '🇱🇾',
+      sd: '🇸🇩',
+      sa: '🇸🇦',
+      ae: '🇦🇪',
+      qa: '🇶🇦',
+      kw: '🇰🇼',
+      bh: '🇧🇭',
+      om: '🇴🇲',
+      jo: '🇯🇴',
+      lb: '🇱🇧',
+      sy: '🇸🇾',
+      iq: '🇮🇶',
+      ir: '🇮🇷',
+      tr: '🇹🇷',
+      il: '🇮🇱',
+      pk: '🇵🇰',
+      bd: '🇧🇩',
+      lk: '🇱🇰',
+      np: '🇳🇵',
+      mm: '🇲🇲',
+      kh: '🇰🇭',
+      la: '🇱🇦',
+      mn: '🇲🇳',
+      kz: '🇰🇿',
+      uz: '🇺🇿',
+      kg: '🇰🇬',
+      tj: '🇹🇯',
+      tm: '🇹🇲',
+      af: '🇦🇫',
+      ru: '🇷🇺',
+      ua: '🇺🇦',
+      by: '🇧🇾',
+      md: '🇲🇩',
+      ge: '🇬🇪',
+      am: '🇦🇲',
+      az: '🇦🇿',
     };
     return emojiFlags[countryCode] || '🇸🇬';
   };
@@ -197,21 +285,33 @@ const PhoneInput: React.FC<PhoneInputProps> = ({
   const getCountryFlagElement = (countryCode: string) => {
     // Try emoji first
     const emojiFlag = getCountryFlagIcon(countryCode);
-    
+
     // If emoji doesn't render properly (shows as box or question mark), use CSS flag
     if (emojiFlag.length === 2 && emojiFlag.charCodeAt(0) === 55356) {
       // This is likely a valid emoji, use it
-      return <span className="flag bg-[#E3E3E3]" role="img" aria-label={`Flag of ${getCountryName(countryCode)}`}>
-        {emojiFlag}
-      </span>;
+      return (
+        <span
+          className="flag bg-[#E3E3E3]"
+          role="img"
+          aria-label={`Flag of ${getCountryName(countryCode)}`}
+        >
+          {emojiFlag}
+        </span>
+      );
     } else {
       // Use CSS flag as fallback
-      return <span className={`flag flag-css ${countryCode}`} role="img" aria-label={`Flag of ${getCountryName(countryCode)}`}></span>;
+      return (
+        <span
+          className={`flag flag-css ${countryCode}`}
+          role="img"
+          aria-label={`Flag of ${getCountryName(countryCode)}`}
+        ></span>
+      );
     }
   };
 
   const getCountryName = (countryCode: string) => {
-    const country = COUNTRIES_DATA.find(c => c.code === countryCode);
+    const country = COUNTRIES_DATA.find((c) => c.code === countryCode);
     return country ? country.name : 'Singapore';
   };
 
@@ -263,10 +363,15 @@ const PhoneInput: React.FC<PhoneInputProps> = ({
                 stroke="currentColor"
                 viewBox="0 0 24 24"
               >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M19 9l-7 7-7-7"
+                />
               </svg>
             </button>
-            
+
             {/* Dropdown */}
             {isDropdownOpen && (
               <div className="phone-input-custom-dropdown">

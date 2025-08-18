@@ -4,20 +4,35 @@ import { API_URL } from './constants';
 export const getImageUrl = (imageData: any): string => {
   if (!imageData) return '';
 
-  // Handle both Strapi v4 (with data) and direct cases
-  const imageAttributes = imageData.data ? imageData.data.attributes : imageData;
+  // Normalize arrays (pick the first image)
+  if (Array.isArray(imageData)) {
+    imageData = imageData[0];
+  }
+
+  // Handle both Strapi v4 (with data) and direct attributes
+  const imageAttributes = imageData?.data?.attributes || imageData?.attributes || imageData;
 
   if (!imageAttributes) return '';
 
-  // Get URL from formats or directly
+  // If it's already a string URL
+  if (typeof imageAttributes === 'string') {
+    let url = imageAttributes as string;
+    if (url.startsWith('/')) {
+      url = API_URL + url;
+    }
+    return url;
+  }
+
+  // Get URL from formats (prefer large) or directly
   let imageUrl =
+    imageAttributes.formats?.large?.url ||
     imageAttributes.formats?.medium?.url ||
     imageAttributes.formats?.small?.url ||
     imageAttributes.formats?.thumbnail?.url ||
     imageAttributes.url;
 
-  // Add API_URL if URL starts with /uploads/
-  if (imageUrl && imageUrl.startsWith('/uploads/')) {
+  // Add API_URL if URL is relative
+  if (imageUrl && imageUrl.startsWith('/')) {
     imageUrl = API_URL + imageUrl;
   }
 

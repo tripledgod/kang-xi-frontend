@@ -1,19 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Loading from '../components/Loading';
 import { useLoading } from '../hooks/useLoading';
 import { useLanguage } from '../contexts/LanguageContext';
-import tang from '../assets/tang.png';
-import horse from '../assets/horse.png';
-import ceramics from '../assets/ceramics.png';
-import chaseCollection from '../assets/chase_collection.png';
-import ceramicsMobile from '../assets/ceramics_mobile.png';
-import ourArticles from '../assets/our_articles.png';
 import articlesCover from '../assets/hero_image.png';
 import heroMobileImage from '../assets/hero_mobile_image.png';
-import bigLeft from '../assets/big_left_article.png';
-import bigRight from '../assets/big_right_article.png';
-import { getArticles, Article } from '../api/articles';
+import { getArticles, getHeaderArticle, getArticlesByIds, Article } from '../api/articles';
 import { getCoverUrl } from '../utils';
 import { useScrollToTop } from '../hooks/useScrollToTop';
 
@@ -22,6 +14,7 @@ const ARTICLES_PER_PAGE = 5;
 export default function Articles() {
   const [page, setPage] = useState(1);
   const [articles, setArticles] = useState<Article[]>([]);
+  const [headerArticles, setHeaderArticles] = useState<Article[]>([]);
   const [totalPages, setTotalPages] = useState(1);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
@@ -29,7 +22,12 @@ export default function Articles() {
   const { locale } = useLanguage();
   const scrollToTop = useScrollToTop();
 
-  const featuredArticles = articles.slice(0, 2);
+  const featuredArticles = headerArticles.length > 0
+    ? [
+        ...headerArticles,
+        ...articles.filter((a) => !headerArticles.some((h) => h.id === a.id)).slice(0, Math.max(0, 2 - headerArticles.length)),
+      ].slice(0, 2)
+    : articles.slice(0, 2);
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 768);
@@ -50,6 +48,33 @@ export default function Articles() {
 
     withLoading(fetchArticles);
   }, [page, locale]); // Re-fetch when locale changes
+
+  // Fetch header featured article on locale change
+  useEffect(() => {
+    const fetchHeader = async () => {
+      try {
+        const response = await getHeaderArticle(locale);
+        let headerList = response.data?.articles || [];
+
+        // If covers are missing, enrich by fetching full articles by ids
+        const hasCover = (a: Article) => Boolean((a as any)?.cover);
+        if (headerList.length && headerList.some((a) => !hasCover(a))) {
+          const ids = headerList.map((a) => a.id);
+          const enriched = await getArticlesByIds(ids, locale);
+          // Keep backend order by mapping back
+          const byId = new Map(enriched.data.map((a) => [a.id, a] as const));
+          headerList = headerList.map((a) => byId.get(a.id) || a);
+        }
+
+        setHeaderArticles(headerList);
+      } catch (error) {
+        console.error('Error fetching header article:', error);
+        setHeaderArticles([]);
+      }
+    };
+
+    withLoading(fetchHeader);
+  }, [locale]);
 
   // Scroll to top when page changes
   useEffect(() => {
@@ -191,7 +216,7 @@ export default function Articles() {
             const imageUrl = getCoverUrl(article.cover);
 
             // Function to handle scroll to top before page navigation
-            const handleFeaturedArticleClick = (e: React.MouseEvent) => {
+            const handleFeaturedArticleClick = () => {
               scrollToTop();
             };
 
@@ -231,7 +256,7 @@ export default function Articles() {
                         {article.title}
                       </h5>
                       <div className="text-base text-white mb-3 line-clamp-2 drop-shadow-lg">
-                        {article.description}
+                        {article.shortDescription || article.description}
                       </div>
                       <div className="text-xs text-white uppercase font-semibold tracking-wider drop-shadow-lg">
                         {new Date(article.publishedAt)
@@ -273,7 +298,7 @@ export default function Articles() {
                       {article.title}
                     </h5>
                     <div className="text-base text-white mb-3 line-clamp-2 drop-shadow-lg">
-                      {article.description}
+                      {article.shortDescription || article.description}
                     </div>
                     <div className="text-[14px]  leading-[20px] text-white uppercase tracking-wider font-semibold drop-shadow-lg">
                       {new Date(article.publishedAt)
@@ -305,7 +330,7 @@ export default function Articles() {
                   const imageUrl = getCoverUrl(article.cover);
 
                   // Function to handle scroll to top before page navigation
-                  const handleArticleClick = (e: React.MouseEvent) => {
+                  const handleArticleClick = () => {
                     scrollToTop();
                   };
 
@@ -345,7 +370,7 @@ export default function Articles() {
                             {article.title}
                           </h5>
                           <div className="text-base text-[#585550] mb-3 line-clamp-3 text-left">
-                            {article.description}
+                            {article.shortDescription || article.description}
                           </div>
                           <div className="flex-1"></div>
                           <div className="text-xs font-semibold text-[#7B6142] md:pb-6 pb-0 uppercase tracking-wider text-left">
@@ -376,7 +401,7 @@ export default function Articles() {
                             {article.title}
                           </h5>
                           <div className="text-base text-[#585550] mb-3 line-clamp-3 text-left">
-                            {article.description}
+                            {article.shortDescription || article.description}
                           </div>
                           <div className="flex-1"></div>
                           <div className="text-[14px] font-semibold leading-[20px] text-[#585550] uppercase tracking-wider text-left">
@@ -433,7 +458,7 @@ export default function Articles() {
                 <button
                   key={num}
                   className={`ticket-rounded w-9 h-9 rounded-lg flex items-center justify-center text-[#535862] btn-clickable ${
-                    page === num ? 'md:bg-[#133A4A] bg-[#83644B] text-white' : ''
+                    page === num ? 'bg-[#83644B] text-white' : ''
                   }`}
                   onClick={() => {
                     setPage(num);
