@@ -1,0 +1,69 @@
+/* Button component specific styles */
+.custom-button {
+  /* Completely remove all scaling and transition effects */
+  transform: none !important;
+  transition: none !important;
+  animation: none !important;
+}
+
+.custom-button:active {
+  transform: none !important;
+  transition: none !important;
+  animation: none !important;
+}
+
+.custom-button:hover {
+  transform: none !important;
+  transition: none !important;
+  animation: none !important;
+}
+
+.custom-button:focus {
+  transform: none !important;
+  transition: none !important;
+  animation: none !important;
+}
+
+/* Remove all effects on touch devices */
+@media (hover: none) and (pointer: coarse) {
+  .custom-button:hover {
+    transform: none !important;
+    transition: none !important;
+    animation: none !important;
+  }
+  
+  .custom-button:active {
+    transform: none !important;
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/* Override any global button styles that might cause scaling */
+button.custom-button,
+button.custom-button:active,
+button.custom-button:hover,
+button.custom-button:focus {
+  transform: none !important;
+  transition: none !important;
+  animation: none !important;
+  scale: 1 !important;
+}
+
+/* Higher specificity selectors to override global button:active */
+button.custom-button:active,
+button.custom-button:focus:active,
+button.custom-button:hover:active {
+  transform: none !important;
+  transition: none !important;
+  animation: none !important;
+  scale: 1 !important;
+}
+
+/* Override global button:active with maximum specificity */
+button:active.custom-button {
+  transform: none !important;
+  transition: none !important;
+  animation: none !important;
+  scale: 1 !important;
+}

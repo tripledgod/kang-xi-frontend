@@ -56,8 +56,8 @@ export default function AboutUs() {
 
   // Responsive card/container width
   const mobileCardWidth = 320;
-  const mobilePeek = 0.18;
-  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+  // const mobilePeek = 0.18;
+  // const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
 
   if (loading) {
     return (
@@ -201,6 +201,21 @@ export default function AboutUs() {
                 onClick={() => setTeamIndex((i) => Math.max(0, i - 1))}
                 disabled={!canGoLeft}
                 aria-label="Previous"
+                onMouseDown={(e) => {
+                  (e.currentTarget as HTMLButtonElement).style.backgroundColor = '#DAC497';
+                }}
+                onMouseUp={(e) => {
+                  (e.currentTarget as HTMLButtonElement).style.backgroundColor = '';
+                }}
+                onMouseLeave={(e) => {
+                  (e.currentTarget as HTMLButtonElement).style.backgroundColor = '';
+                }}
+                onTouchStart={(e) => {
+                  (e.currentTarget as HTMLButtonElement).style.backgroundColor = '#DAC497';
+                }}
+                onTouchEnd={(e) => {
+                  (e.currentTarget as HTMLButtonElement).style.backgroundColor = '';
+                }}
               >
                 <span className="text-[20px] text-[#93633B]">
                   <svg
@@ -228,6 +243,21 @@ export default function AboutUs() {
                 }
                 disabled={!canGoRight}
                 aria-label="Next"
+                onMouseDown={(e) => {
+                  (e.currentTarget as HTMLButtonElement).style.backgroundColor = '#DAC497';
+                }}
+                onMouseUp={(e) => {
+                  (e.currentTarget as HTMLButtonElement).style.backgroundColor = '';
+                }}
+                onMouseLeave={(e) => {
+                  (e.currentTarget as HTMLButtonElement).style.backgroundColor = '';
+                }}
+                onTouchStart={(e) => {
+                  (e.currentTarget as HTMLButtonElement).style.backgroundColor = '#DAC497';
+                }}
+                onTouchEnd={(e) => {
+                  (e.currentTarget as HTMLButtonElement).style.backgroundColor = '';
+                }}
               >
                 <span className="text-[20px] text-[#93633B]">
                   <svg
@@ -256,7 +286,7 @@ export default function AboutUs() {
               maxWidth: `${cardWidth * (visibleCount + peekWidth) + 24 * visibleCount}px`,
             }}
           >
-            {aboutData?.team?.map((member, idx) => (
+            {aboutData?.team?.map((member) => (
               <div
                 key={member.id}
                 className="flex flex-col items-start flex-shrink-0"

@@ -16,8 +16,10 @@ import { useTranslation } from 'react-i18next';
 import happendImg from '../assets/happend.jpg';
 import expressImg from '../assets/express.jpg';
 import bgButtonMobile from '../assets/bg_button.png';
-import bgButtonMobileHover from '../assets/bg_button_mobile_hover.png';
+// import bgButtonMobileHover from '../assets/bg_button_mobile_hover.png';
 import bgButtonHover from '../assets/bg_button_hover.png';
+import bgButtonPressed from '../assets/bg_button_pressed.png';
+import bgButtonMobilePressed from '../assets/bg_button_mobile_pressed.png';
 
 const steps = [
   {
@@ -39,14 +41,14 @@ const steps = [
   },
 ];
 
-const countryOptions = [
-  { code: '+65', label: 'Singapore', flag: '🇸🇬' },
-  { code: '+84', label: 'Vietnam', flag: '🇻🇳' },
-  { code: '+86', label: 'China', flag: '🇨🇳' },
-];
+// const countryOptions = [
+//   { code: '+65', label: 'Singapore', flag: '🇸🇬' },
+//   { code: '+84', label: 'Vietnam', flag: '🇻🇳' },
+//   { code: '+86', label: 'China', flag: '🇨🇳' },
+// ];
 
 export default function AcquireAnItem() {
-  const [country, setCountry] = useState(countryOptions[0]);
+  // const [country, setCountry] = useState(countryOptions[0]);
   const [phone, setPhone] = useState('');
   const [acquireForm, setAcquireForm] = useState({
     firstName: '',
@@ -113,7 +115,7 @@ export default function AcquireAnItem() {
         }),
       });
 
-      const data = await response.json();
+      await response.json();
       setShowSuccess(true);
       setAcquireForm({ firstName: '', lastName: '', itemCode: '' });
       setPhone('');
@@ -172,11 +174,25 @@ export default function AcquireAnItem() {
             <button
               type="submit"
               onClick={handleScrollToForm}
-              className="flex h-[48px]   font-semibold w-[189px] items-center justify-center text-[14px] leading-[20px] shadow-none transition-all px-6 btn-clickable"
+              className="flex h-[48px]   font-semibold w-[189px] items-center justify-center text-[14px] leading-[20px] shadow-none px-6 custom-button cursor-pointer"
               onMouseEnter={(e) => {
+                // Desktop hover only
                 e.currentTarget.style.backgroundImage = `url(${bgButtonHover})`;
               }}
               onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundImage = `url(${bgButtonMobile})`;
+              }}
+              onMouseDown={(e) => {
+                e.currentTarget.style.backgroundImage = `url(${bgButtonPressed})`;
+              }}
+              onMouseUp={(e) => {
+                // Return to default on mouse up to avoid hover state on touch devices
+                e.currentTarget.style.backgroundImage = `url(${bgButtonMobile})`;
+              }}
+              onTouchStart={(e) => {
+                e.currentTarget.style.backgroundImage = `url(${bgButtonMobilePressed})`;
+              }}
+              onTouchEnd={(e) => {
                 e.currentTarget.style.backgroundImage = `url(${bgButtonMobile})`;
               }}
               style={{

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import chaseIcon from '../assets/chase.svg';
 import letterIcon from '../assets/letter.svg';
@@ -6,12 +6,9 @@ import chaseCollection from '../assets/chase_collection.png';
 import chaseCollectionMobile from '../assets/chase_collection_mobile.jpg';
 import image from '../assets/image.png';
 import imageMobile from '../assets/image_mobile.jpg';
-import bgButton from '../assets/bg_button.png';
 import Button from './Button';
 import { COLORS } from './colors';
 import { useNavigate } from 'react-router-dom';
-import bgButtonHover from '../assets/bg_button_hover.png';
-import bgButtonMobileHover from '../assets/bg_button_mobile_hover.png';
 
 export default function AcquireOrAppraise() {
   const navigate = useNavigate();
@@ -59,7 +56,7 @@ export default function AcquireOrAppraise() {
 
   return (
     <div className="w-full">
-      {sections.map((section, idx) => (
+      {sections.map((section) => (
         <section
           key={section.title}
           className={`w-full flex flex-col md:flex-row ${section.reverse ? 'md:flex-row-reverse' : ''}`}
@@ -85,38 +82,13 @@ export default function AcquireOrAppraise() {
             )}
             <p className="text-base leading-6 text-[#ABAAA7] mb-10 max-w-lg">{section.desc}</p>
             <div className="w-[220px] flex justify-center">
-              <button
-                className="w-full font-semibold md:w-[189px] h-[48px] flex items-center justify-center text-base shadow-none transition-all px-6 btn-clickable"
+              <Button
+                text={section.button}
                 onClick={
                   section.link === '/acquire-an-item' ? handleAcquireClick : handleAppraiseClick
                 }
-                onMouseEnter={(e) => {
-                  const target = e.currentTarget;
-                  if (isMobile) {
-                    target.style.backgroundImage = `url(${bgButtonMobileHover})`;
-                  } else {
-                    target.style.backgroundImage = `url(${bgButtonHover})`;
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundImage = `url(${bgButton})`;
-                }}
-                style={{
-                  backgroundImage: `url(${bgButton})`,
-                  backgroundSize: '100% 100%',
-                  backgroundRepeat: 'no-repeat',
-                  backgroundPosition: 'center',
-                  color: '#fff',
-                  border: 'none',
-                  padding: 0,
-                  minWidth: 0,
-                  fontSize: 14,
-                  lineHeight: '20px',
-                  letterSpacing: '0.5px',
-                }}
-              >
-                {section.button}
-              </button>
+                forceMobile={isMobile}
+              />
             </div>
           </div>
           {/* Mobile: order-1, Desktop: order-2 (image) */}

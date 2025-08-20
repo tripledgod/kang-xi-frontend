@@ -1,11 +1,13 @@
 import React from 'react';
-import Button from './Button';
+// import Button from './Button';
 
 import { COLORS } from './colors.ts';
 import bgButtonSubmitForm from '../assets/bg_button_submit_form1.png';
 import bgButtonMobile from '../assets/bg_button_mobile.png';
 import bgButtonSubmitFormHover from '../assets/bg_button_submit_form_hover.png';
-import bgButtonMobileHover from '../assets/bg_button_mobile_hover.png';
+// import bgButtonMobileHover from '../assets/bg_button_mobile_hover.png';
+import bgButtonSubmitFormPressed from '../assets/bg_button_submitt_form_pressed.png';
+import bgButtonMobilePressed from '../assets/bg_button_mobile_pressed.png';
 
 interface PopupProps {
   title: string;
@@ -66,11 +68,23 @@ const Popup: React.FC<PopupProps> = ({
         {/* Button */}
         <div className="w-full flex justify-center mx-auto">
           <button
-            className="w-full h-[48px]  items-center justify-center text-[14px] leading-[24px]  shadow-none transition-all    hidden md:block mx-5 btn-clickable"
+            className="w-full h-[48px]  items-center justify-center text-[14px] leading-[24px]  shadow-none    hidden md:block mx-5 custom-button cursor-pointer"
             onMouseEnter={(e) => {
               e.currentTarget.style.backgroundImage = `url(${bgButtonSubmitFormHover})`;
             }}
             onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundImage = `url(${bgButtonSubmitForm})`;
+            }}
+            onMouseDown={(e) => {
+              e.currentTarget.style.backgroundImage = `url(${bgButtonSubmitFormPressed})`;
+            }}
+            onMouseUp={(e) => {
+              e.currentTarget.style.backgroundImage = `url(${bgButtonSubmitFormHover})`;
+            }}
+            onTouchStart={(e) => {
+              e.currentTarget.style.backgroundImage = `url(${bgButtonSubmitFormPressed})`;
+            }}
+            onTouchEnd={(e) => {
               e.currentTarget.style.backgroundImage = `url(${bgButtonSubmitForm})`;
             }}
             style={{
@@ -88,11 +102,24 @@ const Popup: React.FC<PopupProps> = ({
             {buttonText}
           </button>
           <button
-            className="w-full  h-[48px] flex items-center justify-center text-[14px] leading-[24px]  shadow-none transition-all     md:hidden btn-clickable"
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundImage = `url(${bgButtonMobileHover})`;
+            className="w-full  h-[48px] flex items-center justify-center text-[14px] leading-[24px]  shadow-none      md:hidden custom-button cursor-pointer"
+            onMouseEnter={() => {
+              // No hover effect on mobile
             }}
             onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundImage = `url(${bgButtonMobile})`;
+            }}
+            onMouseDown={(e) => {
+              e.currentTarget.style.backgroundImage = `url(${bgButtonMobilePressed})`;
+            }}
+            onMouseUp={(e) => {
+              // Return to default on mouse up to avoid hover state on touch devices
+              e.currentTarget.style.backgroundImage = `url(${bgButtonMobile})`;
+            }}
+            onTouchStart={(e) => {
+              e.currentTarget.style.backgroundImage = `url(${bgButtonMobilePressed})`;
+            }}
+            onTouchEnd={(e) => {
               e.currentTarget.style.backgroundImage = `url(${bgButtonMobile})`;
             }}
             style={{

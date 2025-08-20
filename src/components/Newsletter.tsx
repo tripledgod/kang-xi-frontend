@@ -2,13 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 import { COLORS } from './colors';
-import bgButton from '../assets/bg_button.png';
-import bgButtonMobile from '../assets/bg_button_mobile.png';
 import Popup from './Popup';
-import Button from './Button';
 import { subscribe } from '../api/newsletter';
+import bgButton from '../assets/bg_button.png';
 import bgButtonHover from '../assets/bg_button_hover.png';
+import bgButtonPressed from '../assets/bg_button_pressed.png';
+import bgButtonMobile from '../assets/bg_button_mobile.png';
 import bgButtonMobileHover from '../assets/bg_button_mobile_hover.png';
+import bgButtonMobilePressed from '../assets/bg_button_mobile_pressed.png';
 
 export default function Newsletter() {
   const [showPopup, setShowPopup] = useState(false);
@@ -174,13 +175,30 @@ export default function Newsletter() {
             <button
               type="submit"
               disabled={loading}
-              className="hidden md:flex w-full h-full items-center justify-center text-[16px] leading-[20px] font-medium shadow-none transition-all px-6"
+              className="hidden md:flex w-full h-full items-center justify-center text-[16px] leading-[20px] font-medium shadow-none px-6 custom-button"
               onMouseEnter={(e) => {
+                // No hover effect on mobile; desktop-only visual cue
+                if (!loading) e.currentTarget.style.backgroundImage = `url(${bgButtonHover})`;
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundImage = `url(${bgButton})`;
+              }}
+              onMouseDown={(e) => {
+                if (!loading) {
+                  e.currentTarget.style.backgroundImage = `url(${bgButtonPressed})`;
+                }
+              }}
+              onMouseUp={(e) => {
                 if (!loading) {
                   e.currentTarget.style.backgroundImage = `url(${bgButtonHover})`;
                 }
               }}
-              onMouseLeave={(e) => {
+              onTouchStart={(e) => {
+                if (!loading) {
+                  e.currentTarget.style.backgroundImage = `url(${bgButtonPressed})`;
+                }
+              }}
+              onTouchEnd={(e) => {
                 e.currentTarget.style.backgroundImage = `url(${bgButton})`;
               }}
               style={{
@@ -194,19 +212,35 @@ export default function Newsletter() {
                 letterSpacing: '0.5px',
               }}
             >
-              {loading ? 'SENDING...' : t('SUBSCRIBE')}
+              {t('SUBSCRIBE')}
             </button>
             {/* Button mobile */}
             <button
               type="submit"
               disabled={loading}
-              className="flex md:hidden w-full h-full items-center justify-center text-[16px] leading-[24px] font-medium shadow-none transition-all px-6"
-              onMouseEnter={(e) => {
+              className="flex md:hidden w-full h-full items-center justify-center text-[16px] leading-[24px] font-medium shadow-none px-6 custom-button"
+              onMouseEnter={() => {
+                // Skip hover visuals on mobile; rely on pressed/touch feedback
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundImage = `url(${bgButtonMobile})`;
+              }}
+              onMouseDown={(e) => {
+                if (!loading) {
+                  e.currentTarget.style.backgroundImage = `url(${bgButtonMobilePressed})`;
+                }
+              }}
+              onMouseUp={(e) => {
                 if (!loading) {
                   e.currentTarget.style.backgroundImage = `url(${bgButtonMobileHover})`;
                 }
               }}
-              onMouseLeave={(e) => {
+              onTouchStart={(e) => {
+                if (!loading) {
+                  e.currentTarget.style.backgroundImage = `url(${bgButtonMobilePressed})`;
+                }
+              }}
+              onTouchEnd={(e) => {
                 e.currentTarget.style.backgroundImage = `url(${bgButtonMobile})`;
               }}
               style={{
@@ -219,7 +253,7 @@ export default function Newsletter() {
                 cursor: loading ? 'not-allowed' : 'pointer',
               }}
             >
-              {loading ? 'SENDING...' : t('SUBSCRIBE')}
+              {t('SUBSCRIBE')}
             </button>
           </div>
         </form>
