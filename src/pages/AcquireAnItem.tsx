@@ -174,7 +174,7 @@ export default function AcquireAnItem() {
             <button
               type="submit"
               onClick={handleScrollToForm}
-              className="flex h-[48px]   font-semibold w-[189px] items-center justify-center text-[14px] leading-[20px] shadow-none transition-all px-6 btn-clickable"
+              className="flex h-[48px]   font-semibold w-[189px] items-center justify-center text-[14px] leading-[20px] shadow-none px-6 custom-button cursor-pointer"
               onMouseEnter={(e) => {
                 // Desktop hover only
                 e.currentTarget.style.backgroundImage = `url(${bgButtonHover})`;

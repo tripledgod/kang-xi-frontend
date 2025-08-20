@@ -68,7 +68,7 @@ const Popup: React.FC<PopupProps> = ({
         {/* Button */}
         <div className="w-full flex justify-center mx-auto">
           <button
-            className="w-full h-[48px]  items-center justify-center text-[14px] leading-[24px]  shadow-none transition-all    hidden md:block mx-5 btn-clickable"
+            className="w-full h-[48px]  items-center justify-center text-[14px] leading-[24px]  shadow-none    hidden md:block mx-5 custom-button cursor-pointer"
             onMouseEnter={(e) => {
               e.currentTarget.style.backgroundImage = `url(${bgButtonSubmitFormHover})`;
             }}
@@ -102,7 +102,7 @@ const Popup: React.FC<PopupProps> = ({
             {buttonText}
           </button>
           <button
-            className="w-full  h-[48px] flex items-center justify-center text-[14px] leading-[24px]  shadow-none transition-all     md:hidden btn-clickable"
+            className="w-full  h-[48px] flex items-center justify-center text-[14px] leading-[24px]  shadow-none      md:hidden custom-button cursor-pointer"
             onMouseEnter={() => {
               // No hover effect on mobile
             }}

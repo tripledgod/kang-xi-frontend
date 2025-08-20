@@ -95,7 +95,7 @@ const CoverPageHome: React.FC = () => {
                 {title}
               </h1>
               <h3
-                className="text-white text-[40px] leading-[48px] drop-shadow-lg text-center md:hidden"
+                className="text-white text-[40px] leading-[48px] drop-shadow-lg text-center md:hidden px-4"
                 style={{ letterSpacing: '-0.01em' }}
               >
                 {title}
@@ -107,8 +107,8 @@ const CoverPageHome: React.FC = () => {
 
             {/* Subtitle block: centered */}
             <div className="flex items-center justify-center text-center md:px-[88.5px]">
-              <p className="text-white md:hidden drop-shadow-lg text-[18px] leading-[26px] text-center">{subTitle}</p>
-              <p className="text-white hidden md:block drop-shadow-lg text-[20px] leading-[28px] text-center">{subTitle}</p>
+              <p className="text-white md:hidden drop-shadow-lg text-[18px] leading-[26px] text-center px-2">{subTitle}</p>
+              <p className="text-white hidden md:block drop-shadow-lg text-[20px] leading-[28px] text-center px-15">{subTitle}</p>
             </div>
           </div>
         </div>

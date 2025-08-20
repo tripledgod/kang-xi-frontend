@@ -2,17 +2,12 @@ import { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 // import icLeft from '../assets/ic_left.svg';
 // import icRight from '../assets/ic_right.svg';
-import bgButton from '../assets/bg_button.png';
-// import bgButtonMobile from '../assets/bg_button_mobile.png';
 import { COLORS } from './colors.ts';
 import Button from './Button.tsx';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
 import { getCategories, flattenCategory } from '../api/categories';
 import { API_URL } from '../utils/constants';
-import bgButtonHover from '../assets/bg_button_hover.png';
-// import bgButtonMobileHover from '../assets/bg_button_mobile_hover.png';
-import bgButtonPressed from '../assets/bg_button_pressed.png';
 
 const CARD_WIDTH = 320;
 const CARD_GAP = 32;
@@ -220,48 +215,13 @@ export default function CeramicsByEra() {
                 </svg>
               </span>
             </button>
-            <button
-              className="ml-4 w-[218px] h-[48px] flex items-center justify-center text-base font-medium shadow-none transition-all px-6 btn-clickable"
+            <Button
+              text={t('VIEW_ALL_COLLECTION')}
               onClick={() => {
                 navigate('/browse');
               }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundImage = `url(${bgButtonHover})`;
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundImage = `url(${bgButton})`;
-              }}
-              onMouseDown={(e) => {
-                e.currentTarget.style.backgroundImage = `url(${bgButtonPressed})`;
-              }}
-              onMouseUp={(e) => {
-                e.currentTarget.style.backgroundImage = `url(${bgButton})`;
-              }}
-              onTouchStart={(e) => {
-                e.currentTarget.style.backgroundImage = `url(${bgButtonPressed})`;
-              }}
-              onTouchEnd={(e) => {
-                e.currentTarget.style.backgroundImage = `url(${bgButton})`;
-              }}
-              style={{
-                backgroundImage: `url(${bgButton})`,
-                backgroundSize: '100% 100%',
-                backgroundRepeat: 'no-repeat',
-                backgroundPosition: 'center',
-                color: '#fff',
-                border: 'none',
-                padding: 0,
-                minWidth: 0,
-                // fontFamily: 'Noto Sans SC, Inter, -apple-system, BlinkMacSystemFont, sans-serif',
-
-                fontSize: 14,
-                lineHeight: 1.25,
-                letterSpacing: '0.5px',
-                wordSpacing: '2px',
-              }}
-            >
-              {t('VIEW_ALL_COLLECTION')}
-            </button>
+              className="ml-4 md:w-[218px]"
+            />
           </div>
         </div>
 

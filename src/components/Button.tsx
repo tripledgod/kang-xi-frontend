@@ -10,6 +10,7 @@ import bgButtonPressed from '../assets/bg_button_pressed.png';
 import bgButtonMobilePressed from '../assets/bg_button_mobile_pressed.png';
 import bgButtonSubmitFormPressed from '../assets/bg_button_submitt_form_pressed.png';
 import bgButtonOutlinePressed from '../assets/bg_button_outline_pressed.png';
+import '../styles/button.css';
 
 interface ButtonProps {
   text: string;
@@ -58,7 +59,8 @@ const Button: React.FC<ButtonProps> = ({
   // Choose the right background
   let backgroundImage = '';
   if (isOutline) {
-    backgroundImage = isHovered || isPressed ? bgButtonOutlinePressed : bgButtonOutline;
+    // Outline buttons have pressed state but no hover state
+    backgroundImage = isPressed ? bgButtonOutlinePressed : bgButtonOutline;
   } else if (isPressed) {
     if (isMobile) {
       backgroundImage = bgButtonMobilePressed;
@@ -99,11 +101,11 @@ const Button: React.FC<ButtonProps> = ({
       onMouseUp={() => setIsPressed(false)}
       onTouchStart={() => setIsPressed(true)}
       onTouchEnd={() => setIsPressed(false)}
-      className={`group relative w-full md:w-[189px] h-[48px] flex items-center justify-center text-base shadow-none transition-all px-6 overflow-hidden before:absolute before:inset-0 before:opacity-0 before:transition-opacity before:duration-200 hover:before:opacity-100 btn-clickable ${className} ${
+      className={`custom-button group relative w-full md:w-[189px] h-[48px] flex items-center justify-center text-base shadow-none px-6 overflow-hidden btn-clickable ${className} ${
         disabled ? 'opacity-50 cursor-not-allowed' : ''
       }`}
       style={{
-        color: isOutline ? (isHovered || isPressed ? '#676767' : '#020202') : '#fff',
+        color: isOutline ? (isPressed ? '#676767' : '#020202') : '#fff',
         border: 'none',
         padding: 0,
         minWidth: 0,
@@ -116,7 +118,7 @@ const Button: React.FC<ButtonProps> = ({
       <span
         className="relative  z-10 w-full h-full flex items-center justify-center leading-[24px] md:leading-[20px]"
         style={{
-          color: isOutline ? (isHovered || isPressed ? '#676767' : '#020202') : '#fff',
+          color: isOutline ? (isPressed ? '#676767' : '#020202') : '#fff',
           fontWeight: 600,
           fontSize: 14,
           letterSpacing: 0,

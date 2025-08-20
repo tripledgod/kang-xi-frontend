@@ -125,7 +125,7 @@ export default function ArticlesSection() {
                       wordSpacing: '2px',
                     }}
                   >
-                    {article.description}
+                    {article.shortDescription || article.description}
                   </div>
                   <div
                     className="text-[14px]  leading-[20px] line-clamp-2 uppercase font-semibold"
