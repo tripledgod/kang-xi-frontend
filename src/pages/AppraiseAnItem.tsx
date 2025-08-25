@@ -510,6 +510,7 @@ export default function AppraiseAnItem() {
                     <div key={idx} className="relative w-40 h-40">
                       <img
                         src={URL.createObjectURL(img)}
+                        loading={'lazy'}
                         alt={`Preview ${idx + 1}`}
                         className="w-40 h-40 object-contain rounded border border-[#C7C7B9] bg-white"
                       />

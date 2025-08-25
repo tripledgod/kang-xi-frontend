@@ -105,7 +105,7 @@ const Button: React.FC<ButtonProps> = ({
         disabled ? 'opacity-50 cursor-not-allowed' : ''
       }`}
       style={{
-        color: isOutline ? (isPressed ? '#676767' : '#020202') : '#fff',
+        color: isOutline ? (isPressed ? '#676767' : '#83644B') : '#fff',
         border: 'none',
         padding: 0,
         minWidth: 0,
@@ -118,7 +118,7 @@ const Button: React.FC<ButtonProps> = ({
       <span
         className="relative  z-10 w-full h-full flex items-center justify-center leading-[24px] md:leading-[20px]"
         style={{
-          color: isOutline ? (isPressed ? '#676767' : '#020202') : '#fff',
+          color: isOutline ? (isPressed ? '#676767' : '#83644B') : '#fff',
           fontWeight: 600,
           fontSize: 14,
           letterSpacing: 0,

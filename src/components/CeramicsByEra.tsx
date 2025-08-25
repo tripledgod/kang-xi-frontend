@@ -231,7 +231,7 @@ export default function CeramicsByEra() {
             <div className="flex justify-center items-center py-16 w-full">
               <div className="flex flex-col items-center">
                 <div className="w-8 h-8 border-2 border-[#61422D] border-t-transparent rounded-full animate-spin mb-4"></div>
-                <span className="text-[#61422D] text-base font-medium">Loading...</span>
+                {/*<span className="text-[#61422D] text-base font-medium">Loading...</span>*/}
               </div>
             </div>
           ) : (
@@ -245,7 +245,7 @@ export default function CeramicsByEra() {
               >
                 <div className="bg-[#E6DDC6] aspect-square w-full flex items-center justify-center overflow-hidden mb-4">
                   {era.img ? (
-                    <img src={era.img} alt={era.name} className="object-cover w-full h-full" />
+                    <img src={era.img} loading={'lazy'} alt={era.name} className="object-cover w-full h-full" />
                   ) : (
                     <div className="text-[#61422D] text-center p-4">
                       <div className="text-6xl mb-3 opacity-50">🏺</div>
@@ -298,7 +298,7 @@ export default function CeramicsByEra() {
             <div className="flex justify-center items-center py-16 w-full">
               <div className="flex flex-col items-center">
                 <div className="w-8 h-8 border-2 border-[#61422D] border-t-transparent rounded-full animate-spin mb-4"></div>
-                <span className="text-[#61422D] text-base font-medium">Loading...</span>
+                {/*<span className="text-[#61422D] text-base font-medium">Loading...</span>*/}
               </div>
             </div>
           ) : (
@@ -313,7 +313,7 @@ export default function CeramicsByEra() {
               >
                 <div className="bg-[#E6DDC6] aspect-square w-full flex items-center justify-center overflow-hidden mb-4">
                   {era.img ? (
-                    <img src={era.img} alt={era.name} className="object-cover w-full h-full" />
+                    <img src={era.img} alt={era.name} loading={'lazy'} className="object-cover w-full h-full" />
                   ) : (
                     <div className="text-[#61422D] text-center p-4">
                       <div className="text-6xl mb-3 opacity-50">🏺</div>

@@ -54,21 +54,12 @@ function AppContent() {
     return new Date(date).toLocaleDateString('en-US', options);
   };
 
-  useEffect(() => {
-    // Only show loading for initial load, not for locale changes
-    if (articles.length === 0) {
-      withLoading(getArticlesData);
-    } else {
-      getArticlesData();
-    }
-  }, [locale]); // Re-fetch when locale changes
-
   // Array of paths where Newsletter should be hidden
   const hideNewsletterPaths = ['/acquire-an-item', '/appraise-an-item'];
   const shouldShowNewsletter = !hideNewsletterPaths.includes(location.pathname);
 
   if (loading) {
-    return <Loading fullScreen={true} text="Initializing..." size="large" />;
+    return <Loading fullScreen={true} size="large" />;
   }
 
   return (

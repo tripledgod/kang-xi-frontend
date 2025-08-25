@@ -45,7 +45,7 @@ const ArticleImage = ({
     );
   }
 
-  return <img src={imageUrl} alt={alt} className={className} onError={handleImageError} />;
+  return <img src={imageUrl} loading={'lazy'} alt={alt} className={className} onError={handleImageError} />;
 };
 
 function RelatedArticles({ related }: { related: Article[] }) {
