@@ -348,6 +348,7 @@ export default function Articles() {
                           <div className="w-full h-48 overflow-hidden mb-4 bg-[#E6DDC6] flex items-center justify-center">
                             <img
                               src={imageUrl || articlesCover}
+                              loading={'lazy'}
                               alt={article.title}
                               className="object-cover w-full h-full"
                               onError={(e) => {
@@ -418,6 +419,7 @@ export default function Articles() {
                           <img
                             src={imageUrl || articlesCover}
                             alt={article.title}
+                            loading={'lazy'}
                             className="object-cover w-full h-full"
                             onError={(e) => {
                               console.error('Image failed to load:', imageUrl);

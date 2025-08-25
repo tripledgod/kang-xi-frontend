@@ -71,7 +71,7 @@ export default function ArticlesSection() {
             <div className="col-span-3 flex justify-center items-center py-16 w-full">
               <div className="flex flex-col items-center">
                 <div className="w-8 h-8 border-2 border-[#61422D] border-t-transparent rounded-full animate-spin mb-4"></div>
-                <span className="text-[#61422D] text-base font-medium">Loading...</span>
+                {/*<span className="text-[#61422D] text-base font-medium">Loading...</span>*/}
               </div>
             </div>
           ) : (

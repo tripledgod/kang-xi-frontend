@@ -36,6 +36,7 @@ const Browse: React.FC = () => {
   const [errorProducts, setErrorProducts] = useState<string | null>(null);
   const [preloadingProgress, setPreloadingProgress] = useState<Record<string, boolean>>({});
   const [showStickyHeader, setShowStickyHeader] = useState(false);
+  const [productsCache, setProductsCache] = useState<Record<string, any[]>>({});
   const navigate = useNavigate();
   const { locale } = useLanguage();
   const [searchParams] = useSearchParams();
@@ -43,6 +44,9 @@ const Browse: React.FC = () => {
   const eraTabWrapperRef = useRef<HTMLDivElement>(null);
   const eraButtonRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const heroRef = useRef<HTMLDivElement>(null);
+  const lastEraChange = useRef<number>(0);
+  const pendingRequests = useRef<Record<string, Promise<any>>>({});
+  const [enablePreloading, setEnablePreloading] = useState(false); // Set to false for better performance
 
   // Memoize sorted categories to prevent unnecessary recalculations
   const sortedCategories = useMemo(() => {
@@ -101,6 +105,8 @@ const Browse: React.FC = () => {
     if (categories.length > 0) {
       const flattened = categories.map((cat) => flattenCategory(cat));
       setFlattenedCategories(flattened);
+      // Clear products cache when categories change
+      setProductsCache({});
     }
   }, [categories]);
 
@@ -125,6 +131,7 @@ const Browse: React.FC = () => {
   // Fetch products by activeEra (no cache, always fresh data)
   useEffect(() => {
     let isMounted = true;
+    let abortController = new AbortController();
 
     if (!activeEra || sortedCategories.length === 0) {
       // Clear products when no active era or no categories
@@ -152,19 +159,63 @@ const Browse: React.FC = () => {
           setProducts([]); // Clear previous products immediately
         }
 
+        // Check cache first
+        const cacheKey = `${category.id}-${locale}`;
+        if (productsCache[cacheKey]) {
+          if (isMounted) {
+            setProducts(productsCache[cacheKey]);
+          }
+          return;
+        }
+
+        // Check if there's already a pending request for this data
+        if (pendingRequests.current[cacheKey] !== undefined) {
+          try {
+            const productsData = await pendingRequests.current[cacheKey];
+            if (!isMounted) return;
+            
+            if (productsData && productsData.length > 0) {
+              const flattened = productsData.map((prod: any) => flattenProduct(prod));
+              setProducts(flattened);
+            } else {
+              setProducts([]);
+              setErrorProducts('No data for this era');
+            }
+          } catch (err) {
+            if (!isMounted) return;
+            console.error('Error from pending request:', err);
+            setErrorProducts('Unable to load product list');
+            setProducts([]);
+          }
+          return;
+        }
+
+        // Create new request and store it
+        const requestPromise = getProductsByCategory(category.id, locale);
+        pendingRequests.current[cacheKey] = requestPromise;
+
         // Always fetch fresh data from API
-        const productsData = await getProductsByCategory(category.id, locale);
+        const productsData = await requestPromise;
+
+        // Clean up the pending request
+        delete pendingRequests.current[cacheKey];
 
         if (!isMounted) return; // Check if component is still mounted
 
         if (productsData && productsData.length > 0) {
           const flattened = productsData.map((prod) => flattenProduct(prod));
           setProducts(flattened);
+          // Cache the results
+          setProductsCache(prev => ({ ...prev, [cacheKey]: flattened }));
         } else {
           setProducts([]);
           setErrorProducts('No data for this era');
         }
       } catch (err) {
+        // Clean up the pending request on error
+        const cacheKey = `${category.id}-${locale}`;
+        delete pendingRequests.current[cacheKey];
+        
         if (!isMounted) return;
         console.error('Error fetching products:', err);
         setErrorProducts('Unable to load product list');
@@ -177,61 +228,60 @@ const Browse: React.FC = () => {
     // Cleanup function
     return () => {
       isMounted = false;
+      abortController.abort();
+      // Clean up any pending requests
+      const cacheKey = `${category.id}-${locale}`;
+      delete pendingRequests.current[cacheKey];
     };
   }, [activeEra, sortedCategories, locale, withProductsLoading]);
 
-  // Preload products for all eras when categories are available (no cache, just preload)
+  // Lazy load products only when needed - no aggressive preloading
   useEffect(() => {
-    let isMounted = true;
-
-    if (sortedCategories.length > 0) {
-      // Preload products for all eras in background
-      const preloadAllProducts = async () => {
-        const eraSlugs = sortedCategories.map((cat) => cat.slug);
-
-        for (const eraSlug of eraSlugs) {
-          if (!isMounted) break; // Stop if component unmounted
-
-          // Skip if this is the currently active era (already being fetched)
-          if (eraSlug === activeEra) continue;
-
-          // Mark as preloading
-          if (isMounted) {
-            setPreloadingProgress((prev) => ({ ...prev, [eraSlug]: true }));
-          }
-
-          const category = sortedCategories.find((cat) => cat.slug === eraSlug);
-          if (category) {
-            try {
-              // Always fetch fresh data, no cache
-              const productsData = await getProductsByCategory(category.id, locale);
-            } catch (err) {
-              if (isMounted) {
-                console.warn(`Failed to preload products for ${eraSlug}:`, err);
-              }
+    // Only preload if enabled (disabled by default for better performance)
+    if (!enablePreloading || !sortedCategories.length || !activeEra) return;
+    
+    const currentIndex = sortedCategories.findIndex(cat => cat.slug === activeEra);
+    if (currentIndex !== -1) {
+      const nextEra = sortedCategories[currentIndex + 1];
+      const prevEra = sortedCategories[currentIndex - 1];
+      
+      // Preload only adjacent eras (optional - can be removed for even better performance)
+      const erasToPreload = [nextEra, prevEra].filter(Boolean);
+      
+      erasToPreload.forEach(async (era) => {
+        if (era && !productsCache[`${era.id}-${locale}`]) {
+          try {
+            const productsData = await getProductsByCategory(era.id, locale);
+            if (productsData && productsData.length > 0) {
+              const flattened = productsData.map((prod: any) => flattenProduct(prod));
+              setProductsCache(prev => ({ ...prev, [`${era.id}-${locale}`]: flattened }));
             }
-          }
-
-          // Mark as completed
-          if (isMounted) {
-            setPreloadingProgress((prev) => ({ ...prev, [eraSlug]: false }));
+          } catch (err) {
+            console.warn(`Failed to preload products for ${era.slug}:`, err);
           }
         }
-      };
-
-      // Start preloading in background (don't await)
-      preloadAllProducts();
+      });
     }
 
-    // Cleanup function
+    // Cleanup function to clear pending requests when component unmounts
     return () => {
-      isMounted = false;
+      // Clear all pending requests
+      Object.keys(pendingRequests.current).forEach(key => {
+        delete pendingRequests.current[key];
+      });
     };
-  }, [sortedCategories, locale, activeEra]);
+  }, [activeEra, sortedCategories, locale, productsCache, enablePreloading]);
 
   const handleEraClick = useCallback(
     (eraSlug: string) => {
       if (eraSlug !== activeEra) {
+        // Debounce rapid successive clicks (300ms)
+        const now = Date.now();
+        if (now - lastEraChange.current < 300) {
+          return;
+        }
+        lastEraChange.current = now;
+
         // Clear current products immediately when switching
         setProducts([]);
         setErrorProducts(null);
@@ -463,10 +513,10 @@ const Browse: React.FC = () => {
           <div className="text-center py-16">
             <p className="text-[#61422D] text-lg mb-4">{errorProducts}</p>
           </div>
-        ) : products.length === 0 ? (
-          <div className="text-center py-16">
-            <p className="text-[#61422D] text-lg">No data</p>
-          </div>
+        // ) : products.length === 0 ? (
+        //   <div className="text-center py-16">
+        //     <p className="text-[#61422D] text-lg">No data</p>
+        //   </div>
         ) : (
           products.map((product: any) => (
             <ProductCard key={product.id} product={product} navigate={navigate} />

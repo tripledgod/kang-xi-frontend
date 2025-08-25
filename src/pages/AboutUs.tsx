@@ -150,7 +150,7 @@ export default function AboutUs() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
             {aboutData?.journey?.map((item) => (
               <div key={item.id} className="flex flex-col items-center">
-                <img src={getImageUrl(item.icon)} alt={item.title} className="h-12 mb-4" />
+                <img src={getImageUrl(item.icon)} loading={'lazy'} alt={item.title} className="h-12 mb-4" />
                 <h5 className="text-[20px] md:text-[24px] leading-[28px] md:leading-[32px] text-[#FAF7F2] mb-2">
                   {item.title}
                 </h5>
@@ -298,6 +298,7 @@ export default function AboutUs() {
                 <img
                   src={getImageUrl(member.image) || heroImg}
                   alt={member.name}
+                  loading={'lazy'}
                   className="w-full h-[340px] object-cover mb-6"
                 />
                 <h5 className="text-2xl font-serif text-[#61422D] mb-1 text-left">{member.name}</h5>
