@@ -76,7 +76,7 @@ const CoverPageHome: React.FC = () => {
     <div className="w-full flex justify-center ">
       <div className="relative w-full h-[675px] md:h-[872px] overflow-hidden">
         <img
-          src={imageUrl || heroImg}
+          src={imageUrl || ''}
           alt={title}
           className="absolute inset-0 w-full h-full object-cover object-center"
         />

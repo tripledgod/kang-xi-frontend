@@ -16,6 +16,7 @@ import {
   Product,
 } from '../api/categories';
 import { API_URL } from '../utils/constants';
+import loading from '../components/Loading';
 
 interface Era {
   key: string;
@@ -173,7 +174,7 @@ const Browse: React.FC = () => {
           try {
             const productsData = await pendingRequests.current[cacheKey];
             if (!isMounted) return;
-            
+
             if (productsData && productsData.length > 0) {
               const flattened = productsData.map((prod: any) => flattenProduct(prod));
               setProducts(flattened);
@@ -215,7 +216,7 @@ const Browse: React.FC = () => {
         // Clean up the pending request on error
         const cacheKey = `${category.id}-${locale}`;
         delete pendingRequests.current[cacheKey];
-        
+
         if (!isMounted) return;
         console.error('Error fetching products:', err);
         setErrorProducts('Unable to load product list');
@@ -239,15 +240,15 @@ const Browse: React.FC = () => {
   useEffect(() => {
     // Only preload if enabled (disabled by default for better performance)
     if (!enablePreloading || !sortedCategories.length || !activeEra) return;
-    
+
     const currentIndex = sortedCategories.findIndex(cat => cat.slug === activeEra);
     if (currentIndex !== -1) {
       const nextEra = sortedCategories[currentIndex + 1];
       const prevEra = sortedCategories[currentIndex - 1];
-      
+
       // Preload only adjacent eras (optional - can be removed for even better performance)
       const erasToPreload = [nextEra, prevEra].filter(Boolean);
-      
+
       erasToPreload.forEach(async (era) => {
         if (era && !productsCache[`${era.id}-${locale}`]) {
           try {
@@ -395,13 +396,13 @@ const Browse: React.FC = () => {
     }
   }, [activeEra, eras]);
 
-  if (categoriesLoading) {
-    return (
-      <div className="min-h-screen bg-[#F7F5EA] flex items-center justify-center">
-        <Loading fullScreen={true} text="Loading..." />
-      </div>
-    );
-  }
+  // if (categoriesLoading) {
+  //   return (
+  //     <div className="min-h-screen bg-[#F7F5EA] flex items-center justify-center">
+  //       <Loading fullScreen={true} text="Loading..." />
+  //     </div>
+  //   );
+  // }
 
   if (error) {
     return (
@@ -421,6 +422,7 @@ const Browse: React.FC = () => {
 
   return (
     <div className="w-full min-h-screen bg-[#F7F5EA]">
+      {categoriesLoading &&   <Loading fullScreen={true} text="Loading..." />}
       {/* Hero Section */}
       <div ref={heroRef} className="w-full relative">
         <img
@@ -505,18 +507,19 @@ const Browse: React.FC = () => {
 
       {/* Categories Grid */}
       <div className="w-full max-w-7xl mx-auto px-4 mt-10 grid grid-cols-1 md:grid-cols-3 gap-10 md:pl-0 pl-[20px]">
-        {productsLoading ? (
-          <div className="flex justify-center py-16">
-            <Loading size="large" text="Loading..." />
-          </div>
-        ) : errorProducts ? (
-          <div className="text-center py-16">
-            <p className="text-[#61422D] text-lg mb-4">{errorProducts}</p>
-          </div>
-        // ) : products.length === 0 ? (
-        //   <div className="text-center py-16">
-        //     <p className="text-[#61422D] text-lg">No data</p>
-        //   </div>
+        {/*{productsLoading ? (*/}
+        {/*  <div className="flex justify-center py-16">*/}
+        {/*    <Loading size="large" text="Loading..." />*/}
+        {/*  </div>*/}
+        {/*) : */}
+        {/*  errorProducts ? (*/}
+        {/*  <div className="text-center py-16">*/}
+        {/*    <p className="text-[#61422D] text-lg mb-4">{errorProducts}</p>*/}
+        {/*  </div>*/}
+        {errorProducts ? (
+        <div className="text-center py-16">
+          <p className="text-[#61422D] text-lg mb-4">{errorProducts}</p>
+        </div>
         ) : (
           products.map((product: any) => (
             <ProductCard key={product.id} product={product} navigate={navigate} />

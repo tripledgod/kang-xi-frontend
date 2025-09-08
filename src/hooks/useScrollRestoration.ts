@@ -31,8 +31,8 @@ export const useScrollRestoration = () => {
           }, 50);
         }
       } else {
-        // New page - scroll to top smoothly
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        // New page - scroll to top instantly for better UX
+        window.scrollTo({ top: 0, behavior: 'instant' });
       }
     }
 

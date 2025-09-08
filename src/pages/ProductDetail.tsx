@@ -73,7 +73,7 @@ export default function ProductDetail() {
   const [showReadMore, setShowReadMore] = useState(false);
   const [isDesktop, setIsDesktop] = useState(false);
   const [showTaskBar, setShowTaskBar] = useState(false);
-  
+
 
 
   // Add validation and loading states
@@ -196,49 +196,49 @@ export default function ProductDetail() {
       const desktop = window.innerWidth >= 768;
       setIsDesktop(desktop);
     };
-    
+
     checkScreenSize();
     window.addEventListener('resize', checkScreenSize);
-    
+
     return () => window.removeEventListener('resize', checkScreenSize);
   }, []);
 
-	// Track scroll position for task bar (smooth + hysteresis)
-	useEffect(() => {
-		// Hysteresis to avoid flicker: show at 700px, hide at 650px
-		const SHOW_THRESHOLD = 700;
-		const HIDE_THRESHOLD = 650;
+  // Track scroll position for task bar (smooth + hysteresis)
+  useEffect(() => {
+    // Hysteresis to avoid flicker: show at 700px, hide at 650px
+    const SHOW_THRESHOLD = 700;
+    const HIDE_THRESHOLD = 650;
 
-		let rafId: number | null = null;
-		let lastY = window.scrollY || 0;
+    let rafId: number | null = null;
+    let lastY = window.scrollY || 0;
 
-		const update = () => {
-			rafId = null;
-			if (!isDesktop) {
-				if (showTaskBar) setShowTaskBar(false);
-				return;
-			}
-			// Apply hysteresis based on current visibility
-			if (!showTaskBar && lastY > SHOW_THRESHOLD) {
-				setShowTaskBar(true);
-			} else if (showTaskBar && lastY < HIDE_THRESHOLD) {
-				setShowTaskBar(false);
-			}
-		};
+    const update = () => {
+      rafId = null;
+      if (!isDesktop) {
+        if (showTaskBar) setShowTaskBar(false);
+        return;
+      }
+      // Apply hysteresis based on current visibility
+      if (!showTaskBar && lastY > SHOW_THRESHOLD) {
+        setShowTaskBar(true);
+      } else if (showTaskBar && lastY < HIDE_THRESHOLD) {
+        setShowTaskBar(false);
+      }
+    };
 
-		const onScroll = () => {
-			lastY = window.scrollY || window.pageYOffset;
-			if (rafId == null) {
-				rafId = requestAnimationFrame(update);
-			}
-		};
+    const onScroll = () => {
+      lastY = window.scrollY || window.pageYOffset;
+      if (rafId == null) {
+        rafId = requestAnimationFrame(update);
+      }
+    };
 
-		window.addEventListener('scroll', onScroll, { passive: true });
-		return () => {
-			if (rafId != null) cancelAnimationFrame(rafId);
-			window.removeEventListener('scroll', onScroll);
-		};
-	}, [isDesktop, showTaskBar]);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => {
+      if (rafId != null) cancelAnimationFrame(rafId);
+      window.removeEventListener('scroll', onScroll);
+    };
+  }, [isDesktop, showTaskBar]);
 
   const openModal = (idx: number) => {
     setModalIndex(idx);
@@ -266,6 +266,28 @@ export default function ProductDetail() {
     onSwipedRight: () => {
       const images = productDetail?.images || [];
       setMobileIndex((i) => (i === 0 ? images.length - 1 : i - 1));
+    },
+    preventScrollOnSwipe: true,
+    trackMouse: true,
+  });
+
+  // Swipe handlers for main image
+  const mainImageSwipeHandlers = useSwipeable({
+    onSwipedLeft: () => {
+      const images = productDetail?.images || [];
+      if (images.length > 0) {
+        const currentIndex = imageUrls.findIndex((url) => url === mainImg);
+        const nextIndex = currentIndex === images.length - 1 ? 0 : currentIndex + 1;
+        setMainImg(imageUrls[nextIndex]);
+      }
+    },
+    onSwipedRight: () => {
+      const images = productDetail?.images || [];
+      if (images.length > 0) {
+        const currentIndex = imageUrls.findIndex((url) => url === mainImg);
+        const prevIndex = currentIndex === 0 ? images.length - 1 : currentIndex - 1;
+        setMainImg(imageUrls[prevIndex]);
+      }
     },
     preventScrollOnSwipe: true,
     trackMouse: true,
@@ -402,13 +424,13 @@ export default function ProductDetail() {
     ));
   };
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-[#F7F5EA] flex items-center justify-center">
-        <Loading fullScreen={true} text="Loading..." />
-      </div>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <div className="min-h-screen bg-[#F7F5EA] flex items-center justify-center">
+  //       <Loading fullScreen={true} text="Loading..." />
+  //     </div>
+  //   );
+  // }
 
   if (error || !productDetail) {
     return (
@@ -441,122 +463,127 @@ export default function ProductDetail() {
 
   return (
     <>
+      {loading && <Loading fullScreen={true} text="Loading..." />}
       {/* Desktop Scroll Header with Task Bar - Shows when scrolling down */}
-      {isDesktop && productDetail && mainImg && createPortal(
-        <div
-          style={{
-            position: 'fixed',
-            top: 0, // Position at the very top
-            left: 0,
-            right: 0,
-            zIndex: 999999,
-            backgroundColor: '#E8DBC0',
-            borderBottom: '1px solid #E8DBC0',
-            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
-            width: '100%',
-            height: 'auto',
-            transform: showTaskBar ? 'translateY(0)' : 'translateY(-110%)',
-            opacity: showTaskBar ? 1 : 0,
-            transition: 'transform 240ms ease, opacity 240ms ease',
-            willChange: 'transform, opacity',
-            pointerEvents: showTaskBar ? 'auto' : 'none'
-          }}
-        >
-          {/* Header component - same as main header */}
-          <Header />
-          
-          {/* Task bar section */}
-          <div 
+      {isDesktop &&
+        productDetail &&
+        mainImg &&
+        createPortal(
+          <div
             style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
+              position: 'fixed',
+              top: 0, // Position at the very top
+              left: 0,
+              right: 0,
+              zIndex: 999999,
               backgroundColor: '#E8DBC0',
-              padding: '16px 112px',
+              borderBottom: '1px solid #E8DBC0',
+              boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
               width: '100%',
-              minHeight: '72px',
-              boxSizing: 'border-box'
+              height: 'auto',
+              transform: showTaskBar ? 'translateY(0)' : 'translateY(-110%)',
+              opacity: showTaskBar ? 1 : 0,
+              transition: 'transform 240ms ease, opacity 240ms ease',
+              willChange: 'transform, opacity',
+              pointerEvents: showTaskBar ? 'auto' : 'none',
             }}
           >
-            {/* Left side: Product image and title */}
-            <div 
+            {/* Header component - same as main header */}
+            <Header />
+
+            {/* Task bar section */}
+            <div
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: '16px',
-                flexShrink: 0,
-                minWidth: '0'
+                justifyContent: 'space-between',
+                backgroundColor: '#E8DBC0',
+                padding: '16px 112px',
+                width: '100%',
+                minHeight: '72px',
+                boxSizing: 'border-box',
               }}
             >
-              <div 
-                style={{
-                  width: '64px',
-                  height: '64px',
-                  backgroundColor: '#F7F3E8',
-                  borderRadius: '4px',
-                  overflow: 'hidden',
-                  flexShrink: 0
-                }}
-              >
-                <img
-                  src={mainImg}
-                  alt={productDetail.title}
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'cover'
-                  }}
-                />
-              </div>
-              <div 
+              {/* Left side: Product image and title */}
+              <div
                 style={{
                   display: 'flex',
-                  flexDirection: 'column',
+                  alignItems: 'center',
+                  gap: '16px',
+                  flexShrink: 0,
                   minWidth: '0',
-                  flex: 1
                 }}
               >
-                <p 
+                <div
                   style={{
-                    fontSize: '18px',
-                    lineHeight: '26px',
-                    
-                    fontWeight: 600,
-                    color: '#61422D',
-                    margin: 0,
-                    padding: 0,
+                    width: '64px',
+                    height: '64px',
+                    backgroundColor: '#F7F3E8',
+                    borderRadius: '4px',
                     overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap'
+                    flexShrink: 0,
                   }}
                 >
-                  {productDetail.title}
-                </p>
-                
+                  <img
+                    src={mainImg}
+                    alt={productDetail.title}
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'cover',
+                    }}
+                  />
+                </div>
+                <div
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    minWidth: '0',
+                    flex: 1,
+                  }}
+                >
+                  <p
+                    style={{
+                      fontSize: '18px',
+                      lineHeight: '26px',
+
+                      fontWeight: 600,
+                      color: '#61422D',
+                      margin: 0,
+                      padding: 0,
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      whiteSpace: 'nowrap',
+                    }}
+                  >
+                    {productDetail.title}
+                  </p>
+                </div>
+              </div>
+
+              {/* Right side: Acquire button */}
+              <div
+                style={{
+                  flexShrink: 0,
+                  marginLeft: '16px',
+                }}
+              >
+                <Button
+                  text={t('ACQUIRE_THIS_ITEM')}
+                  className="w-[189px]"
+                  onClick={() => setShowAcquireModal(true)}
+                />
               </div>
             </div>
-            
-                         {/* Right side: Acquire button */}
-             <div 
-               style={{
-                 flexShrink: 0,
-                 marginLeft: '16px'
-               }}
-             >
-               <Button
-                 text={t('ACQUIRE_THIS_ITEM')}
-                 className="w-[189px]"
-                 onClick={() => setShowAcquireModal(true)}
-               />
-             </div>
-          </div>
-        </div>,
-        document.body
-      )}
+          </div>,
+          document.body
+        )}
 
-                    <div className={`w-full min-h-screen bg-[#F7F3E8] pb-20 md:pb-0 transition-all duration-300 ease-in-out ${
+      <div
+        className={`w-full min-h-screen bg-[#F7F3E8] pb-20 md:pb-0 transition-all duration-300 ease-in-out ${
           showTaskBar && isDesktop ? 'pt-64' : 'pt-0'
-        }`}>
+        }`}
+      >
         {/* Show popup when registration is successful */}
         {showSuccess && (
           <Popup
@@ -613,7 +640,10 @@ export default function ProductDetail() {
           </div>
           {/* Main Image */}
           <div className="md:flex-shrink-0 md:flex md:items-start md:justify-center md:w-[539px] md:h-[636px] w-full">
-            <div className="relative bg-[#F7F3E8] w-full md:h-full flex items-start justify-center">
+            <div
+              className="relative bg-[#F7F3E8] w-full md:h-full flex items-start justify-center"
+              {...mainImageSwipeHandlers}
+            >
               <img
                 src={mainImg}
                 alt={productDetail.title}
@@ -632,7 +662,10 @@ export default function ProductDetail() {
               </div>
               <button
                 className="absolute top-2 right-2 bg-white rounded-full p-2 shadow md:block hidden btn-clickable"
-                onClick={() => openModal(0)}
+                onClick={() => {
+                  const currentIndex = imageUrls.findIndex((url) => url === mainImg);
+                  openModal(currentIndex >= 0 ? currentIndex : 0);
+                }}
                 aria-label="Zoom in"
               >
                 <img src={zoomInIcon} alt="Zoom In" className="w-6 h-6" />

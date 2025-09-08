@@ -29,12 +29,13 @@ export default function TermsAndCondition() {
     withLoading(fetchTerms);
   }, [withLoading, locale]);
 
-  if (loading) {
-    return <Loading text="Loading..." fullScreen={true} />;
-  }
+  // if (loading) {
+  //   return <Loading text="Loading..." fullScreen={true} />;
+  // }
 
   return (
     <div className="bg-[#F7F5EA] min-h-screen w-full">
+      {loading && <Loading text="Loading..." fullScreen={true} />}
       {/* Hero Section */}
       <div className="relative w-full h-[220px] md:h-[320px] flex items-center justify-center overflow-hidden">
         <img

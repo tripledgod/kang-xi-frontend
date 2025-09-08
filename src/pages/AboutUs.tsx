@@ -59,13 +59,13 @@ export default function AboutUs() {
   // const mobilePeek = 0.18;
   // const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-[#F7F5EA] flex items-center justify-center">
-        <Loading fullScreen={true} text="Loading..." />
-      </div>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <div className="min-h-screen bg-[#F7F5EA] flex items-center justify-center">
+  //       <Loading fullScreen={true} text="Loading..." />
+  //     </div>
+  //   );
+  // }
 
   if (!aboutData) {
     return (
@@ -86,6 +86,7 @@ export default function AboutUs() {
   return (
     <div className="w-full min-h-screen bg-[#F7F5EA]">
       {/* Hero Section */}
+      {loading &&   <Loading fullScreen={true} text="Loading..." />}
       <CoverPage cover={aboutData?.cover} />
 
       {/* Legacy Section */}

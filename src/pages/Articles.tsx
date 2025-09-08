@@ -159,16 +159,17 @@ export default function Articles() {
 
   const pageNumbers = getPageNumbers(page, totalPages, isMobile); // Determine if mobile
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-[#F7F3E8] flex items-center justify-center">
-        <Loading fullScreen={true} text="Loading..." />
-      </div>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <div className="min-h-screen bg-[#F7F3E8] flex items-center justify-center">
+  //       <Loading fullScreen={true} text="Loading..." />
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className="w-full min-h-screen md:pb-24 pb-12 bg-[#F7F3E8] ">
+      {loading && <Loading fullScreen={true} size="large" />}
       {/* Hero Image */}
       <div className="relative w-full h-[220px] md:h-[312px] flex items-center justify-center overflow-hidden mb-6 md:pt-[96px] md:pb-[96px]">
         {/* Mobile Hero Image */}

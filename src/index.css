@@ -150,7 +150,7 @@ h6 {
     height: 0 !important;
     background: transparent !important;
   }
-  
+
   /* Ensure touch scrolling works properly */
   .scrollbar-hide {
     touch-action: pan-x !important; /* Enable horizontal touch scrolling */

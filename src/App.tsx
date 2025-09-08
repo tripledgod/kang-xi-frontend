@@ -58,13 +58,13 @@ function AppContent() {
   const hideNewsletterPaths = ['/acquire-an-item', '/appraise-an-item'];
   const shouldShowNewsletter = !hideNewsletterPaths.includes(location.pathname);
 
-  if (loading) {
-    return <Loading fullScreen={true} size="large" />;
-  }
+  // if (loading) {
+  //   return <Loading fullScreen={true} size="large" />;
+  // }
 
   return (
     <div className="min-h-screen flex flex-col">
-      <ScrollToTop />
+      {/*<ScrollToTop />*/}
       <Header />
       <main className="flex-grow">
         <PageTransition>
