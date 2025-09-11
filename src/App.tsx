@@ -4,7 +4,6 @@ import { BrowserRouter as Router, Routes, Route, useLocation, useParams } from '
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Newsletter from './components/Newsletter';
-import Loading from './components/Loading';
 import ScrollToTop from './components/ScrollToTop';
 import PageTransition from './components/PageTransition';
 import { useLoading } from './hooks/useLoading';
@@ -68,7 +67,7 @@ function AppContent() {
       <Header />
       <main className="flex-grow">
         <PageTransition>
-          <Suspense fallback={<Loading fullScreen={true} text="Loading page..." size="large" />}>
+          <Suspense fallback={<div className="min-h-screen bg-[#F7F5EA]" />}>
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/browse" element={<Browse />} />

@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { getArticles, Article } from '../api/articles';
 import { useLanguage } from '../contexts/LanguageContext';
 import { getCoverUrl } from '../utils';
+import { ArticleCardSkeleton } from './ShimmerSkeleton';
 
 export default function ArticlesSection() {
   const navigate = useNavigate();
@@ -68,12 +69,11 @@ export default function ArticlesSection() {
         </div>
         <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-8 mb-12 min-h-[320px] flex-1">
           {isLoading ? (
-            <div className="col-span-3 flex justify-center items-center py-16 w-full">
-              <div className="flex flex-col items-center">
-                <div className="w-8 h-8 border-2 border-[#61422D] border-t-transparent rounded-full animate-spin mb-4"></div>
-                {/*<span className="text-[#61422D] text-base font-medium">Loading...</span>*/}
-              </div>
-            </div>
+            <>
+              {Array.from({ length: 3 }).map((_, index) => (
+                <ArticleCardSkeleton key={index} />
+              ))}
+            </>
           ) : (
             articles.map((article) => {
               const imageUrl = getCoverUrl(article.cover);

@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
 import { getCategories, flattenCategory } from '../api/categories';
 import { API_URL } from '../utils/constants';
+import { CeramicCardSkeleton } from './ShimmerSkeleton';
 
 const CARD_WIDTH = 320;
 const CARD_GAP = 32;
@@ -228,11 +229,10 @@ export default function CeramicsByEra() {
         {/* Mobile: vertical stack */}
         <div className="flex flex-col gap-8 mt-4 md:hidden">
           {loading ? (
-            <div className="flex justify-center items-center py-16 w-full">
-              <div className="flex flex-col items-center">
-                <div className="w-8 h-8 border-2 border-[#61422D] border-t-transparent rounded-full animate-spin mb-4"></div>
-                {/*<span className="text-[#61422D] text-base font-medium">Loading...</span>*/}
-              </div>
+            <div className="flex flex-col gap-8">
+              {Array.from({ length: 3 }).map((_, index) => (
+                <CeramicCardSkeleton key={index} />
+              ))}
             </div>
           ) : (
             eras.map((era) => (
@@ -245,7 +245,12 @@ export default function CeramicsByEra() {
               >
                 <div className="bg-[#E6DDC6] aspect-square w-full flex items-center justify-center overflow-hidden mb-4">
                   {era.img ? (
-                    <img src={era.img} loading={'lazy'} alt={era.name} className="object-cover w-full h-full" />
+                    <img
+                      src={era.img}
+                      loading={'lazy'}
+                      alt={era.name}
+                      className="object-cover w-full h-full"
+                    />
                   ) : (
                     <div className="text-[#61422D] text-center p-4">
                       <div className="text-6xl mb-3 opacity-50">🏺</div>
@@ -295,10 +300,25 @@ export default function CeramicsByEra() {
           // style={{ width: containerWidth, maxWidth: '100%' }}
         >
           {loading ? (
-            <div className="flex justify-center items-center py-16 w-full">
-              <div className="flex flex-col items-center">
-                <div className="w-8 h-8 border-2 border-[#61422D] border-t-transparent rounded-full animate-spin mb-4"></div>
-                {/*<span className="text-[#61422D] text-base font-medium">Loading...</span>*/}
+            <div className="flex gap-8 w-full">
+              {/* 3 full cards */}
+              {Array.from({ length: 3 }).map((_, index) => (
+                <div
+                  key={index}
+                  className="flex-shrink-0"
+                  style={{ width: CARD_WIDTH, minWidth: CARD_WIDTH }}
+                >
+                  <CeramicCardSkeleton />
+                </div>
+              ))}
+              {/* Half card */}
+              <div
+                className="flex-shrink-0 overflow-hidden"
+                style={{ width: CARD_WIDTH / 2, minWidth: CARD_WIDTH / 2 }}
+              >
+                <div className="w-full" style={{ width: CARD_WIDTH }}>
+                  <CeramicCardSkeleton />
+                </div>
               </div>
             </div>
           ) : (
@@ -313,7 +333,12 @@ export default function CeramicsByEra() {
               >
                 <div className="bg-[#E6DDC6] aspect-square w-full flex items-center justify-center overflow-hidden mb-4">
                   {era.img ? (
-                    <img src={era.img} alt={era.name} loading={'lazy'} className="object-cover w-full h-full" />
+                    <img
+                      src={era.img}
+                      alt={era.name}
+                      loading={'lazy'}
+                      className="object-cover w-full h-full"
+                    />
                   ) : (
                     <div className="text-[#61422D] text-center p-4">
                       <div className="text-6xl mb-3 opacity-50">🏺</div>

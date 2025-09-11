@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect } from 'react';
-import Loading from '../components/Loading';
 import { useLoading } from '../hooks/useLoading';
 import heroImg from '../assets/about_us_cover.png';
 import { API_URL } from '../utils/constants.ts';
@@ -8,6 +7,7 @@ import CoverPage from '../components/CoverPage';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { getImageUrl } from '../utils';
+import { TeamCardSkeleton } from '../components/ShimmerSkeleton';
 
 // Customize the component for <img> tag in markdown
 const MarkdownComponents = {
@@ -21,6 +21,7 @@ const MarkdownComponents = {
 export default function AboutUs() {
   const [teamIndex, setTeamIndex] = useState(0);
   const [aboutData, setAboutData] = useState<AboutResponse['data'] | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const { loading, withLoading } = useLoading(true);
   const visibleCount = 3;
   const cardWidth = 320;
@@ -33,11 +34,13 @@ export default function AboutUs() {
   useEffect(() => {
     const fetchAboutData = async () => {
       try {
+        setError(null);
         const response = await fetch(`${API_URL}/api/about?populate=*`);
         const data: AboutResponse = await response.json();
         setAboutData(data.data);
       } catch (error) {
         console.error('Error fetching about data:', error);
+        setError('Failed to load about us data');
       }
     };
 
@@ -67,11 +70,13 @@ export default function AboutUs() {
   //   );
   // }
 
-  if (!aboutData) {
+  // No loading state return - we'll show shimmer inline
+
+  if (error) {
     return (
       <div className="min-h-screen bg-[#F7F5EA] flex items-center justify-center">
         <div className="text-center">
-          <p className="text-[#61422D] text-lg mb-4">Failed to load about us data</p>
+          <p className="text-[#61422D] text-lg mb-4">{error}</p>
           <button
             onClick={() => window.location.reload()}
             className="px-4 py-2 bg-[#7B6142] text-white rounded hover:bg-[#6a5437] btn-clickable"
@@ -86,7 +91,6 @@ export default function AboutUs() {
   return (
     <div className="w-full min-h-screen bg-[#F7F5EA]">
       {/* Hero Section */}
-      {loading &&   <Loading fullScreen={true} text="Loading..." />}
       <CoverPage cover={aboutData?.cover} />
 
       {/* Legacy Section */}
@@ -95,47 +99,82 @@ export default function AboutUs() {
           <div className="text-[14px] leading-[20px] text-[#585550] uppercase font-semibold tracking-wider mb-2">
             Heritage
           </div>
-          <h3 className="hidden md:block text-[40px] leading-[48px] font-serif  text-[#61422D] mb-4">
-            {aboutData?.heritage?.title || 'The Legacy of Kangxi Private Collection'}
-          </h3>
-          <h4 className="block md:hidden text-[32px] leading-[40px] font-serif  text-[#61422D] mb-4">
-            {aboutData?.heritage?.title || 'The Legacy of Kangxi Private Collection'}
-          </h4>
-          <div className="text-[18px] leading-[26px] text-[#585550] mb-5">
-            {aboutData?.heritage?.body || 'Loading...'}
-          </div>
-          <div className="h-[1px] bg-[#D5D4D3] w-full my-4 md:mt-8"></div>
-          <div className="flex gap-12 ">
-            <div>
-              <h2 style={{ letterSpacing: '-1%' }} className="text-5xl font-medium text-[#61422D]">
-                {aboutData?.heritage?.yearsExp || '25'}+
-              </h2>
-              <div
-                style={{ letterSpacing: '0.5px' }}
-                className="text-[14px] leading-[20px] text-[#585550] font-semibold mt-2"
-              >
-                YEARS EXPERIENCES
+          {loading ? (
+            <>
+              <div className="hidden md:block text-[40px] leading-[48px] font-serif text-[#61422D] mb-4">
+                <div className="h-12 w-3/4 bg-[#E6DDC6] rounded animate-pulse"></div>
               </div>
-            </div>
-            <div>
-              <h2 style={{ letterSpacing: '-1%' }} className="text-5xl font-medium text-[#61422D]">
-                {aboutData?.heritage?.rareCollectibleItems || '100'}+
-              </h2>
-              <div
-                style={{ letterSpacing: '0.5px' }}
-                className="text-[14px] leading-[20px] text-[#585550] font-semibold mt-2"
-              >
-                RARE COLLECTIBLE ITEMS
+              <div className="block md:hidden text-[32px] leading-[40px] font-serif text-[#61422D] mb-4">
+                <div className="h-10 w-3/4 bg-[#E6DDC6] rounded animate-pulse"></div>
               </div>
-            </div>
-          </div>
+              <div className="text-[18px] leading-[26px] text-[#585550] mb-5">
+                <div className="space-y-2">
+                  <div className="h-5 w-full bg-[#E6DDC6] rounded animate-pulse"></div>
+                  <div className="h-5 w-5/6 bg-[#E6DDC6] rounded animate-pulse"></div>
+                  <div className="h-5 w-4/5 bg-[#E6DDC6] rounded animate-pulse"></div>
+                </div>
+              </div>
+              <div className="h-[1px] bg-[#D5D4D3] w-full my-4 md:mt-8"></div>
+              <div className="flex gap-12">
+                <div>
+                  <div className="h-12 w-16 bg-[#E6DDC6] rounded animate-pulse"></div>
+                  <div className="h-4 w-32 bg-[#E6DDC6] rounded animate-pulse mt-2"></div>
+                </div>
+                <div>
+                  <div className="h-12 w-20 bg-[#E6DDC6] rounded animate-pulse"></div>
+                  <div className="h-4 w-40 bg-[#E6DDC6] rounded animate-pulse mt-2"></div>
+                </div>
+              </div>
+            </>
+          ) : (
+            <>
+              <h3 className="hidden md:block text-[40px] leading-[48px] font-serif text-[#61422D] mb-4">
+                {aboutData?.heritage?.title || 'The Legacy of Kangxi Private Collection'}
+              </h3>
+              <h4 className="block md:hidden text-[32px] leading-[40px] font-serif text-[#61422D] mb-4">
+                {aboutData?.heritage?.title || 'The Legacy of Kangxi Private Collection'}
+              </h4>
+              <div className="text-[18px] leading-[26px] text-[#585550] mb-5">
+                {aboutData?.heritage?.body || 'Loading...'}
+              </div>
+              <div className="h-[1px] bg-[#D5D4D3] w-full my-4 md:mt-8"></div>
+              <div className="flex gap-12">
+                <div>
+                  <h2 style={{ letterSpacing: '-1%' }} className="text-5xl font-medium text-[#61422D]">
+                    {aboutData?.heritage?.yearsExp || '25'}+
+                  </h2>
+                  <div
+                    style={{ letterSpacing: '0.5px' }}
+                    className="text-[14px] leading-[20px] text-[#585550] font-semibold mt-2"
+                  >
+                    YEARS EXPERIENCES
+                  </div>
+                </div>
+                <div>
+                  <h2 style={{ letterSpacing: '-1%' }} className="text-5xl font-medium text-[#61422D]">
+                    {aboutData?.heritage?.rareCollectibleItems || '100'}+
+                  </h2>
+                  <div
+                    style={{ letterSpacing: '0.5px' }}
+                    className="text-[14px] leading-[20px] text-[#585550] font-semibold mt-2"
+                  >
+                    RARE COLLECTIBLE ITEMS
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
         </div>
         <div className="flex-1 flex items-center justify-center">
-          <img
-            src={getImageUrl(aboutData?.heritage?.image) || heroImg}
-            alt="Horse"
-            className="w-full max-w-md"
-          />
+          {loading ? (
+            <div className="w-full max-w-md h-64 bg-[#E6DDC6] rounded animate-pulse"></div>
+          ) : (
+            <img
+              src={getImageUrl(aboutData?.heritage?.image) || heroImg}
+              alt="Horse"
+              className="w-full max-w-md"
+            />
+          )}
         </div>
       </div>
 
@@ -145,19 +184,34 @@ export default function AboutUs() {
           <h3 className="hidden md:block text-[40px] leading-[48px] font-serif text-white mb-16">
             The Journey of Antique Chinese Porcelain
           </h3>
-          <h4 className="block md:hidden text-[32px] leading-[40px]font-serif text-white mb-10">
+          <h4 className="block md:hidden text-[32px] leading-[40px] font-serif text-white mb-10">
             Our Services
           </h4>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-            {aboutData?.journey?.map((item) => (
-              <div key={item.id} className="flex flex-col items-center">
-                <img src={getImageUrl(item.icon)} loading={'lazy'} alt={item.title} className="h-12 mb-4" />
-                <h5 className="text-[20px] md:text-[24px] leading-[28px] md:leading-[32px] text-[#FAF7F2] mb-2">
-                  {item.title}
-                </h5>
-                <div className="text-[#ABAAA7] text-[16px] leading-[24px]">{item.description}</div>
-              </div>
-            ))}
+            {loading ? (
+              Array.from({ length: 3 }).map((_, idx) => (
+                <div key={idx} className="flex flex-col items-center">
+                  <div className="h-12 w-12 bg-[#E6DDC6] rounded animate-pulse mb-4"></div>
+                  <div className="h-6 w-32 bg-[#E6DDC6] rounded animate-pulse mb-2"></div>
+                  <div className="h-4 w-full bg-[#E6DDC6] rounded animate-pulse"></div>
+                </div>
+              ))
+            ) : (
+              aboutData?.journey?.map((item) => (
+                <div key={item.id} className="flex flex-col items-center">
+                  <img
+                    src={getImageUrl(item.icon)}
+                    loading={'lazy'}
+                    alt={item.title}
+                    className="h-12 mb-4"
+                  />
+                  <h5 className="text-[20px] md:text-[24px] leading-[28px] md:leading-[32px] text-[#FAF7F2] mb-2">
+                    {item.title}
+                  </h5>
+                  <div className="text-[#ABAAA7] text-[16px] leading-[24px]">{item.description}</div>
+                </div>
+              ))
+            )}
           </div>
         </div>
       </div>
@@ -171,11 +225,24 @@ export default function AboutUs() {
           {aboutData?.title || 'The History of Ceramics'}
         </h4>
 
-        <div className="my-5 prose prose-lg max-w-none text-[20px] leading-[28px] [&_img]:my-3 md:[&_img]:my-11 text-[#585550]">
-          <ReactMarkdown remarkPlugins={[remarkGfm]} components={MarkdownComponents}>
-            {aboutData.mainContent}
-          </ReactMarkdown>
-        </div>
+        {loading ? (
+          <div className="my-5 space-y-3">
+            <div className="h-5 w-full bg-[#E6DDC6] rounded animate-pulse"></div>
+            <div className="h-5 w-5/6 bg-[#E6DDC6] rounded animate-pulse"></div>
+            <div className="h-5 w-4/5 bg-[#E6DDC6] rounded animate-pulse"></div>
+            <div className="h-5 w-full bg-[#E6DDC6] rounded animate-pulse"></div>
+            <div className="h-5 w-3/4 bg-[#E6DDC6] rounded animate-pulse"></div>
+            <div className="h-5 w-full bg-[#E6DDC6] rounded animate-pulse"></div>
+            <div className="h-5 w-5/6 bg-[#E6DDC6] rounded animate-pulse"></div>
+            <div className="h-5 w-4/5 bg-[#E6DDC6] rounded animate-pulse"></div>
+          </div>
+        ) : (
+          <div className="my-5 prose prose-lg max-w-none text-[20px] leading-[28px] [&_img]:my-3 md:[&_img]:my-11 text-[#585550]">
+            <ReactMarkdown remarkPlugins={[remarkGfm]} components={MarkdownComponents}>
+              {aboutData.mainContent}
+            </ReactMarkdown>
+          </div>
+        )}
       </div>
 
       <div className="h-[1px] max-w-[382px] md:max-w-[1120px] mx-auto bg-[#D5D4D3]  opacity-50 w-full md:my-8 my-0 mt-8 px-4"></div>
@@ -223,13 +290,13 @@ export default function AboutUs() {
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
-                    stroke-width="1.5"
+                    strokeWidth="1.5"
                     stroke="currentColor"
                     className="size-6"
                   >
                     <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
                       d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"
                     />
                   </svg>
@@ -265,13 +332,13 @@ export default function AboutUs() {
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
-                    stroke-width="1.5"
+                    strokeWidth="1.5"
                     stroke="currentColor"
                     className="size-6"
                   >
                     <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
                       d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"
                     />
                   </svg>
@@ -287,7 +354,14 @@ export default function AboutUs() {
               maxWidth: `${cardWidth * (visibleCount + peekWidth) + 24 * visibleCount}px`,
             }}
           >
-            {aboutData?.team?.map((member) => (
+            {loading ? (
+              <>
+                {Array.from({ length: 3 }).map((_, index) => (
+                  <TeamCardSkeleton key={index} />
+                ))}
+              </>
+            ) : (
+              aboutData?.team?.map((member) => (
               <div
                 key={member.id}
                 className="flex flex-col items-start flex-shrink-0"
@@ -306,7 +380,8 @@ export default function AboutUs() {
                 <div className="text-base text-[#61422D] mb-2 text-left">{member.position}</div>
                 <div className="text-base text-[#585550] text-left">{member.bio}</div>
               </div>
-            ))}
+            ))
+            )}
           </div>
         </div>
       </div>

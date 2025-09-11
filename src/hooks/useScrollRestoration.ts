@@ -20,7 +20,7 @@ export const useScrollRestoration = () => {
     } else {
       // Check if we're navigating to a previously visited page (back navigation)
       const hasVisited = scrollPositions.current.has(pathname);
-      
+
       if (hasVisited) {
         // Back navigation - restore scroll position smoothly
         const savedPosition = scrollPositions.current.get(pathname);
@@ -45,11 +45,6 @@ export const useScrollRestoration = () => {
     },
     getScrollPosition: (path: string) => {
       return scrollPositions.current.get(path) || 0;
-    }
+    },
   };
 };
-
-
-
-
-

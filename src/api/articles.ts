@@ -73,9 +73,7 @@ export const getArticles = async (
 };
 
 // Get header featured article
-export const getHeaderArticle = async (
-  locale: string = 'en'
-): Promise<HeaderArticleResponse> => {
+export const getHeaderArticle = async (locale: string = 'en'): Promise<HeaderArticleResponse> => {
   const response = await axios.get(`${API_URL}/api/header-article`, {
     params: {
       // Ensure nested populate for articles (covers, etc.)

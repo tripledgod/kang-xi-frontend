@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import Loading from '../components/Loading';
 import { useLoading } from '../hooks/useLoading';
 import { useLanguage } from '../contexts/LanguageContext';
 import articlesCover from '../assets/hero_image.png';
@@ -8,6 +7,7 @@ import heroMobileImage from '../assets/hero_mobile_image.png';
 import { getArticles, getHeaderArticle, getArticlesByIds, Article } from '../api/articles';
 import { getCoverUrl } from '../utils';
 import { useScrollToTop } from '../hooks/useScrollToTop';
+import { FeaturedArticleSkeleton, LatestArticleSkeleton } from '../components/ShimmerSkeleton';
 
 const ARTICLES_PER_PAGE = 5;
 
@@ -17,17 +17,22 @@ export default function Articles() {
   const [headerArticles, setHeaderArticles] = useState<Article[]>([]);
   const [totalPages, setTotalPages] = useState(1);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  const [latestArticlesLoading, setLatestArticlesLoading] = useState(false);
+  const [featuredArticlesLoading, setFeaturedArticlesLoading] = useState(true);
 
   const { loading, withLoading } = useLoading(true);
   const { locale } = useLanguage();
   const scrollToTop = useScrollToTop();
 
-  const featuredArticles = headerArticles.length > 0
-    ? [
-        ...headerArticles,
-        ...articles.filter((a) => !headerArticles.some((h) => h.id === a.id)).slice(0, Math.max(0, 2 - headerArticles.length)),
-      ].slice(0, 2)
-    : articles.slice(0, 2);
+  const featuredArticles =
+    headerArticles.length > 0
+      ? [
+          ...headerArticles,
+          ...articles
+            .filter((a) => !headerArticles.some((h) => h.id === a.id))
+            .slice(0, Math.max(0, 2 - headerArticles.length)),
+        ].slice(0, 2)
+      : articles.slice(0, 2);
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 768);
@@ -35,14 +40,30 @@ export default function Articles() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-    useEffect(() => {
+  useEffect(() => {
     const fetchArticles = async () => {
       try {
+        // Always set loading for latest articles
+        setLatestArticlesLoading(true);
+        
+        // Only set featured articles loading on first page
+        if (page === 1) {
+          setFeaturedArticlesLoading(true);
+        }
+        
         const response = await getArticles(page, ARTICLES_PER_PAGE, locale);
         setArticles(response.data);
         setTotalPages(response.meta.pagination.pageCount);
+        
+        // Clear loading states
+        setLatestArticlesLoading(false);
+        if (page === 1) {
+          setFeaturedArticlesLoading(false);
+        }
       } catch (error) {
         console.error('Error fetching articles:', error);
+        setLatestArticlesLoading(false);
+        setFeaturedArticlesLoading(false);
       }
     };
 
@@ -53,6 +74,9 @@ export default function Articles() {
   useEffect(() => {
     const fetchHeader = async () => {
       try {
+        // Set featured articles loading when locale changes
+        setFeaturedArticlesLoading(true);
+        
         const response = await getHeaderArticle(locale);
         let headerList = response.data?.articles || [];
 
@@ -67,9 +91,11 @@ export default function Articles() {
         }
 
         setHeaderArticles(headerList);
+        setFeaturedArticlesLoading(false);
       } catch (error) {
         console.error('Error fetching header article:', error);
         setHeaderArticles([]);
+        setFeaturedArticlesLoading(false);
       }
     };
 
@@ -169,7 +195,6 @@ export default function Articles() {
 
   return (
     <div className="w-full min-h-screen md:pb-24 pb-12 bg-[#F7F3E8] ">
-      {loading && <Loading fullScreen={true} size="large" />}
       {/* Hero Image */}
       <div className="relative w-full h-[220px] md:h-[312px] flex items-center justify-center overflow-hidden mb-6 md:pt-[96px] md:pb-[96px]">
         {/* Mobile Hero Image */}
@@ -213,7 +238,14 @@ export default function Articles() {
       <div className="md:px-28  px-4 w-full mx-auto flex flex-col md:gap-12 gap-6 md:mt-24">
         {/* Featured Articles */}
         <div className="flex flex-col lg:flex-row gap-4 md:gap-6 lg:gap-8 mx-auto w-full transition-all duration-300">
-          {featuredArticles.map((article, idx) => {
+          {featuredArticlesLoading ? (
+            <>
+              {Array.from({ length: 2 }).map((_, index) => (
+                <FeaturedArticleSkeleton key={index} isFirst={index === 0} />
+              ))}
+            </>
+          ) : (
+            featuredArticles.map((article, idx) => {
             const imageUrl = getCoverUrl(article.cover);
 
             // Function to handle scroll to top before page navigation
@@ -314,7 +346,8 @@ export default function Articles() {
                 </div>
               </Link>
             );
-          })}
+          })
+          )}
         </div>
         {/* Latest Articles */}
         <div className="flex flex-col lg:flex-row gap-8 md:mt-12 transition-all duration-300">
@@ -327,7 +360,14 @@ export default function Articles() {
                 Latest Articles
               </h5>
               <div className="flex flex-col gap-8 items-start">
-                {articles.map((article, idx) => {
+                {latestArticlesLoading ? (
+                  <>
+                    {Array.from({ length: 5 }).map((_, index) => (
+                      <LatestArticleSkeleton key={index} isLast={index === 4} />
+                    ))}
+                  </>
+                ) : (
+                  articles.map((article, idx) => {
                   const imageUrl = getCoverUrl(article.cover);
 
                   // Function to handle scroll to top before page navigation
@@ -435,7 +475,8 @@ export default function Articles() {
                       )}
                     </Link>
                   );
-                })}
+                })
+                )}
               </div>
             </div>
           </div>

@@ -7,6 +7,4 @@ import './i18n'; // Import i18n configuration
 const root = document.getElementById('root');
 if (!root) throw new Error('Root element not found');
 
-createRoot(root).render(
-  <App />
-);
+createRoot(root).render(<App />);

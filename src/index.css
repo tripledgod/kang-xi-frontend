@@ -137,6 +137,20 @@ h6 {
   transition: opacity 0.1s ease-in;
 }
 
+/* Shimmer animation */
+@keyframes shimmer-wave {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.animate-shimmer-wave {
+  animation: shimmer-wave 1.5s ease-in-out infinite;
+}
+
 @media (max-width: 767px) {
   .scrollbar-hide {
     -ms-overflow-style: none !important; /* IE and Edge */
