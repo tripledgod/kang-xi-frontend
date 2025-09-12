@@ -25,6 +25,11 @@ import Popup from '../components/Popup.tsx';
 import logo from '../assets/logo.png';
 import { ProductCardSkeleton, ProductCardSkeleton320 } from '../components/ShimmerSkeleton';
 
+// Small utility component to reduce repeated skeleton classes
+const SkeletonBlock: React.FC<{ className?: string }> = ({ className = '' }) => (
+  <div className={`rounded animate-pulse ${className}`}></div>
+);
+
 export default function ProductDetail() {
   const { slug } = useParams();
   const [mainImg, setMainImg] = useState<string>('');
@@ -460,30 +465,30 @@ export default function ProductDetail() {
               Browse
             </span>
             <span className="mx-1 flex-shrink-0">&gt;</span>
-            <div className="h-4 w-32 bg-[#F7F5EA] rounded animate-pulse"></div>
+            <SkeletonBlock className="h-4 w-32 bg-[#F7F5EA]" />
           </div>
         </div>
         <div className="w-full flex flex-col md:flex-row md:gap-4 gap-6 md:items-start items-start md:px-[112px] pb-8 md:pb-22">
           <div className="hidden md:flex flex-col gap-4 w-[109px] flex-shrink-0">
             {Array.from({ length: 4 }).map((_, idx) => (
-              <div key={idx} className="w-[109px] h-[109px] bg-[#E6DDC6] rounded animate-pulse"></div>
+              <SkeletonBlock key={idx} className="w-[109px] h-[109px] bg-[#E6DDC6]" />
             ))}
           </div>
           <div className="md:flex-shrink-0 md:flex md:items-start md:justify-center md:w-[539px] md:h-[636px] w-full">
             <div className="relative bg-[#F7F3E8] w-full md:h-full flex items-start justify-center">
-              <div className="w-full md:h-full bg-[#E6DDC6] rounded animate-pulse"></div>
+              <SkeletonBlock className="w-full md:h-full bg-[#E6DDC6]" />
             </div>
           </div>
           <div className="flex-1 md:pl-12 flex flex-col gap-4 md:min-h-[636px] md:px-0 px-4">
             {/* Era and date - 1 line */}
             <div className="flex flex-row justify-between text-[14px] text-[#585550] leading-[20px] items-center font-semibold">
-              <div className="h-4 w-32 bg-[#E6DDC6] rounded animate-pulse"></div>
-              <div className="h-4 w-40 bg-[#E6DDC6] rounded animate-pulse"></div>
+              <SkeletonBlock className="h-4 w-32 bg-[#E6DDC6]" />
+              <SkeletonBlock className="h-4 w-40 bg-[#E6DDC6]" />
             </div>
             {/* Title - 2 lines */}
             <div className="space-y-2">
-              <div className="h-8 w-full bg-[#E6DDC6] rounded animate-pulse"></div>
-              <div className="h-8 w-4/5 bg-[#E6DDC6] rounded animate-pulse"></div>
+              <SkeletonBlock className="h-8 w-full bg-[#E6DDC6]" />
+              <SkeletonBlock className="h-8 w-4/5 bg-[#E6DDC6]" />
             </div>
             <div className="max-w-xl">
               <div className="text-[14px] leading-[20px] text-[#2E2A24] mb-2 font-semibold">
@@ -491,13 +496,13 @@ export default function ProductDetail() {
               </div>
               {/* Description - 7 lines */}
               <div className="space-y-2">
-                <div className="h-4 w-full bg-[#E6DDC6] rounded animate-pulse"></div>
-                <div className="h-4 w-5/6 bg-[#E6DDC6] rounded animate-pulse"></div>
-                <div className="h-4 w-4/5 bg-[#E6DDC6] rounded animate-pulse"></div>
-                <div className="h-4 w-3/4 bg-[#E6DDC6] rounded animate-pulse"></div>
-                <div className="h-4 w-5/6 bg-[#E6DDC6] rounded animate-pulse"></div>
-                <div className="h-4 w-4/5 bg-[#E6DDC6] rounded animate-pulse"></div>
-                <div className="h-4 w-3/4 bg-[#E6DDC6] rounded animate-pulse"></div>
+                <SkeletonBlock className="h-4 w-full bg-[#E6DDC6]" />
+                <SkeletonBlock className="h-4 w-5/6 bg-[#E6DDC6]" />
+                <SkeletonBlock className="h-4 w-4/5 bg-[#E6DDC6]" />
+                <SkeletonBlock className="h-4 w-3/4 bg-[#E6DDC6]" />
+                <SkeletonBlock className="h-4 w-5/6 bg-[#E6DDC6]" />
+                <SkeletonBlock className="h-4 w-4/5 bg-[#E6DDC6]" />
+                <SkeletonBlock className="h-4 w-3/4 bg-[#E6DDC6]" />
               </div>
               {isDesktop && (
                 <Button
@@ -509,7 +514,7 @@ export default function ProductDetail() {
             </div>
           </div>
         </div>
-        
+
         {/* Always show "You might be interested" section */}
         <div className="w-full bg-[#FAF7F2] py-8 md:py-20">
           <div className="w-full md:px-[112px] px-4">
@@ -528,8 +533,8 @@ export default function ProductDetail() {
               <button className="absolute -left-6 top-5/16 -translate-y-1/2 rounded-full p-2 z-10 hidden md:block btn-clickable">
                 <img src={icCircleLeft} alt="Previous" className="w-10 h-10" />
               </button>
-              <div className="overflow-hidden">
-                <div className="flex md:gap-8 gap-[22px]">
+              <div className="overflow-x-auto md:overflow-hidden -mx-4 px-4 md:mx-0 md:px-0 scrollbar-hide">
+                <div className="flex flex-nowrap md:gap-8 gap-[22px] snap-x snap-mandatory md:snap-none">
                   {relatedProductsLoading || loading || contentLoading ? (
                     <>
                       {Array.from({ length: 4 }).map((_, index) => (
@@ -543,7 +548,7 @@ export default function ProductDetail() {
                       return (
                         <div
                           key={idx}
-                          className="min-w-[260px] max-w-xs flex flex-col cursor-pointer"
+                          className="min-w-[260px] max-w-xs flex flex-col cursor-pointer flex-shrink-0 snap-start"
                           onClick={() => navigate(`/products/${item.slug}`)}
                         >
                           <div className="bg-[#E6DDC6] aspect-square w-full flex items-center justify-center overflow-hidden mb-4">
@@ -839,20 +844,20 @@ export default function ProductDetail() {
             {contentLoading ? (
               <>
                 <div className="flex flex-row justify-between text-[14px] text-[#585550] leading-[20px] items-center font-semibold">
-                  <div className="h-4 w-24 bg-[#F7F5EA] rounded animate-pulse"></div>
-                  <div className="h-4 w-32 bg-[#F7F5EA] rounded animate-pulse"></div>
+                  <SkeletonBlock className="h-4 w-24 bg-[#F7F5EA]" />
+                  <SkeletonBlock className="h-4 w-32 bg-[#F7F5EA]" />
                 </div>
-                <div className="h-8 w-3/4 bg-[#F7F5EA] rounded animate-pulse"></div>
+                <SkeletonBlock className="h-8 w-3/4 bg-[#F7F5EA]" />
                 <div className="max-w-xl">
-                  <div className="h-4 w-20 bg-[#F7F5EA] rounded animate-pulse mb-2"></div>
+                  <SkeletonBlock className="h-4 w-20 bg-[#F7F5EA] mb-2" />
                   <div className="space-y-2">
-                    <div className="h-4 w-full bg-[#F7F5EA] rounded animate-pulse"></div>
-                    <div className="h-4 w-5/6 bg-[#F7F5EA] rounded animate-pulse"></div>
-                    <div className="h-4 w-4/5 bg-[#F7F5EA] rounded animate-pulse"></div>
-                    <div className="h-4 w-3/4 bg-[#F7F5EA] rounded animate-pulse"></div>
+                    <SkeletonBlock className="h-4 w-full bg-[#F7F5EA]" />
+                    <SkeletonBlock className="h-4 w-5/6 bg-[#F7F5EA]" />
+                    <SkeletonBlock className="h-4 w-4/5 bg-[#F7F5EA]" />
+                    <SkeletonBlock className="h-4 w-3/4 bg-[#F7F5EA]" />
                   </div>
-                  <div className="h-4 w-24 bg-[#F7F5EA] rounded animate-pulse mt-4"></div>
-                  <div className="h-12 w-48 bg-[#F7F5EA] rounded animate-pulse mt-8"></div>
+                  <SkeletonBlock className="h-4 w-24 bg-[#F7F5EA] mt-4" />
+                  <SkeletonBlock className="h-12 w-48 bg-[#F7F5EA] mt-8" />
                 </div>
               </>
             ) : (
@@ -874,7 +879,9 @@ export default function ProductDetail() {
                     >
                       <img src={copyIcon} alt="Copy" className="w-4 h-4" />
                     </button>
-                    {copied && <span className="text-xs text-green-600 ml-1 font-medium">Copied!</span>}
+                    {copied && (
+                      <span className="text-xs text-green-600 ml-1 font-medium">Copied!</span>
+                    )}
                     {copyError && !copied && (
                       <span className="text-xs text-red-600 ml-1 font-medium">{copyError}</span>
                     )}
@@ -891,10 +898,10 @@ export default function ProductDetail() {
               </div>
               {contentLoading ? (
                 <div className="space-y-2">
-                  <div className="h-4 w-full bg-[#F7F5EA] rounded animate-pulse"></div>
-                  <div className="h-4 w-5/6 bg-[#F7F5EA] rounded animate-pulse"></div>
-                  <div className="h-4 w-4/5 bg-[#F7F5EA] rounded animate-pulse"></div>
-                  <div className="h-4 w-3/4 bg-[#F7F5EA] rounded animate-pulse"></div>
+                  <SkeletonBlock className="h-4 w-full bg-[#F7F5EA]" />
+                  <SkeletonBlock className="h-4 w-5/6 bg-[#F7F5EA]" />
+                  <SkeletonBlock className="h-4 w-4/5 bg-[#F7F5EA]" />
+                  <SkeletonBlock className="h-4 w-3/4 bg-[#F7F5EA]" />
                 </div>
               ) : (
                 <div id="product-description" className="text-[16px] leading-[24px] text-[#585550]">
@@ -995,8 +1002,8 @@ export default function ProductDetail() {
                 <button className="absolute -left-6 top-5/16 -translate-y-1/2 rounded-full  p-2  z-10 hidden md:block btn-clickable">
                   <img src={icCircleLeft} alt="Previous" className="w-10 h-10" />
                 </button>
-                <div className="overflow-hidden">
-                  <div className="flex md:gap-8 gap-[22px]">
+                <div className="overflow-x-auto md:overflow-hidden -mx-4 px-4 md:mx-0 md:px-0 scrollbar-hide">
+                  <div className="flex flex-nowrap md:gap-8 gap-[22px] snap-x snap-mandatory md:snap-none">
                     {relatedProductsLoading || loading || contentLoading ? (
                       <>
                         {Array.from({ length: 4 }).map((_, index) => (
@@ -1005,46 +1012,46 @@ export default function ProductDetail() {
                       </>
                     ) : (
                       relatedProducts.map((item: any, idx: number) => {
-                      const relatedImageUrl =
-                        item.images && item.images.length > 0 ? getImageUrl(item.images[0]) : '';
-                      return (
-                        <div
-                          key={item.id}
-                          className="min-w-[260px] max-w-xs flex flex-col cursor-pointer rounded link-clickable"
-                          onClick={() => navigate(`/products/${item.slug}`)}
-                        >
-                          <div className="bg-[#E6DDC6] aspect-square w-full flex items-center justify-center overflow-hidden mb-4">
-                            {relatedImageUrl ? (
-                              <img
-                                src={relatedImageUrl}
-                                alt={item.title}
-                                className="object-contain w-full h-full"
-                              />
-                            ) : (
-                              <div className="text-[#61422D] text-center">
-                                <div className="text-4xl mb-2 opacity-50">🏺</div>
-                                <div className="text-xs">No Image</div>
+                        const relatedImageUrl =
+                          item.images && item.images.length > 0 ? getImageUrl(item.images[0]) : '';
+                        return (
+                          <div
+                            key={item.id}
+                            className="min-w-[260px] max-w-xs flex flex-col cursor-pointer rounded link-clickable flex-shrink-0 snap-start"
+                            onClick={() => navigate(`/products/${item.slug}`)}
+                          >
+                            <div className="bg-[#E6DDC6] aspect-square w-full flex items-center justify-center overflow-hidden mb-4">
+                              {relatedImageUrl ? (
+                                <img
+                                  src={relatedImageUrl}
+                                  alt={item.title}
+                                  className="object-contain w-full h-full"
+                                />
+                              ) : (
+                                <div className="text-[#61422D] text-center">
+                                  <div className="text-4xl mb-2 opacity-50">🏺</div>
+                                  <div className="text-xs">No Image</div>
+                                </div>
+                              )}
+                            </div>
+                            <div className="text-[#585550] text-[14px] leading-[20px] uppercase mb-2 font-semibold">
+                              {item.category.name}
+                            </div>
+                            <h5 className="text-[20px] md:text-[24px] md:leading-[32px] leading-snug font-serif text-[#61422D] mb-4 md:pb-8 pb-7 line-clamp-3 h-[110px] md:h-[128px] flex items-start">
+                              {item.title}
+                            </h5>
+                            <div className="border-t-2 border-[#E5E1D7] opacity-80 mb-2"></div>
+                            <div className="flex flex-col gap-1 text-[14px] leading-[20px] text-[#585550] font-semibold">
+                              <div className="flex flex-row justify-between">
+                                <span>
+                                  {item.ageFrom} - {item.ageTo}
+                                </span>
+                                <span>ITEM {item.itemCode || item.documentId}</span>
                               </div>
-                            )}
-                          </div>
-                          <div className="text-[#585550] text-[14px] leading-[20px] uppercase mb-2 font-semibold">
-                            {item.category.name}
-                          </div>
-                          <h5 className="text-[20px] md:text-[24px] md:leading-[32px] leading-snug font-serif text-[#61422D] mb-4 md:pb-8 pb-7 line-clamp-3 h-[110px] md:h-[128px] flex items-start">
-                            {item.title}
-                          </h5>
-                          <div className="border-t-2 border-[#E5E1D7] opacity-80 mb-2"></div>
-                          <div className="flex flex-col gap-1 text-[14px] leading-[20px] text-[#585550] font-semibold">
-                            <div className="flex flex-row justify-between">
-                              <span>
-                                {item.ageFrom} - {item.ageTo}
-                              </span>
-                              <span>ITEM {item.itemCode || item.documentId}</span>
                             </div>
                           </div>
-                        </div>
-                      );
-                    })
+                        );
+                      })
                     )}
                   </div>
                 </div>

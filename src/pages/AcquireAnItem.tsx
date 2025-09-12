@@ -50,6 +50,11 @@ const steps = [
 export default function AcquireAnItem() {
   // const [country, setCountry] = useState(countryOptions[0]);
   const [phone, setPhone] = useState('');
+  
+  // Scroll to top when component mounts
+  React.useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }, []);
   const [acquireForm, setAcquireForm] = useState({
     firstName: '',
     lastName: '',

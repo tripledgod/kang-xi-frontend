@@ -77,47 +77,22 @@ export const CeramicCardSkeleton: React.FC = () => (
         theme="image"
       />
     </div>
-    
+
     {/* Title - text-2xl font-serif text-[#61422D] mb-6 */}
     <div className="text-2xl font-serif text-[#61422D] mb-6">
-      <ShimmerSkeleton
-        variant="text"
-        height="32px"
-        className="w-3/4"
-        theme="light"
-      />
+      <ShimmerSkeleton variant="text" height="32px" className="w-3/4" theme="light" />
     </div>
-    
+
     {/* Years - text-base border-t border-[#C7C7B9] pt-4 text-[#2E2A24] mb-1 font-semibold */}
     <div className="text-base border-t border-[#C7C7B9] pt-4 text-[#2E2A24] mb-1 font-semibold">
-      <ShimmerSkeleton
-        variant="text"
-        height="16px"
-        className="w-1/3"
-        theme="light"
-      />
+      <ShimmerSkeleton variant="text" height="16px" className="w-1/3" theme="light" />
     </div>
-    
+
     {/* Description - text-base pt-2 text-[#6D6A66] line-clamp-3 */}
     <div className="text-base pt-2 text-[#6D6A66] line-clamp-3">
-      <ShimmerSkeleton
-        variant="text"
-        height="16px"
-        className="mb-2"
-        theme="light"
-      />
-      <ShimmerSkeleton
-        variant="text"
-        height="16px"
-        className="mb-2 w-5/6"
-        theme="light"
-      />
-      <ShimmerSkeleton
-        variant="text"
-        height="16px"
-        className="w-4/5"
-        theme="light"
-      />
+      <ShimmerSkeleton variant="text" height="16px" className="mb-2" theme="light" />
+      <ShimmerSkeleton variant="text" height="16px" className="mb-2 w-5/6" theme="light" />
+      <ShimmerSkeleton variant="text" height="16px" className="w-4/5" theme="light" />
     </div>
   </div>
 );
@@ -132,22 +107,9 @@ export const ArticleCardSkeleton: React.FC = () => (
         theme="image"
       />
     </div>
-    <ShimmerSkeleton
-      variant="text"
-      height="24px"
-      className="mb-2"
-    />
-    <ShimmerSkeleton
-      variant="text"
-      lines={3}
-      height="16px"
-      className="mb-4"
-    />
-    <ShimmerSkeleton
-      variant="text"
-      height="14px"
-      className="w-1/3"
-    />
+    <ShimmerSkeleton variant="text" height="24px" className="mb-2" />
+    <ShimmerSkeleton variant="text" lines={3} height="16px" className="mb-4" />
+    <ShimmerSkeleton variant="text" height="14px" className="w-1/3" />
   </div>
 );
 
@@ -163,15 +125,10 @@ export const ProductCardSkeleton: React.FC = () => (
         theme="image"
       />
     </div>
-    
+
     {/* Title - 2 lines with min-height */}
     <div className="md:text-[24px] text-[20px] font-medium text-[#61422D] mb-2 leading-[28px] md:leading-[32px] tracking-[0px] line-clamp-2 min-h-[64px]">
-      <ShimmerSkeleton
-        variant="text"
-        height="20px"
-        className="mb-2 md:hidden"
-        theme="light"
-      />
+      <ShimmerSkeleton variant="text" height="20px" className="mb-2 md:hidden" theme="light" />
       <ShimmerSkeleton
         variant="text"
         height="20px"
@@ -191,46 +148,21 @@ export const ProductCardSkeleton: React.FC = () => (
         theme="light"
       />
     </div>
-    
+
     {/* Description - 3 lines with min-height */}
     <div className="text-base text-[#585550] mb-4 line-clamp-3 min-h-[72px]">
-      <ShimmerSkeleton
-        variant="text"
-        height="16px"
-        className="mb-2"
-        theme="light"
-      />
-      <ShimmerSkeleton
-        variant="text"
-        height="16px"
-        className="mb-2 w-5/6"
-        theme="light"
-      />
-      <ShimmerSkeleton
-        variant="text"
-        height="16px"
-        className="mb-2 w-4/5"
-        theme="light"
-      />
+      <ShimmerSkeleton variant="text" height="16px" className="mb-2" theme="light" />
+      <ShimmerSkeleton variant="text" height="16px" className="mb-2 w-5/6" theme="light" />
+      <ShimmerSkeleton variant="text" height="16px" className="mb-2 w-4/5" theme="light" />
     </div>
-    
+
     {/* Border */}
     <div className="border-t-2 border-[#E5E1D7] opacity-80 my-3"></div>
-    
+
     {/* Age and Item Code */}
     <div className="flex flex-row justify-between text-[14px] leading-[20px] text-[#585550] font-semibold">
-      <ShimmerSkeleton
-        variant="text"
-        height="14px"
-        className="w-20"
-        theme="light"
-      />
-      <ShimmerSkeleton
-        variant="text"
-        height="14px"
-        className="w-24"
-        theme="light"
-      />
+      <ShimmerSkeleton variant="text" height="14px" className="w-20" theme="light" />
+      <ShimmerSkeleton variant="text" height="14px" className="w-24" theme="light" />
     </div>
   </div>
 );
@@ -246,12 +178,7 @@ export const ProductCardSkeleton320: React.FC = () => (
         theme="image"
       />
     </div>
-    <ShimmerSkeleton
-      variant="text"
-      height="14px"
-      className="mb-2 w-1/2 uppercase"
-      theme="light"
-    />
+    <ShimmerSkeleton variant="text" height="14px" className="mb-2 w-1/2 uppercase" theme="light" />
     <div className="h-[110px] md:h-[128px] flex items-start mb-4 md:pb-8 pb-7">
       <ShimmerSkeleton
         variant="text"
@@ -275,17 +202,17 @@ export const TeamCardSkeleton: React.FC = () => (
   <div className="flex flex-col items-start flex-shrink-0" style={{ width: 320, minWidth: 320 }}>
     {/* Image - w-full h-[340px] object-cover mb-6 */}
     <div className="w-full h-[340px] bg-[#E6DDC6] rounded mb-6 animate-pulse"></div>
-    
+
     {/* Name - text-2xl font-serif text-[#61422D] mb-1 text-left */}
     <div className="text-2xl font-serif text-[#61422D] mb-1 text-left w-full">
       <div className="h-8 w-3/4 bg-[#E6DDC6] rounded animate-pulse"></div>
     </div>
-    
+
     {/* Position - text-base text-[#61422D] mb-2 text-left */}
     <div className="text-base text-[#61422D] mb-2 text-left w-full">
       <div className="h-4 w-1/2 bg-[#E6DDC6] rounded animate-pulse"></div>
     </div>
-    
+
     {/* Bio - text-base text-[#585550] text-left */}
     <div className="text-base text-[#585550] text-left w-full">
       <div className="space-y-2">
@@ -312,33 +239,13 @@ export const FeaturedArticleSkeleton: React.FC<{ isFirst?: boolean }> = ({ isFir
         <div className="absolute bottom-0 left-0 right-0 p-4 z-30">
           {/* Title - 2 lines */}
           <div className="mb-2">
-            <ShimmerSkeleton
-              variant="text"
-              height="20px"
-              className="mb-1 w-full"
-              theme="light"
-            />
-            <ShimmerSkeleton
-              variant="text"
-              height="20px"
-              className="w-4/5"
-              theme="light"
-            />
+            <ShimmerSkeleton variant="text" height="20px" className="mb-1 w-full" theme="light" />
+            <ShimmerSkeleton variant="text" height="20px" className="w-4/5" theme="light" />
           </div>
           {/* Description - 1 line */}
-          <ShimmerSkeleton
-            variant="text"
-            height="16px"
-            className="mb-3 w-full"
-            theme="light"
-          />
+          <ShimmerSkeleton variant="text" height="16px" className="mb-3 w-full" theme="light" />
           {/* Date - 1 line */}
-          <ShimmerSkeleton
-            variant="text"
-            height="12px"
-            className="w-1/3"
-            theme="light"
-          />
+          <ShimmerSkeleton variant="text" height="12px" className="w-1/3" theme="light" />
         </div>
       </div>
     </div>
@@ -361,12 +268,7 @@ export const FeaturedArticleSkeleton: React.FC<{ isFirst?: boolean }> = ({ isFir
             className="mb-1 w-full md:hidden"
             theme="light"
           />
-          <ShimmerSkeleton
-            variant="text"
-            height="20px"
-            className="w-4/5 md:hidden"
-            theme="light"
-          />
+          <ShimmerSkeleton variant="text" height="20px" className="w-4/5 md:hidden" theme="light" />
           <ShimmerSkeleton
             variant="text"
             height="24px"
@@ -381,19 +283,9 @@ export const FeaturedArticleSkeleton: React.FC<{ isFirst?: boolean }> = ({ isFir
           />
         </div>
         {/* Description - 1 line */}
-        <ShimmerSkeleton
-          variant="text"
-          height="16px"
-          className="mb-3 w-full"
-          theme="light"
-        />
+        <ShimmerSkeleton variant="text" height="16px" className="mb-3 w-full" theme="light" />
         {/* Date - 1 line */}
-        <ShimmerSkeleton
-          variant="text"
-          height="12px"
-          className="w-1/3 md:hidden"
-          theme="light"
-        />
+        <ShimmerSkeleton variant="text" height="12px" className="w-1/3 md:hidden" theme="light" />
         <ShimmerSkeleton
           variant="text"
           height="14px"
@@ -418,42 +310,27 @@ export const LatestArticleSkeleton: React.FC<{ isLast?: boolean }> = ({ isLast =
             theme="image"
           />
         </div>
-        <h5 className="text-2xl font-serif mb-2 line-clamp-2 leading-snug" style={{ fontWeight: 600, fontSize: 20, lineHeight: '28px', letterSpacing: 0, textAlign: 'left', color: '#61422D' }}>
-          <ShimmerSkeleton
-            variant="text"
-            height="20px"
-            className="mb-2 w-3/4"
-            theme="light"
-          />
+        <h5
+          className="text-2xl font-serif mb-2 line-clamp-2 leading-snug"
+          style={{
+            fontWeight: 600,
+            fontSize: 20,
+            lineHeight: '28px',
+            letterSpacing: 0,
+            textAlign: 'left',
+            color: '#61422D',
+          }}
+        >
+          <ShimmerSkeleton variant="text" height="20px" className="mb-2 w-3/4" theme="light" />
         </h5>
         <div className="text-base text-[#585550] mb-3 line-clamp-3 text-left">
-          <ShimmerSkeleton
-            variant="text"
-            height="16px"
-            className="mb-2 w-full"
-            theme="light"
-          />
-          <ShimmerSkeleton
-            variant="text"
-            height="16px"
-            className="mb-2 w-5/6"
-            theme="light"
-          />
-          <ShimmerSkeleton
-            variant="text"
-            height="16px"
-            className="w-4/5"
-            theme="light"
-          />
+          <ShimmerSkeleton variant="text" height="16px" className="mb-2 w-full" theme="light" />
+          <ShimmerSkeleton variant="text" height="16px" className="mb-2 w-5/6" theme="light" />
+          <ShimmerSkeleton variant="text" height="16px" className="w-4/5" theme="light" />
         </div>
         <div className="flex-1"></div>
         <div className="text-xs font-semibold text-[#7B6142] md:pb-6 pb-0 uppercase tracking-wider text-left">
-          <ShimmerSkeleton
-            variant="text"
-            height="12px"
-            className="w-1/3"
-            theme="light"
-          />
+          <ShimmerSkeleton variant="text" height="12px" className="w-1/3" theme="light" />
         </div>
       </div>
     </div>
@@ -461,42 +338,27 @@ export const LatestArticleSkeleton: React.FC<{ isLast?: boolean }> = ({ isLast =
     {/* Desktop Grid Layout */}
     <div className="hidden md:grid grid-cols-[1fr_238px] gap-6 w-full">
       <div className="flex flex-col h-full min-w-0">
-        <h5 className="text-2xl font-serif mb-2 leading-snug line-clamp-2" style={{ fontWeight: 600, fontSize: 24, lineHeight: '32px', letterSpacing: 0, textAlign: 'left', color: '#61422D' }}>
-          <ShimmerSkeleton
-            variant="text"
-            height="24px"
-            className="mb-2 w-3/4"
-            theme="light"
-          />
+        <h5
+          className="text-2xl font-serif mb-2 leading-snug line-clamp-2"
+          style={{
+            fontWeight: 600,
+            fontSize: 24,
+            lineHeight: '32px',
+            letterSpacing: 0,
+            textAlign: 'left',
+            color: '#61422D',
+          }}
+        >
+          <ShimmerSkeleton variant="text" height="24px" className="mb-2 w-3/4" theme="light" />
         </h5>
         <div className="text-base text-[#585550] mb-3 line-clamp-3 text-left">
-          <ShimmerSkeleton
-            variant="text"
-            height="16px"
-            className="mb-2 w-full"
-            theme="light"
-          />
-          <ShimmerSkeleton
-            variant="text"
-            height="16px"
-            className="mb-2 w-5/6"
-            theme="light"
-          />
-          <ShimmerSkeleton
-            variant="text"
-            height="16px"
-            className="w-4/5"
-            theme="light"
-          />
+          <ShimmerSkeleton variant="text" height="16px" className="mb-2 w-full" theme="light" />
+          <ShimmerSkeleton variant="text" height="16px" className="mb-2 w-5/6" theme="light" />
+          <ShimmerSkeleton variant="text" height="16px" className="w-4/5" theme="light" />
         </div>
         <div className="flex-1"></div>
         <div className="text-[14px] font-semibold leading-[20px] text-[#585550] uppercase tracking-wider text-left">
-          <ShimmerSkeleton
-            variant="text"
-            height="14px"
-            className="w-1/3"
-            theme="light"
-          />
+          <ShimmerSkeleton variant="text" height="14px" className="w-1/3" theme="light" />
         </div>
       </div>
       <div className="w-[238px] h-[180px] flex-shrink-0 overflow-hidden bg-[#E6DDC6] flex items-center justify-center">
@@ -508,11 +370,9 @@ export const LatestArticleSkeleton: React.FC<{ isLast?: boolean }> = ({ isLast =
         />
       </div>
     </div>
-    
+
     {/* Faded divider under each article (except last) */}
-    {!isLast && (
-      <div className="border-t-2 border-[#E5E1D7] opacity-80 mt-8"></div>
-    )}
+    {!isLast && <div className="border-t-2 border-[#E5E1D7] opacity-80 mt-8"></div>}
   </div>
 );
 
@@ -542,12 +402,7 @@ export const RelatedArticleSkeleton: React.FC = () => (
         className="mb-1 w-full hidden md:block"
         theme="light"
       />
-      <ShimmerSkeleton
-        variant="text"
-        height="20px"
-        className="w-4/5 md:hidden"
-        theme="light"
-      />
+      <ShimmerSkeleton variant="text" height="20px" className="w-4/5 md:hidden" theme="light" />
       <ShimmerSkeleton
         variant="text"
         height="24px"
@@ -558,34 +413,14 @@ export const RelatedArticleSkeleton: React.FC = () => (
 
     {/* Description - 3 lines with fixed height */}
     <div className="md:h-20 mb-4">
-      <ShimmerSkeleton
-        variant="text"
-        height="16px"
-        className="mb-2 w-full"
-        theme="light"
-      />
-      <ShimmerSkeleton
-        variant="text"
-        height="16px"
-        className="mb-2 w-5/6"
-        theme="light"
-      />
-      <ShimmerSkeleton
-        variant="text"
-        height="16px"
-        className="w-4/5"
-        theme="light"
-      />
+      <ShimmerSkeleton variant="text" height="16px" className="mb-2 w-full" theme="light" />
+      <ShimmerSkeleton variant="text" height="16px" className="mb-2 w-5/6" theme="light" />
+      <ShimmerSkeleton variant="text" height="16px" className="w-4/5" theme="light" />
     </div>
 
     {/* Date */}
     <div className="text-[14px] leading-[20px] text-[#585550] uppercase font-semibold tracking-wider mt-auto">
-      <ShimmerSkeleton
-        variant="text"
-        height="14px"
-        className="w-1/3"
-        theme="light"
-      />
+      <ShimmerSkeleton variant="text" height="14px" className="w-1/3" theme="light" />
     </div>
   </div>
 );

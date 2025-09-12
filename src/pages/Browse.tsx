@@ -414,9 +414,7 @@ const Browse: React.FC = () => {
               {Array.from({ length: 5 }).map((_, idx) => (
                 <div key={idx} className="flex items-center gap-2">
                   <div className="h-4 w-10 md:w-14 bg-[#E6DDC6] rounded animate-pulse"></div>
-                  {idx < 4 && (
-                    <div className="text-[#E6DDC6] text-lg font-bold">+</div>
-                  )}
+                  {idx < 4 && <div className="text-[#E6DDC6] text-lg font-bold">+</div>}
                 </div>
               ))}
             </div>
@@ -541,9 +539,7 @@ const Browse: React.FC = () => {
       {/* Categories Grid */}
       <div className="w-full max-w-7xl mx-auto px-4 mt-10 grid grid-cols-1 md:grid-cols-3 gap-10 md:pl-0 pl-[20px]">
         {productsLoading ? (
-          Array.from({ length: 6 }).map((_, idx) => (
-            <ProductCardSkeleton key={idx} />
-          ))
+          Array.from({ length: 6 }).map((_, idx) => <ProductCardSkeleton key={idx} />)
         ) : errorProducts ? (
           <div className="text-center py-16">
             <p className="text-[#61422D] text-lg mb-4">{errorProducts}</p>

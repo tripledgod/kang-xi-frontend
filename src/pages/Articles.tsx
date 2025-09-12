@@ -45,16 +45,16 @@ export default function Articles() {
       try {
         // Always set loading for latest articles
         setLatestArticlesLoading(true);
-        
+
         // Only set featured articles loading on first page
         if (page === 1) {
           setFeaturedArticlesLoading(true);
         }
-        
+
         const response = await getArticles(page, ARTICLES_PER_PAGE, locale);
         setArticles(response.data);
         setTotalPages(response.meta.pagination.pageCount);
-        
+
         // Clear loading states
         setLatestArticlesLoading(false);
         if (page === 1) {
@@ -76,7 +76,7 @@ export default function Articles() {
       try {
         // Set featured articles loading when locale changes
         setFeaturedArticlesLoading(true);
-        
+
         const response = await getHeaderArticle(locale);
         let headerList = response.data?.articles || [];
 
@@ -246,25 +246,67 @@ export default function Articles() {
             </>
           ) : (
             featuredArticles.map((article, idx) => {
-            const imageUrl = getCoverUrl(article.cover);
+              const imageUrl = getCoverUrl(article.cover);
 
-            // Function to handle scroll to top before page navigation
-            const handleFeaturedArticleClick = () => {
-              scrollToTop();
-            };
+              // Function to handle scroll to top before page navigation
+              const handleFeaturedArticleClick = () => {
+                scrollToTop();
+              };
 
-            return (
-              <Link
-                key={article.id}
-                to={`/article/${article.slug}`}
-                className={`w-full ${idx === 0 ? 'flex-2' : 'flex-1'}`}
-                style={{ textDecoration: 'none' }}
-                onClick={handleFeaturedArticleClick}
-              >
-                {/* Mobile Layout */}
-                <div className="block lg:hidden">
+              return (
+                <Link
+                  key={article.id}
+                  to={`/article/${article.slug}`}
+                  className={`w-full ${idx === 0 ? 'flex-2' : 'flex-1'}`}
+                  style={{ textDecoration: 'none' }}
+                  onClick={handleFeaturedArticleClick}
+                >
+                  {/* Mobile Layout */}
+                  <div className="block lg:hidden">
+                    <div
+                      className="relative h-[343px] overflow-hidden w-full transition-all duration-300 cursor-pointer"
+                      style={{ backgroundColor: '#E6DDC6' }}
+                    >
+                      <img
+                        src={imageUrl || articlesCover}
+                        alt={article.title}
+                        className="absolute inset-0 w-full h-full object-cover object-center z-0"
+                        loading="eager"
+                        onError={(e) => {
+                          console.error('Featured image failed to load:', imageUrl);
+                          e.currentTarget.src = articlesCover;
+                        }}
+                        style={{
+                          minHeight: '343px',
+                          width: '100%',
+                          height: '100%',
+                        }}
+                      />
+                      <div className="absolute inset-0 bg-black opacity-40 z-20"></div>
+                      {/* Mobile Content Overlay on Image */}
+                      <div className="absolute bottom-0 left-0 right-0 p-4 z-30">
+                        <h5 className="text-[20px] leading-[28px] text-white mb-2 line-clamp-2 drop-shadow-lg">
+                          {article.title}
+                        </h5>
+                        <div className="text-base text-white mb-3 line-clamp-2 drop-shadow-lg">
+                          {article.shortDescription || article.description}
+                        </div>
+                        <div className="text-xs text-white uppercase font-semibold tracking-wider drop-shadow-lg">
+                          {new Date(article.publishedAt)
+                            .toLocaleDateString('en-GB', {
+                              day: '2-digit',
+                              month: 'short',
+                              year: 'numeric',
+                            })
+                            .replace(/\b([a-z]{3})\b/i, (m) => m.toUpperCase())}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Desktop Layout */}
                   <div
-                    className="relative h-[343px] overflow-hidden w-full transition-all duration-300 cursor-pointer"
+                    className="hidden lg:block relative h-[480px] overflow-hidden group flex-shrink-0 transition-all duration-300 w-full cursor-pointer"
                     style={{ backgroundColor: '#E6DDC6' }}
                   >
                     <img
@@ -277,21 +319,21 @@ export default function Articles() {
                         e.currentTarget.src = articlesCover;
                       }}
                       style={{
-                        minHeight: '343px',
+                        minHeight: '480px',
                         width: '100%',
                         height: '100%',
                       }}
                     />
                     <div className="absolute inset-0 bg-black opacity-40 z-20"></div>
-                    {/* Mobile Content Overlay on Image */}
-                    <div className="absolute bottom-0 left-0 right-0 p-4 z-30">
-                      <h5 className="text-[20px] leading-[28px] text-white mb-2 line-clamp-2 drop-shadow-lg">
+                    {/* Overlay title/desc/date always white and clear */}
+                    <div className="absolute bottom-0 left-0 right-0 md:p-6 p-4 z-30">
+                      <h5 className="text-[20px] md:text-[24px] leading-[28px] md:leading-[32px] text-white mb-2 line-clamp-2 drop-shadow-lg">
                         {article.title}
                       </h5>
                       <div className="text-base text-white mb-3 line-clamp-2 drop-shadow-lg">
                         {article.shortDescription || article.description}
                       </div>
-                      <div className="text-xs text-white uppercase font-semibold tracking-wider drop-shadow-lg">
+                      <div className="text-[14px]  leading-[20px] text-white uppercase tracking-wider font-semibold drop-shadow-lg">
                         {new Date(article.publishedAt)
                           .toLocaleDateString('en-GB', {
                             day: '2-digit',
@@ -302,51 +344,9 @@ export default function Articles() {
                       </div>
                     </div>
                   </div>
-                </div>
-
-                {/* Desktop Layout */}
-                <div
-                  className="hidden lg:block relative h-[480px] overflow-hidden group flex-shrink-0 transition-all duration-300 w-full cursor-pointer"
-                  style={{ backgroundColor: '#E6DDC6' }}
-                >
-                  <img
-                    src={imageUrl || articlesCover}
-                    alt={article.title}
-                    className="absolute inset-0 w-full h-full object-cover object-center z-0"
-                    loading="eager"
-                    onError={(e) => {
-                      console.error('Featured image failed to load:', imageUrl);
-                      e.currentTarget.src = articlesCover;
-                    }}
-                    style={{
-                      minHeight: '480px',
-                      width: '100%',
-                      height: '100%',
-                    }}
-                  />
-                  <div className="absolute inset-0 bg-black opacity-40 z-20"></div>
-                  {/* Overlay title/desc/date always white and clear */}
-                  <div className="absolute bottom-0 left-0 right-0 md:p-6 p-4 z-30">
-                    <h5 className="text-[20px] md:text-[24px] leading-[28px] md:leading-[32px] text-white mb-2 line-clamp-2 drop-shadow-lg">
-                      {article.title}
-                    </h5>
-                    <div className="text-base text-white mb-3 line-clamp-2 drop-shadow-lg">
-                      {article.shortDescription || article.description}
-                    </div>
-                    <div className="text-[14px]  leading-[20px] text-white uppercase tracking-wider font-semibold drop-shadow-lg">
-                      {new Date(article.publishedAt)
-                        .toLocaleDateString('en-GB', {
-                          day: '2-digit',
-                          month: 'short',
-                          year: 'numeric',
-                        })
-                        .replace(/\b([a-z]{3})\b/i, (m) => m.toUpperCase())}
-                    </div>
-                  </div>
-                </div>
-              </Link>
-            );
-          })
+                </Link>
+              );
+            })
           )}
         </div>
         {/* Latest Articles */}
@@ -368,29 +368,99 @@ export default function Articles() {
                   </>
                 ) : (
                   articles.map((article, idx) => {
-                  const imageUrl = getCoverUrl(article.cover);
+                    const imageUrl = getCoverUrl(article.cover);
 
-                  // Function to handle scroll to top before page navigation
-                  const handleArticleClick = () => {
-                    scrollToTop();
-                  };
+                    // Function to handle scroll to top before page navigation
+                    const handleArticleClick = () => {
+                      scrollToTop();
+                    };
 
-                  return (
-                    <Link
-                      key={article.id}
-                      to={`/article/${article.slug}`}
-                      className="w-full"
-                      style={{ textDecoration: 'none' }}
-                      onClick={handleArticleClick}
-                    >
-                      {/* Mobile Card Layout */}
-                      <div className="block md:hidden p-0 w-full">
-                        <div className="w-full flex flex-col h-full">
-                          <div className="w-full h-48 overflow-hidden mb-4 bg-[#E6DDC6] flex items-center justify-center">
+                    return (
+                      <Link
+                        key={article.id}
+                        to={`/article/${article.slug}`}
+                        className="w-full"
+                        style={{ textDecoration: 'none' }}
+                        onClick={handleArticleClick}
+                      >
+                        {/* Mobile Card Layout */}
+                        <div className="block md:hidden p-0 w-full">
+                          <div className="w-full flex flex-col h-full">
+                            <div className="w-full h-48 overflow-hidden mb-4 bg-[#E6DDC6] flex items-center justify-center">
+                              <img
+                                src={imageUrl || articlesCover}
+                                loading={'lazy'}
+                                alt={article.title}
+                                className="object-cover w-full h-full"
+                                onError={(e) => {
+                                  console.error('Image failed to load:', imageUrl);
+                                  e.currentTarget.src = articlesCover;
+                                }}
+                              />
+                            </div>
+                            <h5
+                              className="text-2xl font-serif mb-2 line-clamp-2 leading-snug"
+                              style={{
+                                fontWeight: 600,
+                                fontSize: 20,
+                                lineHeight: '28px',
+                                letterSpacing: 0,
+                                textAlign: 'left',
+                                color: '#61422D',
+                              }}
+                            >
+                              {article.title}
+                            </h5>
+                            <div className="text-base text-[#585550] mb-3 line-clamp-3 text-left">
+                              {article.shortDescription || article.description}
+                            </div>
+                            <div className="flex-1"></div>
+                            <div className="text-xs font-semibold text-[#7B6142] md:pb-6 pb-0 uppercase tracking-wider text-left">
+                              {new Date(article.publishedAt)
+                                .toLocaleDateString('en-GB', {
+                                  day: '2-digit',
+                                  month: 'short',
+                                  year: 'numeric',
+                                })
+                                .replace(/\b([a-z]{3})\b/i, (m) => m.toUpperCase())}
+                            </div>
+                          </div>
+                        </div>
+                        {/* Desktop Grid Layout */}
+                        <div className="hidden md:grid grid-cols-[1fr_238px] gap-6 w-full">
+                          <div className="flex flex-col h-full min-w-0">
+                            <h5
+                              className="text-2xl font-serif mb-2 leading-snug line-clamp-2"
+                              style={{
+                                fontWeight: 600,
+                                fontSize: 24,
+                                lineHeight: '32px',
+                                letterSpacing: 0,
+                                textAlign: 'left',
+                                color: '#61422D',
+                              }}
+                            >
+                              {article.title}
+                            </h5>
+                            <div className="text-base text-[#585550] mb-3 line-clamp-3 text-left">
+                              {article.shortDescription || article.description}
+                            </div>
+                            <div className="flex-1"></div>
+                            <div className="text-[14px] font-semibold leading-[20px] text-[#585550] uppercase tracking-wider text-left">
+                              {new Date(article.publishedAt)
+                                .toLocaleDateString('en-GB', {
+                                  day: '2-digit',
+                                  month: 'short',
+                                  year: 'numeric',
+                                })
+                                .replace(/\b([a-z]{3})\b/i, (m) => m.toUpperCase())}
+                            </div>
+                          </div>
+                          <div className="w-[238px] h-[180px] flex-shrink-0 overflow-hidden bg-[#E6DDC6] flex items-center justify-center">
                             <img
                               src={imageUrl || articlesCover}
-                              loading={'lazy'}
                               alt={article.title}
+                              loading={'lazy'}
                               className="object-cover w-full h-full"
                               onError={(e) => {
                                 console.error('Image failed to load:', imageUrl);
@@ -398,84 +468,14 @@ export default function Articles() {
                               }}
                             />
                           </div>
-                          <h5
-                            className="text-2xl font-serif mb-2 line-clamp-2 leading-snug"
-                            style={{
-                              fontWeight: 600,
-                              fontSize: 20,
-                              lineHeight: '28px',
-                              letterSpacing: 0,
-                              textAlign: 'left',
-                              color: '#61422D',
-                            }}
-                          >
-                            {article.title}
-                          </h5>
-                          <div className="text-base text-[#585550] mb-3 line-clamp-3 text-left">
-                            {article.shortDescription || article.description}
-                          </div>
-                          <div className="flex-1"></div>
-                          <div className="text-xs font-semibold text-[#7B6142] md:pb-6 pb-0 uppercase tracking-wider text-left">
-                            {new Date(article.publishedAt)
-                              .toLocaleDateString('en-GB', {
-                                day: '2-digit',
-                                month: 'short',
-                                year: 'numeric',
-                              })
-                              .replace(/\b([a-z]{3})\b/i, (m) => m.toUpperCase())}
-                          </div>
                         </div>
-                      </div>
-                      {/* Desktop Grid Layout */}
-                      <div className="hidden md:grid grid-cols-[1fr_238px] gap-6 w-full">
-                        <div className="flex flex-col h-full min-w-0">
-                          <h5
-                            className="text-2xl font-serif mb-2 leading-snug line-clamp-2"
-                            style={{
-                              fontWeight: 600,
-                              fontSize: 24,
-                              lineHeight: '32px',
-                              letterSpacing: 0,
-                              textAlign: 'left',
-                              color: '#61422D',
-                            }}
-                          >
-                            {article.title}
-                          </h5>
-                          <div className="text-base text-[#585550] mb-3 line-clamp-3 text-left">
-                            {article.shortDescription || article.description}
-                          </div>
-                          <div className="flex-1"></div>
-                          <div className="text-[14px] font-semibold leading-[20px] text-[#585550] uppercase tracking-wider text-left">
-                            {new Date(article.publishedAt)
-                              .toLocaleDateString('en-GB', {
-                                day: '2-digit',
-                                month: 'short',
-                                year: 'numeric',
-                              })
-                              .replace(/\b([a-z]{3})\b/i, (m) => m.toUpperCase())}
-                          </div>
-                        </div>
-                        <div className="w-[238px] h-[180px] flex-shrink-0 overflow-hidden bg-[#E6DDC6] flex items-center justify-center">
-                          <img
-                            src={imageUrl || articlesCover}
-                            alt={article.title}
-                            loading={'lazy'}
-                            className="object-cover w-full h-full"
-                            onError={(e) => {
-                              console.error('Image failed to load:', imageUrl);
-                              e.currentTarget.src = articlesCover;
-                            }}
-                          />
-                        </div>
-                      </div>
-                      {/* Faded divider under each article */}
-                      {idx !== articles.length - 1 && (
-                        <div className="border-t-2 border-[#E5E1D7] opacity-80 mt-8"></div>
-                      )}
-                    </Link>
-                  );
-                })
+                        {/* Faded divider under each article */}
+                        {idx !== articles.length - 1 && (
+                          <div className="border-t-2 border-[#E5E1D7] opacity-80 mt-8"></div>
+                        )}
+                      </Link>
+                    );
+                  })
                 )}
               </div>
             </div>

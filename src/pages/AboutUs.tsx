@@ -140,7 +140,10 @@ export default function AboutUs() {
               <div className="h-[1px] bg-[#D5D4D3] w-full my-4 md:mt-8"></div>
               <div className="flex gap-12">
                 <div>
-                  <h2 style={{ letterSpacing: '-1%' }} className="text-5xl font-medium text-[#61422D]">
+                  <h2
+                    style={{ letterSpacing: '-1%' }}
+                    className="text-5xl font-medium text-[#61422D]"
+                  >
                     {aboutData?.heritage?.yearsExp || '25'}+
                   </h2>
                   <div
@@ -151,7 +154,10 @@ export default function AboutUs() {
                   </div>
                 </div>
                 <div>
-                  <h2 style={{ letterSpacing: '-1%' }} className="text-5xl font-medium text-[#61422D]">
+                  <h2
+                    style={{ letterSpacing: '-1%' }}
+                    className="text-5xl font-medium text-[#61422D]"
+                  >
                     {aboutData?.heritage?.rareCollectibleItems || '100'}+
                   </h2>
                   <div
@@ -188,30 +194,30 @@ export default function AboutUs() {
             Our Services
           </h4>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-            {loading ? (
-              Array.from({ length: 3 }).map((_, idx) => (
-                <div key={idx} className="flex flex-col items-center">
-                  <div className="h-12 w-12 bg-[#E6DDC6] rounded animate-pulse mb-4"></div>
-                  <div className="h-6 w-32 bg-[#E6DDC6] rounded animate-pulse mb-2"></div>
-                  <div className="h-4 w-full bg-[#E6DDC6] rounded animate-pulse"></div>
-                </div>
-              ))
-            ) : (
-              aboutData?.journey?.map((item) => (
-                <div key={item.id} className="flex flex-col items-center">
-                  <img
-                    src={getImageUrl(item.icon)}
-                    loading={'lazy'}
-                    alt={item.title}
-                    className="h-12 mb-4"
-                  />
-                  <h5 className="text-[20px] md:text-[24px] leading-[28px] md:leading-[32px] text-[#FAF7F2] mb-2">
-                    {item.title}
-                  </h5>
-                  <div className="text-[#ABAAA7] text-[16px] leading-[24px]">{item.description}</div>
-                </div>
-              ))
-            )}
+            {loading
+              ? Array.from({ length: 3 }).map((_, idx) => (
+                  <div key={idx} className="flex flex-col items-center">
+                    <div className="h-12 w-12 bg-[#E6DDC6] rounded animate-pulse mb-4"></div>
+                    <div className="h-6 w-32 bg-[#E6DDC6] rounded animate-pulse mb-2"></div>
+                    <div className="h-4 w-full bg-[#E6DDC6] rounded animate-pulse"></div>
+                  </div>
+                ))
+              : aboutData?.journey?.map((item) => (
+                  <div key={item.id} className="flex flex-col items-center">
+                    <img
+                      src={getImageUrl(item.icon)}
+                      loading={'lazy'}
+                      alt={item.title}
+                      className="h-12 mb-4"
+                    />
+                    <h5 className="text-[20px] md:text-[24px] leading-[28px] md:leading-[32px] text-[#FAF7F2] mb-2">
+                      {item.title}
+                    </h5>
+                    <div className="text-[#ABAAA7] text-[16px] leading-[24px]">
+                      {item.description}
+                    </div>
+                  </div>
+                ))}
           </div>
         </div>
       </div>
@@ -362,25 +368,27 @@ export default function AboutUs() {
               </>
             ) : (
               aboutData?.team?.map((member) => (
-              <div
-                key={member.id}
-                className="flex flex-col items-start flex-shrink-0"
-                style={{
-                  width: window.innerWidth < 768 ? mobileCardWidth : cardWidth,
-                  minWidth: window.innerWidth < 768 ? mobileCardWidth : cardWidth,
-                }}
-              >
-                <img
-                  src={getImageUrl(member.image) || heroImg}
-                  alt={member.name}
-                  loading={'lazy'}
-                  className="w-full h-[340px] object-cover mb-6"
-                />
-                <h5 className="text-2xl font-serif text-[#61422D] mb-1 text-left">{member.name}</h5>
-                <div className="text-base text-[#61422D] mb-2 text-left">{member.position}</div>
-                <div className="text-base text-[#585550] text-left">{member.bio}</div>
-              </div>
-            ))
+                <div
+                  key={member.id}
+                  className="flex flex-col items-start flex-shrink-0"
+                  style={{
+                    width: window.innerWidth < 768 ? mobileCardWidth : cardWidth,
+                    minWidth: window.innerWidth < 768 ? mobileCardWidth : cardWidth,
+                  }}
+                >
+                  <img
+                    src={getImageUrl(member.image) || heroImg}
+                    alt={member.name}
+                    loading={'lazy'}
+                    className="w-full h-[340px] object-cover mb-6"
+                  />
+                  <h5 className="text-2xl font-serif text-[#61422D] mb-1 text-left">
+                    {member.name}
+                  </h5>
+                  <div className="text-base text-[#61422D] mb-2 text-left">{member.position}</div>
+                  <div className="text-base text-[#585550] text-left">{member.bio}</div>
+                </div>
+              ))
             )}
           </div>
         </div>

@@ -56,7 +56,7 @@ const ArticleImage = ({
   );
 };
 
-function RelatedArticles({ related, loading }: { related: Article[], loading: boolean }) {
+function RelatedArticles({ related, loading }: { related: Article[]; loading: boolean }) {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
@@ -76,69 +76,69 @@ function RelatedArticles({ related, loading }: { related: Article[], loading: bo
           </>
         ) : (
           related.map((article) => (
-          <div
-            key={article.id}
-            className="flex flex-col cursor-pointer"
-            onClick={() => handleArticleClick(article.slug)}
-          >
-            <div className="bg-[#E6DDC6] aspect-square w-full flex items-center justify-center overflow-hidden mb-4">
-              <ArticleImage
-                cover={article.cover}
-                alt={article.title}
-                className="object-cover w-full h-full"
-              />
-            </div>
+            <div
+              key={article.id}
+              className="flex flex-col cursor-pointer"
+              onClick={() => handleArticleClick(article.slug)}
+            >
+              <div className="bg-[#E6DDC6] aspect-square w-full flex items-center justify-center overflow-hidden mb-4">
+                <ArticleImage
+                  cover={article.cover}
+                  alt={article.title}
+                  className="object-cover w-full h-full"
+                />
+              </div>
 
-            {/* Title with fixed height of 2 lines only on desktop */}
-            <div>
-              <h5
-                className="md:text-[24px] md:leading-[32px] text-20[px] leading[28px] text-[#61422D] mb-[8px] md:mb-[9px]"
-                style={{
-                  // fontFamily: 'Noto Serif SC, serif',
-                  // fontWeight: 600,
+              {/* Title with fixed height of 2 lines only on desktop */}
+              <div>
+                <h5
+                  className="md:text-[24px] md:leading-[32px] text-20[px] leading[28px] text-[#61422D] mb-[8px] md:mb-[9px]"
+                  style={{
+                    // fontFamily: 'Noto Serif SC, serif',
+                    // fontWeight: 600,
 
-                  letterSpacing: 0,
-                  textAlign: 'left',
-                  color: '#1E1E1E',
-                  display: '-webkit-box',
-                  WebkitLineClamp: 2,
-                  WebkitBoxOrient: 'vertical',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                }}
-              >
-                {article.title}
-              </h5>
-            </div>
+                    letterSpacing: 0,
+                    textAlign: 'left',
+                    color: '#1E1E1E',
+                    display: '-webkit-box',
+                    WebkitLineClamp: 2,
+                    WebkitBoxOrient: 'vertical',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                  }}
+                >
+                  {article.title}
+                </h5>
+              </div>
 
-            {/* Description with fixed height of 3 lines only on desktop */}
-            <div className="md:h-20 mb-4">
-              <div
-                className="font-pingfang text-base leading-6 overflow-hidden"
-                style={{
-                  color: '#585550',
-                  display: '-webkit-box',
-                  WebkitLineClamp: 3,
-                  WebkitBoxOrient: 'vertical',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                }}
-              >
-                {article.description}
+              {/* Description with fixed height of 3 lines only on desktop */}
+              <div className="md:h-20 mb-4">
+                <div
+                  className="font-pingfang text-base leading-6 overflow-hidden"
+                  style={{
+                    color: '#585550',
+                    display: '-webkit-box',
+                    WebkitLineClamp: 3,
+                    WebkitBoxOrient: 'vertical',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                  }}
+                >
+                  {article.description}
+                </div>
+              </div>
+
+              <div className="text-[14px] leading-[20px] text-[#585550] uppercase  font-semibold tracking-wider mt-auto">
+                {new Date(article.publishedAt)
+                  .toLocaleDateString('en-GB', {
+                    day: '2-digit',
+                    month: 'short',
+                    year: 'numeric',
+                  })
+                  .toUpperCase()
+                  .replace(/,/g, '')}
               </div>
             </div>
-
-            <div className="text-[14px] leading-[20px] text-[#585550] uppercase  font-semibold tracking-wider mt-auto">
-              {new Date(article.publishedAt)
-                .toLocaleDateString('en-GB', {
-                  day: '2-digit',
-                  month: 'short',
-                  year: 'numeric',
-                })
-                .toUpperCase()
-                .replace(/,/g, '')}
-            </div>
-          </div>
           ))
         )}
       </div>
@@ -193,10 +193,9 @@ export default function ArticleDetail() {
           throw new Error('Article not found');
         }
 
-        
         setArticle(articleData);
         const id = articleData.id;
-        
+
         const related = await getRelatedArticles(id, 3, locale);
         setRelatedArticles(related.data);
         setRelatedLoading(false);
@@ -235,7 +234,7 @@ export default function ArticleDetail() {
             <div className="text-[14px] leading-[20px] text-[#6D6A66] uppercase font-semibold tracking-wider mb-2">
               <div className="h-4 w-32 bg-[#E6DDC6] rounded animate-pulse"></div>
             </div>
-            
+
             {/* Title shimmer */}
             <div className="hidden md:block text-[40px] leading-[48px] text-[#61422D] mb-2">
               <div className="h-12 w-full bg-[#E6DDC6] rounded animate-pulse mb-2"></div>
@@ -245,16 +244,16 @@ export default function ArticleDetail() {
               <div className="h-10 w-full bg-[#E6DDC6] rounded animate-pulse mb-2"></div>
               <div className="h-10 w-4/5 bg-[#E6DDC6] rounded animate-pulse"></div>
             </div>
-            
+
             {/* Short description shimmer */}
             <div className="text-[20px] leading-[28px] text-[#585550] mt-6">
               <div className="h-7 w-full bg-[#E6DDC6] rounded animate-pulse mb-2"></div>
               <div className="h-7 w-5/6 bg-[#E6DDC6] rounded animate-pulse"></div>
             </div>
-            
+
             {/* Main image shimmer */}
             <div className="w-full h-64 md:h-96 bg-[#E6DDC6] rounded md:my-16 my-8 animate-pulse"></div>
-            
+
             {/* Main content shimmer */}
             <div className="prose max-w-none text-[#585550] text-[16px] md:text-[18px] leading-[24px] md:leading-[26px]">
               <div className="space-y-3">

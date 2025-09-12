@@ -63,7 +63,7 @@ function AppContent() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      {/*<ScrollToTop />*/}
+      <ScrollToTop />
       <Header />
       <main className="flex-grow">
         <PageTransition>

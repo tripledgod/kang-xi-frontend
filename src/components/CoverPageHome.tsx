@@ -21,7 +21,6 @@ const CoverPageHome: React.FC = () => {
   useEffect(() => {
     const fetchHomeCover = async () => {
       try {
-        
         const requestUrl = `${API_URL}/api/home?populate=*`;
         console.log('[HomeCover] Requesting:', requestUrl);
         const res = await fetch(requestUrl);
@@ -85,13 +84,13 @@ const CoverPageHome: React.FC = () => {
           // Shimmer effect
           <>
             {/* Background shimmer */}
-            <ShimmerSkeleton 
-              variant="rectangular" 
-              height="100%" 
-              className="absolute inset-0 w-full h-full" 
+            <ShimmerSkeleton
+              variant="rectangular"
+              height="100%"
+              className="absolute inset-0 w-full h-full"
               theme="image"
             />
-            
+
             {/* Text layer shimmer */}
             <div className="absolute inset-0 flex items-center justify-center z-20">
               <div className="w-full flex flex-col items-center justify-center">
@@ -133,7 +132,7 @@ const CoverPageHome: React.FC = () => {
                 </div>
               </div>
             </div>
-            
+
             {/* Note shimmer at bottom */}
             <div className="absolute inset-x-0 bottom-6 md:bottom-14 z-20 text-center">
               <div className="inline-flex items-center gap-2 pl-3 py-1">
