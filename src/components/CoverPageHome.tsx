@@ -6,6 +6,11 @@ import { API_URL } from '../utils/constants';
 import { useLanguage } from '../contexts/LanguageContext';
 import ShimmerSkeleton from './ShimmerSkeleton';
 
+// Small utility component to reduce repeated skeleton classes
+const SkeletonBlock: React.FC<{ className?: string }> = ({ className = '' }) => (
+  <div className={`rounded animate-pulse bg-white ${className}`}></div>
+);
+
 interface HomeCoverState {
   title?: string;
   subTitle?: string;
@@ -98,15 +103,15 @@ const CoverPageHome: React.FC = () => {
                 <div className="flex items-center justify-center text-center w-full">
                   {/* Desktop title shimmer - 2 lines with first line longer - text-[72px] leading-[88px] */}
                   <div className="hidden md:block flex flex-col items-center justify-center w-full">
-                    <div className="w-[897px] h-[88px] bg-white mb-4 rounded animate-pulse mx-auto"></div>
-                    <div className="w-[720px] h-[88px] bg-white rounded animate-pulse mx-auto"></div>
+                    <SkeletonBlock className="w-[897px] h-[88px] mb-4 mx-auto" />
+                    <SkeletonBlock className="w-[720px] h-[88px] mx-auto" />
                   </div>
                   {/* Mobile title shimmer - 4 lines - text-[40px] leading-[48px] */}
                   <div className="block md:hidden px-4 flex flex-col items-center justify-center w-full">
-                    <div className="w-[100px] h-[48px] bg-white mb-2 rounded animate-pulse mx-auto"></div>
-                    <div className="w-[180px] h-[48px] bg-white mb-2 rounded animate-pulse mx-auto"></div>
-                    <div className="w-[190px] h-[48px] bg-white mb-2 rounded animate-pulse mx-auto"></div>
-                    <div className="w-[100px] h-[48px] bg-white rounded animate-pulse mx-auto"></div>
+                    <SkeletonBlock className="w-[100px] h-[48px] mb-2 mx-auto" />
+                    <SkeletonBlock className="w-[180px] h-[48px] mb-2 mx-auto" />
+                    <SkeletonBlock className="w-[190px] h-[48px] mb-2 mx-auto" />
+                    <SkeletonBlock className="w-[100px] h-[48px] mx-auto" />
                   </div>
                 </div>
 
@@ -117,17 +122,17 @@ const CoverPageHome: React.FC = () => {
                 <div className="flex items-center justify-center text-center w-full md:px-[88.5px]">
                   {/* Mobile subtitle shimmer - 5 lines - text-[18px] leading-[26px] */}
                   <div className="md:hidden px-2 flex flex-col items-center justify-center w-full">
-                    <div className="w-[250px] h-[26px] bg-white mb-1 rounded animate-pulse mx-auto"></div>
-                    <div className="w-[220px] h-[26px] bg-white mb-1 rounded animate-pulse mx-auto"></div>
-                    <div className="w-[230px] h-[26px] bg-white mb-1 rounded animate-pulse mx-auto"></div>
-                    <div className="w-[200px] h-[26px] bg-white mb-1 rounded animate-pulse mx-auto"></div>
-                    <div className="w-[180px] h-[26px] bg-white rounded animate-pulse mx-auto"></div>
+                    <SkeletonBlock className="w-[250px] h-[26px] mb-1 mx-auto" />
+                    <SkeletonBlock className="w-[220px] h-[26px] mb-1 mx-auto" />
+                    <SkeletonBlock className="w-[230px] h-[26px] mb-1 mx-auto" />
+                    <SkeletonBlock className="w-[200px] h-[26px] mb-1 mx-auto" />
+                    <SkeletonBlock className="w-[180px] h-[26px] mx-auto" />
                   </div>
                   {/* Desktop subtitle shimmer - 3 lines with different widths - text-[20px] leading-[28px] */}
                   <div className="hidden md:block px-15 flex flex-col items-center justify-center w-full">
-                    <div className="w-[680px] h-[28px] bg-white mb-1 rounded animate-pulse mx-auto"></div>
-                    <div className="w-[720px] h-[28px] bg-white mb-1 rounded animate-pulse mx-auto"></div>
-                    <div className="w-[250px] h-[28px] bg-white rounded animate-pulse mx-auto"></div>
+                    <SkeletonBlock className="w-[680px] h-[28px] mb-1 mx-auto" />
+                    <SkeletonBlock className="w-[720px] h-[28px] mb-1 mx-auto" />
+                    <SkeletonBlock className="w-[250px] h-[28px] mx-auto" />
                   </div>
                 </div>
               </div>
@@ -136,8 +141,8 @@ const CoverPageHome: React.FC = () => {
             {/* Note shimmer at bottom */}
             <div className="absolute inset-x-0 bottom-6 md:bottom-14 z-20 text-center">
               <div className="inline-flex items-center gap-2 pl-3 py-1">
-                <div className="w-5 h-5 bg-white rounded animate-pulse"></div>
-                <div className="w-32 h-5 bg-white rounded animate-pulse"></div>
+                <SkeletonBlock className="w-5 h-5" />
+                <SkeletonBlock className="w-32 h-5" />
               </div>
             </div>
           </>
