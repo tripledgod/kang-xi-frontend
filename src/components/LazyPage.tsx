@@ -1,5 +1,4 @@
 import React, { Suspense } from 'react';
-import Loading from './Loading';
 
 interface LazyPageProps {
   children: React.ReactNode;
@@ -8,7 +7,7 @@ interface LazyPageProps {
 
 const LazyPage: React.FC<LazyPageProps> = ({
   children,
-  fallback = <Loading fullScreen={true} text="Loading page..." size="large" />,
+  fallback = <div className="min-h-screen bg-[#F7F5EA]" />,
 }) => {
   return <Suspense fallback={fallback}>{children}</Suspense>;
 };

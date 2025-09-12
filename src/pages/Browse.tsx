@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import Loading from '../components/Loading';
 import Header from '../components/Header';
 import { useLoading } from '../hooks/useLoading';
 import { useLanguage } from '../contexts/LanguageContext';
 import heroImg from '../assets/ceramic_cover.png';
 import heroImgMobile from '../assets/ceramic_cover_mobile.png';
 import AcquireOrAppraise from '../components/AcquireOrAppraise';
+import { ProductCardSkeleton } from '../components/ShimmerSkeleton';
 import {
   getCategories,
   getProductsByCategory,
@@ -16,6 +16,7 @@ import {
   Product,
 } from '../api/categories';
 import { API_URL } from '../utils/constants';
+import loading from '../components/Loading';
 
 interface Era {
   key: string;
@@ -173,7 +174,7 @@ const Browse: React.FC = () => {
           try {
             const productsData = await pendingRequests.current[cacheKey];
             if (!isMounted) return;
-            
+
             if (productsData && productsData.length > 0) {
               const flattened = productsData.map((prod: any) => flattenProduct(prod));
               setProducts(flattened);
@@ -191,7 +192,9 @@ const Browse: React.FC = () => {
         }
 
         // Create new request and store it
-        const requestPromise = getProductsByCategory(category.id, locale);
+        const requestPromise = (async () => {
+          return getProductsByCategory(category.id, locale);
+        })();
         pendingRequests.current[cacheKey] = requestPromise;
 
         // Always fetch fresh data from API
@@ -206,7 +209,7 @@ const Browse: React.FC = () => {
           const flattened = productsData.map((prod) => flattenProduct(prod));
           setProducts(flattened);
           // Cache the results
-          setProductsCache(prev => ({ ...prev, [cacheKey]: flattened }));
+          setProductsCache((prev) => ({ ...prev, [cacheKey]: flattened }));
         } else {
           setProducts([]);
           setErrorProducts('No data for this era');
@@ -215,7 +218,7 @@ const Browse: React.FC = () => {
         // Clean up the pending request on error
         const cacheKey = `${category.id}-${locale}`;
         delete pendingRequests.current[cacheKey];
-        
+
         if (!isMounted) return;
         console.error('Error fetching products:', err);
         setErrorProducts('Unable to load product list');
@@ -239,22 +242,22 @@ const Browse: React.FC = () => {
   useEffect(() => {
     // Only preload if enabled (disabled by default for better performance)
     if (!enablePreloading || !sortedCategories.length || !activeEra) return;
-    
-    const currentIndex = sortedCategories.findIndex(cat => cat.slug === activeEra);
+
+    const currentIndex = sortedCategories.findIndex((cat) => cat.slug === activeEra);
     if (currentIndex !== -1) {
       const nextEra = sortedCategories[currentIndex + 1];
       const prevEra = sortedCategories[currentIndex - 1];
-      
+
       // Preload only adjacent eras (optional - can be removed for even better performance)
       const erasToPreload = [nextEra, prevEra].filter(Boolean);
-      
+
       erasToPreload.forEach(async (era) => {
         if (era && !productsCache[`${era.id}-${locale}`]) {
           try {
             const productsData = await getProductsByCategory(era.id, locale);
             if (productsData && productsData.length > 0) {
               const flattened = productsData.map((prod: any) => flattenProduct(prod));
-              setProductsCache(prev => ({ ...prev, [`${era.id}-${locale}`]: flattened }));
+              setProductsCache((prev) => ({ ...prev, [`${era.id}-${locale}`]: flattened }));
             }
           } catch (err) {
             console.warn(`Failed to preload products for ${era.slug}:`, err);
@@ -266,7 +269,7 @@ const Browse: React.FC = () => {
     // Cleanup function to clear pending requests when component unmounts
     return () => {
       // Clear all pending requests
-      Object.keys(pendingRequests.current).forEach(key => {
+      Object.keys(pendingRequests.current).forEach((key) => {
         delete pendingRequests.current[key];
       });
     };
@@ -397,8 +400,38 @@ const Browse: React.FC = () => {
 
   if (categoriesLoading) {
     return (
-      <div className="min-h-screen bg-[#F7F5EA] flex items-center justify-center">
-        <Loading fullScreen={true} text="Loading..." />
+      <div className="w-full min-h-screen bg-[#F7F5EA]">
+        {/* Hero Section Skeleton */}
+        <div className="w-full relative">
+          <div className="block md:hidden w-full h-[218px] bg-[#E6DDC6] animate-pulse"></div>
+          <div className="hidden md:block w-full h-[420px] bg-[#E6DDC6] animate-pulse"></div>
+        </div>
+
+        {/* Era Tabs Skeleton */}
+        <div className="w-full bg-[#F7F3E8]">
+          <div className="max-w-7xl mx-auto px-4 md:px-0 pt-4 md:pt-24 pb-3 md:pb-5">
+            <div className="flex items-center gap-x-4 md:gap-x-2 justify-start pl-[10px] md:pl-0">
+              {Array.from({ length: 5 }).map((_, idx) => (
+                <div key={idx} className="flex items-center gap-2">
+                  <div className="h-4 w-10 md:w-14 bg-[#E6DDC6] rounded animate-pulse"></div>
+                  {idx < 4 && <div className="text-[#E6DDC6] text-lg font-bold">+</div>}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Products Grid Skeleton */}
+        <div className="w-full max-w-7xl mx-auto px-4 mt-10 grid grid-cols-1 md:grid-cols-3 gap-10 md:pl-0 pl-[20px]">
+          {Array.from({ length: 6 }).map((_, idx) => (
+            <ProductCardSkeleton key={idx} />
+          ))}
+        </div>
+
+        {/* Acquire or Appraise Section Skeleton */}
+        <div className="mt-20">
+          <div className="w-full h-32 bg-[#E6DDC6] animate-pulse"></div>
+        </div>
       </div>
     );
   }
@@ -506,17 +539,11 @@ const Browse: React.FC = () => {
       {/* Categories Grid */}
       <div className="w-full max-w-7xl mx-auto px-4 mt-10 grid grid-cols-1 md:grid-cols-3 gap-10 md:pl-0 pl-[20px]">
         {productsLoading ? (
-          <div className="flex justify-center py-16">
-            <Loading size="large" text="Loading..." />
-          </div>
+          Array.from({ length: 6 }).map((_, idx) => <ProductCardSkeleton key={idx} />)
         ) : errorProducts ? (
           <div className="text-center py-16">
             <p className="text-[#61422D] text-lg mb-4">{errorProducts}</p>
           </div>
-        // ) : products.length === 0 ? (
-        //   <div className="text-center py-16">
-        //     <p className="text-[#61422D] text-lg">No data</p>
-        //   </div>
         ) : (
           products.map((product: any) => (
             <ProductCard key={product.id} product={product} navigate={navigate} />

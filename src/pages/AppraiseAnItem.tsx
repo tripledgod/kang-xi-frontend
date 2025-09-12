@@ -46,6 +46,11 @@ export default function AppraiseAnItem() {
   const navigate = useNavigate();
 
   const [phone, setPhone] = useState('');
+  
+  // Scroll to top when component mounts
+  React.useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }, []);
   const [images, setImages] = useState<File[]>([]);
   const [appraiseForm, setAppraiseForm] = useState({
     firstName: '',
