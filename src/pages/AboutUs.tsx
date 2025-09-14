@@ -8,6 +8,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { getImageUrl } from '../utils';
 import { TeamCardSkeleton } from '../components/ShimmerSkeleton';
+import { useLanguage } from '../contexts/LanguageContext.tsx';
 
 // Customize the component for <img> tag in markdown
 const MarkdownComponents = {
@@ -29,13 +30,14 @@ export default function AboutUs() {
   const containerRef = useRef<HTMLDivElement>(null);
   const canGoLeft = teamIndex > 0;
   const canGoRight = teamIndex < (aboutData?.team?.length ?? 0) - visibleCount;
+  const { locale } = useLanguage();
 
   // Fetch about data
   useEffect(() => {
     const fetchAboutData = async () => {
       try {
         setError(null);
-        const response = await fetch(`${API_URL}/api/about?populate=*`);
+        const response = await fetch(`${API_URL}/api/about?populate=*&locale=${locale}`);
         const data: AboutResponse = await response.json();
         setAboutData(data.data);
       } catch (error) {
@@ -45,7 +47,7 @@ export default function AboutUs() {
     };
 
     withLoading(fetchAboutData);
-  }, []);
+  }, [locale]);
 
   // Scroll to the correct position when teamIndex changes (desktop only)
   React.useEffect(() => {
