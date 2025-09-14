@@ -1,5 +1,4 @@
 import React from 'react';
-import heroImg from '../assets/hero_image.png';
 
 import { Cover } from '../types';
 import { getImageUrl } from '../utils';
@@ -14,7 +13,7 @@ const CoverPage: React.FC<CoverPageProps> = ({ cover }) => {
   return (
     <div className="relative w-full h-[260px] md:h-[340px] flex items-center justify-center overflow-hidden mb-12">
       <img
-        src={heroImg || imageUrl}
+        src={imageUrl || ''}
         alt={cover?.title || 'About Us'}
         className="absolute inset-0 w-full h-full object-cover object-center"
         style={{ maxWidth: '100vw' }}

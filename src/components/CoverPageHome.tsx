@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import heroImg from '../assets/hero_image.png';
 import mouseImg from '../assets/gg_mouse.png';
 import { getImageUrl } from '../utils';
 import { API_URL } from '../utils/constants';
@@ -26,7 +25,7 @@ const CoverPageHome: React.FC = () => {
   useEffect(() => {
     const fetchHomeCover = async () => {
       try {
-        const requestUrl = `${API_URL}/api/home?populate=*`;
+        const requestUrl = `${API_URL}/api/home?populate=*&locale=${locale}`;
         console.log('[HomeCover] Requesting:', requestUrl);
         const res = await fetch(requestUrl);
         const json = await res.json();
