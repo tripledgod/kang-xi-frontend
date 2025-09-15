@@ -3,11 +3,15 @@ import { Link } from 'react-router-dom';
 import { useLoading } from '../hooks/useLoading';
 import { useLanguage } from '../contexts/LanguageContext';
 import articlesCover from '../assets/hero_image.png';
-import heroMobileImage from '../assets/hero_mobile_image.png';
 import { getArticles, getHeaderArticle, getArticlesByIds, Article } from '../api/articles';
 import { getCoverUrl } from '../utils';
 import { useScrollToTop } from '../hooks/useScrollToTop';
 import { FeaturedArticleSkeleton, LatestArticleSkeleton } from '../components/ShimmerSkeleton';
+import CoverPage from '../components/CoverPage';
+ 
+import axios from 'axios';
+import { API_URL } from '../utils/constants';
+import type { Cover } from '../types';
 
 const ARTICLES_PER_PAGE = 5;
 
@@ -19,8 +23,10 @@ export default function Articles() {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const [latestArticlesLoading, setLatestArticlesLoading] = useState(false);
   const [featuredArticlesLoading, setFeaturedArticlesLoading] = useState(true);
+  const [cover, setCover] = useState<Cover | undefined>(undefined);
+  
 
-  const { loading, withLoading } = useLoading(true);
+  const { withLoading } = useLoading(true);
   const { locale } = useLanguage();
   const scrollToTop = useScrollToTop();
 
@@ -39,6 +45,24 @@ export default function Articles() {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
+  // Fetch cover for Articles page from header-article API (no fallback)
+  useEffect(() => {
+    const fetchCover = async () => {
+      try {
+        const response = await axios.get(`${API_URL}/api/header-article`, {
+          params: { 'populate[cover][populate]': '*', populate: '*', locale },
+        });
+        const root = response?.data?.data?.attributes || response?.data?.data || response?.data || {};
+        const c = root?.cover as Cover | undefined;
+        setCover(c);
+      } catch (e) {
+        console.error('Error fetching header-article cover:', e);
+        setCover(undefined);
+      }
+    };
+    fetchCover();
+  }, [locale]);
 
   useEffect(() => {
     const fetchArticles = async () => {
@@ -195,45 +219,17 @@ export default function Articles() {
 
   return (
     <div className="w-full min-h-screen md:pb-24 pb-12 bg-[#F7F3E8] ">
-      {/* Hero Image */}
-      <div className="relative w-full h-[220px] md:h-[312px] flex items-center justify-center overflow-hidden mb-6 md:pt-[96px] md:pb-[96px]">
-        {/* Mobile Hero Image */}
-        <img
-          src={heroMobileImage}
-          alt="Articles Cover"
-          className="absolute inset-0 w-full h-full object-cover object-center md:hidden"
-          style={{ maxWidth: '100vw' }}
-        />
-        {/* Desktop Hero Image */}
-        <img
-          src={articlesCover}
-          alt="Articles Cover"
-          className="absolute inset-0 w-full h-full object-cover object-center hidden md:block"
-          style={{ maxWidth: '100vw' }}
-        />
-        <div className="absolute inset-0 bg-black/40 z-10"></div>
-        {/* Add prominent title on hero image if needed */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center z-20">
-          <h3
-            className="text-white text-[40px] leading-[48px] drop-shadow-lg text-center md:hidden"
-            style={{ letterSpacing: '-0.01em' }}
-          >
-            Articles
-          </h3>
-          <h1
-            className="hidden md:block text-white text-[60px] leading-[72px] drop-shadow-lg text-center"
-            style={{ letterSpacing: '-0.02em' }}
-          >
-            Articles
-          </h1>
-          <p className="text-white md:hidden drop-shadow-lg  text-[18px] leading-[26px] mt-4">
-            Appreciating Chinese Works of Art
-          </p>
-          <p className="text-white hidden md:block drop-shadow-lg text-[20px] leading-[28px] mt-5  ">
-            Appreciating Chinese Works of Art
-          </p>
-        </div>
-      </div>
+      {/* Cover from API (same style as About) */}
+      <CoverPage
+        cover={
+          cover ?? {
+            id: 0,
+            title: 'Articles',
+            subTitle: 'Appreciating Chinese Works of Art',
+            image: (cover as any)?.image,
+          }
+        }
+      />
       {/* Featured Articles Section */}
       <div className="md:px-28  px-4 w-full mx-auto flex flex-col md:gap-12 gap-6 md:mt-24">
         {/* Featured Articles */}
