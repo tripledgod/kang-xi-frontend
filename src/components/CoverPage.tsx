@@ -11,6 +11,7 @@ interface CoverPageProps {
 const CoverPage: React.FC<CoverPageProps> = ({ cover }) => {
   const imageUrl = getImageUrl(cover?.image);
   const [imageLoaded, setImageLoaded] = useState(false);
+  const hasText = Boolean(cover?.title || cover?.subTitle);
 
   // Reset shimmer when image URL changes (e.g., switching locale)
   useEffect(() => {
@@ -41,7 +42,7 @@ const CoverPage: React.FC<CoverPageProps> = ({ cover }) => {
       )}
       <div className="absolute inset-0 bg-black/40 z-10"></div>
       <div className="absolute inset-0 flex flex-col items-center justify-center z-20">
-        {imageLoaded ? (
+        {hasText ? (
           <>
             <h1
               className="hidden md:block text-white text-[60px] leading-[72px]  drop-shadow-lg text-center"

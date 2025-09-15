@@ -146,13 +146,13 @@ export default function AboutUs() {
                     style={{ letterSpacing: '-1%' }}
                     className="text-5xl font-medium text-[#61422D]"
                   >
-                    {aboutData?.heritage?.yearsExp || '25'}+
+                    {(aboutData?.heritage?.yearsExpNumber || aboutData?.heritage?.yearsExp || '25')}+
                   </h2>
                   <div
                     style={{ letterSpacing: '0.5px' }}
                     className="text-[14px] leading-[20px] text-[#585550] font-semibold mt-2"
                   >
-                    YEARS EXPERIENCES
+                    {aboutData?.heritage?.yearsExpText || aboutData?.heritage?.yearsExpLabel || 'YEARS EXPERIENCES'}
                   </div>
                 </div>
                 <div>
@@ -160,13 +160,13 @@ export default function AboutUs() {
                     style={{ letterSpacing: '-1%' }}
                     className="text-5xl font-medium text-[#61422D]"
                   >
-                    {aboutData?.heritage?.rareCollectibleItems || '100'}+
+                    {(aboutData?.heritage?.collectibleItemsNumber || aboutData?.heritage?.rareCollectibleItems || '100')}+
                   </h2>
                   <div
                     style={{ letterSpacing: '0.5px' }}
                     className="text-[14px] leading-[20px] text-[#585550] font-semibold mt-2"
                   >
-                    RARE COLLECTIBLE ITEMS
+                    {aboutData?.heritage?.collectibleItemsText || aboutData?.heritage?.rareCollectibleItemsLabel || 'RARE COLLECTIBLE ITEMS'}
                   </div>
                 </div>
               </div>
@@ -246,9 +246,17 @@ export default function AboutUs() {
           </div>
         ) : (
           <div className="my-5 prose prose-lg max-w-none text-[20px] leading-[28px] [&_img]:my-3 md:[&_img]:my-11 text-[#585550]">
-            <ReactMarkdown remarkPlugins={[remarkGfm]} components={MarkdownComponents}>
-              {aboutData.mainContent}
-            </ReactMarkdown>
+            {aboutData?.mainContent ? (
+              <ReactMarkdown remarkPlugins={[remarkGfm]} components={MarkdownComponents}>
+                {aboutData.mainContent}
+              </ReactMarkdown>
+            ) : (
+              <div className="space-y-3">
+                <div className="h-5 w-full bg-[#E6DDC6] rounded animate-pulse"></div>
+                <div className="h-5 w-5/6 bg-[#E6DDC6] rounded animate-pulse"></div>
+                <div className="h-5 w-4/5 bg-[#E6DDC6] rounded animate-pulse"></div>
+              </div>
+            )}
           </div>
         )}
       </div>

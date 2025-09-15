@@ -64,8 +64,14 @@ export interface Heritage {
   id: number;
   title: string;
   body: string;
-  yearsExp: string;
-  rareCollectibleItems: string;
+  yearsExp?: string; // legacy
+  yearsExpNumber?: string; // new
+  yearsExpText?: string; // new localized label
+  yearsExpLabel?: string; // legacy label
+  rareCollectibleItems?: string; // legacy
+  collectibleItemsNumber?: string; // new
+  collectibleItemsText?: string; // new localized label
+  rareCollectibleItemsLabel?: string; // legacy label
   image: Image;
 }
 
