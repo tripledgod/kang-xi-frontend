@@ -3,7 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import Header from '../components/Header';
 import { useLoading } from '../hooks/useLoading';
 import { useLanguage } from '../contexts/LanguageContext';
- 
+
 import AcquireOrAppraise from '../components/AcquireOrAppraise';
 import { ProductCardSkeleton } from '../components/ShimmerSkeleton';
 import {
@@ -17,6 +17,7 @@ import CoverPage from '../components/CoverPage';
 import axios from 'axios';
 import { API_URL } from '../utils/constants';
 import type { Cover } from '../types';
+import { useTranslation } from 'react-i18next';
 
 interface Era {
   key: string;
@@ -30,12 +31,12 @@ const Browse: React.FC = () => {
   const { loading: categoriesLoading, withLoading: withCategoriesLoading } = useLoading(true);
   const [error, setError] = useState<string | null>(null);
   const [activeEra, setActiveEra] = useState<string>('');
-
+  const {t} = useTranslation();
   // Products state - no cache, always fetch fresh data
   const [products, setProducts] = useState<any[]>([]);
   const { loading: productsLoading, withLoading: withProductsLoading } = useLoading(false);
   const [errorProducts, setErrorProducts] = useState<string | null>(null);
-  
+
   const [showStickyHeader, setShowStickyHeader] = useState(false);
   const [productsCache, setProductsCache] = useState<Record<string, any[]>>({});
   const navigate = useNavigate();
@@ -166,7 +167,7 @@ const Browse: React.FC = () => {
     if (!category) {
       if (isMounted) {
         setProducts([]);
-        setErrorProducts('No data for this era');
+        setErrorProducts(t('NO_DATA_FOR_THIS_ERA'));
       }
       return;
     }
@@ -198,7 +199,7 @@ const Browse: React.FC = () => {
               setProducts(flattened);
             } else {
               setProducts([]);
-              setErrorProducts('No data for this era');
+              setErrorProducts(t('NO_DATA_FOR_THIS_ERA'));
             }
           } catch (err) {
             if (!isMounted) return;
@@ -230,7 +231,7 @@ const Browse: React.FC = () => {
           setProductsCache((prev) => ({ ...prev, [cacheKey]: flattened }));
         } else {
           setProducts([]);
-          setErrorProducts('No data for this era');
+          setErrorProducts(t('NO_DATA_FOR_THIS_ERA'));
         }
       } catch (err) {
         // Clean up the pending request on error
