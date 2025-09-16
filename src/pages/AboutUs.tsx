@@ -146,13 +146,13 @@ export default function AboutUs() {
                     style={{ letterSpacing: '-1%' }}
                     className="text-5xl font-medium text-[#61422D]"
                   >
-                    {(aboutData?.heritage?.yearsExpNumber || aboutData?.heritage?.yearsExp || '25')}+
+                    {(aboutData?.heritage?.yearsExpNumber || '25')}+
                   </h2>
                   <div
                     style={{ letterSpacing: '0.5px' }}
                     className="text-[14px] leading-[20px] text-[#585550] font-semibold mt-2"
                   >
-                    {aboutData?.heritage?.yearsExpText || aboutData?.heritage?.yearsExpLabel || 'YEARS EXPERIENCES'}
+                    {aboutData?.heritage?.yearsExpText || 'YEARS EXPERIENCES'}
                   </div>
                 </div>
                 <div>
@@ -160,13 +160,13 @@ export default function AboutUs() {
                     style={{ letterSpacing: '-1%' }}
                     className="text-5xl font-medium text-[#61422D]"
                   >
-                    {(aboutData?.heritage?.collectibleItemsNumber || aboutData?.heritage?.rareCollectibleItems || '100')}+
+                    {(aboutData?.heritage?.collectibleItemsNumber || '100')}+
                   </h2>
                   <div
                     style={{ letterSpacing: '0.5px' }}
                     className="text-[14px] leading-[20px] text-[#585550] font-semibold mt-2"
                   >
-                    {aboutData?.heritage?.collectibleItemsText || aboutData?.heritage?.rareCollectibleItemsLabel || 'RARE COLLECTIBLE ITEMS'}
+                    {aboutData?.heritage?.collectibleItemsText || 'RARE COLLECTIBLE ITEMS'}
                   </div>
                 </div>
               </div>
