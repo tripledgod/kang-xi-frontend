@@ -3,8 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import Header from '../components/Header';
 import { useLoading } from '../hooks/useLoading';
 import { useLanguage } from '../contexts/LanguageContext';
-import heroImg from '../assets/ceramic_cover.png';
-import heroImgMobile from '../assets/ceramic_cover_mobile.png';
+
 import AcquireOrAppraise from '../components/AcquireOrAppraise';
 import { ProductCardSkeleton } from '../components/ShimmerSkeleton';
 import {
@@ -13,10 +12,12 @@ import {
   flattenCategory,
   flattenProduct,
   Category,
-  Product,
 } from '../api/categories';
+import CoverPage from '../components/CoverPage';
+import axios from 'axios';
 import { API_URL } from '../utils/constants';
-import loading from '../components/Loading';
+import type { Cover } from '../types';
+import { useTranslation } from 'react-i18next';
 
 interface Era {
   key: string;
@@ -30,24 +31,24 @@ const Browse: React.FC = () => {
   const { loading: categoriesLoading, withLoading: withCategoriesLoading } = useLoading(true);
   const [error, setError] = useState<string | null>(null);
   const [activeEra, setActiveEra] = useState<string>('');
-
+  const {t} = useTranslation();
   // Products state - no cache, always fetch fresh data
   const [products, setProducts] = useState<any[]>([]);
   const { loading: productsLoading, withLoading: withProductsLoading } = useLoading(false);
   const [errorProducts, setErrorProducts] = useState<string | null>(null);
-  const [preloadingProgress, setPreloadingProgress] = useState<Record<string, boolean>>({});
+
   const [showStickyHeader, setShowStickyHeader] = useState(false);
   const [productsCache, setProductsCache] = useState<Record<string, any[]>>({});
   const navigate = useNavigate();
   const { locale } = useLanguage();
   const [searchParams] = useSearchParams();
   const eraTabRef = useRef<HTMLDivElement>(null);
-  const eraTabWrapperRef = useRef<HTMLDivElement>(null);
   const eraButtonRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const heroRef = useRef<HTMLDivElement>(null);
   const lastEraChange = useRef<number>(0);
   const pendingRequests = useRef<Record<string, Promise<any>>>({});
-  const [enablePreloading, setEnablePreloading] = useState(false); // Set to false for better performance
+  const [enablePreloading] = useState(false); // Set to false for better performance
+  const [cover, setCover] = useState<Cover | undefined>(undefined);
 
   // Memoize sorted categories to prevent unnecessary recalculations
   const sortedCategories = useMemo(() => {
@@ -101,6 +102,24 @@ const Browse: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Fetch cover for Browse page from header-browse API (no fallback)
+  useEffect(() => {
+    const fetchCover = async () => {
+      try {
+        const response = await axios.get(`${API_URL}/api/header-browse`, {
+          params: { 'populate[cover][populate]': '*', populate: '*', locale },
+        });
+        const root = response?.data?.data?.attributes || response?.data?.data || response?.data || {};
+        const c = root?.cover as Cover | undefined;
+        setCover(c);
+      } catch (e) {
+        console.error('Error fetching header-browse cover:', e);
+        setCover(undefined);
+      }
+    };
+    fetchCover();
+  }, [locale]);
+
   // Update flattenedCategories when categories change
   useEffect(() => {
     if (categories.length > 0) {
@@ -148,7 +167,7 @@ const Browse: React.FC = () => {
     if (!category) {
       if (isMounted) {
         setProducts([]);
-        setErrorProducts('No data for this era');
+        setErrorProducts(t('NO_DATA_FOR_THIS_ERA'));
       }
       return;
     }
@@ -180,7 +199,7 @@ const Browse: React.FC = () => {
               setProducts(flattened);
             } else {
               setProducts([]);
-              setErrorProducts('No data for this era');
+              setErrorProducts(t('NO_DATA_FOR_THIS_ERA'));
             }
           } catch (err) {
             if (!isMounted) return;
@@ -212,7 +231,7 @@ const Browse: React.FC = () => {
           setProductsCache((prev) => ({ ...prev, [cacheKey]: flattened }));
         } else {
           setProducts([]);
-          setErrorProducts('No data for this era');
+          setErrorProducts(t('NO_DATA_FOR_THIS_ERA'));
         }
       } catch (err) {
         // Clean up the pending request on error
@@ -456,15 +475,15 @@ const Browse: React.FC = () => {
     <div className="w-full min-h-screen bg-[#F7F5EA]">
       {/* Hero Section */}
       <div ref={heroRef} className="w-full relative">
-        <img
-          src={heroImgMobile}
-          alt="Ceramic by Era Mobile"
-          className="block md:hidden w-full h-[218px]  object-cover bg-[#F7F5EA] pb-8"
-        />
-        <img
-          src={heroImg}
-          alt="Ceramic by Era"
-          className="hidden md:block w-full h-[420px] object-cover object-center"
+        <CoverPage
+          cover={
+            cover ?? {
+              id: 0,
+              title: 'Browse',
+              subTitle: 'Appreciating Chinese Works of Art',
+              image: (cover as any)?.image,
+            }
+          }
         />
       </div>
 
@@ -486,9 +505,6 @@ const Browse: React.FC = () => {
                     onClick={() => handleEraClick(era.slug)}
                   >
                     {era.name}
-                    {/* {preloadingProgress[era.slug] && ( // Removed preloading state
-                      <span className="ml-1 text-xs text-[#7B6142]">●</span>
-                    )} */}
                   </button>
                   {idx < eraTabs.length - 1 && (
                     <span className="text-[#D6C7A1] text-lg mx-2 flex items-center select-none mb-[5px] pb-3">
@@ -519,9 +535,6 @@ const Browse: React.FC = () => {
                       onClick={() => handleEraClick(era.slug)}
                     >
                       {era.name}
-                      {/* {preloadingProgress[era.slug] && ( // Removed preloading state
-                        <span className="ml-1 text-xs text-[#7B6142]">●</span>
-                      )} */}
                     </button>
                     {idx < eraTabs.length - 1 && (
                       <span className="text-[#D6C7A1] text-lg mx-2 flex items-center select-none mb-[5px] pb-3">

@@ -20,6 +20,7 @@ i18n.use(initReactI18next).init({
         READ_LESS: 'Read less',
         SUBMIT_FORM: 'SUBMIT FORM',
         SUBMITTING: 'SUBMITTING...',
+        NO_DATA_FOR_THIS_ERA: 'No data for this era',
       },
     },
     zh: {
@@ -39,6 +40,7 @@ i18n.use(initReactI18next).init({
         READ_LESS: '收起',
         SUBMIT_FORM: '提交表单',
         SUBMITTING: '提交中...',
+        NO_DATA_FOR_THIS_ERA: '暂无此时代数据',
       },
     },
   },

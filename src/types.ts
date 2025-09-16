@@ -64,8 +64,10 @@ export interface Heritage {
   id: number;
   title: string;
   body: string;
-  yearsExp: string;
-  rareCollectibleItems: string;
+  yearsExpNumber?: string;
+  yearsExpText?: string;
+  collectibleItemsNumber?: string;
+  collectibleItemsText?: string;
   image: Image;
 }
 
