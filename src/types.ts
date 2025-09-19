@@ -111,6 +111,7 @@ export interface AboutResponse {
     publishedAt: string;
     subtitle: string | null;
     mainContent: string;
+    journeyTitle: string;
     team: TeamMember[];
     heritage: Heritage;
     journey: Journey[];
@@ -124,6 +125,7 @@ export interface TermsAndConditionResponse {
     id: number;
     documentId: string;
     content: string; // HTML or text
+    cover: Cover;
     createdAt: string;
     updatedAt: string;
     publishedAt: string;

@@ -5,6 +5,7 @@ import '../styles/phone-input.css';
 import '../styles/submit-form-button.css';
 import Button from '../components/Button';
 import Loading from '../components/Loading';
+import { useTranslation } from 'react-i18next';
 import customerSupportIcon from '../assets/customer_support.svg';
 import privateViewingIcon from '../assets/private_viewing.svg';
 import secureTransactionIcon from '../assets/secure_transaction.svg';
@@ -24,28 +25,32 @@ import bgButtonHover from '../assets/bg_button_hover.png';
 import bgButtonPressed from '../assets/bg_button_pressed.png';
 import bgButtonMobilePressed from '../assets/bg_button_mobile_pressed.png';
 
-const whyItems = [
-  {
-    icon: <img src={customerSupportIcon} alt="Expert Assessment" className="w-12 h-12" />,
-    title: 'Expert Assessment',
-    desc: 'Our specialists provide a professional evaluation backed by historical research and market knowledge.',
-  },
-  {
-    icon: <img src={privateViewingIcon} alt="Provenance Verification" className="w-12 h-12" />,
-    title: 'Provenance Verification',
-    desc: 'Confirm the history, origin, and chain of your antique.',
-  },
-  {
-    icon: <img src={secureTransactionIcon} alt="Valuation & Advisory" className="w-12 h-12" />,
-    title: 'Valuation & Advisory',
-    desc: 'Understand the market value of your piece and explore potential opportunities for listing or acquisition.',
-  },
-];
+// whyItems will be defined inside the component to access translations
 
 export default function AppraiseAnItem() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const [phone, setPhone] = useState('');
+  
+  // Define whyItems with translations
+  const whyItems = [
+    {
+      icon: <img src={customerSupportIcon} alt="Expert Assessment" className="w-12 h-12" />,
+      title: t('EXPERT_ASSESSMENT'),
+      desc: t('EXPERT_ASSESSMENT_DESC'),
+    },
+    {
+      icon: <img src={privateViewingIcon} alt="Provenance Verification" className="w-12 h-12" />,
+      title: t('PROVENANCE_VERIFICATION'),
+      desc: t('PROVENANCE_VERIFICATION_DESC'),
+    },
+    {
+      icon: <img src={secureTransactionIcon} alt="Valuation & Advisory" className="w-12 h-12" />,
+      title: t('VALUATION_ADVISORY'),
+      desc: t('VALUATION_ADVISORY_DESC'),
+    },
+  ];
   
   // Scroll to top when component mounts
   React.useEffect(() => {
@@ -81,13 +86,13 @@ export default function AppraiseAnItem() {
     // Check file format
     const allowedTypes = ['image/jpeg', 'image/jpg', 'image/gif', 'image/png'];
     if (!allowedTypes.includes(file.type)) {
-      return 'Only JPG, GIF or PNG files are allowed';
+      return t('ONLY_JPG_GIF_PNG');
     }
 
     // Check file size (800KB = 800 * 1024 bytes)
     const maxSize = 800 * 1024; // 800KB
     if (file.size > maxSize) {
-      return 'File size must be less than 800KB';
+      return t('FILE_SIZE_LESS_THAN');
     }
 
     return null;
@@ -103,23 +108,23 @@ export default function AppraiseAnItem() {
     };
 
     if (!appraiseForm.firstName.trim()) {
-      newErrors.firstName = 'First name is required';
+      newErrors.firstName = t('FIRST_NAME_REQUIRED');
     }
 
     if (!appraiseForm.lastName.trim()) {
-      newErrors.lastName = 'Last name is required';
+      newErrors.lastName = t('LAST_NAME_REQUIRED');
     }
 
     if (!appraiseForm.itemCode.trim()) {
-      newErrors.itemCode = 'Item code is required';
+      newErrors.itemCode = t('ITEM_CODE_REQUIRED');
     }
 
     if (!phone.trim()) {
-      newErrors.phone = 'Contact number is required';
+      newErrors.phone = t('CONTACT_NUMBER_REQUIRED');
     }
 
     if (images.length === 0) {
-      newErrors.images = 'At least one image is required';
+      newErrors.images = t('AT_LEAST_ONE_IMAGE');
     }
 
     setErrors(newErrors);
@@ -215,18 +220,15 @@ export default function AppraiseAnItem() {
         {/* Overlay content: Title & Description */}
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center md:px-4 px-6 pointer-events-none z-10">
           <h3 className="block md:hidden text-white font-serif text-[40px] leading-[48px] mb-5 pointer-events-auto">
-            Verify the <br /> Legacy of Your <br /> Antique
+            {t('VERIFY_THE')} <br /> {t('LEGACY_OF')} {t('YOUR_ANTIQUE')} <br />
           </h3>
           <h1 className="hidden md:block text-white font-serif text-[60px] leading-[72px] drop-shadow-lg mb-5 pointer-events-auto">
-            Verify the Legacy of
+            {t('VERIFY_THE')} {t('LEGACY_OF')}
             <br />
-            Your Antique
+            {t('YOUR_ANTIQUE')}
           </h1>
           <p className="text-white text-[18px] leading-[26px] max-w-2xl md:max-w-[664px] mx-auto opacity-90 mb-5 pointer-events-auto">
-            Antiques carry history, but true value lies in authenticity. Whether you have inherited
-            a piece, discovered a rare find, or wish to confirm the provenance of your artifact,
-            Kangxis offers expert authentication services to help you uncover the true story behind
-            your antique
+            {t('ANTIQUE_DESCRIPTION')}
           </p>
           <div className="pointer-events-auto md:mt-7 mt-12">
             <button
@@ -261,7 +263,7 @@ export default function AppraiseAnItem() {
                 color: '#fff',
               }}
             >
-              APPRAISE AN ITEM
+              {t('APPRAISE_AN_ITEM')}
             </button>
           </div>
         </div>
@@ -269,17 +271,13 @@ export default function AppraiseAnItem() {
       {/* Our Services Section */}
       <div className="w-full bg-[#23211C] py-16 flex flex-col items-center justify-center text-center px-4">
         <div className="text-[#F7F3E8] text-[14px] leading-[20px] mb-2 tracking-widest  font-semibold">
-          OUR SERVICES
+          {t('OUR_SERVICES')}
         </div>
         <h4 className="hidden md:block text-[32px]  leading-[40px] font-serif text-white mb-6 max-w-2xl mx-auto">
-          With a network of specialists in Chinese antiquities, we provide a meticulous evaluation
-          of your piece—examining craftsmanship, materials, historical context, and provenance to
-          determine its authenticity and significance.
+          {t('OUR_SERVICES_DESC')}
         </h4>
         <h5 className="block md:hidden text-[24px]  leading-[32px]  font-serif text-white mb-6 max-w-2xl mx-auto">
-          With a network of specialists in Chinese antiquities, we provide a meticulous evaluation
-          of your piece—examining craftsmanship, materials, historical context, and provenance to
-          determine its authenticity and significance.
+          {t('OUR_SERVICES_DESC')}
         </h5>
         <div className="flex flex-col items-center">
           <img src={logoWhite} alt="Kangxi Collection Logo" className="h-14 md:h-20" />
@@ -288,10 +286,10 @@ export default function AppraiseAnItem() {
       {/* Why Authenticate Section */}
       <div className="w-full bg-[#F7F5EA] py-12 px-4 md:py-28">
         <h3 className="hidden md:block text-[40px] leading-[48px] font-serif text-[#61422D] mb-10 text-left max-w-7xl mx-auto">
-          Why Authenticate with Kangxis?
+          {t('WHY_AUTHENTICATE_KANGXIS')}
         </h3>
         <h4 className="block md:hidden text-[32px] leading-[40px] font-serif text-[#61422D] mb-10 text-left max-w-7xl mx-auto">
-          Why Authenticate with Kangxis?
+          {t('WHY_AUTHENTICATE_KANGXIS')}
         </h4>
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-10 mb-12 md:mb-28">
           {whyItems.map((item, idx) => (
@@ -314,26 +312,25 @@ export default function AppraiseAnItem() {
       <div ref={formRef} className="w-full bg-[#E6DDC6] py-16 px-4">
         <div className="max-w-xl mx-auto">
           <h3 className="hidden md:block text-[40px] leading-[48px]  font-serif text-[#61422D] mb-2 text-center">
-            Submit Your Antique for Authentication
+            {t('SUBMIT_ANTIQUE_AUTHENTICATION')}
           </h3>
           <h4 className="block md:hidden text-[32px] leading-[40px] font-serif text-[#61422D] mb-2 text-center">
-            Submit Your Antique for Authentication
+            {t('SUBMIT_ANTIQUE_AUTHENTICATION')}
           </h4>
           <div className="text-[20px] leading-[28px] text-[#585550] mb-8 text-center">
-            To begin the authentication process, kindly provide the details below. Our team will
-            review your submission and reach out with the next steps.
+            {t('SUBMIT_ANTIQUE_DESC')}
           </div>
           <form className="space-y-6" onSubmit={submitForm}>
             <div>
               <label className="block mb-2 text-[#1F1F1F]  text-[14px] leading-[20px] ">
-                First Name
+                {t('FIRST_NAME')}
               </label>
               <input
                 type="text"
                 className={`w-full rounded border px-4 py-3 bg-[#F7F5EA] text-[#23211C] ${
                   errors.firstName ? 'border-red-500' : 'border-[#C7C7B9]'
                 }`}
-                placeholder="Enter your first name"
+                placeholder={t('ENTER_FIRST_NAME')}
                 value={appraiseForm.firstName}
                 onChange={(e) => {
                   setAppraiseForm((f) => ({ ...f, firstName: e.target.value }));
@@ -346,14 +343,14 @@ export default function AppraiseAnItem() {
             </div>
             <div>
               <label className="block mb-2 text-[#1F1F1F]  text-[14px] leading-[20px] ">
-                Last Name
+                {t('LAST_NAME')}
               </label>
               <input
                 type="text"
                 className={`w-full rounded border px-4 py-3 bg-[#F7F5EA] text-[#23211C] ${
                   errors.lastName ? 'border-red-500' : 'border-[#C7C7B9]'
                 }`}
-                placeholder="Enter your last name"
+                placeholder={t('ENTER_LAST_NAME')}
                 value={appraiseForm.lastName}
                 onChange={(e) => {
                   setAppraiseForm((f) => ({ ...f, lastName: e.target.value }));
@@ -366,14 +363,14 @@ export default function AppraiseAnItem() {
             </div>
             <div>
               <label className="block mb-2 text-[#1F1F1F]  text-[14px] leading-[20px] ">
-                Item Code
+                {t('ITEM_CODE')}
               </label>
               <input
                 type="text"
                 className={`w-full rounded border px-4 py-3 bg-[#F7F5EA] text-[#23211C] ${
                   errors.itemCode ? 'border-red-500' : 'border-[#C7C7B9]'
                 }`}
-                placeholder="Enter item code"
+                placeholder={t('ENTER_ITEM_CODE')}
                 value={appraiseForm.itemCode}
                 onChange={(e) => {
                   setAppraiseForm((f) => ({ ...f, itemCode: e.target.value }));
@@ -386,7 +383,7 @@ export default function AppraiseAnItem() {
             </div>
             <div>
               <label className="block mb-2 text-[#1F1F1F]  text-[14px] leading-[20px]">
-                Contact Number
+                {t('CONTACT_NUMBER')}
               </label>
               <PhoneInput
                 country={'sg'}
@@ -409,7 +406,7 @@ export default function AppraiseAnItem() {
             </div>
             <div>
               <label className="block mb-2 text-[#1F1F1F]  text-[14px] leading-[20px]">
-                Upload Image
+                {t('UPLOAD_IMAGE')}
               </label>
               <div
                 className={`w-full bg-[#FDFBF1] border-2 border-dashed rounded-lg flex flex-col items-center justify-center py-8 cursor-pointer transition hover:border-[#7B6142] ${
@@ -455,7 +452,7 @@ export default function AppraiseAnItem() {
               >
                 <img src={icUpload} alt="Upload" className="w-[19px] h-[23px] mb-2" />
                 <div className="text-[#2E2A24] text-[14px] leading-[20px] text-center">
-                  Drag &amp; Drop or{' '}
+                  {t('DRAG_DROP_OR')}{' '}
                   <span
                     className="text-[#BE9051] underline cursor-pointer"
                     onClick={(e) => {
@@ -463,12 +460,12 @@ export default function AppraiseAnItem() {
                       document.getElementById('file-upload')?.click();
                     }}
                   >
-                    Choose file
+                    {t('CHOOSE_FILE')}
                   </span>{' '}
-                  to upload
+                  {t('TO_UPLOAD')}
                 </div>
                 <div className="text-xs text-[#6D6A66] mt-2 text-center">
-                  JPG, GIF or PNG. Max size of 800Kb
+                  {t('FILE_FORMAT_SIZE')}
                 </div>
                 <input
                   id="file-upload"
@@ -528,7 +525,7 @@ export default function AppraiseAnItem() {
                           if (newImages.length === 0 && errors.images === '') {
                             setErrors((prev) => ({
                               ...prev,
-                              images: 'At least one image is required',
+                              images: t('AT_LEAST_ONE_IMAGE'),
                             }));
                           }
                         }}
@@ -543,7 +540,7 @@ export default function AppraiseAnItem() {
             </div>
             <div className="w-full">
               <Button
-                text={isLoading ? 'SUBMITTING...' : 'SUBMIT FORM'}
+                text={isLoading ? t('SUBMITTING') : t('SUBMIT_FORM')}
                 type="submit"
                 className="submit-form-btn"
                 disabled={isLoading}
@@ -562,7 +559,7 @@ export default function AppraiseAnItem() {
                     </svg>
                   </div>
                   <div className="ml-3">
-                    <h3 className="text-sm font-medium text-red-800">Submission Failed</h3>
+                    <h3 className="text-sm font-medium text-red-800">{t('SUBMISSION_FAILED')}</h3>
                     <div className="mt-2 text-sm text-red-700">{submitError}</div>
                   </div>
                 </div>
@@ -573,11 +570,11 @@ export default function AppraiseAnItem() {
       </div>
       {showSuccess && (
         <Popup
-          title={'Thank you for\nyour submission'}
+          title={t('THANK_YOU_SUBMISSION')}
           titleClassName="md:text-[40px] md:leading-[48px] text-[30px] leading-[36px]"
           containerClassName=" md:h-[300px] h-[274px] "
-          content="We have received your request and will contact you soon."
-          buttonText="BACK TO HOMEPAGE"
+          content={t('WE_HAVE_RECEIVED')}
+          buttonText={t('BACK_TO_HOMEPAGE')}
           onButtonClick={() => {
             setShowSuccess(false);
             navigate('/');
@@ -585,7 +582,7 @@ export default function AppraiseAnItem() {
           onClose={() => setShowSuccess(false)}
         />
       )}
-      {isLoading && <Loading fullScreen={true} text="Submitting your request..." />}
+      {isLoading && <Loading fullScreen={true} text={t('SUBMITTING_REQUEST')} />}
     </div>
   );
 }

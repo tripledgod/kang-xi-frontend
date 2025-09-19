@@ -21,25 +21,7 @@ import bgButtonHover from '../assets/bg_button_hover.png';
 import bgButtonPressed from '../assets/bg_button_pressed.png';
 import bgButtonMobilePressed from '../assets/bg_button_mobile_pressed.png';
 
-const steps = [
-  {
-    icon: <img src={customerSupportIcon} alt="Customer Support" className="w-12 h-12 mx-auto" />,
-    title: 'Personalized Assistance',
-    desc: 'Our team will reach out to discuss details, provenance, and any questions you may have.',
-  },
-  {
-    icon: <img src={privateViewingIcon} alt="Private Viewing" className="w-12 h-12 mx-auto" />,
-    title: 'Private Viewing & Consultation',
-    desc: 'For select pieces, we may arrange a private consultation or viewing session.',
-  },
-  {
-    icon: (
-      <img src={secureTransactionIcon} alt="Secure Transaction" className="w-12 h-12 mx-auto" />
-    ),
-    title: 'Secure & Discreet Transaction',
-    desc: 'We prioritize confidentiality and ensure that every acquisition is handled with utmost professionalism.',
-  },
-];
+// Steps will be defined inside the component to access translations
 
 // const countryOptions = [
 //   { code: '+65', label: 'Singapore', flag: '🇸🇬' },
@@ -50,7 +32,29 @@ const steps = [
 export default function AcquireAnItem() {
   // const [country, setCountry] = useState(countryOptions[0]);
   const [phone, setPhone] = useState('');
-  
+  const { t } = useTranslation();
+
+  // Define steps with translations
+  const steps = [
+    {
+      icon: <img src={customerSupportIcon} alt="Customer Support" className="w-12 h-12 mx-auto" />,
+      title: t('PERSONALIZED_ASSISTANCE'),
+      desc: t('PERSONALIZED_ASSISTANCE_DESC'),
+    },
+    {
+      icon: <img src={privateViewingIcon} alt="Private Viewing" className="w-12 h-12 mx-auto" />,
+      title: t('PRIVATE_VIEWING_CONSULTATION'),
+      desc: t('PRIVATE_VIEWING_CONSULTATION_DESC'),
+    },
+    {
+      icon: (
+        <img src={secureTransactionIcon} alt="Secure Transaction" className="w-12 h-12 mx-auto" />
+      ),
+      title: t('SECURE_DISCREET_TRANSACTION'),
+      desc: t('SECURE_DISCREET_TRANSACTION_DESC'),
+    },
+  ];
+
   // Scroll to top when component mounts
   React.useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' });
@@ -69,7 +73,6 @@ export default function AcquireAnItem() {
     phone: '',
   });
   const navigate = useNavigate();
-  const { t } = useTranslation();
   const formRef = React.useRef<HTMLDivElement>(null);
 
   const validateForm = () => {
@@ -81,19 +84,19 @@ export default function AcquireAnItem() {
     };
 
     if (!acquireForm.firstName.trim()) {
-      newErrors.firstName = 'First name is required';
+      newErrors.firstName = t('FIRST_NAME_REQUIRED');
     }
 
     if (!acquireForm.lastName.trim()) {
-      newErrors.lastName = 'Last name is required';
+      newErrors.lastName = t('LAST_NAME_REQUIRED');
     }
 
     if (!acquireForm.itemCode.trim()) {
-      newErrors.itemCode = 'Item code is required';
+      newErrors.itemCode = t('ITEM_CODE_REQUIRED');
     }
 
     if (!phone.trim()) {
-      newErrors.phone = 'Contact number is required';
+      newErrors.phone = t('CONTACT_NUMBER_REQUIRED');
     }
 
     setErrors(newErrors);
@@ -143,11 +146,11 @@ export default function AcquireAnItem() {
       {/* Show popup when registration is successful */}
       {showSuccess && (
         <Popup
-          title={'Thank you for\ncontacting us'}
+          title={t('THANK_YOU_CONTACTING')}
           titleClassName="md:text-[40px] md:leading-[48px] text-[30px] leading-[36px]"
           containerClassName=" md:h-[300px] h-[274px] "
-          content="We will  be in  touch with you  shortly."
-          buttonText="BACK TO HOMEPAGE"
+          content={t('WE_WILL_BE_IN_TOUCH')}
+          buttonText={t('BACK_TO_HOMEPAGE')}
           onButtonClick={() => {
             setShowSuccess(false);
             navigate('/');
@@ -161,20 +164,19 @@ export default function AcquireAnItem() {
           {/* Left */}
           <div className="flex-1 text-white mb-8 md:mb-0">
             <h1 className="hidden md:block text-[60px] leading-[72px] font-serif mb-6">
-              Reserve a <br />
-              Timeless
+              {t('RESERVE_A')} <br />
+              {t('TIMELESS')}
               <br />
-              Treasure
+              {t('TREASURE')}
             </h1>
             <h3 className="block md:hidden text-[40px] leading-[48px] font-serif mb-4">
-              Reserve a<br /> Timeless
+              {t('RESERVE_A')} <br />
+              {t('TIMELESS')}
               <br />
-              Treasure
+              {t('TREASURE')}
             </h3>
             <p className="md:mb-16 mb-8 text-[18px] leading-[26px] text-[#FFFFFF] max-w-[478px] opacity-70">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in
-              eros elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum
-              nulla, ut commodo diam libero vitae erat morbi euismod.
+              {t('HERO_DESCRIPTION')}
             </p>
             <button
               type="submit"
@@ -208,7 +210,7 @@ export default function AcquireAnItem() {
                 color: '#fff',
               }}
             >
-              ACQUIRE AN ITEM
+              {t('ACQUIRE_AN_ITEM')}
             </button>
           </div>
           {/* Right: Single image */}
@@ -236,10 +238,10 @@ export default function AcquireAnItem() {
           {/* Right: Steps */}
           <div className="flex-1 order-2">
             <h3 className="hidden md:block  text-[40px] leading-[48px] font-serif text-[#61422D] mb-6 text-left">
-              What Happens Next?
+              {t('WHAT_HAPPENS_NEXT')}
             </h3>
             <h4 className="block md:hidden text-[32px] leading-[40px] font-serif text-[#61422D] mb-6 text-left">
-              What Happens Next?
+              {t('WHAT_HAPPENS_NEXT')}
             </h4>
             <div className="flex flex-col gap-10">
               {steps.map((step, idx) => (
@@ -277,22 +279,16 @@ export default function AcquireAnItem() {
           {/* Left: Text */}
           <div className="flex-1 order-2">
             <h3 className="hidden md:block text-[40px] leading-[48px] font-serif text-[#61422D] mb-4">
-              Express Your Interest in a Piece of History
+              {t('EXPRESS_INTEREST_HISTORY')}
             </h3>
             <h4 className="block md:hidden text-[32px] leading-[40px] font-serif text-[#61422D] mb-4">
-              Express Your Interest in a Piece of History
+              {t('EXPRESS_INTEREST_HISTORY')}
             </h4>
             <p className="text-[18px] leading-[26px] text-[#6D6A66] mb-5">
-              Owning an antique is more than just possession—it is stewardship of history, a
-              connection to centuries of artistry, and a tribute to a legacy that endures. If a
-              particular piece in our collection has captured your attention, we invite you to take
-              the next step.
+              {t('EXPRESS_INTEREST_DESC_1')}
             </p>
             <p className="text-[18px] leading-[26px] text-[#6D6A66]">
-              Each artifact in our curation is unique, often with centuries of history behind it.
-              Due to the rarity and exclusivity of these pieces, availability is limited. To ensure
-              a seamless acquisition process, kindly fill out the form below to express your
-              interest.
+              {t('EXPRESS_INTEREST_DESC_2')}
             </p>
           </div>
         </div>
@@ -302,13 +298,13 @@ export default function AcquireAnItem() {
       <div ref={formRef} className="w-full bg-[#E6DDC6] py-16 px-4">
         <div className="max-w-xl mx-auto">
           <h3 className="hidden md:block text-[40px] leading-[48px] font-serif text-[#61422D] mb-2 text-center">
-            Secure Your Piece of History
+            {t('SECURE_PIECE_HISTORY')}
           </h3>
           <h4 className="block md:hidden text-[32px]  leading-[40px] font-serif text-[#61422D] mb-2 text-center">
-            Secure Your Piece of History
+            {t('SECURE_PIECE_HISTORY')}
           </h4>
           <div className="text-[20px] leading-[28px] text-[#585550] mb-8 text-center">
-            Fill in your details below, and we will be in touch with you shortly.
+            {t('FILL_DETAILS_BELOW')}
           </div>
           <form
             className="space-y-6"
@@ -319,14 +315,14 @@ export default function AcquireAnItem() {
           >
             <div>
               <label className="block mb-2 text-[#1F1F1F]  text-[14px] leading-[20px]">
-                First Name
+                {t('FIRST_NAME')}
               </label>
               <input
                 type="text"
                 className={`w-full rounded border px-4 py-3 bg-white text-[#23211C] ${
                   errors.firstName ? 'border-red-500' : 'border-[#C7C7B9]'
                 }`}
-                placeholder="Enter your first name"
+                placeholder={t('ENTER_FIRST_NAME')}
                 value={acquireForm.firstName}
                 onChange={(e) => {
                   setAcquireForm((f) => ({ ...f, firstName: e.target.value }));
@@ -339,14 +335,14 @@ export default function AcquireAnItem() {
             </div>
             <div>
               <label className="block mb-2 text-[#1F1F1F]  text-[14px] leading-[20px]">
-                Last Name
+                {t('LAST_NAME')}
               </label>
               <input
                 type="text"
                 className={`w-full rounded border px-4 py-3 bg-white text-[#23211C] ${
                   errors.lastName ? 'border-red-500' : 'border-[#C7C7B9]'
                 }`}
-                placeholder="Enter your last name"
+                placeholder={t('ENTER_LAST_NAME')}
                 value={acquireForm.lastName}
                 onChange={(e) => {
                   setAcquireForm((f) => ({ ...f, lastName: e.target.value }));
@@ -359,14 +355,14 @@ export default function AcquireAnItem() {
             </div>
             <div>
               <label className="block mb-2 text-[#1F1F1F]  text-[14px] leading-[20px]">
-                Item Code
+                {t('ITEM_CODE')}
               </label>
               <input
                 type="text"
                 className={`w-full rounded border px-4 py-3 bg-white text-[#23211C] ${
                   errors.itemCode ? 'border-red-500' : 'border-[#C7C7B9]'
                 }`}
-                placeholder="Enter item code"
+                placeholder={t('ENTER_ITEM_CODE')}
                 value={acquireForm.itemCode}
                 onChange={(e) => {
                   setAcquireForm((f) => ({ ...f, itemCode: e.target.value }));
@@ -379,7 +375,7 @@ export default function AcquireAnItem() {
             </div>
             <div>
               <label className="block mb-2 text-[#1F1F1F]  text-[14px] leading-[20px]">
-                Contact Number
+                {t('CONTACT_NUMBER')}
               </label>
               <PhoneInput
                 country={'sg'}
@@ -411,7 +407,7 @@ export default function AcquireAnItem() {
           </form>
         </div>
       </div>
-      {isLoading && <Loading fullScreen={true} text="Submitting your request..." />}
+      {isLoading && <Loading fullScreen={true} text={t('SUBMITTING_REQUEST')} />}
     </div>
   );
 }

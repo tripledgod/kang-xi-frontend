@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useLoading } from '../hooks/useLoading';
 import heroImg from '../assets/about_us_cover.png';
 import { API_URL } from '../utils/constants.ts';
@@ -31,6 +32,7 @@ export default function AboutUs() {
   const canGoLeft = teamIndex > 0;
   const canGoRight = teamIndex < (aboutData?.team?.length ?? 0) - visibleCount;
   const { locale } = useLanguage();
+  const { t } = useTranslation();
 
   // Fetch about data
   useEffect(() => {
@@ -42,7 +44,7 @@ export default function AboutUs() {
         setAboutData(data.data);
       } catch (error) {
         console.error('Error fetching about data:', error);
-        setError('Failed to load about us data');
+        setError(t('FAILED_TO_LOAD_ABOUT'));
       }
     };
 
@@ -83,7 +85,7 @@ export default function AboutUs() {
             onClick={() => window.location.reload()}
             className="px-4 py-2 bg-[#7B6142] text-white rounded hover:bg-[#6a5437] btn-clickable"
           >
-            Try Again
+            {t('TRY_AGAIN')}
           </button>
         </div>
       </div>
@@ -99,7 +101,7 @@ export default function AboutUs() {
       <div className="max-w-6xl mx-auto px-4 md:flex md:items-center md:gap-12 mb-16">
         <div className="flex-1 mb-8 md:mb-0">
           <div className="text-[14px] leading-[20px] text-[#585550] uppercase font-semibold tracking-wider mb-2">
-            Heritage
+            {t('HERITAGE')}
           </div>
           {loading ? (
             <>
@@ -131,10 +133,10 @@ export default function AboutUs() {
           ) : (
             <>
               <h3 className="hidden md:block text-[40px] leading-[48px] font-serif text-[#61422D] mb-4">
-                {aboutData?.heritage?.title || 'The Legacy of Kangxi Private Collection'}
+                {aboutData?.heritage?.title || t('THE_LEGACY_KANGXI')}
               </h3>
               <h4 className="block md:hidden text-[32px] leading-[40px] font-serif text-[#61422D] mb-4">
-                {aboutData?.heritage?.title || 'The Legacy of Kangxi Private Collection'}
+                {aboutData?.heritage?.title || t('THE_LEGACY_KANGXI')}
               </h4>
               <div className="text-[18px] leading-[26px] text-[#585550] mb-5">
                 {aboutData?.heritage?.body || 'Loading...'}
@@ -152,7 +154,7 @@ export default function AboutUs() {
                     style={{ letterSpacing: '0.5px' }}
                     className="text-[14px] leading-[20px] text-[#585550] font-semibold mt-2"
                   >
-                    {aboutData?.heritage?.yearsExpText || 'YEARS EXPERIENCES'}
+                    {aboutData?.heritage?.yearsExpText || t('YEARS_EXPERIENCES')}
                   </div>
                 </div>
                 <div>
@@ -166,7 +168,7 @@ export default function AboutUs() {
                     style={{ letterSpacing: '0.5px' }}
                     className="text-[14px] leading-[20px] text-[#585550] font-semibold mt-2"
                   >
-                    {aboutData?.heritage?.collectibleItemsText || 'RARE COLLECTIBLE ITEMS'}
+                    {aboutData?.heritage?.collectibleItemsText || t('RARE_COLLECTIBLE_ITEMS')}
                   </div>
                 </div>
               </div>
@@ -190,11 +192,11 @@ export default function AboutUs() {
       <div className="w-full bg-[#2E2A24] py-16 mb-16 md:mt-8">
         <div className="max-w-6xl mx-auto text-center">
           <h3 className="hidden md:block text-[40px] leading-[48px] font-serif text-white mb-16">
-            The Journey of Antique Chinese Porcelain
+            {aboutData?.journeyTitle || ''}
           </h3>
-          <h4 className="block md:hidden text-[32px] leading-[40px] font-serif text-white mb-10">
-            Our Services
-          </h4>
+          {/*<h4 className="block md:hidden text-[32px] leading-[40px] font-serif text-white mb-10">*/}
+          {/*  Our Services*/}
+          {/*</h4>*/}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
             {loading
               ? Array.from({ length: 3 }).map((_, idx) => (
@@ -227,10 +229,10 @@ export default function AboutUs() {
       {/* History Section */}
       <div className="max-w-6xl mx-auto px-4 mb-16">
         <h3 className="hidden md:block text-[40px] leading-[48px] font-serif text-[#61422D] mb-2">
-          {aboutData?.title || 'The History of Ceramics'}
+          {aboutData?.title || t('THE_HISTORY_CERAMICS')}
         </h3>
         <h4 className="block md:hidden text-[32px] leading-[40px] font-serif text-[#61422D] mb-2">
-          {aboutData?.title || 'The History of Ceramics'}
+          {aboutData?.title || t('THE_HISTORY_CERAMICS')}
         </h4>
 
         {loading ? (
@@ -269,13 +271,13 @@ export default function AboutUs() {
           <div className="flex items-center justify-between mb-2">
             <div>
               <h3 className="hidden md:block text-[40px] leading-[48px] font-serif text-[#61422D] mb-4 text-left">
-                Meet Our Team
+                {t('MEET_OUR_TEAM')}
               </h3>
               <h4 className="block md:hidden text-2xl font-serif text-[#61422D] mb-4 md:mb-5 text-left">
-                Meet Our Team
+                {t('MEET_OUR_TEAM')}
               </h4>
               <div className="text-[20px] leading-[28px] text-[#585550] md:mb-8 mb-0 text-left">
-                Meet the dedicated professionals behind our collection.
+                {t('MEET_DEDICATED_PROFESSIONALS')}
               </div>
             </div>
             {/* Desktop arrows only */}
