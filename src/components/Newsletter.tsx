@@ -41,7 +41,7 @@ export default function Newsletter() {
   const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateFirstName(firstName)) {
-      setError('Please enter your first name');
+      setError(t('PLEASE_ENTER_FIRST_NAME'));
       return;
     }
 
@@ -61,17 +61,17 @@ export default function Newsletter() {
         );
         if (nameError) {
           if (nameError.message.includes('unique')) {
-            setError('This name has already been registered');
+            setError(t('NAME_ALREADY_REGISTERED'));
           } else {
             setError(nameError.message);
           }
         } else {
-          setError('An error occurred, please try again.');
+          setError(t('ERROR_OCCURRED_TRY_AGAIN'));
         }
       } else if (err?.response?.data?.error?.message) {
         setError(err.response.data.error.message);
       } else {
-        setError('An error occurred, please try again.');
+        setError(t('ERROR_OCCURRED_TRY_AGAIN'));
       }
     } finally {
       setLoading(false);
@@ -97,7 +97,7 @@ export default function Newsletter() {
                   letterSpacing: 0,
                 }}
               >
-                GET THE LATEST NEWS
+                {t('GET_THE_LATEST_NEWS')}
               </h5>
             ) : (
               <h4
@@ -110,7 +110,7 @@ export default function Newsletter() {
                   letterSpacing: 0,
                 }}
               >
-                GET THE LATEST NEWS
+                {t('GET_THE_LATEST_NEWS')}
               </h4>
             )}
             <p
@@ -124,8 +124,7 @@ export default function Newsletter() {
                 opacity: 0.8,
               }}
             >
-              Subscribe to get our {new Date().getFullYear()} catalog as well as get exclusive
-              invites to our private events
+              {t('NEWSLETTER_DESCRIPTION', { year: new Date().getFullYear() })}
             </p>
           </div>
         </div>
@@ -137,7 +136,7 @@ export default function Newsletter() {
           <div className="w-full md:w-2/3 relative">
             <input
               type="text"
-              placeholder="Enter your first name"
+              placeholder={t('ENTER_YOUR_FIRST_NAME')}
               value={firstName}
               onChange={(e) => {
                 setFirstName(e.target.value);
@@ -260,11 +259,11 @@ export default function Newsletter() {
       </div>
       {showPopup && (
         <Popup
-          title="Thanks for subscribing!"
+          title={t('THANKS_FOR_SUBSCRIBING')}
           titleClassName="md:text-[32px] md:leading-[40px] text-[30px] leading-[36px]"
           containerClassName=" md:h-[244px] h-[274px] "
-          content="We will be in touch with you shortly."
-          buttonText="BACK TO HOMEPAGE"
+          content={t('WE_WILL_BE_IN_TOUCH_SHORTLY')}
+          buttonText={t('BACK_TO_HOMEPAGE')}
           onButtonClick={handleClosePopup}
           onClose={handleClosePopup}
         />

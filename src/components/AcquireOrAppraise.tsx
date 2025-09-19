@@ -26,8 +26,8 @@ export default function AcquireOrAppraise() {
   const sections = [
     {
       icon: chaseIcon,
-      title: 'Acquire an item',
-      desc: 'Looking to acquire an item from our network of private collectors? Contact us here with your interest.',
+      title: t('ACQUIRE_AN_ITEM_TITLE'),
+      desc: t('ACQUIRE_AN_ITEM_DESC'),
       button: t('LEARN_MORE'),
       imageDesktop: chaseCollection,
       imageMobile: chaseCollectionMobile,
@@ -36,8 +36,8 @@ export default function AcquireOrAppraise() {
     },
     {
       icon: letterIcon,
-      title: 'Appraise an item',
-      desc: 'Looking to acquire an item from our network of private collectors? Contact us here with your interest.',
+      title: t('APPRAISE_AN_ITEM_TITLE'),
+      desc: t('APPRAISE_AN_ITEM_DESC'),
       button: t('LEARN_MORE'),
       imageDesktop: image,
       imageMobile: imageMobile,

@@ -48,11 +48,11 @@ export default function ArticlesSection() {
       <div className="max-w-7xl mx-auto flex flex-col items-center">
         {isMobile ? (
           <h4 className="text-[32px] leading-[40px]   text-[#61422D] mb-2 text-center">
-            Our Articles
+            {t('OUR_ARTICLES')}
           </h4>
         ) : (
           <h2 className="text-[48px] leading-[58px]   text-[#61422D] mb-2 text-center">
-            Our Articles
+            {t('OUR_ARTICLES')}
           </h2>
         )}
         <div
@@ -65,7 +65,7 @@ export default function ArticlesSection() {
             opacity: 0.8,
           }}
         >
-          Feature articles of the month
+          {t('FEATURE_ARTICLES_MONTH')}
         </div>
         <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-8 mb-12 min-h-[320px] flex-1">
           {isLoading ? (
@@ -100,7 +100,7 @@ export default function ArticlesSection() {
                     ) : (
                       <div className="text-[#61422D] text-center p-4">
                         <div className="text-6xl mb-3 opacity-50">📄</div>
-                        <div className="text-sm font-medium">No Image</div>
+                        <div className="text-sm font-medium">{t('NO_IMAGE')}</div>
                       </div>
                     )}
                   </div>

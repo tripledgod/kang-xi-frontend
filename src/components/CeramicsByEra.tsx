@@ -66,7 +66,7 @@ export default function CeramicsByEra() {
               category.ageFrom && category.ageTo ? `${category.ageFrom}—${category.ageTo}` : '';
 
             // Use description from category or fallback
-            const description = category.description || `Explore ${category.name} era ceramics`;
+            const description = category.description || t('EXPLORE_ERA_CERAMICS', { era: category.name });
 
             return {
               name: category.name,
@@ -131,11 +131,11 @@ export default function CeramicsByEra() {
         <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 md:mb-12">
           {isMobile ? (
             <h4 className="text-4xl md:text-5xl md:mb-0" style={{ color: COLORS.secondary900 }}>
-              Ceramics by Era
+              {t('CERAMICS_BY_ERA')}
             </h4>
           ) : (
             <h2 className="text-4xl md:text-5xl md:mb-0" style={{ color: COLORS.secondary900 }}>
-              Ceramics by Era
+              {t('CERAMICS_BY_ERA')}
             </h2>
           )}
           <div className="hidden md:flex items-center gap-4 self-end md:self-auto">
@@ -254,8 +254,8 @@ export default function CeramicsByEra() {
                   ) : (
                     <div className="text-[#61422D] text-center p-4">
                       <div className="text-6xl mb-3 opacity-50">🏺</div>
-                      <div className="text-sm font-medium">No Image</div>
-                      <div className="text-xs opacity-70 mt-1">Ceramic Art</div>
+                      <div className="text-sm font-medium">{t('NO_IMAGE')}</div>
+                      <div className="text-xs opacity-70 mt-1">{t('CERAMIC_ART')}</div>
                     </div>
                   )}
                 </div>
@@ -342,8 +342,8 @@ export default function CeramicsByEra() {
                   ) : (
                     <div className="text-[#61422D] text-center p-4">
                       <div className="text-6xl mb-3 opacity-50">🏺</div>
-                      <div className="text-sm font-medium">No Image</div>
-                      <div className="text-xs opacity-70 mt-1">Ceramic Art</div>
+                      <div className="text-sm font-medium">{t('NO_IMAGE')}</div>
+                      <div className="text-xs opacity-70 mt-1">{t('CERAMIC_ART')}</div>
                     </div>
                   )}
                 </div>
