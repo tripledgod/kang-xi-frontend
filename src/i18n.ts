@@ -53,7 +53,7 @@ i18n.use(initReactI18next).init({
         WE_WILL_BE_IN_TOUCH: 'We will be in touch with you shortly.',
         BACK_TO_HOMEPAGE: 'BACK TO HOMEPAGE',
         SUBMITTING_REQUEST: 'Submitting your request...',
-        HERO_DESCRIPTION: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum nulla, ut commodo diam libero vitae erat morbi euismod.',
+        HERO_DESCRIPTION: 'Acquiring timeless Chinese antique porcelain is a pursuit rich in cultural, historical, and economic benefits, offering a unique connection to a civilization\'s past, a tangible piece of art history, and potential long-term investment value. These objects on display here embody sophisticated craftsmanship, cultural storytelling through symbolic motifs, and enduring aesthetic appeal that remains relevant in contemporary decor.',
         // AppraiseAnItem page translations
         VERIFY_THE: 'Verify the',
         LEGACY_OF: 'Legacy of',
@@ -166,7 +166,7 @@ i18n.use(initReactI18next).init({
         WE_WILL_BE_IN_TOUCH: '我们将很快与您联系。',
         BACK_TO_HOMEPAGE: '返回首页',
         SUBMITTING_REQUEST: '正在提交您的请求...',
-        HERO_DESCRIPTION: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum nulla, ut commodo diam libero vitae erat morbi euismod.',
+        HERO_DESCRIPTION: '收藏隽永的中国古瓷器是一项富有文化、历史和经济效益的追求，它不仅能与一个文明的过去建立独特的联系，还能成为一件实实在在的艺术史珍品，并具有潜在的长期投资价值。这里展出的这些藏品体现了精湛的工艺、通过象征性图案讲述的文化故事，以及在当代装饰中依然具有重要意义的持久美学魅力。',
         // AppraiseAnItem page translations
         VERIFY_THE: '验证',
         LEGACY_OF: '传承',
