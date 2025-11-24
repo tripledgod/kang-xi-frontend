@@ -115,15 +115,25 @@ export const getCategoryById = async (
 };
 
 export const getProductsByCategory = async (
-  categoryId: number | string,
+  categorySlug: string,
   locale: string = 'en'
 ): Promise<Product[]> => {
   try {
+    // Find the category by slug in the requested locale to obtain the correct ID
+    const categories = await getCategories(locale);
+    const normalizedCategories = categories.map((cat) => flattenCategory(cat as Category));
+    const category = normalizedCategories.find((cat) => cat.slug === categorySlug);
+
+    if (!category) {
+      console.warn(`Category with slug "${categorySlug}" not found in locale "${locale}"`);
+      return [];
+    }
+
     const response = await axios.get(`${API_URL}/api/products`, {
       params: {
-        'filters[category][id][$eq]': categoryId,
+        'filters[category][id][$eq]': category.id,
         locale: locale,
-        populate: '*',
+        'populate[category]': '*',
         sort: 'createdAt:desc',
       },
     });
@@ -131,11 +141,8 @@ export const getProductsByCategory = async (
     // Handle data structure - could be data array or direct
     let data = response.data.data || response.data || [];
 
-    // If data is array, use directly
+    // If data is array, return directly. No additional filtering needed
     if (Array.isArray(data)) {
-      if (data.length > 0) {
-        // Keep the structure logging for debugging but remove console.log
-      }
       return data;
     }
 
@@ -148,7 +155,7 @@ export const getProductsByCategory = async (
 };
 
 // Helper function to convert Category from API format to flat format
-export const flattenCategory = (category: Category) => {
+export const flattenCategory = (category: Category | any) => {
   // Check if category has correct structure
   if (!category) {
     return {
@@ -167,24 +174,33 @@ export const flattenCategory = (category: Category) => {
     };
   }
 
+  const source = category.attributes || category;
+  const rawImage =
+    source.image?.data?.attributes ||
+    source.image?.data ||
+    source.image ||
+    category.image?.data?.attributes ||
+    category.image ||
+    null;
+
   return {
-    id: category.id,
-    documentId: category.documentId || '',
-    name: category.name || 'Unknown Category',
-    slug: category.slug || 'unknown',
-    description: category.description || null,
-    createdAt: category.createdAt || '',
-    updatedAt: category.updatedAt || '',
-    publishedAt: category.publishedAt || '',
-    order: category.order || 0,
-    ageFrom: category.ageFrom || null,
-    ageTo: category.ageTo || null,
-    image: category.image || null,
+    id: category.id || source.id || 0,
+    documentId: source.documentId || source.document_id || '',
+    name: source.name || 'Unknown Category',
+    slug: source.slug || 'unknown',
+    description: source.description || null,
+    createdAt: source.createdAt || '',
+    updatedAt: source.updatedAt || '',
+    publishedAt: source.publishedAt || '',
+    order: typeof source.order === 'number' ? source.order : 0,
+    ageFrom: source.ageFrom || null,
+    ageTo: source.ageTo || null,
+    image: rawImage,
   };
 };
 
 // Helper function to convert Product from API format to flat format
-export const flattenProduct = (product: Product) => {
+export const flattenProduct = (product: Product | any) => {
   // Check if product has correct structure
   if (!product) {
     return {
@@ -201,17 +217,34 @@ export const flattenProduct = (product: Product) => {
     };
   }
 
+  const source = product.attributes || product;
+
+  // Handle category relation from different Strapi response shapes
+  const rawCategory =
+    product.category ||
+    product.category?.data ||
+    source.category ||
+    source.category?.data;
+
+  const normalizedCategory = rawCategory
+    ? {
+        id: rawCategory.id || rawCategory?.attributes?.id || null,
+        name: rawCategory.name || rawCategory?.attributes?.name || null,
+        slug: rawCategory.slug || rawCategory?.attributes?.slug || null,
+      }
+    : null;
+
   return {
-    id: product.id,
-    title: product.title || 'Unknown Product',
-    slug: product.slug || 'unknown',
-    description: product.description || null,
-    ageFrom: product.ageFrom || null,
-    ageTo: product.ageTo || null,
-    itemCode: product.itemCode || null,
-    documentId: product.documentId || null,
-    images: product.images || [],
-    category: product.category || null,
+    id: product.id || source.id || 0,
+    title: source.title || 'Unknown Product',
+    slug: source.slug || 'unknown',
+    description: source.description || null,
+    ageFrom: source.ageFrom || null,
+    ageTo: source.ageTo || null,
+    itemCode: source.itemCode || null,
+    documentId: source.documentId || null,
+    images: source.images || [],
+    category: normalizedCategory,
   };
 };
 

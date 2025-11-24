@@ -89,6 +89,33 @@ const Browse: React.FC = () => {
     }
   }, [eraTabs, searchParams, activeEra]);
 
+// Ensure active era stays valid when locale/categories change
+useEffect(() => {
+  // Reset caches when locale switches
+  setProducts([]);
+  setErrorProducts(null);
+  setProductsCache({});
+  pendingRequests.current = {};
+
+  if (!sortedCategories.length) {
+    setActiveEra('');
+    return;
+  }
+
+  if (activeEra) {
+    const exists = sortedCategories.some((cat) => cat.slug === activeEra);
+    if (exists) {
+      return;
+    }
+  }
+
+  const firstEraSlug = sortedCategories[0]?.slug;
+  if (firstEraSlug && firstEraSlug !== activeEra) {
+    setActiveEra(firstEraSlug);
+    navigate(`/browse?era=${firstEraSlug}`, { replace: true });
+  }
+}, [locale, sortedCategories, activeEra, navigate]);
+
   // Handle scroll to show/hide sticky header
   useEffect(() => {
     const handleScroll = () => {
@@ -180,7 +207,7 @@ const Browse: React.FC = () => {
         }
 
         // Check cache first
-        const cacheKey = `${category.id}-${locale}`;
+        const cacheKey = `${category.slug}-${locale}`;
         if (productsCache[cacheKey]) {
           if (isMounted) {
             setProducts(productsCache[cacheKey]);
@@ -195,7 +222,12 @@ const Browse: React.FC = () => {
             if (!isMounted) return;
 
             if (productsData && productsData.length > 0) {
-              const flattened = productsData.map((prod: any) => flattenProduct(prod));
+              const flattened = productsData
+                .map((prod: any) => flattenProduct(prod))
+                .filter((prod) => {
+                  const productSlug = prod.category?.slug;
+                  return !productSlug || productSlug === category.slug;
+                });
               setProducts(flattened);
             } else {
               setProducts([]);
@@ -212,7 +244,7 @@ const Browse: React.FC = () => {
 
         // Create new request and store it
         const requestPromise = (async () => {
-          return getProductsByCategory(category.id, locale);
+          return getProductsByCategory(category.slug, locale);
         })();
         pendingRequests.current[cacheKey] = requestPromise;
 
@@ -225,7 +257,12 @@ const Browse: React.FC = () => {
         if (!isMounted) return; // Check if component is still mounted
 
         if (productsData && productsData.length > 0) {
-          const flattened = productsData.map((prod) => flattenProduct(prod));
+          const flattened = productsData
+            .map((prod) => flattenProduct(prod))
+            .filter((prod) => {
+              const productSlug = prod.category?.slug;
+              return !productSlug || productSlug === category.slug;
+            });
           setProducts(flattened);
           // Cache the results
           setProductsCache((prev) => ({ ...prev, [cacheKey]: flattened }));
@@ -235,7 +272,7 @@ const Browse: React.FC = () => {
         }
       } catch (err) {
         // Clean up the pending request on error
-        const cacheKey = `${category.id}-${locale}`;
+        const cacheKey = `${category.slug}-${locale}`;
         delete pendingRequests.current[cacheKey];
 
         if (!isMounted) return;
@@ -252,7 +289,7 @@ const Browse: React.FC = () => {
       isMounted = false;
       abortController.abort();
       // Clean up any pending requests
-      const cacheKey = `${category.id}-${locale}`;
+      const cacheKey = `${category.slug}-${locale}`;
       delete pendingRequests.current[cacheKey];
     };
   }, [activeEra, sortedCategories, locale, withProductsLoading]);
@@ -271,12 +308,17 @@ const Browse: React.FC = () => {
       const erasToPreload = [nextEra, prevEra].filter(Boolean);
 
       erasToPreload.forEach(async (era) => {
-        if (era && !productsCache[`${era.id}-${locale}`]) {
+        if (era && !productsCache[`${era.slug}-${locale}`]) {
           try {
-            const productsData = await getProductsByCategory(era.id, locale);
+            const productsData = await getProductsByCategory(era.slug, locale);
             if (productsData && productsData.length > 0) {
-              const flattened = productsData.map((prod: any) => flattenProduct(prod));
-              setProductsCache((prev) => ({ ...prev, [`${era.id}-${locale}`]: flattened }));
+              const flattened = productsData
+                .map((prod: any) => flattenProduct(prod))
+                .filter((prod) => {
+                  const productSlug = prod.category?.slug;
+                  return !productSlug || productSlug === era.slug;
+                });
+              setProductsCache((prev) => ({ ...prev, [`${era.slug}-${locale}`]: flattened }));
             }
           } catch (err) {
             console.warn(`Failed to preload products for ${era.slug}:`, err);
